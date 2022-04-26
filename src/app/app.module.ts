@@ -18,6 +18,8 @@ import { ErrorInterceptor } from './core/interceptors/errorInterceptor';
 import { ZeroLayoutComponent } from './modules/layouts/zero-layout/zero-layout.component';
 import { DefaultLayoutComponent } from './modules/layouts/default-layout/default-layout.component';
 import { AuthenticationGuard } from './core/guards/authenticationGuard';
+import { MaterialModule } from './modules/material-module';
+
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { AuthenticationGuard } from './core/guards/authenticationGuard';
         deps: [HttpClient]
       }
     }),
+    MaterialModule,
 
   ],
   providers: [

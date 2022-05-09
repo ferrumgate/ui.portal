@@ -1,0 +1,5 @@
+<div>
+    <mat-select [value]="selected" (selectionChange)="changeLanguage($event)" name="items">
+        <mat-option *ngFor="let item of items" [value]="item.value">{{item.name}}</mat-option>
+    </mat-select>
+</div>

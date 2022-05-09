@@ -1,2 +1,99 @@
-<p>login works!</p>
-<mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+<div class="login" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="login-container">
+        <mat-card class="login-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="login-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                    <p>
+                        <mat-form-field>
+                            <input type="text" matInput placeholder="Username" formControlName="username">
+                        </mat-form-field>
+                    </p>
+
+                    <p>
+                        <mat-form-field>
+                            <input type="password" matInput placeholder="Password" formControlName="password">
+                        </mat-form-field>
+                    </p>
+
+                    <p *ngIf="error" class="error">
+                        {{ error }}
+                    </p>
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button type="submit" mat-raised-button>Sign in</button>
+                    </div>
+                    <div class="login-forgotpassword">
+                        <span> <a mat-flat-button href="https://www.google.com/" target="_blank">Forgot
+                                password?</a></span>
+                    </div>
+                    <div class="login-register">
+                        <span><a mat-flat-button href="https://www.google.com/" target="_blank">Don't have an
+                                account?</a></span>
+                    </div>
+
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="center center" class="login-container">
+        <mat-card>
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+                    <mat-label>
+                        OR
+                    </mat-label>
+                    <mat-divider></mat-divider>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+
+                    <div class="social">
+                        <button mat-icon-button aria-label="google authentication" matTooltip="Sign in with Google"
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                            <mat-icon svgIcon="social-google"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="social">
+                        <button mat-icon-button aria-label="github authentication" matTooltip="Sign in with Github"
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                            <mat-icon svgIcon="social-github"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="social">
+                        <button mat-icon-button aria-label="linkedin authentication" matTooltip="Sign in with Linkedin"
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                            <mat-icon svgIcon="social-linkedin"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="social">
+                        <button mat-icon-button aria-label="microsoft authenticaton" matTooltip="Sign in with Microsoft"
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                            <mat-icon svgIcon="social-microsoft"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

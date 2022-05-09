@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+
+export function translationHttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,13 +18,8 @@ export class TranslationService {
     return this.translationService.instant(data);
   }
 
-  translateCategoryName(data: string) {
-    return this.translationService.instant(`CATEGORY.${data}`);
-  }
-
   initLanguages(lang?: string) {
-
-    const languages = ['en'];
+    const languages = this.getAllLanguages();
     languages.forEach(x => {
       this.translationService.addLangs([x]);
     });
@@ -49,11 +49,16 @@ export class TranslationService {
   setDefaultLang(lang: string): any {
     this.translationService.setDefaultLang(lang);
   }
+  getDefaultLang(): any {
+    return this.translationService.getDefaultLang();
+  }
+
+  getAllLanguages() {
+    return ['en'];
+  }
 }
 
 
-export function translateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
+
 
 

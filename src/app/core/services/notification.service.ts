@@ -4,12 +4,19 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class NotificationService {
-  error(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-  danger(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
+
 
   constructor() { }
+  error(arg0: string) {
+
+  }
+  danger(arg0: string) {
+
+  }
+  warning(arg0: string) {
+
+  }
+  info(arg0: string) {
+
+  }
 }

@@ -82,7 +82,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
-.sass-cache/
+.scss-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log

@@ -8,22 +8,20 @@ import { LoadingService } from '../services/loading.service';
 import { LoggerService } from '../services/logger.service';
 import { TranslationService } from '../services/translation.service';
 
-// errors-handler.ts
 @Injectable()
 export class ErrorInterceptor implements ErrorHandler {
   constructor(
-    // Because the ErrorHandler is created before the providers, we’ll have to use the Injector to get them.
     private injector: Injector
   ) { }
 
   handleError(error: Error | HttpErrorResponse) {
+    const translateService = this.injector.get(TranslationService);
     const loggerService = this.injector.get(LoggerService);
     const notificationService = this.injector.get(NotificationService);
     const loadingService = this.injector.get(LoadingService);
     loadingService.hide();
-    const translateService = this.injector.get(TranslationService);
 
-    // throw error;
+
 
     if (error instanceof HttpErrorResponse) {
       // Server or connection error happened

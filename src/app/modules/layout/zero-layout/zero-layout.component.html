@@ -1,0 +1,26 @@
+<div class="zerolayout">
+    <div style="height:5vh">
+        <div fxLayout="row" fxLayoutAlign="end center" fxFill>
+            <div class="zerolayout-themeselector">
+                <app-themeselector></app-themeselector>
+
+            </div>
+            <div class="zerolayout-languageselector" *ngIf="showLanguages">
+                <app-languageselector></app-languageselector>
+
+            </div>
+
+        </div>
+    </div>
+    <div style="height: 80vh;">
+        <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+    <div style="height:15vh">
+        <div fxLayout="row" fxLayoutAlign="center end" fxFill>
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>

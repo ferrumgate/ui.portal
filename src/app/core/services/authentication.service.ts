@@ -7,12 +7,16 @@ import { Router } from '@angular/router';
 export class AuthenticationService {
 
 
+
   constructor(private router: Router) {
 
   }
   get currentSession() {
     return {
-      token: ''
+      token: '',
+      currentUser: {
+        id: '0'
+      }
     }
   }
   checkSession() {

@@ -3,7 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
-import { MaterialModule } from '../material-module';
+import { MaterialModule } from '../shared/material-module';
+import { SharedModule } from '../shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
+
+
+
 
 
 @NgModule({
@@ -12,8 +19,9 @@ import { MaterialModule } from '../material-module';
   ],
   imports: [
     CommonModule,
-    MaterialModule,
-    LoginRoutingModule
+    LoginRoutingModule,
+    SharedModule,
+
   ]
 })
 export class LoginModule { }

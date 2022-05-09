@@ -6,7 +6,7 @@
     "start": "npx -p @angular/cli@13.3.3 ng serve --open",
     "build": "npx -p @angular/cli@13.3.3 ng build",
     "watch": "npx -p @angular/cli@13.3.3 ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "npx -p @angular/cli@13.3.3 ng test --include='**/**.spec.ts'"
   },
   "private": true,
   "dependencies": {
@@ -15,6 +15,7 @@
     "@angular/common": "~13.3.0",
     "@angular/compiler": "~13.3.0",
     "@angular/core": "~13.3.0",
+    "@angular/flex-layout": "^13.0.0-beta.38",
     "@angular/forms": "~13.3.0",
     "@angular/material": "^13.3.4",
     "@angular/platform-browser": "~13.3.0",

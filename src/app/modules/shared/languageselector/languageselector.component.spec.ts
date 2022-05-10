@@ -17,7 +17,8 @@ describe('LanguageSelectorComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [LanguageSelectorComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot()],
+      imports: [RouterTestingModule,
+        TranslateModule.forRoot()],
       providers: [
         TranslateService,
         ConfigService,
@@ -32,16 +33,17 @@ describe('LanguageSelectorComponent', () => {
   });
 
   beforeEach(() => {
-    /*  fixture = TestBed.createComponent(LanguageSelectorComponent);
+    /*fixture = TestBed.createComponent(LanguageSelectorComponent);
      component = fixture.componentInstance;
      fixture.detectChanges(); */
   });
 
   it('should create with 2 languages', () => {
-
+    //mock services
     translationService.getAllLanguages.and.returnValue(['en', 'tr'])
     translationService.getCurrentLang.and.returnValue('en');
 
+    //after mocking create services
     fixture = TestBed.createComponent(LanguageSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -59,10 +61,10 @@ describe('LanguageSelectorComponent', () => {
   });
 
   it('should create with 1 languages', () => {
-    expect(component).toBeTruthy();
-
+    //mock services
     translationService.getAllLanguages.and.returnValue(['en'])
     translationService.getCurrentLang.and.returnValue('en');
+    //create components
     fixture = TestBed.createComponent(LanguageSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

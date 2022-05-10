@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -9,12 +10,12 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, TranslateModule.forRoot()
+        RouterTestingModule, HttpClientModule, TranslateModule.forRoot()
       ],
       declarations: [
         AppComponent
       ],
-      providers: [TranslateService, ConfigService, AuthenticationService]
+      providers: [HttpClient, TranslateService, ConfigService, AuthenticationService]
     }).compileComponents();
   });
 
@@ -30,6 +31,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    //expect(compiled.querySelector('.content span')?.textContent).toContain('manage app is running!');
+    expect(compiled).toBeTruthy();
   });
 });

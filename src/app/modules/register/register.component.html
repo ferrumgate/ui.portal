@@ -1,1 +1,89 @@
-<p>register works!</p>
+<div class="register" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="register-container">
+        <mat-card class="register-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="register-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="!isRegistered" fxLayout="column" fxLayoutAlign="center center" class="register-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                    <p>
+                        <mat-form-field class="register-form-field">
+                            <input type="text" matInput placeholder="{{'Email'|translate}}" formControlName="email"
+                                [(ngModel)]="model.email" (ngModelChange)="modelChanged($event)">
+                        </mat-form-field>
+                    </p>
+
+                    <p>
+                        <mat-form-field class="register-form-field">
+                            <input type=" password" matInput placeholder="{{'Password'|translate}}"
+                                formControlName="password" [(ngModel)]="model.password"
+                                (ngModelChange)="modelChanged($event)">
+                        </mat-form-field>
+
+                    </p>
+                    <p>
+                        <mat-form-field class="register-form-field">
+                            <input type="password" matInput placeholder="{{'PasswordAgain'|translate}}"
+                                formControlName="passwordAgain" [(ngModel)]="model.passwordAgain"
+                                (ngModelChange)="modelChanged($event)">
+                        </mat-form-field>
+                    </p>
+
+                    <div>
+                        <mat-hint class="mat-error register-error" matTooltip="{{error}}"> {{ error }}</mat-hint>
+                    </div>
+
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button type="submit" mat-raised-button
+                            [disabled]="!form.valid">{{"Register"|translate}}</button>
+                    </div>
+
+
+                    <div class="register-register" fxLayout="row" fxLayoutAlign="end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+
+
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="isRegistered" fxLayout="column" fxLayoutAlign="center center" class="register-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+
+
+
+
+                <div fxLayout="row" fxLayoutAlign="center">
+                    <p color="warn" class="register-registered"> {{ "SuccessfullyRegistered"|translate}}</p>
+                </div>
+
+
+                <div class="register-register" fxLayout="row" fxLayoutAlign="end">
+                    <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+</div>

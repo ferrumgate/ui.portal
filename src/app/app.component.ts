@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from './core/services/authentication.service';
 import { ConfigService } from './core/services/config.service';
 import { LoggerService } from './core/services/logger.service';
+import { TranslationService } from './core/services/translation.service';
 
 @Component({
   selector: 'app-root',
@@ -47,12 +48,14 @@ export class AppComponent implements OnInit {
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';
     })
+
     const user = this.authenticationService.currentSession?.currentUser;
     this.configService.init(user?.id || 'empty');
-    this.authenticationService.checkSession();
+
+
   }
   ngOnInit(): void {
-    // this.router.navigateByUrl('/login');
+
   }
 
 

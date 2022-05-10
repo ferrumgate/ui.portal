@@ -7,16 +7,16 @@ export class NotificationService {
 
 
   constructor() { }
-  error(arg0: string) {
+  error(msg: string) {
 
   }
-  danger(arg0: string) {
+  danger(msg: string) {
 
   }
-  warning(arg0: string) {
+  warning(msg: string) {
 
   }
-  info(arg0: string) {
+  info(msg: string) {
 
   }
 }

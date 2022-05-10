@@ -33,35 +33,33 @@ export class ErrorInterceptor implements ErrorHandler {
         if (error.error.code) {
           const message = translateService.translate(error.error.code);
           loggerService.log(`${status} - ${message}`);
-          if (error.error.code != 'ErrOAuthJwtVerificationFailed') {
-            notificationService.error(`${message}`);
-          }
+          notificationService.error(`${message}`);
+
         } else
           if (error.statusText == 'Service Temporarily Unavailable') {
 
             const message = translateService.translate(error.statusText);
-            notificationService.error(translateService.translate(message));
+            notificationService.error(message);
             loggerService.log(`${status} - ${message}`);
 
           } else
             if (error.statusText == 'Bad Gateway') {
               const message = translateService.translate(error.statusText);
-              notificationService.error(translateService.translate(message));
+              notificationService.error(message);
               loggerService.log(`${status} - ${message}`);
             } else
               if (error.statusText == 'Gateway Timeout') {
                 const message = translateService.translate(error.statusText);
-                notificationService.error(translateService.translate(message));
+                notificationService.error(message);
                 loggerService.log(`${status} - ${message}`);
               } else {
 
                 const message = translateService.translate(error.statusText);
-                notificationService.error(translateService.translate('ErrOAuthUnknownError'));
+                notificationService.error(message);
                 loggerService.log(`${status} - ${message}`);
               }
       }
     } else {
-
       const message = translateService.translate(error.message);
       loggerService.log(message);
       throw error;

@@ -1,4 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Register } from 'src/app/core/models/register';
@@ -18,6 +19,8 @@ export class RegisterComponent implements OnInit {
   device: any;
   model: Register = {};
   isRegistered = false;
+  hidePasswordAgain = true;
+  hidePassword = true;
 
   form: FormGroup = new FormGroup(
     {
@@ -31,7 +34,8 @@ export class RegisterComponent implements OnInit {
   );
 
 
-  error: string | null;
+  error: { email: string, password: string, passwordAgain: string, save: string };
+
 
   @Output() submitEM = new EventEmitter();
 
@@ -40,7 +44,8 @@ export class RegisterComponent implements OnInit {
     private translateService: TranslationService,
     private authService: AuthenticationService
   ) {
-    this.error = '';
+    this.error = this.resetErrrors();
+
     this.configService.themeChanged.subscribe(x => {
       this.isThemeDark = x == 'dark';
     })
@@ -68,10 +73,15 @@ export class RegisterComponent implements OnInit {
   initForm() {
 
   }
+  resetErrrors() {
+    return {
+      email: '', password: '', passwordAgain: '', save: ''
+    };
+  }
 
   submit() {
     if (!this.form?.valid || !this.model.email || !this.model.password) {
-      this.error = this.translateService.translate('FormIsInvalid');
+      this.error.save = this.translateService.translate('FormIsInvalid');
       return;
     }
 
@@ -84,16 +94,16 @@ export class RegisterComponent implements OnInit {
   }
   checkFormError() {
     //check errors 
-    const messages: string[] = [];
+    this.error = this.resetErrrors();
     const emailError = this.form.controls['email'].errors;
     if (emailError) {
       Object.keys(emailError).forEach(x => {
         switch (x) {
           case 'required':
-            //messages.push("EmailRequired"); 
+            this.error.email = 'EmailRequired';
             break;
           default:
-            messages.push('EmailInvalid'); break;
+            this.error.email = 'EmailInvalid'; break;
         }
       })
 
@@ -104,17 +114,17 @@ export class RegisterComponent implements OnInit {
       Object.keys(passwordError).forEach(x => {
         switch (x) {
           case 'required':
-            //messages.push('PasswordRequired'); 
+            this.error.password = 'PasswordRequired';
             break;
           case 'minlength':
-            messages.push('PasswordMinLength'); break;
+            this.error.password = 'PasswordMinLength'; break;
 
           case 'pattern':
-            messages.push('PasswordPattern'); break;
+            this.error.password = 'PasswordPattern'; break;
           case 'mismatchedPasswords':
-            messages.push('PasswordsMismatch'); break;
+            this.error.password = 'PasswordsMismatch'; break;
           default:
-            messages.push('PasswordInvalid'); break;
+            this.error.password = 'PasswordInvalid'; break;
         }
       })
     }
@@ -124,26 +134,21 @@ export class RegisterComponent implements OnInit {
       Object.keys(passwordAgainError).forEach(x => {
         switch (x) {
           case 'required':
-            //messages.push('PasswordAgainRequired'); 
+            this.error.passwordAgain = 'PasswordAgainRequired';
             break;
           case 'minlength':
-            messages.push('PasswordAgainMinLength'); break;
+            this.error.passwordAgain = 'PasswordAgainMinLength'; break;
 
           case 'pattern':
-            messages.push('PasswordAgainPattern'); break;
+            this.error.passwordAgain = 'PasswordAgainPattern'; break;
           case 'mismatchedPasswords':
-            messages.push('PasswordsMismatch'); break;
+            this.error.passwordAgain = 'PasswordsMismatch'; break;
           default:
-            messages.push('PasswordInvalid'); break;
+            this.error.passwordAgain = 'PasswordInvalid'; break;
         }
       })
     }
 
-    const translatedMessages: string[] = [];
-    messages.forEach(x => {
-      translatedMessages.push(this.translateService.translate(x));
-    })
-    this.error = Array.from(new Set(translatedMessages)).join(', ')
   }
   modelChanged($event: any) {
 

@@ -68,12 +68,14 @@ export class InputService {
     return (group: FormGroup) => {
       const password = group.controls[passwordKey];
       const confirmPassword = group.controls[passwordConfirmationKey];
+      confirmPassword.setErrors(null);
       // password alanları boşsa null dönmeli
       if ((password.value == null || password.value == '') && (confirmPassword.value == null || confirmPassword.value == '')) {
         return null;
       } else if (password.value !== confirmPassword.value) {
         return confirmPassword.setErrors({ 'mismatchedPasswords': true });
       }
+      else return null;
     };
   }
 

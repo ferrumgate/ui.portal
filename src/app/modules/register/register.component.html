@@ -24,27 +24,40 @@
                         <mat-form-field class="register-form-field">
                             <input type="text" matInput placeholder="{{'Email'|translate}}" formControlName="email"
                                 [(ngModel)]="model.email" (ngModelChange)="modelChanged($event)">
+                            <mat-error class="register-error"> {{ error.email |translate }}</mat-error>
                         </mat-form-field>
                     </p>
 
                     <p>
                         <mat-form-field class="register-form-field">
-                            <input type=" password" matInput placeholder="{{'Password'|translate}}"
-                                formControlName="password" [(ngModel)]="model.password"
-                                (ngModelChange)="modelChanged($event)">
+                            <input [type]="hidePassword?'password':'text'" matInput
+                                placeholder="{{'Password'|translate}}" formControlName="password"
+                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+                            <mat-error class="register-error"> {{ error.password |translate}}</mat-error>
                         </mat-form-field>
+
 
                     </p>
                     <p>
                         <mat-form-field class="register-form-field">
-                            <input type="password" matInput placeholder="{{'PasswordAgain'|translate}}"
-                                formControlName="passwordAgain" [(ngModel)]="model.passwordAgain"
-                                (ngModelChange)="modelChanged($event)">
+                            <input [type]="hidePasswordAgain?'password':'text'" matInput
+                                placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
+                                [(ngModel)]="model.passwordAgain" (ngModelChange)="modelChanged($event)">
+                            <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+
+                            <mat-error class="register-error"> {{ error.passwordAgain | translate }}</mat-error>
+
                         </mat-form-field>
+
                     </p>
 
                     <div>
-                        <mat-hint class="mat-error register-error" matTooltip="{{error}}"> {{ error }}</mat-hint>
+                        <!-- <mat-hint class="mat-error register-error" matTooltip="{{error}}"> {{ error }}</mat-hint> -->
+                        <mat-error class="register-error" matTooltip="{{error.save|translate}}"> {{ error.save|translate
+                            }}</mat-error>
                     </div>
 
 

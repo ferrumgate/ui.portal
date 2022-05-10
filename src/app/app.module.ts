@@ -35,6 +35,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigService } from './core/services/config.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 
@@ -72,6 +73,7 @@ import { CommonModule } from '@angular/common';
     MatGridListModule,
     MatMenuModule,
     MatIconModule,
+    MatSnackBarModule,
     LayoutModule
 
   ],

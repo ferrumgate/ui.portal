@@ -6,6 +6,7 @@ import { Register } from 'src/app/core/models/register';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { InputService } from 'src/app/core/services/input.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 
 @Component({
@@ -42,7 +43,8 @@ export class RegisterComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver,
     private configService: ConfigService,
     private translateService: TranslationService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private notificationService: NotificationService
   ) {
     this.error = this.resetErrrors();
 
@@ -153,6 +155,17 @@ export class RegisterComponent implements OnInit {
   modelChanged($event: any) {
 
     this.checkFormError();
+  }
+  counter = 0;
+  test($event: any) {
+    this.counter++;
+    switch (this.counter % 3) {
+      case 0: this.notificationService.success('success'); break;
+      case 1: this.notificationService.error('error'); break;
+      case 2: this.notificationService.info('info'); break;
+
+    }
+
   }
 
 }

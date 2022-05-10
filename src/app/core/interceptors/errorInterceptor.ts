@@ -26,7 +26,7 @@ export class ErrorInterceptor implements ErrorHandler {
     if (error instanceof HttpErrorResponse) {
       // Server or connection error happened
       if (!navigator.onLine) {
-        notificationService.danger('No Internet Connection');
+        notificationService.error('No Internet Connection');
       } else {
         // Handle Http Error (error.status === 403, 404...)
         const status = error.status;

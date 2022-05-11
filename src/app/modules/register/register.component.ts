@@ -68,31 +68,28 @@ export class RegisterComponent implements OnInit {
         shareReplay(),
 
       ).subscribe(); */
-    this.initForm();
+
 
   }
 
-  initForm() {
-
-  }
   resetErrrors() {
     return {
       email: '', password: '', passwordAgain: '', save: ''
     };
   }
-
+  isSubmitted = false;
   submit() {
+    this.isSubmitted = true;
     if (!this.form?.valid || !this.model.email || !this.model.password) {
       this.error.save = this.translateService.translate('FormIsInvalid');
       return;
     }
 
-    if (this.form?.valid && this.model.email && this.model.password) {
+    this.authService.register(this.model.email, this.model.password).subscribe(x => {
+      this.isRegistered = true;
+      this.error = this.resetErrrors();
+    })
 
-      this.authService.register(this.model.email, this.model.password).subscribe(x => {
-        this.isRegistered = true;
-      })
-    }
   }
   checkFormError() {
     //check errors 
@@ -150,6 +147,7 @@ export class RegisterComponent implements OnInit {
         }
       })
     }
+
 
   }
   modelChanged($event: any) {

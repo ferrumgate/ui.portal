@@ -19,36 +19,41 @@
         <mat-card *ngIf="!isRegistered" fxLayout="column" fxLayoutAlign="center center" class="register-mat-card">
             <mat-card-title></mat-card-title>
             <mat-card-content>
-                <form [formGroup]="form" (ngSubmit)="submit()">
+                <form test-id="register-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>
                         <mat-form-field class="register-form-field">
-                            <input type="text" matInput placeholder="{{'Email'|translate}}" formControlName="email"
-                                [(ngModel)]="model.email" (ngModelChange)="modelChanged($event)">
-                            <mat-error class="register-error"> {{ error.email |translate }}</mat-error>
+                            <input type="text" test-id="register-email-input" matInput
+                                placeholder="{{'Email'|translate}}" formControlName="email" [(ngModel)]="model.email"
+                                (ngModelChange)="modelChanged($event)">
+                            <mat-error test-id="register-email-error" class="register-error"> {{ error.email |translate
+                                }}
+                            </mat-error>
                         </mat-form-field>
                     </p>
 
                     <p>
                         <mat-form-field class="register-form-field">
-                            <input [type]="hidePassword?'password':'text'" matInput
+                            <input [type]="hidePassword?'password':'text'" test-id="register-password-input" matInput
                                 placeholder="{{'Password'|translate}}" formControlName="password"
                                 [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
                             <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
-                            <mat-error class="register-error"> {{ error.password |translate}}</mat-error>
+                            <mat-error test-id="register-password-error" class="register-error"> {{ error.password
+                                |translate}}</mat-error>
                         </mat-form-field>
 
 
                     </p>
                     <p>
                         <mat-form-field class="register-form-field">
-                            <input [type]="hidePasswordAgain?'password':'text'" matInput
-                                placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
+                            <input [type]="hidePasswordAgain?'password':'text'" test-id="register-password-again-input"
+                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
                                 [(ngModel)]="model.passwordAgain" (ngModelChange)="modelChanged($event)">
                             <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
 
-                            <mat-error class="register-error"> {{ error.passwordAgain | translate }}</mat-error>
+                            <mat-error test-id="register-password-again-error" class="register-error">
+                                {{error.passwordAgain | translate }}</mat-error>
 
                         </mat-form-field>
 
@@ -62,7 +67,7 @@
 
 
                     <div class="button" fxLayout="row" fxLayoutAlign="center">
-                        <button type="submit" mat-raised-button
+                        <button test-id="register-submit-button" type="submit" mat-raised-button
                             [disabled]="!form.valid">{{"Register"|translate}}</button>
                     </div>
 
@@ -80,7 +85,8 @@
             </mat-card-content>
         </mat-card>
 
-        <mat-card *ngIf="isRegistered" fxLayout="column" fxLayoutAlign="center center" class="register-mat-card">
+        <mat-card *ngIf="isRegistered" test-id="register-registered-view" fxLayout="column"
+            fxLayoutAlign="center center" class="register-mat-card">
             <mat-card-title></mat-card-title>
             <mat-card-content>
 

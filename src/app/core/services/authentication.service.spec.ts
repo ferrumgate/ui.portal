@@ -24,7 +24,7 @@ describe('AuthenticationService', () => {
     });
 
     service = TestBed.inject(AuthenticationService);
-    httpClientSpy.post
+
   });
 
   it('should be created', () => {

@@ -22,6 +22,7 @@ export class AuthenticationService {
   protected _currentSession: Session | null = null;
 
 
+
   constructor(
     private routerService: Router,
     private configService: ConfigService,
@@ -54,8 +55,8 @@ export class AuthenticationService {
 
   }
 
-  loginLocal(username: string, password: string) {
-    return this.httpService.post<Session>(this._authLocal, { username: username, password: password }, this._jsonHeader)
+  loginLocal(email: string, password: string) {
+    return this.httpService.post<Session>(this._authLocal, { email: email, password: password }, this._jsonHeader)
       .pipe(map((res: any) => {
 
         this._currentSession = {
@@ -72,8 +73,8 @@ export class AuthenticationService {
       }))
   }
 
-  register(username: string, password: string) {
-    return this.httpService.post<{ result: boolean }>(this._authRegister, { username: username, password: password }, this._jsonHeader);
+  register(email: string, password: string) {
+    return this.httpService.post<{ result: boolean }>(this._authRegister, { email2: email, password: password }, this._jsonHeader);
   }
 
 

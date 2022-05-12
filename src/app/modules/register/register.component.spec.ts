@@ -2,8 +2,10 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { CaptchaService } from 'src/app/core/services/captcha.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
@@ -20,11 +22,18 @@ describe('RegisterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(), BrowserAnimationsModule, SharedModule],
+      imports: [RouterTestingModule, TranslateModule.forRoot(),
+        BrowserAnimationsModule, SharedModule, RecaptchaV3Module],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authSpy },
-        TranslationService, TranslateService, NotificationService
+        TranslationService, TranslateService, NotificationService,
+        ReCaptchaV3Service,
+        {
+          provide: RECAPTCHA_V3_SITE_KEY,
+          useValue: '',
+
+        }, CaptchaService
       ]
     }).compileComponents();
 
@@ -39,7 +48,7 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
     expect(fixture.nativeElement.querySelector('.register')).toBeTruthy();
-    expect(fixture.nativeElement.querySelectorAll('.register > [fxLayout="row"]').length).toBe(2);
+    expect(fixture.nativeElement.querySelectorAll('.register > [fxLayout="row"]').length).toBe(1);
   });
   it('register form email input', fakeAsync(async () => {
     const formvalues = {

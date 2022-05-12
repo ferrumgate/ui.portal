@@ -1,12 +1,9 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../services/notification.service';
-
-import { environment } from 'src/environments/environment';
-import { LoadingService } from '../services/loading.service';
-;
 import { LoggerService } from '../services/logger.service';
 import { TranslationService } from '../services/translation.service';
+import { LoadingService } from 'src/app/modules/shared/loading/loading.service';
 
 @Injectable()
 export class ErrorInterceptor implements ErrorHandler {
@@ -18,11 +15,6 @@ export class ErrorInterceptor implements ErrorHandler {
     const translateService = this.injector.get(TranslationService);
     const loggerService = this.injector.get(LoggerService);
     const notificationService = this.injector.get(NotificationService);
-    const loadingService = this.injector.get(LoadingService);
-    loadingService.hide();
-
-
-
     if (error instanceof HttpErrorResponse) {
       // Server or connection error happened
       if (!navigator.onLine) {

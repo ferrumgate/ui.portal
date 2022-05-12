@@ -2,8 +2,10 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Register } from 'src/app/core/models/register';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { CaptchaService } from 'src/app/core/services/captcha.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { InputService } from 'src/app/core/services/input.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -37,14 +39,15 @@ export class RegisterComponent implements OnInit {
 
   error: { email: string, password: string, passwordAgain: string, save: string };
 
-
+  isCaptchaEnabled = false;
   @Output() submitEM = new EventEmitter();
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private captchaService: CaptchaService
   ) {
     this.error = this.resetErrrors();
 
@@ -53,11 +56,15 @@ export class RegisterComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
+    this.route.queryParams.subscribe(params => {
+      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+    })
 
   }
 
 
   ngOnInit(): void {
+
     /* this.device = this.breakpointObserver
       .observe([
         Breakpoints.XSmall,
@@ -77,13 +84,14 @@ export class RegisterComponent implements OnInit {
       email: '', password: '', passwordAgain: '', save: ''
     };
   }
-  isSubmitted = false;
+
   submit() {
-    this.isSubmitted = true;
+
     if (!this.form?.valid || !this.model.email || !this.model.password) {
       this.error.save = this.translateService.translate('FormIsInvalid');
       return;
     }
+
 
     this.authService.register(this.model.email, this.model.password).subscribe(x => {
       this.isRegistered = true;

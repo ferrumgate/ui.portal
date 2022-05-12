@@ -1,13 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import { TranslationService } from './translation.service';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   userId = 'empty';
-  constructor(private translationservice: TranslationService) {
+  constructor(private translationservice: TranslationService, private http: HttpClient) {
 
   }
   links = {
@@ -32,6 +37,11 @@ export class ConfigService {
     }
     const theme = this.getTheme();
     this.themeChanged.emit(theme);
+
+    //try to get config
+    if (environment.production) {
+      this.getDynamicConfig().pipe(catchError(err => of())).subscribe();
+    }
   }
 
   getApiUrl(): string {
@@ -68,5 +78,21 @@ export class ConfigService {
   getTheme() {
     const theme = localStorage.getItem(`theme_for_user_${this.userId}`);
     return theme || 'white';
+  }
+  getDynamicConfig() {
+
+    return this.http.get(this.getApiUrl() + `/config/public`).pipe(
+      map((x: { [key: string]: any }) => {
+        this.captchaSiteKey = x.captchaSiteKey;
+        return x;
+      }));
+  }
+  captchaSiteKey: string = '';
+  getCaptchaKey() {
+    if (this.captchaSiteKey) return of(this.captchaSiteKey);
+    //we need to get it from backapi
+    return this.getDynamicConfig().pipe(map(x => {
+      return this.captchaSiteKey;
+    }))
   }
 }

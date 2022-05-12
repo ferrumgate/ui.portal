@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -18,7 +19,7 @@ describe('LanguageSelectorComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LanguageSelectorComponent],
       imports: [RouterTestingModule,
-        TranslateModule.forRoot()],
+        TranslateModule.forRoot(), HttpClientModule],
       providers: [
         TranslateService,
         ConfigService,

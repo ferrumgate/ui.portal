@@ -3,6 +3,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { Register } from 'src/app/core/models/register';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { CaptchaService } from 'src/app/core/services/captcha.service';
@@ -92,6 +93,13 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+
+    if (!this.isCaptchaEnabled)
+      this.captchaService.execute('register').pipe(
+        switchMap((token: any) => {
+          return this.authService.register(this.model.email || '', this.model.password || '', token, 'register')
+        })
+      )
 
     this.authService.register(this.model.email, this.model.password).subscribe(x => {
       this.isRegistered = true;

@@ -39,6 +39,7 @@ describe('CaptchaService', () => {
       expect(x).toBeTruthy();
       done();
     }, (err) => {
+      console.log(err);
       expect(err).toBeFalsy();
     })
   })

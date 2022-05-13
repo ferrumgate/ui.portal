@@ -10,6 +10,7 @@ import { LanguageSelectorComponent } from "./languageselector/languageselector.c
 import { CommonModule } from "@angular/common";
 import { LoadingComponent } from './loading/loading.component';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from "ng-recaptcha";
+import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service";
 
 
 

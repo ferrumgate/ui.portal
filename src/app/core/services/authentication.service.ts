@@ -1,4 +1,5 @@
 import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, map, mergeMap, throwError } from 'rxjs';
@@ -17,7 +18,7 @@ export interface Session {
 })
 export class AuthenticationService {
   static SessionKey = 'ferrumgate_session';
-  private _authLocal = this.configService.getApiUrl() + '/auth/login/local';
+  private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
   protected _currentSession: Session | null = null;
 
@@ -55,8 +56,8 @@ export class AuthenticationService {
 
   }
 
-  loginLocal(email: string, password: string) {
-    return this.httpService.post<Session>(this._authLocal, { email: email, password: password }, this._jsonHeader)
+  loginLocal(email: string, password: string, captcha?: string, action?: string) {
+    return this.httpService.post<Session>(this._authLocal, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader)
       .pipe(map((res: any) => {
 
         this._currentSession = {

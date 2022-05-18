@@ -5,22 +5,39 @@
 }
 
 
-.login-register {
+.login-forgotpassword {
     margin-top: 10px;
 }
 
-.login {}
+
 
 .login-container {
     max-width: 600px;
 }
 
 
+.login-form-field {
+    min-width: 300px;
+}
+
+
+.login-error {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+}
+
+.login-registered {
+    max-width: 300px;
+
+
+}
+
+
 
 .login-subtitle {
     padding-top: 10px;
-}
-
-.login-form-field {
-    min-width: 300px;
 }

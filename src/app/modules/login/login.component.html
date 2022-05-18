@@ -19,29 +19,43 @@
         <mat-card fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
             <mat-card-title></mat-card-title>
             <mat-card-content>
-                <form [formGroup]="form" (ngSubmit)="submit()">
+                <form test-id="login-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>
                         <mat-form-field class="login-form-field">
-                            <input type="text" matInput placeholder="{{'Email'|translate}}" formControlName="username">
+                            <input type="text" test-id="login-email-input" matInput placeholder="{{'Email'|translate}}"
+                                formControlName="email" [(ngModel)]="model.email"
+                                (ngModelChange)="modelChanged($event)">
+                            <mat-error test-id="login-email-error" class="login-error"> {{ error.email |translate
+                                }}
+                            </mat-error>
                         </mat-form-field>
+
                     </p>
 
                     <p>
                         <mat-form-field class="login-form-field">
-                            <input type="password" matInput placeholder="{{'Password'|translate}}"
-                                formControlName="password">
+                            <input [type]="hidePassword?'password':'text'" test-id="login-password-input" matInput
+                                placeholder="{{'Password'|translate}}" formControlName="password"
+                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+                            <mat-error test-id="login-password-error" class="login-error"> {{ error.password
+                                |translate}}</mat-error>
                         </mat-form-field>
                     </p>
 
-                    <p *ngIf="error" class="error">
-                        {{ error }}
-                    </p>
+                    <div>
+
+                        <mat-error class="login-error" matTooltip="{{error.login|translate}}"> {{ error.login|translate
+                            }}</mat-error>
+                    </div>
 
                     <div class="button" fxLayout="row" fxLayoutAlign="center">
-                        <button type="submit" mat-raised-button>{{"SignIn"|translate}}</button>
+                        <button test-id="login-submit-button" type="submit" mat-raised-button
+                            [disabled]="!form.valid">{{"SignIn"|translate}}</button>
                     </div>
                     <div class="login-forgotpassword">
-                        <span> <a mat-flat-button href="https://www.google.com/"
+                        <span> <a mat-flat-button href="/forgotpass"
                                 target="_self">{{"ForgotPassword"|translate}}?</a></span>
                     </div>
                     <div class="login-register">

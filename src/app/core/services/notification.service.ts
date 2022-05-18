@@ -1,4 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -6,17 +10,39 @@ import { Injectable } from '@angular/core';
 export class NotificationService {
 
 
-  constructor() { }
-  error(arg0: string) {
+  constructor(private snackBar: MatSnackBar, private zone: NgZone,) {
 
   }
-  danger(arg0: string) {
+  showSnackbarTopPosition(content: any, action: any, type: string, duration?: any) {
+    this.zone.run(() => {
+
+
+      let sb = this.snackBar.open(content, action, {
+        duration: duration || 1000,
+        verticalPosition: "top", // Allowed values are  'top' | 'bottom'
+        horizontalPosition: "end", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
+        panelClass: [type]
+      });
+      sb.onAction().subscribe(() => {
+        sb.dismiss();
+      });
+    });
+  }
+
+
+
+
+
+  error(msg: string) {
+    this.showSnackbarTopPosition(msg, 'done', 'snack-error');
 
   }
-  warning(arg0: string) {
 
+
+  info(msg: string) {
+    this.showSnackbarTopPosition(msg, 'done', 'mat-primary');
   }
-  info(arg0: string) {
-
+  success(msg: string) {
+    this.showSnackbarTopPosition(msg, 'done', 'snack-success');
   }
 }

@@ -22,13 +22,13 @@ export class JwtInterceptor implements HttpInterceptor {
         const authService = this.inject.get(AuthenticationService);
         // add authorization header with jwt token if available
         const currentSession = authService.currentSession;
-        if (currentSession && currentSession.token) {
+        if (currentSession && currentSession.accessToken) {
 
 
-            if (request.url.indexOf('/token') < 0 && request.url.indexOf('/prelogin') < 0) {
+            if (request.url.indexOf('/register') < 0 && request.url.indexOf('/resetpassword') < 0 && request.url.indexOf('/auth') < 0) {
                 request = request.clone({
                     setHeaders: {
-                        'Authorization': `Bearer ${currentSession.token}`,
+                        'Authorization': `Bearer ${currentSession.accessToken}`,
                     }
                 });
 

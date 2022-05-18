@@ -7,9 +7,11 @@ import { MaterialModule } from "./material-module";
 import { ThemeSelectorComponent } from './themeselector/themeselector.component';
 import { FooterComponent } from './footer/footer.component';
 import { LanguageSelectorComponent } from "./languageselector/languageselector.component";
-import { ConfigService } from "src/app/core/services/config.service";
-import { AuthenticationService } from "src/app/core/services/authentication.service";
 import { CommonModule } from "@angular/common";
+import { LoadingComponent } from './loading/loading.component';
+import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from "ng-recaptcha";
+import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service";
+
 
 
 
@@ -20,10 +22,12 @@ import { CommonModule } from "@angular/common";
         TranslateModule,
         FormsModule,
         ReactiveFormsModule,
+        HttpClientModule,
+        RecaptchaV3Module,
         ThemeSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
-
+        LoadingComponent,
 
     ],
     imports: [
@@ -32,13 +36,15 @@ import { CommonModule } from "@angular/common";
         ReactiveFormsModule,
         HttpClientModule,
         MaterialModule,
+        RecaptchaV3Module,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
                 useFactory: translationHttpLoaderFactory,
                 deps: [HttpClient]
             }
-        })
+        }),
+
 
 
 
@@ -46,10 +52,16 @@ import { CommonModule } from "@angular/common";
     declarations: [
         ThemeSelectorComponent,
         FooterComponent,
-        LanguageSelectorComponent
+        LanguageSelectorComponent,
+        LoadingComponent,
     ],
     providers: [
+        {
+            provide: RECAPTCHA_V3_SITE_KEY,
+            useValue: 'some',
 
+        },
+        ReCaptchaV3Service,
     ]
 
 })

@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -13,7 +14,7 @@ describe('FooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FooterComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot()],
+      imports: [RouterTestingModule, TranslateModule.forRoot(), HttpClientModule],
       providers: [TranslateService, ConfigService]
     })
       .compileComponents();

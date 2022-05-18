@@ -21,14 +21,15 @@
             <mat-card-content>
                 <form [formGroup]="form" (ngSubmit)="submit()">
                     <p>
-                        <mat-form-field>
-                            <input type="text" matInput placeholder="Username" formControlName="username">
+                        <mat-form-field class="login-form-field">
+                            <input type="text" matInput placeholder="{{'Email'|translate}}" formControlName="username">
                         </mat-form-field>
                     </p>
 
                     <p>
-                        <mat-form-field>
-                            <input type="password" matInput placeholder="Password" formControlName="password">
+                        <mat-form-field class="login-form-field">
+                            <input type="password" matInput placeholder="{{'Password'|translate}}"
+                                formControlName="password">
                         </mat-form-field>
                     </p>
 
@@ -37,15 +38,15 @@
                     </p>
 
                     <div class="button" fxLayout="row" fxLayoutAlign="center">
-                        <button type="submit" mat-raised-button>Sign in</button>
+                        <button type="submit" mat-raised-button>{{"SignIn"|translate}}</button>
                     </div>
                     <div class="login-forgotpassword">
-                        <span> <a mat-flat-button href="https://www.google.com/" target="_blank">Forgot
-                                password?</a></span>
+                        <span> <a mat-flat-button href="https://www.google.com/"
+                                target="_self">{{"ForgotPassword"|translate}}?</a></span>
                     </div>
                     <div class="login-register">
-                        <span><a mat-flat-button href="https://www.google.com/" target="_blank">Don't have an
-                                account?</a></span>
+                        <span><a mat-flat-button href="/register"
+                                target="_self">{{"DontHaveAnAccount"|translate}}?</a></span>
                     </div>
 
 

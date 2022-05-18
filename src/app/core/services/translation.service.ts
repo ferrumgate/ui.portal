@@ -13,44 +13,44 @@ export function translationHttpLoaderFactory(http: HttpClient) {
 })
 export class TranslationService {
 
-  constructor(private translationService: TranslateService) { }
+  constructor(private translateService: TranslateService) { }
   translate(data: string): string {
-    return this.translationService.instant(data);
+    return this.translateService.instant(data);
   }
 
   initLanguages(lang?: string) {
     const languages = this.getAllLanguages();
     languages.forEach(x => {
-      this.translationService.addLangs([x]);
+      this.translateService.addLangs([x]);
     });
 
 
-    this.translationService.setDefaultLang(languages[0]);
+    this.translateService.setDefaultLang(languages[0]);
 
-    const browserLang = this.translationService.getBrowserLang();
+    const browserLang = this.translateService.getBrowserLang();
     if (!lang) {
       const founded = languages.find(x => x == browserLang);
 
-      this.translationService.use(founded ? (browserLang || languages[0]) : languages[0]);
+      this.translateService.use(founded ? (browserLang || languages[0]) : languages[0]);
     } else {
       const language = languages.find(x => x == lang);
       if (language) {
-        this.translationService.use(language);
-      } else { this.translationService.use(languages[0]); }
+        this.translateService.use(language);
+      } else { this.translateService.use(languages[0]); }
     }
   }
 
   use(lang: string): any {
-    this.translationService.use(lang);
+    this.translateService.use(lang);
   }
   getCurrentLang(): any {
-    return this.translationService.currentLang;
+    return this.translateService.currentLang;
   }
   setDefaultLang(lang: string): any {
-    this.translationService.setDefaultLang(lang);
+    this.translateService.setDefaultLang(lang);
   }
   getDefaultLang(): any {
-    return this.translationService.getDefaultLang();
+    return this.translateService.getDefaultLang();
   }
 
   getAllLanguages() {

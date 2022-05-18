@@ -1,12 +1,9 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../services/notification.service';
-
-import { environment } from 'src/environments/environment';
-import { LoadingService } from '../services/loading.service';
-;
 import { LoggerService } from '../services/logger.service';
 import { TranslationService } from '../services/translation.service';
+import { LoadingService } from 'src/app/modules/shared/loading/loading.service';
 
 @Injectable()
 export class ErrorInterceptor implements ErrorHandler {
@@ -18,50 +15,43 @@ export class ErrorInterceptor implements ErrorHandler {
     const translateService = this.injector.get(TranslationService);
     const loggerService = this.injector.get(LoggerService);
     const notificationService = this.injector.get(NotificationService);
-    const loadingService = this.injector.get(LoadingService);
-    loadingService.hide();
-
-
-
     if (error instanceof HttpErrorResponse) {
       // Server or connection error happened
       if (!navigator.onLine) {
-        notificationService.danger('No Internet Connection');
+        notificationService.error('No Internet Connection');
       } else {
         // Handle Http Error (error.status === 403, 404...)
         const status = error.status;
         if (error.error.code) {
           const message = translateService.translate(error.error.code);
           loggerService.log(`${status} - ${message}`);
-          if (error.error.code != 'ErrOAuthJwtVerificationFailed') {
-            notificationService.error(`${message}`);
-          }
+          notificationService.error(`${message}`);
+
         } else
           if (error.statusText == 'Service Temporarily Unavailable') {
 
             const message = translateService.translate(error.statusText);
-            notificationService.error(translateService.translate(message));
+            notificationService.error(message);
             loggerService.log(`${status} - ${message}`);
 
           } else
             if (error.statusText == 'Bad Gateway') {
               const message = translateService.translate(error.statusText);
-              notificationService.error(translateService.translate(message));
+              notificationService.error(message);
               loggerService.log(`${status} - ${message}`);
             } else
               if (error.statusText == 'Gateway Timeout') {
                 const message = translateService.translate(error.statusText);
-                notificationService.error(translateService.translate(message));
+                notificationService.error(message);
                 loggerService.log(`${status} - ${message}`);
               } else {
 
                 const message = translateService.translate(error.statusText);
-                notificationService.error(translateService.translate('ErrOAuthUnknownError'));
+                notificationService.error(message);
                 loggerService.log(`${status} - ${message}`);
               }
       }
     } else {
-
       const message = translateService.translate(error.message);
       loggerService.log(message);
       throw error;

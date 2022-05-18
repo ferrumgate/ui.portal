@@ -94,17 +94,22 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    if (!this.isCaptchaEnabled)
+    if (this.isCaptchaEnabled) {
       this.captchaService.execute('register').pipe(
         switchMap((token: any) => {
           return this.authService.register(this.model.email || '', this.model.password || '', token, 'register')
         })
-      )
+      ).subscribe(x => {
+        this.isRegistered = true;
+        this.error = this.resetErrrors();
+      });
+    } else {
 
-    this.authService.register(this.model.email, this.model.password).subscribe(x => {
-      this.isRegistered = true;
-      this.error = this.resetErrrors();
-    })
+      this.authService.register(this.model.email, this.model.password).subscribe(x => {
+        this.isRegistered = true;
+        this.error = this.resetErrrors();
+      })
+    }
 
   }
   checkFormError() {

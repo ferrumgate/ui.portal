@@ -74,7 +74,7 @@ export class AuthenticationService {
   }
 
   register(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<{ result: boolean }>(this._authRegister, { email2: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
+    return this.httpService.post<{ result: boolean }>(this._authRegister, { email: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
   }
 
 

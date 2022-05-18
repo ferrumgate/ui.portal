@@ -6,10 +6,12 @@ import { defer, of } from 'rxjs';
 
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
+import { LoggerService } from './logger.service';
 
 describe('CaptchaService', () => {
   let service: CaptchaService;
   let httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+  let logger: LoggerService
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot(), RecaptchaV3Module, HttpClientModule],
@@ -21,11 +23,13 @@ describe('CaptchaService', () => {
 
         },
         ReCaptchaV3Service,
-        ConfigService
+        ConfigService,
+        LoggerService
       ]
 
     });
     service = TestBed.inject(CaptchaService);
+
   });
 
   it('should be created', () => {
@@ -35,11 +39,11 @@ describe('CaptchaService', () => {
   it('captcha must create a token', (done) => {
     httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }))
     service.execute('test').subscribe(x => {
-      console.log(x);
+
       expect(x).toBeTruthy();
       done();
     }, (err) => {
-      console.log(err);
+
       expect(err).toBeFalsy();
     })
   })

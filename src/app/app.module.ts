@@ -34,9 +34,12 @@ import { SharedModule } from './modules/shared/shared.module';
 import { LoadingService } from './modules/shared/loading/loading.service';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
+
 
 
   ],

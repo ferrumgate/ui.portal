@@ -24,6 +24,11 @@ const routes: Routes = [
 
       },
       {
+        path: 'user/confirm/email/:key',
+        loadChildren: () => import('../../emailconfirm/emailconfirm.module').then(m => m.EmailConfirmModule)
+
+      },
+      {
         path: '**',
         loadChildren: () => import('../../pagenotfound/pagenotfound.module').then(m => m.PagenotfoundModule)
       }

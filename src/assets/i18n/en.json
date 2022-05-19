@@ -38,5 +38,8 @@
     "PasswordAgainMinLength": "Password length must be at least 8 character",
     "PasswordAgainPattern": "Password must have at least 1 number, 1 lowercase, 1 uppercase",
     "FormIsInvalid": "Form is invalid",
-    "SuccessfullyRegistered": "Successfully registered, please check your email for confirm"
+    "SuccessfullyRegistered": "Successfully registered, please check your email for confirm",
+    "EmailConfirmedSuccessfully": "Email confirmed successfully, please wait redirecting login",
+    "WaitBeforeConfirmingYourEmail": "Wait before confirming your email",
+    "Retry": "Retry"
 }

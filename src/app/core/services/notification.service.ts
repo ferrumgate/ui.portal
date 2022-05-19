@@ -18,7 +18,7 @@ export class NotificationService {
 
 
       let sb = this.snackBar.open(content, action, {
-        duration: duration || 1000,
+        duration: duration || 2000,
         verticalPosition: "top", // Allowed values are  'top' | 'bottom'
         horizontalPosition: "end", // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
         panelClass: [type]
@@ -34,15 +34,15 @@ export class NotificationService {
 
 
   error(msg: string) {
-    this.showSnackbarTopPosition(msg, 'done', 'snack-error');
+    this.showSnackbarTopPosition(msg, '', 'snack-error');
 
   }
 
 
   info(msg: string) {
-    this.showSnackbarTopPosition(msg, 'done', 'mat-primary');
+    this.showSnackbarTopPosition(msg, '', 'mat-primary');
   }
   success(msg: string) {
-    this.showSnackbarTopPosition(msg, 'done', 'snack-success');
+    this.showSnackbarTopPosition(msg, '', 'snack-success');
   }
 }

@@ -20,12 +20,13 @@ export class AuthenticationService {
   static SessionKey = 'ferrumgate_session';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
+  private _confirmUser = this.configService.getApiUrl() + '/user/confirm/email'
   protected _currentSession: Session | null = null;
 
 
 
   constructor(
-    private routerService: Router,
+    private router: Router,
     private configService: ConfigService,
     private httpService: HttpClient) {
     this._currentSession = this.getSavedSession();
@@ -87,6 +88,13 @@ export class AuthenticationService {
   logout() {
 
     sessionStorage.clear();
-    this.routerService.navigateByUrl('/login');
+    this.router.navigate(['/login']);
+  }
+  confirmUserEmail(key: string, captcha?: string, action?: string) {
+    const url = `${this._confirmUser}/${key}`;
+    if (!captcha)
+      return this.httpService.post(url, this._jsonHeader);
+    else
+      return this.httpService.post(url, { captcha: captcha, action: action }, this._jsonHeader);
   }
 }

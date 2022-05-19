@@ -46,6 +46,19 @@ export function queryByCss<T>(
     return debugElement;
 }
 
+export function queryAllByCss<T>(
+    fixture: ComponentFixture<T>,
+    selector: string
+): DebugElement[] {
+    // The return type of DebugElement#query() is declared as DebugElement,
+    // but the actual return type is DebugElement | null.
+    // See https://github.com/angular/angular/issues/22449.
+    const debugElements = fixture.debugElement.queryAll(By.css(selector));
+
+
+    return debugElements;
+}
+
 /**
  * Finds an element inside the Component by the given `test-id` attribute.
  * Throws an error if no element was found.

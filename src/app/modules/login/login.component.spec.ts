@@ -20,6 +20,8 @@ import { ThemeSelectorComponent } from '../shared/themeselector/themeselector.co
 
 import { LoginComponent } from './login.component';
 import { LoginModule } from './login.module';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 
 describe('LoginComponent', () => {
@@ -33,9 +35,9 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
+      declarations: [LoginComponent, MatIcon],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        BrowserAnimationsModule, SharedModule, RecaptchaV3Module],
+        BrowserAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authServiceSpy },

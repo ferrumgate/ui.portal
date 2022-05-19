@@ -7,6 +7,7 @@ import { AuthenticationService } from '../services/authentication.service';
 
 import { NotificationService } from '../services/notification.service';
 import { LoadingService } from 'src/app/modules/shared/loading/loading.service';
+import { TranslationService } from '../services/translation.service';
 
 
 
@@ -21,6 +22,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
         const notificationService = this.injector.get(NotificationService);
         const authenticationService = this.injector.get(AuthenticationService);
+        const translationService = this.injector.get(TranslationService);
         const loading = this.injector.get(LoadingService);
         loading.show();
         return next.handle(request).pipe(
@@ -45,14 +47,18 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 }
                 else
                     if (resp.status === 401) {
-
-                        if (window.location.href.indexOf('/register') >= 0 || window.location.href.indexOf('/login') >= 0 || window.location.href.indexOf('/forgot-password-confirm') >= 0 || window.location.href.indexOf('/account-created-parent') >= 0) {
+                        if (window.location.href.indexOf('/register') >= 0 || window.location.href.indexOf('/login') >= 0) {
 
                         } else {
                             // auto logout if 401 response returned from api
                             authenticationService.logout();
+                            notificationService.error(translationService.translate('ErrNotAuthorized'));
+
                             if (window.location.href.indexOf('/login') === -1) { // reload if not login page
+
                                 location.href = '/login';
+
+
                             }
 
                         }

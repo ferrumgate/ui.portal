@@ -1,0 +1,54 @@
+<div class="emailconfirm" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="emailconfirm-container">
+        <mat-card class="emailconfirm-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="email-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card test-id="emailconfirm-view" fxLayout="column" fxLayoutAlign="center center"
+            class="emailconfirm-mat-card">
+            <mat-card-content>
+                <div *ngIf="isConfirmed" test-id="emailconfirm-confirmed">
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <p color="warn" class="emailconfirm-confirmed"> {{ "EmailConfirmedSuccessfully"|translate}}</p>
+                    </div>
+
+
+                    <div class="emailconfirm-emailconfirm" fxLayout="row" fxLayoutAlign="end end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+                </div>
+
+
+                <div *ngIf="!isConfirmed" test-id="emailconfirm-not-confirmed">
+                    <div fxLayout="row" fxLayoutAlign="center end">
+                        <p color="warn" class="emailconfirm-confirmed"> {{ "WaitBeforeConfirmingYourEmail"|translate}}
+                        </p>
+                    </div>
+
+                    <div class="emailconfirm-emailconfirm" fxFlexAlign="end" fxLayout="row" fxLayoutAlign="end end">
+                        <button test-id="emailconfirm-retry-button" mat-raised-button
+                            (click)="execute(1).subscribe()">{{"Retry"|translate}}</button>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+    </div>
+
+
+</div>

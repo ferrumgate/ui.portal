@@ -1,10 +1,15 @@
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
+import { click, queryAllByCss, queryByCss } from '../helper.spec';
+import { MaterialModule } from '../material-module';
+import { SharedModule } from '../shared.module';
 
 import { LanguageSelectorComponent } from './languageselector.component';
 
@@ -12,13 +17,14 @@ import { LanguageSelectorComponent } from './languageselector.component';
 describe('LanguageSelectorComponent', () => {
   let component: LanguageSelectorComponent;
   let fixture: ComponentFixture<LanguageSelectorComponent>;
+
   const translationService = jasmine.createSpyObj('TranslationService', ['getAllLanguages', 'getCurrentLang']);
   beforeEach(async () => {
 
 
     await TestBed.configureTestingModule({
       declarations: [LanguageSelectorComponent],
-      imports: [RouterTestingModule,
+      imports: [RouterTestingModule, MaterialModule, BrowserAnimationsModule,
         TranslateModule.forRoot(), HttpClientModule],
       providers: [
         TranslateService,
@@ -39,29 +45,31 @@ describe('LanguageSelectorComponent', () => {
      fixture.detectChanges(); */
   });
 
-  it('should create with 2 languages', () => {
+  it('should create with 2 languages', fakeAsync(async () => {
     //mock services
     translationService.getAllLanguages.and.returnValue(['en', 'tr'])
     translationService.getCurrentLang.and.returnValue('en');
 
     //after mocking create services
-    fixture = TestBed.createComponent(LanguageSelectorComponent);
-    component = fixture.componentInstance;
+    let fixture = TestBed.createComponent(LanguageSelectorComponent);
+    let component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
 
-    let ops = translationService.getAllLanguages();
-    const element = fixture.debugElement.query(By.css('mat-select'))
+    expect(translationService.getAllLanguages).toHaveBeenCalled();
+    expect(component.items.length).toBe(2);
+    const element = queryByCss(fixture, 'mat-select');
     expect(element).toBeTruthy();
-    const options = fixture.debugElement.queryAll(By.css('mat-option'))
+    const selectTrigger = queryByCss(fixture, '.mat-select-trigger');
+    selectTrigger.triggerEventHandler('click', {});
+    fixture.detectChanges();
+    const options = queryAllByCss(fixture, '.mat-select-panel mat-option');
     expect(options.length).toBe(2);
+    expect(options[0].nativeElement.textContent).toBe('en');
 
-    const options2 = fixture.nativeElement.querySelectorAll('mat-option');
-    expect(options2[0].textContent).toBe('en');
+  }));
 
-  });
-
-  it('should create with 1 languages', () => {
+  it('should create with 1 languages', fakeAsync(async () => {
     //mock services
     translationService.getAllLanguages.and.returnValue(['en'])
     translationService.getCurrentLang.and.returnValue('en');
@@ -71,13 +79,13 @@ describe('LanguageSelectorComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
 
-    const element = fixture.debugElement.query(By.css('mat-select'))
+    const element = queryByCss(fixture, 'mat-select');
     expect(element).toBeTruthy();
-    const options = fixture.debugElement.queryAll(By.css('mat-option'))
-    expect(options.length).toBe(1);
+    const selectTrigger = queryByCss(fixture, '.mat-select-trigger');
+    selectTrigger.triggerEventHandler('click', {});
+    fixture.detectChanges();
+    const options = queryAllByCss(fixture, '.mat-select-panel mat-option');
+    expect(options[0].nativeElement.textContent).toBe('en');
 
-    const options2 = fixture.nativeElement.querySelectorAll('mat-option');
-    expect(options2[0].textContent).toBe('en');
-
-  });
+  }));
 });

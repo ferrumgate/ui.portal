@@ -10,6 +10,7 @@ import { ConfigService } from 'src/app/core/services/config.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { TranslationService } from 'src/app/core/services/translation.service';
 import { click, dispatchFakeEvent, expectContent, findEl, getText, queryByCss, setFieldElementValue, setFieldValue } from '../shared/helper.spec';
+import { MaterialModule } from '../shared/material-module';
 import { SharedModule } from '../shared/shared.module';
 
 import { RegisterComponent } from './register.component';
@@ -24,7 +25,7 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        BrowserAnimationsModule, SharedModule, RecaptchaV3Module],
+        BrowserAnimationsModule, SharedModule, RecaptchaV3Module, MaterialModule],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authServiceSpy },

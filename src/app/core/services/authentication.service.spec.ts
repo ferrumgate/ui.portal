@@ -11,7 +11,7 @@ describe('AuthenticationService', () => {
   let service: AuthenticationService;
   const key = `ferrumgate_session`;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
-  const routerServiceSpy = jasmine.createSpyObj('Router', ['navigateByUrl'])
+  const routerServiceSpy = jasmine.createSpyObj('Router', ['navigate'])
   beforeEach(() => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
@@ -63,12 +63,12 @@ describe('AuthenticationService', () => {
   });
   it('logout', (done) => {
     //mock router
-    routerServiceSpy.navigateByUrl.and.returnValue('');
+    routerServiceSpy.navigate.and.returnValue('');
     sessionStorage.setItem(AuthenticationService.SessionKey, 'something');
     service.logout();
     const item = sessionStorage.getItem(AuthenticationService.SessionKey);
     expect(item).toBeFalsy();
-    expect(routerServiceSpy.navigateByUrl).toHaveBeenCalled();
+    expect(routerServiceSpy.navigate).toHaveBeenCalled();
     done();
 
 

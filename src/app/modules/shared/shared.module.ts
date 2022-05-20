@@ -11,6 +11,7 @@ import { CommonModule } from "@angular/common";
 import { LoadingComponent } from './loading/loading.component';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from "ng-recaptcha";
 import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service";
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 
@@ -28,6 +29,7 @@ import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service"
         FooterComponent,
         LanguageSelectorComponent,
         LoadingComponent,
+        QRCodeModule
 
     ],
     imports: [
@@ -44,6 +46,7 @@ import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service"
                 deps: [HttpClient]
             }
         }),
+        QRCodeModule
 
 
 
@@ -53,7 +56,7 @@ import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service"
         ThemeSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
-        LoadingComponent,
+        LoadingComponent
     ],
     providers: [
         {

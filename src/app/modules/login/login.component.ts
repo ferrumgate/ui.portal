@@ -2,9 +2,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { RunHelpers } from 'rxjs/testing';
-import { Login } from 'src/app/core/models/login';
+import { Login, Login2FA } from 'src/app/core/models/login';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { CaptchaService } from 'src/app/core/services/captcha.service';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -39,6 +40,19 @@ export class LoginComponent implements OnInit {
 
   hidePassword = true;
 
+  /// 2FA 
+  is2FA = false;
+  hideToken = true;
+  form2FA: FormGroup = new FormGroup(
+    {
+
+      token: new FormControl('', [Validators.required])
+    }
+  );
+
+  model2fa: Login2FA = {};
+  error2fa: { token: string };
+
   @Output() submitEM = new EventEmitter();
 
   constructor(private breakpointObserver: BreakpointObserver,
@@ -50,27 +64,61 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService,
     private captchaService: CaptchaService) {
     this.title = "Title";
-    this.error = this.resetErrrors();
+    this.error = this.resetErrors();
+    this.error2fa = this.resetErrors2FA();
 
     this.configService.themeChanged.subscribe(x => {
       this.isThemeDark = x == 'dark';
+
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
+
 
     this.route.queryParams.subscribe(params => {
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
     })
   }
-  resetErrrors() {
+  resetErrors() {
     return {
       email: '', password: '', login: ''
+    };
+  }
+
+  resetErrors2FA() {
+    return {
+      token: ''
     };
   }
 
   ngOnInit(): void {
 
   }
+  private login(captcha?: string, action?: string) {
+    //reset when starting login
+    this.model2fa.key = undefined;//this is an impontant security enhancement
+    this.is2FA = false;
+    return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action)
+      .pipe(switchMap(x => {
+        this.error = this.resetErrors();
+        let response: {
+          key: string, is2FA: boolean
+        } = x;
+        if (response.is2FA) {
+          return of('').pipe(map(x => {
+            this.model2fa.key = response.key;
+            this.is2FA = true;
+          }))
 
+        } else {
+
+          return this.authService.getAccessToken(response.key).pipe(map(() => {
+            this.isLogined = true;
+            this.error = this.resetErrors();
+            this.router.navigate(['/dashboard']);
+          }))
+        }
+      }))
+  }
   submit() {
 
     if (!this.form?.valid || !this.model.email || !this.model.password) {
@@ -78,29 +126,20 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-
     if (this.isCaptchaEnabled) {
       this.captchaService.execute('login').pipe(
         switchMap((token: any) => {
-          return this.authService.loginLocal(this.model.email || '', this.model.password || '', token, 'login')
+          return this.login(token, 'login');
         })
-      ).subscribe(x => {
-        this.isLogined = true;
-        this.error = this.resetErrrors();
-        this.router.navigate(['/dashboard']);
-      });
+      ).subscribe();
     } else {
-
-      this.authService.loginLocal(this.model.email, this.model.password).subscribe(x => {
-        this.isLogined = true;
-        this.error = this.resetErrrors();
-      })
+      this.login().subscribe();
     }
 
   }
   checkFormError() {
     //check errors 
-    this.error = this.resetErrrors();
+    this.error = this.resetErrors();
     const emailError = this.form.controls['email'].errors;
     if (emailError) {
       Object.keys(emailError).forEach(x => {
@@ -130,6 +169,66 @@ export class LoginComponent implements OnInit {
   modelChanged($event: any) {
 
     this.checkFormError();
+  }
+
+  ///// 2fa
+
+  modelChanged2FA($event: any) {
+
+    this.checkFormError2FA();
+  }
+
+  checkFormError2FA() {
+    //check errors 
+    this.error2fa = this.resetErrors2FA();
+    const tokenError = this.form2FA.controls['token'].errors;
+    if (tokenError) {
+      Object.keys(tokenError).forEach(x => {
+        switch (x) {
+          case 'required':
+            this.error2fa.token = 'TokenRequired';
+            break;
+          default:
+            this.error2fa.token = 'TokenInvalid'; break;
+        }
+      })
+
+    }
+
+
+
+  }
+  submit2FA() {
+
+    if (!this.form2FA?.valid || !this.model2fa.token) {
+      this.error2fa.token = this.translateService.translate('FormIsInvalid');
+      return;
+    }
+
+    if (this.isCaptchaEnabled) {
+      this.captchaService.execute('confirm2FA').pipe(
+        switchMap((token: any) => {
+          return this.confirm2FA(token, 'confirm2FA');
+        })
+      ).subscribe();
+    } else {
+      this.confirm2FA().subscribe();
+    }
+
+  }
+
+  private confirm2FA(captcha?: string, action?: string) {
+    return this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '', captcha, action)
+      .pipe(switchMap((response: any) => {
+
+
+        return this.authService.getAccessToken(response.key).pipe(map(() => {
+          this.isLogined = true;
+          this.error = this.resetErrors();
+          this.router.navigate(['/dashboard']);
+        }))
+      }))
+
   }
 
 }

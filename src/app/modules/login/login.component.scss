@@ -41,3 +41,21 @@
 .login-subtitle {
     padding-top: 10px;
 }
+
+
+.login-qrcodeImage {}
+
+.login-qrcodeImage-center {
+    border: 2px;
+    border-color: aqua;
+    border-style: solid;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.login-qrcodeImage-text {
+    padding-top: 10px;
+    max-width: 300px;
+
+}

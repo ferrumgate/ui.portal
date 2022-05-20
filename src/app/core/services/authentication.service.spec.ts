@@ -11,19 +11,20 @@ describe('AuthenticationService', () => {
   let service: AuthenticationService;
   const key = `ferrumgate_session`;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
-  const routerServiceSpy = jasmine.createSpyObj('Router', ['navigate'])
+  let router: Router;
   beforeEach(() => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, TranslateModule.forRoot()],
       providers: [
         { provide: HttpClient, useValue: httpClientSpy },
-        { provide: Router, useValue: routerServiceSpy },
+
         TranslateService,
       ]
     });
 
     service = TestBed.inject(AuthenticationService);
+    router = TestBed.inject(Router);
 
   });
 
@@ -41,10 +42,13 @@ describe('AuthenticationService', () => {
   });
 
   it('loginLocal success', (done) => {
-    httpClientSpy.post.and.returnValue(of({ status: 200, body: { accessToken: '', refreshToken: '', user: {} } }));
+    httpClientSpy.post.and.returnValue(of({ key: 'bla', is2FA: true }));
+    spyOn(router, 'navigate');
     service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe(x => {
-
-      expect(service.currentSession).toBeTruthy();
+      expect(x.key).toBeTruthy();
+      expect(x.is2FA).toBeTruthy();
+      expect(service.currentSession).toBeFalsy();
+      expect(router.navigate).not.toHaveBeenCalled();
       done();
     });
   });
@@ -63,15 +67,35 @@ describe('AuthenticationService', () => {
   });
   it('logout', (done) => {
     //mock router
-    routerServiceSpy.navigate.and.returnValue('');
+    spyOn(router, 'navigate');
     sessionStorage.setItem(AuthenticationService.SessionKey, 'something');
     service.logout();
     const item = sessionStorage.getItem(AuthenticationService.SessionKey);
     expect(item).toBeFalsy();
-    expect(routerServiceSpy.navigate).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalled();
     done();
 
 
+  });
+
+  it('2fa confirm', (done) => {
+
+    //mock service
+    httpClientSpy.post.and.returnValue(of({ key: 'somekey' }));
+    service.confirm2FA('bla', 'bla').subscribe(x => {
+      expect(x.key).toBeTruthy();
+      done();
+    })
+  });
+
+  it('register', (done) => {
+
+    //mock service
+    httpClientSpy.post.and.returnValue(of({ result: true }));
+    service.register('bla', 'bla').subscribe(x => {
+      expect(x.result).toBeTruthy();
+      done();
+    })
   });
 
 });

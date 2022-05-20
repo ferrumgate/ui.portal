@@ -16,7 +16,7 @@
 
             </mat-card-content>
         </mat-card>
-        <mat-card fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
+        <mat-card *ngIf="!is2FA" fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
             <mat-card-title></mat-card-title>
             <mat-card-content>
                 <form test-id="login-form" [formGroup]="form" (ngSubmit)="submit()">
@@ -67,9 +67,55 @@
                 </form>
             </mat-card-content>
         </mat-card>
+
+        <mat-card *ngIf="is2FA" fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+                <form test-id="login-form2fa" [formGroup]="form2FA" (ngSubmit)="submit2FA()">
+
+
+
+
+                    <mat-form-field class="login-form-field">
+                        <input [type]="hideToken?'password':'text'" test-id="login-2fa-input" matInput
+                            placeholder="{{'Token'|translate}}" formControlName="token" [(ngModel)]="model2fa.token"
+                            (ngModelChange)="modelChanged2FA($event)">
+                        <mat-icon matSuffix (click)="hideToken = !hideToken">{{hideToken ?
+                            'visibility_off' : 'visibility'}}</mat-icon>
+                        <mat-error test-id="login-2fa-error" class="login-error"> {{ error2fa.token
+                            |translate}}</mat-error>
+                    </mat-form-field>
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="end">
+                        <button test-id="login-2fa-button" type="submit" mat-raised-button
+                            [disabled]="!form2FA.valid">{{"Confirm"|translate}}</button>
+                    </div>
+
+                    <mat-divider style="margin-top:20px ;"></mat-divider>
+                    <div class="login-qrcodeImage-text">
+                        <span> {{"2FA"|translate}}</span>
+                    </div>
+
+                    <div class="login-qrcodeImage-text" fxLayout="row wrap" fxLayoutAlign="center center">
+                        <span> <a mat-flat-button href="/forgotpass" target="_self">Google Authenticatior</a></span>
+                        <span> <a mat-flat-button href="/forgotpass" target="_self">Twillio Authy</a></span>
+                        <span> <a mat-flat-button href="/forgotpass" target="_self">Microsoft Authenticator</a></span>
+                    </div>
+
+
+
+
+
+
+
+
+                </form>
+
+            </mat-card-content>
+        </mat-card>
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="center center" class="login-container">
+    <div test-id="login-others" *ngIf="!is2FA" fxLayout="row" fxLayoutAlign="center center" class="login-container">
         <mat-card>
             <mat-card-content>
                 <div fxLayout="row" fxLayoutAlign="center center" fxFill>
@@ -111,4 +157,6 @@
         </mat-card>
 
     </div>
+
+
 </div>

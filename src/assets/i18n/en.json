@@ -41,5 +41,7 @@
     "SuccessfullyRegistered": "Successfully registered, please check your email for confirm",
     "EmailConfirmedSuccessfully": "Email confirmed successfully, please wait redirecting login",
     "WaitBeforeConfirmingYourEmail": "Wait before confirming your email",
-    "Retry": "Retry"
+    "Retry": "Retry",
+    "Token": "Token",
+    "2FA": "2FA"
 }

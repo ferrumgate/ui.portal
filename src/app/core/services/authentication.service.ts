@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http'
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, mergeMap, throwError } from 'rxjs';
+import { catchError, from, map, mergeMap, Observable, of, switchMap, throwError } from 'rxjs';
 import { User } from '../models/user';
 import { ConfigService } from './config.service';
 
@@ -17,10 +17,14 @@ export interface Session {
   providedIn: 'root'
 })
 export class AuthenticationService {
+  confirmUser2FA(arg0: string, captcha: string | undefined, action: string | undefined): any {
+    throw new Error('Method not implemented.');
+  }
   static SessionKey = 'ferrumgate_session';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
-  private _confirmUser = this.configService.getApiUrl() + '/user/confirm/email'
+  private _confirmUser = this.configService.getApiUrl() + '/user/confirm/email';
+  private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
   protected _currentSession: Session | null = null;
 
 
@@ -57,22 +61,25 @@ export class AuthenticationService {
 
   }
 
+  getAccessToken(key: string) {
+    return of('');
+  }
+
   loginLocal(email: string, password: string, captcha?: string, action?: string) {
     return this.httpService.post<Session>(this._authLocal, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader)
-      .pipe(map((res: any) => {
+      .pipe(
+        switchMap((res: any) => {
 
-        this._currentSession = {
-          accessToken: res.body.accessToken,
-          refreshToken: res.body.refreshToken,
-          currentUser: res.body.user
-        }
-        this.saveSession();
+          let response: {
+            key: string, is2FA: boolean
+          } = res;
+          return of(response);
 
-      }), catchError(err => {
-        this._currentSession = null;
-        this.saveSession();
-        throw err;
-      }))
+        }), catchError(err => {
+          this._currentSession = null;
+          this.saveSession();
+          throw err;
+        }))
   }
 
   register(email: string, password: string, captcha?: string, action?: string) {
@@ -96,5 +103,9 @@ export class AuthenticationService {
       return this.httpService.post(url, this._jsonHeader);
     else
       return this.httpService.post(url, { captcha: captcha, action: action }, this._jsonHeader);
+  }
+
+  confirm2FA(key: string, token: string, captcha?: string, action?: string) {
+    return this.httpService.post<{ key: string }>(this._confirm2FA, { key: key, twoFAToken: token, captcha: captcha, action: action }, this._jsonHeader);
   }
 }

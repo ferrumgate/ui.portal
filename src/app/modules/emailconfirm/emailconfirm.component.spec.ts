@@ -89,7 +89,7 @@ describe('EmailconfirmComponent', () => {
     tick(1000);
     flush();
     fixture.detectChanges();
-    tick(1000);
+    tick(3000);
     flush();
     fixture.detectChanges();
 

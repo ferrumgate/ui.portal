@@ -17,14 +17,14 @@ export interface Session {
   providedIn: 'root'
 })
 export class AuthenticationService {
-  confirmUser2FA(arg0: string, captcha: string | undefined, action: string | undefined): any {
-    throw new Error('Method not implemented.');
-  }
+
   static SessionKey = 'ferrumgate_session';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _confirmUser = this.configService.getApiUrl() + '/user/confirm/email';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
+  private _getAccessToken = this.configService.getApiUrl() + '/auth/token/access';
+  private _getRefreshToken = this.configService.getApiUrl() + '/auth/token/refresh';
   protected _currentSession: Session | null = null;
 
 
@@ -61,8 +61,54 @@ export class AuthenticationService {
 
   }
 
+  checkSessionIsValid() {
+    try {
+
+      const session: Session | null = this.getSavedSession();
+      if (session) {
+        this._currentSession = session;
+        this.getRefreshToken().pipe(
+          catchError(err => {
+            this.logout();
+            return '';
+          })).subscribe();;
+      }
+
+    } catch (err) {
+      // this.logger.console(err);
+      this.logout();
+    }
+
+  }
+
   getAccessToken(key: string) {
-    return of('');
+    return this.httpService.post(this._getAccessToken, { key: key }, this._jsonHeader)
+      .pipe(map((resp: any) => {
+        debugger;
+
+        this._currentSession = {
+          accessToken: resp.accessToken,
+          currentUser: resp.user,
+          refreshToken: resp.refreshToken
+        }
+        this.saveSession();
+        return this._currentSession;
+      }))
+  }
+
+  getRefreshToken() {
+    return this.httpService.post(this._getRefreshToken, this._jsonHeader)
+      .pipe(map((resp: any) => {
+        debugger;
+
+        this._currentSession = {
+          accessToken: resp.accessToken,
+          currentUser: resp.user,
+          refreshToken: resp.refreshToken
+        }
+        this.saveSession();
+        return this._currentSession;
+      }))
   }
 
   loginLocal(email: string, password: string, captcha?: string, action?: string) {

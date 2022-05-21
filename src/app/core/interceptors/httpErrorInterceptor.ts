@@ -47,7 +47,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 }
                 else
                     if (resp.status === 401) {
-                        if (window.location.href.indexOf('/register') >= 0 || window.location.href.indexOf('/login') >= 0) {
+                        if (window.location.href.indexOf('/register') >= 0
+                            || window.location.href.indexOf('/login') >= 0
+                            || window.location.href.indexOf('/forgot-password-confirm') >= 0) {
 
                         } else {
                             // auto logout if 401 response returned from api

@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -24,7 +24,7 @@ describe('LanguageSelectorComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [LanguageSelectorComponent],
-      imports: [RouterTestingModule, MaterialModule, BrowserAnimationsModule,
+      imports: [RouterTestingModule, MaterialModule, NoopAnimationsModule,
         TranslateModule.forRoot(), HttpClientModule],
       providers: [
         TranslateService,

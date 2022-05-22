@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, RouterOutlet } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -37,7 +37,7 @@ describe('LoginComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent, MatIcon],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        BrowserAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authServiceSpy },

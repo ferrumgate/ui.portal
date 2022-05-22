@@ -1,21 +1,32 @@
+import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { delay, filter, of, switchMap, take } from 'rxjs';
+import { fadeAnimation } from './app.animation';
+
+
 import { AuthenticationService } from './core/services/authentication.service';
 import { ConfigService } from './core/services/config.service';
 import { LoggerService } from './core/services/logger.service';
 import { TranslationService } from './core/services/translation.service';
+import { LoadingService } from './modules/shared/loading/loading.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    fadeAnimation
+  ]
+
 })
 export class AppComponent implements OnInit {
   /**
    *
    */
+
   private isDark = false;
   @HostBinding('class')
   get themeMode() {
@@ -25,7 +36,9 @@ export class AppComponent implements OnInit {
     private loggerService: LoggerService,
     private authenticationService: AuthenticationService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private loadingService: LoadingService,
+
   ) {
 
     this.matIconRegistry.addSvgIcon(
@@ -56,6 +69,12 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {
 
+    //check token for time validity
+    this.authenticationService.checkSessionIsValid();
+  }
+
+  getState(outlet: any) {
+    return outlet.activatedRouteData.state;
   }
 
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
@@ -25,7 +25,7 @@ describe('RegisterComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [RegisterComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        BrowserAnimationsModule, SharedModule, RecaptchaV3Module, MaterialModule],
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MaterialModule],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authServiceSpy },

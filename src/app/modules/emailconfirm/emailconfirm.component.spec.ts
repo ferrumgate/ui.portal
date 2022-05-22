@@ -1,5 +1,5 @@
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,7 +28,7 @@ describe('EmailconfirmComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [EmailConfirmComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        BrowserAnimationsModule, SharedModule, RecaptchaV3Module],
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module],
       providers: [
         ConfigService,
         { provide: AuthenticationService, useValue: authServiceSpy },

@@ -6,6 +6,9 @@ import {
     query,
 } from '@angular/animations';
 
+//this animation comes from
+//https://arminzia.com/blog/angular-router-fade-animation
+
 export const fadeAnimation = trigger('fadeAnimation', [
     transition('* => *', [
         query(':enter', [style({ opacity: 0, position: 'relative' })], {

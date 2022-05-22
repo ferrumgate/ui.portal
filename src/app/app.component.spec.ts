@@ -11,13 +11,14 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, TranslateModule.forRoot(), SharedModule, MaterialModule, MatIconTestingModule
+        RouterTestingModule, HttpClientModule, TranslateModule.forRoot(), SharedModule, MaterialModule, MatIconTestingModule, NoopAnimationsModule
       ],
       declarations: [
         AppComponent, MatIcon

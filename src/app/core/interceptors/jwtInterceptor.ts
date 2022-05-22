@@ -23,9 +23,9 @@ export class JwtInterceptor implements HttpInterceptor {
         // add authorization header with jwt token if available
         const currentSession = authService.currentSession;
         if (currentSession && currentSession.accessToken) {
+            const urls = ['/register', '/auth/token/access']
 
-
-            if (request.url.indexOf('/register') < 0 && request.url.indexOf('/resetpassword') < 0 && request.url.indexOf('/auth') < 0) {
+            if (!urls.find(x => request.url.includes(x))) {
                 request = request.clone({
                     setHeaders: {
                         'Authorization': `Bearer ${currentSession.accessToken}`,

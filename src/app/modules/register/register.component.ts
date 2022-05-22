@@ -106,7 +106,7 @@ export class RegisterComponent implements OnInit {
     } else {
 
       this.authService.register(this.model.email, this.model.password).subscribe(x => {
-        debugger;
+
         this.isRegistered = true;
         this.error = this.resetErrrors();
       })

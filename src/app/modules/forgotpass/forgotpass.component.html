@@ -1,0 +1,85 @@
+<div class="forgotpass" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="forgotpass-container">
+        <mat-card class="forgotpass-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="forgotpass-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="!isForgotPassSended" fxLayout="column" fxLayoutAlign="center center"
+            class="forgotpass-mat-card">
+            <mat-card-title class="forgotpass-title">{{"ForgotPassword"|translate}}</mat-card-title>
+            <mat-card-content>
+                <form test-id="forgotpass-form" [formGroup]="form" (ngSubmit)="submit()">
+                    <p>
+                        <mat-form-field class="forgotpass-form-field">
+                            <input type="text" test-id="forgotpass-email-input" matInput
+                                placeholder="{{'Email'|translate}}" formControlName="email" [(ngModel)]="model.email"
+                                (ngModelChange)="modelChanged($event)">
+                            <mat-error test-id="forgotpass-email-error" class="forgotpass-error"> {{ error.email
+                                |translate
+                                }}
+                            </mat-error>
+                        </mat-form-field>
+                    </p>
+
+
+
+                    <div>
+                        <!-- <mat-hint class="mat-error forgotpass-error" matTooltip="{{error}}"> {{ error }}</mat-hint> -->
+                        <mat-error class="forgotpass-error" matTooltip="{{error.send|translate}}"> {{
+                            error.send|translate
+                            }}</mat-error>
+                    </div>
+
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button test-id="forgotpass-submit-button" type="submit" mat-raised-button
+                            [disabled]="!form.valid">{{"SendEmail"|translate}}</button>
+                    </div>
+
+
+                    <div class="forgotpass-forgotpass" fxLayout="row" fxLayoutAlign="end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+
+
+
+
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="isForgotPassSended" test-id="forgotpass-forgotpassed-view" fxLayout="column"
+            fxLayoutAlign="center center" class="forgotpass-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+
+
+
+
+                <div fxLayout="row" fxLayoutAlign="center">
+                    <p color="warn" class="forgotpass-forgotpassed"> {{ "SuccessfullySendedEmail"|translate}}</p>
+                </div>
+
+                <div class="forgotpass-forgotpass" fxLayout="row" fxLayoutAlign="end">
+                    <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

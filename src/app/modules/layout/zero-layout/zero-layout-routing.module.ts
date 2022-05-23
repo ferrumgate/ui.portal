@@ -19,12 +19,20 @@ const routes: Routes = [
         loadChildren: () => import('../../login/login.module').then(m => m.LoginModule),
       },
       {
+        path: 'user/forgotpass',
+        loadChildren: () => import('../../forgotpass/forgotpass.module').then(m => m.ForgotPassModule),
+      },
+      {
+        path: 'user/resetpass',
+        loadChildren: () => import('../../resetpass/resetpass.module').then(m => m.ResetPassModule),
+      },
+      {
         path: 'pagenotfound',
         loadChildren: () => import('../../pagenotfound/pagenotfound.module').then(m => m.PagenotfoundModule)
 
       },
       {
-        path: 'user/confirm/email/:key',
+        path: 'user/emailconfirm',
         loadChildren: () => import('../../emailconfirm/emailconfirm.module').then(m => m.EmailConfirmModule)
 
       },

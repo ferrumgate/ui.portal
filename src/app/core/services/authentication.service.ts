@@ -20,13 +20,16 @@ export interface Session {
 })
 export class AuthenticationService {
 
+
   static SessionKey = 'ferrumgate_session';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
-  private _confirmUser = this.configService.getApiUrl() + '/user/confirm/email';
+  private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
-  private _getAccessToken = this.configService.getApiUrl() + '/auth/token/access';
-  private _getRefreshToken = this.configService.getApiUrl() + '/auth/token/refresh';
+  private _getAccessToken = this.configService.getApiUrl() + '/auth/accesstoken';
+  private _getRefreshToken = this.configService.getApiUrl() + '/auth/refreshtoken';
+  private _userForgotPass = this.configService.getApiUrl() + '/user/forgotpass'
+  private _userResetPass = this.configService.getApiUrl() + '/user/resetpass'
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -158,14 +161,24 @@ export class AuthenticationService {
     this.router.navigate(['/login']);
   }
   confirmUserEmail(key: string, captcha?: string, action?: string) {
-    const url = `${this._confirmUser}/${key}`;
+
     if (!captcha)
-      return this.httpService.post(url, this._jsonHeader);
+      return this.httpService.post(this._confirmUser, { key: key }, this._jsonHeader);
     else
-      return this.httpService.post(url, { captcha: captcha, action: action }, this._jsonHeader);
+      return this.httpService.post(this._confirmUser, { key: key, captcha: captcha, action: action }, this._jsonHeader);
   }
 
   confirm2FA(key: string, token: string, captcha?: string, action?: string) {
     return this.httpService.post<{ key: string }>(this._confirm2FA, { key: key, twoFAToken: token, captcha: captcha, action: action }, this._jsonHeader);
   }
+
+  forgotPassword(email: string, captcha?: string, action?: string): any {
+    return this.httpService.post(this._userForgotPass, { email: email, captcha: captcha, action: action }, this._jsonHeader);
+  }
+
+  resetPassword(key: string, password: string, captcha?: string, action?: string): any {
+    return this.httpService.post(this._userResetPass, { key: key, pass: password, captcha: captcha, action: action }, this._jsonHeader);
+  }
+
+
 }

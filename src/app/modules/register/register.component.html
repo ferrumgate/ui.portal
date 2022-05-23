@@ -17,7 +17,7 @@
             </mat-card-content>
         </mat-card>
         <mat-card *ngIf="!isRegistered" fxLayout="column" fxLayoutAlign="center center" class="register-mat-card">
-            <mat-card-title></mat-card-title>
+            <mat-card-title class="register-title">{{"Register"|translate}}</mat-card-title>
             <mat-card-content>
                 <form test-id="register-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>

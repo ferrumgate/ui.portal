@@ -1,0 +1,101 @@
+<div class="resetpass" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="resetpass-container">
+        <mat-card class="resetpass-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="resetpass-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="!isPasswordChanged" fxLayout="column" fxLayoutAlign="center center" class="resetpass-mat-card">
+            <mat-card-title class="resetpass-title">{{"ResetPassword"|translate}}</mat-card-title>
+            <mat-card-content>
+                <form test-id="resetpass-form" [formGroup]="form" (ngSubmit)="submit()">
+
+
+                    <p>
+                        <mat-form-field class="resetpass-form-field">
+                            <input [type]="hidePassword?'password':'text'" test-id="resetpass-password-input" matInput
+                                placeholder="{{'Password'|translate}}" formControlName="password"
+                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+                            <mat-error test-id="resetpass-password-error" class="resetpass-error"> {{
+                                error.password
+                                |translate}}</mat-error>
+                        </mat-form-field>
+
+
+                    </p>
+                    <p>
+                        <mat-form-field class="resetpass-form-field">
+                            <input [type]="hidePasswordAgain?'password':'text'" test-id="resetpass-password-again-input"
+                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
+                                [(ngModel)]="model.passwordAgain" (ngModelChange)="modelChanged($event)">
+                            <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+
+                            <mat-error test-id="resetpass-password-again-error" class="resetpass-error">
+                                {{error.passwordAgain | translate }}</mat-error>
+
+                        </mat-form-field>
+
+                    </p>
+
+                    <div>
+                        <!-- <mat-hint class="mat-error resetpass-error" matTooltip="{{error}}"> {{ error }}</mat-hint> -->
+                        <mat-error class="resetpass-error" matTooltip="{{error.save|translate}}"> {{
+                            error.save|translate
+                            }}</mat-error>
+                    </div>
+
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button test-id="resetpass-submit-button" type="submit" mat-raised-button
+                            [disabled]="!form.valid">{{"Change"|translate}}</button>
+                    </div>
+
+
+                    <div class="resetpass-resetpass" fxLayout="row" fxLayoutAlign="end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="isPasswordChanged" test-id="resetpass-resetpassed-view" fxLayout="column"
+            fxLayoutAlign="center center" class="resetpass-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+
+
+
+
+                <div fxLayout="row" fxLayoutAlign="center">
+                    <p color="warn" class="resetpass-resetpassed"> {{
+                        "SuccessfullyChangedPassword"|translate}}</p>
+                </div>
+
+
+                <div class="resetpass-resetpass" fxLayout="row" fxLayoutAlign="end">
+                    <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+</div>

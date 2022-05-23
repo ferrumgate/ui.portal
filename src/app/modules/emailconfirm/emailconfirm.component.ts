@@ -35,12 +35,10 @@ export class EmailConfirmComponent implements OnInit, AfterViewInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.route.paramMap.subscribe(params => {
-      this.confirmKey = params.get('key');
 
-    })
     this.route.queryParams.subscribe(params => {
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+      this.confirmKey = params.key;
     })
 
 

@@ -43,5 +43,10 @@
     "WaitBeforeConfirmingYourEmail": "Wait before confirming your email",
     "Retry": "Retry",
     "Token": "Token",
-    "2FA": "2FA"
+    "2FA": "2FA",
+    "SuccessfullyChangedPassword": "Successfully changed password",
+    "Change": "Change",
+    "SendEmail": "Send email",
+    "SuccessfullySendedEmail": "Successfully sended email, please check your email",
+    "ResetPassword": "Reset password"
 }

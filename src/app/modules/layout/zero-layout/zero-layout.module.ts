@@ -6,7 +6,7 @@ import { ZeroLayoutComponent } from './zero-layout.component';
 import { LoginModule } from '../../login/login.module';
 import { PagenotfoundModule } from '../../pagenotfound/pagenotfound.module';
 
-import { ForgotpasswordModule } from '../../forgotpassword/forgotpassword.module';
+import { ResetPassModule } from '../../resetpass/resetpass.module';
 import { RegisterModule } from '../../register/register.module';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -20,7 +20,7 @@ import { SharedModule } from '../../shared/shared.module';
     LoginModule,
     PagenotfoundModule,
     RegisterModule,
-    ForgotpasswordModule
+    ResetPassModule
   ]
 })
 export class ZeroLayoutModule { }

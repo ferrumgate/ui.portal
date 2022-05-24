@@ -1,25 +1,25 @@
-.register-mat-card {
+.resetpass-mat-card {
     max-width: 500px;
     margin: 2em auto;
     text-align: center;
 }
 
 
-.register-register {
+.resetpass-resetpass {
     margin-top: 10px;
 }
 
 
 
-.register-container {
+.resetpass-container {
     max-width: 600px;
 }
 
-.register-form-field {
+.resetpass-form-field {
     min-width: 300px;
 }
 
-.register-error {
+.resetpass-error {
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
@@ -28,19 +28,20 @@
 
 }
 
-.register-registered {
+.resetpass-resetpassed {
     max-width: 300px;
 
 
 }
 
-.register-title {
-    padding-bottom: 15px;
-    font-size: 1.2rem;
+
+
+.resetpass-subtitle {
+    padding-top: 10px;
 }
 
 
-
-.register-subtitle {
-    padding-top: 10px;
+.resetpass-title {
+    padding-bottom: 15px;
+    font-size: 1.2rem;
 }

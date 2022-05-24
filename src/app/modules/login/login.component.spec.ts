@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, RouterOutlet } from '@angular/router';
@@ -285,14 +285,13 @@ describe('LoginComponent', () => {
     const tokenId = 'login-2fa-input'
 
 
-
     setFieldValue(fixture, tokenId, '123345');
     dispatchFakeEvent(findEl(fixture, tokenId).nativeElement, 'blur');
 
 
     fixture.detectChanges();
-    tick(1000);
-    fixture.detectChanges();
+    //tick(1200);
+    //fixture.detectChanges();
     spyOn(router, 'navigate');
 
     expect(component.form2FA.valid).toBeTrue();
@@ -306,7 +305,7 @@ describe('LoginComponent', () => {
     findEl(fixture, 'login-form2fa').triggerEventHandler('submit', {});
     expect(authServiceSpy.confirm2FA).toHaveBeenCalled();
 
-
+    flush();
 
   }));
 

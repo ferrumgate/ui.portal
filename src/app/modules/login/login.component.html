@@ -17,7 +17,7 @@
             </mat-card-content>
         </mat-card>
         <mat-card *ngIf="!is2FA" fxLayout="column" fxLayoutAlign="center center" class="login-mat-card">
-            <mat-card-title></mat-card-title>
+            <mat-card-title class="login-title">{{"SignIn"|translate}}</mat-card-title>
             <mat-card-content>
                 <form test-id="login-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>
@@ -54,11 +54,11 @@
                         <button test-id="login-submit-button" type="submit" mat-raised-button
                             [disabled]="!form.valid">{{"SignIn"|translate}}</button>
                     </div>
-                    <div class="login-forgotpassword">
-                        <span> <a mat-flat-button href="/forgotpass"
+                    <div class="login-forgotpassword" fxLayout="row" fxLayoutAlign="end">
+                        <span> <a mat-flat-button href="/user/forgotpass"
                                 target="_self">{{"ForgotPassword"|translate}}?</a></span>
                     </div>
-                    <div class="login-register">
+                    <div class="login-register" fxLayout="row" fxLayoutAlign="end">
                         <span><a mat-flat-button href="/register"
                                 target="_self">{{"DontHaveAnAccount"|translate}}?</a></span>
                     </div>

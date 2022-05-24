@@ -54,7 +54,7 @@ export class TranslationService {
   }
 
   getAllLanguages() {
-    return ['en'];
+    return ['en', 'en'];
   }
 }
 

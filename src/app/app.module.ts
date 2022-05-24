@@ -32,6 +32,11 @@ import { CommonModule } from '@angular/common';
 import { CaptchaService } from './core/services/captcha.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { LoadingService } from './modules/shared/loading/loading.service';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -63,7 +68,12 @@ import { LoadingService } from './modules/shared/loading/loading.service';
     ZeroLayoutModule,
     DefaultLayoutModule,
     LayoutModule,
-    SharedModule
+    SharedModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
 
   ],
   providers: [

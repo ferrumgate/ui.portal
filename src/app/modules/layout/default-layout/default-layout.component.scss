@@ -1,0 +1,54 @@
+.default-layout-container {}
+
+.defaultlayout-container mat-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+    height: 60px;
+    font-size: 0.9rem;
+}
+
+
+.defaultlayout-sidenav {
+    min-width: 250px;
+}
+
+.defaultlayout-sidecontainer {
+    margin-top: 60px;
+}
+
+.defaultlayout-logo {
+    height: 30px;
+    padding-right: 5px;
+}
+
+.defaultlayout-themeselector {
+    line-height: 1rem;
+    margin-left: 20px;
+
+}
+
+.defaultlayout-languageselector {
+    //margin-right: 25px;
+    width: 50px;
+    text-align: center;
+
+}
+
+.defaultlayout-user {
+    line-height: 1rem;
+    padding: 5px;
+
+}
+
+.defaultlayout-user-options {
+    line-height: 1rem;
+}
+
+.defaultlayout-notifications {
+    margin-right: 20px;
+}
+
+.defaultlayout-content {
+    min-height: calc(100vh - 60px);
+}

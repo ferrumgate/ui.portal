@@ -3,9 +3,9 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from '../shared.module';
 
 import { ThemeSelectorComponent } from './themeselector.component';

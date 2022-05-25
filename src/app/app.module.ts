@@ -9,8 +9,8 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AuthenticationService } from './core/services/authentication.service';
-import { NotificationService } from './core/services/notification.service';
+import { AuthenticationService } from './modules/shared/services/authentication.service';
+import { NotificationService } from './modules/shared/services/notification.service';
 import { JwtInterceptor } from './core/interceptors/jwtInterceptor';
 import { HttpErrorInterceptor } from './core/interceptors/httpErrorInterceptor';
 import { ErrorInterceptor } from './core/interceptors/errorInterceptor';
@@ -19,24 +19,24 @@ import { AuthenticationGuard } from './core/guards/authenticationGuard';
 import { MaterialModule } from './modules/shared/material-module';
 
 
-import { translationHttpLoaderFactory, TranslationService } from './core/services/translation.service';
+import { translationHttpLoaderFactory, TranslationService } from './modules/shared/services/translation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ZeroLayoutModule } from './modules/layout/zero-layout/zero-layout.module';
 import { DefaultLayoutModule } from './modules/layout/default-layout/default-layout.module';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { ConfigService } from './core/services/config.service';
+import { ConfigService } from './modules/shared/services/config.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { CaptchaService } from './core/services/captcha.service';
+import { CaptchaService } from './modules/shared/services/captcha.service';
 import { SharedModule } from './modules/shared/shared.module';
-import { LoadingService } from './modules/shared/loading/loading.service';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LoadingService } from './modules/shared/services/loading.service';
 
 
 

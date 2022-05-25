@@ -2,12 +2,13 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpEventType } from '@angular/common/http';
 import { interval, Observable, of, throwError, timer } from 'rxjs';
 import { catchError, map, finalize, retryWhen, take, delay, concatMap, delayWhen, scan, tap, mergeMap } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../../modules/shared/services/authentication.service';
 
 
-import { NotificationService } from '../services/notification.service';
-import { LoadingService } from 'src/app/modules/shared/loading/loading.service';
-import { TranslationService } from '../services/translation.service';
+import { NotificationService } from '../../modules/shared/services/notification.service';
+
+import { TranslationService } from '../../modules/shared/services/translation.service';
+import { LoadingService } from 'src/app/modules/shared/services/loading.service';
 
 
 

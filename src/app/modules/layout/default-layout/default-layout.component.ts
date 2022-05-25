@@ -2,11 +2,11 @@ import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@ang
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 import { MatSidenav } from '@angular/material/sidenav';

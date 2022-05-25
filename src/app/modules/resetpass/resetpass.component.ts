@@ -5,15 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { RunHelpers } from 'rxjs/testing';
-import { ResetPass } from 'src/app/core/models/resetpass';
-import { Login, Login2FA } from 'src/app/core/models/login';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { InputService } from 'src/app/core/services/input.service';
-import { LoggerService } from 'src/app/core/services/logger.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { ResetPass } from 'src/app/modules/shared/models/resetpass';
+import { Login, Login2FA } from 'src/app/modules/shared/models/login';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { InputService } from 'src/app/modules/shared/services/input.service';
+import { LoggerService } from 'src/app/modules/shared/services/logger.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
   selector: 'app-resetpass',

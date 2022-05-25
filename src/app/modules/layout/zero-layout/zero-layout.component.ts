@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
   selector: 'app-zero-layout',

@@ -1,7 +1,7 @@
 import { Overlay } from '@angular/cdk/overlay';
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { CustomSelectOverlay } from '../custom-select-overlay';
 
 @Component({

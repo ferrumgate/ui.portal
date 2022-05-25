@@ -13,6 +13,7 @@ import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from "ng
 import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service";
 import { QRCodeModule } from 'angularx-qrcode';
 import { NavMenuComponent } from './navmenu/navmenu.component';
+import { ToolbarComponent } from "./toolbar/toolbar.component";
 
 
 
@@ -32,7 +33,9 @@ import { NavMenuComponent } from './navmenu/navmenu.component';
         LanguageSelectorComponent,
         LoadingComponent,
         QRCodeModule,
-        NavMenuComponent
+        NavMenuComponent,
+        ToolbarComponent
+
 
     ],
     imports: [
@@ -60,7 +63,8 @@ import { NavMenuComponent } from './navmenu/navmenu.component';
         FooterComponent,
         LanguageSelectorComponent,
         LoadingComponent,
-        NavMenuComponent
+        NavMenuComponent,
+        ToolbarComponent
     ],
     providers: [
         {

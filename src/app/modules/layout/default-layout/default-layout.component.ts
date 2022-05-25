@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { CaptchaService } from 'src/app/core/services/captcha.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-default-layout',
@@ -17,6 +18,7 @@ import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 
 })
 export class DefaultLayoutComponent {
+
 
   isMobile = false;
   isThemeDark = false;
@@ -39,7 +41,13 @@ export class DefaultLayoutComponent {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
   }
+
   isExpanded = false;
+  @ViewChild('snav')
+  nav!: MatSidenav;
+  menuClicked(event: any) {
+    this.nav.toggle();
+  }
   menus: NavMenuItem[] = [
     {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: 'Dashboard', subItems: [], navigate: () => { this.router.navigate(['/dashboard']) }

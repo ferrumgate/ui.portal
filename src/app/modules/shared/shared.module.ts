@@ -12,6 +12,8 @@ import { LoadingComponent } from './loading/loading.component';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from "ng-recaptcha";
 import { ReCaptchaV3ServiceCustom } from "src/app/core/services/captcha.service";
 import { QRCodeModule } from 'angularx-qrcode';
+import { NavMenuComponent } from './navmenu/navmenu.component';
+
 
 
 
@@ -29,7 +31,8 @@ import { QRCodeModule } from 'angularx-qrcode';
         FooterComponent,
         LanguageSelectorComponent,
         LoadingComponent,
-        QRCodeModule
+        QRCodeModule,
+        NavMenuComponent
 
     ],
     imports: [
@@ -56,7 +59,8 @@ import { QRCodeModule } from 'angularx-qrcode';
         ThemeSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
-        LoadingComponent
+        LoadingComponent,
+        NavMenuComponent
     ],
     providers: [
         {

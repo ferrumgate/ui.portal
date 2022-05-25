@@ -7,11 +7,14 @@ import { TranslationService } from 'src/app/core/services/translation.service';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { CaptchaService } from 'src/app/core/services/captcha.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 
 @Component({
   selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
-  styleUrls: ['./default-layout.component.scss']
+  styleUrls: ['./default-layout.component.scss'],
+
 })
 export class DefaultLayoutComponent {
 
@@ -36,5 +39,22 @@ export class DefaultLayoutComponent {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
   }
+  isExpanded = false;
+  menus: NavMenuItem[] = [
+    {
+      icon: 'dashboard', isClicked: false, isExpanded: false, name: 'Dashboard', subItems: [], navigate: () => { this.router.navigate(['/dashboard']) }
+    },
+    {
+      icon: 'settings', isClicked: false, isExpanded: false, name: 'Settings',
+      subItems: [
+        {
+          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
+        },
+        {
+          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+        }
+      ], navigate: () => { this.router.navigate(['/dashboard']) }
+    }
+  ]
 
 }

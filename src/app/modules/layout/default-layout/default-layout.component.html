@@ -63,10 +63,9 @@
 
 
     <mat-sidenav-container fxFill class="defaultlayout-sidecontainer">
-        <mat-sidenav class="defaultlayout-sidenav" #snav [mode]="'side'" isOpen="true" [fixedInViewport]="true">
-            <mat-nav-list>
-                <a mat-list-item routerLink=".">onu yak</a>
-            </mat-nav-list>
+        <mat-sidenav class="defaultlayout-sidenav" #snav [mode]="'side'" opened="true">
+
+            <app-navmenu [items]="menus"></app-navmenu>
         </mat-sidenav>
 
         <mat-sidenav-content class="defaultlayout-content">

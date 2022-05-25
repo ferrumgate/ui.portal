@@ -299,6 +299,7 @@ describe('LoginComponent', () => {
     expect(findEl(fixture, 'login-2fa-button').properties['disabled']).toBe(false);
 
     authServiceSpy.confirm2FA.and.returnValue(of({ key: 'adfaf' }))
+    authServiceSpy.getAccessToken.and.returnValue(of({ accessToken: 'adfaf' }))
 
     //click submit
 

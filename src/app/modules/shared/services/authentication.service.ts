@@ -30,6 +30,7 @@ export class AuthenticationService {
   private _getRefreshToken = this.configService.getApiUrl() + '/auth/refreshtoken';
   private _userForgotPass = this.configService.getApiUrl() + '/user/forgotpass'
   private _userResetPass = this.configService.getApiUrl() + '/user/resetpass'
+  private _userCurrent = this.configService.getApiUrl() + '/user/current';
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -178,6 +179,14 @@ export class AuthenticationService {
 
   resetPassword(key: string, password: string, captcha?: string, action?: string): any {
     return this.httpService.post(this._userResetPass, { key: key, pass: password, captcha: captcha, action: action }, this._jsonHeader);
+  }
+
+  getUserCurrent() {
+    return this.httpService.get<User>(this._userCurrent).pipe(map(user => {
+      if (this.currentSession)
+        this.currentSession.currentUser = user;
+      return user;
+    }))
   }
 
 

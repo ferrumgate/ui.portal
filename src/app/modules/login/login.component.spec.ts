@@ -28,7 +28,8 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  const authServiceSpy = jasmine.createSpyObj('AuthenticationService', ['loginLocal', 'getAccessToken', 'confirm2FA']);
+  const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
+    ['loginLocal', 'getAccessToken', 'confirm2FA', 'getUserCurrent']);
   const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
 
   let router: Router;
@@ -218,6 +219,7 @@ describe('LoginComponent', () => {
     captchaServiceSpy.execute.and.returnValue(of('sometoken'))
     authServiceSpy.loginLocal.and.returnValue(of({ body: true }))
     authServiceSpy.getAccessToken.and.returnValue(of({ body: true }))
+    authServiceSpy.getUserCurrent.and.returnValue(of({ id: 'someid' }))
     spyOn(router, 'navigate')
 
     //click submit
@@ -230,6 +232,8 @@ describe('LoginComponent', () => {
     expect(captchaServiceSpy.execute).toHaveBeenCalled();
     expect(authServiceSpy.loginLocal).toHaveBeenCalled();
     expect(authServiceSpy.getAccessToken).toHaveBeenCalled();
+    expect(authServiceSpy.getUserCurrent).toHaveBeenCalled();
+
     expect(router.navigate).toHaveBeenCalled();
 
   }));

@@ -2,20 +2,20 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from 'src/app/core/guards/authenticationGuard';
 import { RoleGuard } from 'src/app/core/guards/roleGuard';
-import { DefaultLayoutComponent } from './default-layout.component';
+import { ManageLayoutComponent } from './manage-layout.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: DefaultLayoutComponent,
+    component: ManageLayoutComponent,
     canActivate: [AuthenticationGuard],
     children: [
       {
         path: 'dashboard',
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['Admin', 'Reporter', 'User']
+          expectedRole: ['Admin', 'Reporter']
         },
         loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
 
@@ -29,4 +29,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DefaultLayoutRoutingModule { }
+export class ManageLayoutRoutingModule { }

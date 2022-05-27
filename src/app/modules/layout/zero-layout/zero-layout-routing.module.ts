@@ -13,7 +13,6 @@ const routes: Routes = [
 
       },
 
-
       {
         path: 'login',
         loadChildren: () => import('../../login/login.module').then(m => m.LoginModule),
@@ -34,6 +33,11 @@ const routes: Routes = [
       {
         path: 'user/emailconfirm',
         loadChildren: () => import('../../emailconfirm/emailconfirm.module').then(m => m.EmailConfirmModule)
+
+      },
+      {
+        path: 'screenswitch',
+        loadChildren: () => import('../../screenswitch/screenswitch.module').then(m => m.ScreenSwitchModule)
 
       },
       {

@@ -42,6 +42,11 @@ export class ToolbarComponent {
   menuClicked = new EventEmitter();
 
 
-
+  logout() {
+    this.authService.logout();
+  }
+  userSettings() {
+    this.router.navigate(['/user/settings']);
+  }
 
 }

@@ -26,6 +26,7 @@ describe('AuthenticationService', () => {
     service = TestBed.inject(AuthenticationService);
     router = TestBed.inject(Router);
 
+
   });
 
   it('should be created', () => {
@@ -96,6 +97,26 @@ describe('AuthenticationService', () => {
       expect(x.result).toBeTruthy();
       done();
     })
+  });
+
+
+  it('getUserCurrent', (done) => {
+
+    //mock service
+    httpClientSpy.post.and.returnValue(of({ accessToken: '' }));
+    httpClientSpy.get.and.returnValue(of({ id: 'someid' }));
+    service.getAccessToken('key').subscribe(x => {
+
+      service.getUserCurrent().subscribe(x => {
+        expect(x).toBeTruthy();
+
+        expect(service.currentSession?.currentUser).toBeTruthy();
+        expect(service.currentSession?.currentUser.id).toBe('someid');
+        done();
+      })
+
+    })
+
   });
 
 });

@@ -48,5 +48,9 @@
     "Change": "Change",
     "SendEmail": "Send email",
     "SuccessfullySendedEmail": "Successfully sended email, please check your email",
-    "ResetPassword": "Reset password"
+    "ResetPassword": "Reset password",
+    "Settings": "Settings",
+    "Dashboard": "Dashboard",
+    "ApiKey": "Api Key",
+    "Logs": "Logs"
 }

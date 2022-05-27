@@ -1,0 +1,19 @@
+<div class="managelayout-container" fxLayout="column">
+
+
+
+    <app-toolbar (menuClicked)="menuClicked($event)"></app-toolbar>
+
+
+
+    <mat-sidenav-container fxFill class="managelayout-sidecontainer">
+        <mat-sidenav class="managelayout-sidenav" #snav [mode]="'side'" opened="true">
+
+            <app-navmenu [items]="menus"></app-navmenu>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="managelayout-content">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

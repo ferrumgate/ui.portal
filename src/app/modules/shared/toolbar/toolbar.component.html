@@ -1,0 +1,57 @@
+<mat-toolbar color="{{isThemeDark?'':'primary'}}" class="toolbar-container">
+    <span>
+        <img mat-card-sm-image matTooltip="FerrumGate" class="toolbar-logo" src="/assets/img/logo-white.svg"
+            *ngIf="true">
+
+        <!-- <img mat-card-md-image class="toolbar-logo" src="/assets/img/logo-black.svg" *ngIf="!isThemeDark"> -->
+    </span>
+    <button mat-icon-button (click)="menuClicked.emit('menuClicked')" matTooltip="Menu" aria-label="menu icon">
+        <mat-icon>menu</mat-icon>
+    </button>
+
+
+    <span fxFlex="auto"></span>
+
+    <div class="toolbar-themeselector">
+        <app-themeselector [showThemeName]="true"></app-themeselector>
+    </div>
+    <mat-divider vertical style="height:40px;margin: 10px;"></mat-divider>
+
+    <button mat-icon-button aria-label="Example icon-button with heart icon" class="toolbar-notifications">
+        <mat-icon matBadge="15" matBadgeColor="warn">notification_important</mat-icon>
+        <!-- Include text description of the icon's meaning for screen-readers -->
+        <span class="cdk-visually-hidden">
+            Example with a home icon with overlaid badge showing the number 15
+        </span>
+    </button>
+
+
+    <button mat-stroked-button [matMenuTriggerFor]="auth" class="toolbar-user" fxLayout="row"
+        fxLayoutAlign="center center">
+        <mat-icon style="padding-right: 5px;">person_outline</mat-icon>
+        <span mat-flat-button style="padding-top:1px ;">hamzakilic</span>
+
+        <mat-icon>keyboard_arrow_down</mat-icon>
+
+
+    </button>
+
+
+    <mat-menu #auth="matMenu" class="toolbar-user-options">
+        <button mat-menu-item (click)="userSettings()">
+            <mat-icon>settings</mat-icon>
+            <span>{{"Settings"|translate}}</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>{{"SignOut"|translate}}</span>
+        </button>
+    </mat-menu>
+
+    <mat-divider vertical style="height:40px;margin: 10px;"></mat-divider>
+    <div class="toolbar-languageselector" *ngIf="showLanguages">
+        <app-languageselector></app-languageselector>
+    </div>
+
+
+</mat-toolbar>

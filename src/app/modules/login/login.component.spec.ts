@@ -7,11 +7,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { AppModule } from 'src/app/app.module';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
 import { MaterialModule } from '../shared/material-module';
@@ -24,11 +24,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 
+
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  const authServiceSpy = jasmine.createSpyObj('AuthenticationService', ['loginLocal', 'getAccessToken', 'confirm2FA']);
+  const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
+    ['loginLocal', 'getAccessToken', 'confirm2FA', 'getUserCurrent'], ['currentSession']);
   const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
 
   let router: Router;
@@ -215,21 +217,32 @@ describe('LoginComponent', () => {
 
 
     component.isCaptchaEnabled = true;
+
+    (Object.getOwnPropertyDescriptor(authServiceSpy, 'currentSession')?.get as any)
+      .and.returnValue({
+        currentUser: {
+          roles: []
+        }
+      })
+
     captchaServiceSpy.execute.and.returnValue(of('sometoken'))
     authServiceSpy.loginLocal.and.returnValue(of({ body: true }))
     authServiceSpy.getAccessToken.and.returnValue(of({ body: true }))
+    authServiceSpy.getUserCurrent.and.returnValue(of({ id: 'someid' }))
     spyOn(router, 'navigate')
 
     //click submit
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
 
-    fixture.detectChanges();
-    tick(1000);
+    //fixture.detectChanges();
+    //tick(1000);
     fixture.detectChanges();
 
     expect(captchaServiceSpy.execute).toHaveBeenCalled();
     expect(authServiceSpy.loginLocal).toHaveBeenCalled();
     expect(authServiceSpy.getAccessToken).toHaveBeenCalled();
+    expect(authServiceSpy.getUserCurrent).toHaveBeenCalled();
+
     expect(router.navigate).toHaveBeenCalled();
 
   }));
@@ -299,6 +312,7 @@ describe('LoginComponent', () => {
     expect(findEl(fixture, 'login-2fa-button').properties['disabled']).toBe(false);
 
     authServiceSpy.confirm2FA.and.returnValue(of({ key: 'adfaf' }))
+    authServiceSpy.getAccessToken.and.returnValue(of({ accessToken: 'adfaf' }))
 
     //click submit
 

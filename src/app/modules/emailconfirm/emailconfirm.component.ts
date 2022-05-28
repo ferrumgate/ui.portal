@@ -3,11 +3,11 @@ import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, delay, map, of, switchMap } from 'rxjs';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
   selector: 'app-emailconfirm',

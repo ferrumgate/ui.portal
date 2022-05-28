@@ -30,6 +30,7 @@ export class AuthenticationService {
   private _getRefreshToken = this.configService.getApiUrl() + '/auth/refreshtoken';
   private _userForgotPass = this.configService.getApiUrl() + '/user/forgotpass'
   private _userResetPass = this.configService.getApiUrl() + '/user/resetpass'
+  private _userCurrent = this.configService.getApiUrl() + '/user/current';
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -67,6 +68,8 @@ export class AuthenticationService {
   get currentSession() {
     return this._currentSession;
   }
+
+
 
   private _jsonHeader = {
 
@@ -127,8 +130,8 @@ export class AuthenticationService {
       }))
   }
 
-  loginLocal(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<Session>(this._authLocal, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader)
+  loginLocal(username: string, password: string, captcha?: string, action?: string) {
+    return this.httpService.post<Session>(this._authLocal, { username: username, password: password, captcha: captcha, action: action }, this._jsonHeader)
       .pipe(
         switchMap((res: any) => {
 
@@ -145,7 +148,7 @@ export class AuthenticationService {
   }
 
   register(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<{ result: boolean }>(this._authRegister, { email: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
+    return this.httpService.post<{ result: boolean }>(this._authRegister, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
   }
 
 
@@ -173,11 +176,19 @@ export class AuthenticationService {
   }
 
   forgotPassword(email: string, captcha?: string, action?: string): any {
-    return this.httpService.post(this._userForgotPass, { email: email, captcha: captcha, action: action }, this._jsonHeader);
+    return this.httpService.post(this._userForgotPass, { username: email, captcha: captcha, action: action }, this._jsonHeader);
   }
 
   resetPassword(key: string, password: string, captcha?: string, action?: string): any {
     return this.httpService.post(this._userResetPass, { key: key, pass: password, captcha: captcha, action: action }, this._jsonHeader);
+  }
+
+  getUserCurrent() {
+    return this.httpService.get<User>(this._userCurrent).pipe(map(user => {
+      if (this.currentSession)
+        this.currentSession.currentUser = user;
+      return user;
+    }))
   }
 
 

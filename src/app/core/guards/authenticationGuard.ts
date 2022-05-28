@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthenticationService } from '../services/authentication.service';
-import { LoggerService } from '../services/logger.service';
+import { AuthenticationService } from '../../modules/shared/services/authentication.service';
+import { LoggerService } from '../../modules/shared/services/logger.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -17,7 +17,7 @@ export class AuthenticationGuard implements CanActivate {
         }
         this.logger.error(`auth failed`);
         // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+        this.router.navigate(['/login']);
         return false;
     }
 }

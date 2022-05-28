@@ -1,5 +1,6 @@
 <div>
-    <mat-select [value]="selected" (selectionChange)="changeLanguage($event)" name="items">
+    <mat-select #select [value]="selected" (selectionChange)="changeLanguage($event)" [disableOptionCentering]="true"
+        name="items" panelClass="languageselector-custom-overlay-panel">
         <mat-option *ngFor="let item of items" [value]="item.value">{{item.name}}</mat-option>
     </mat-select>
 </div>

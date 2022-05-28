@@ -1,9 +1,9 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NotificationService } from '../services/notification.service';
-import { LoggerService } from '../services/logger.service';
-import { TranslationService } from '../services/translation.service';
-import { LoadingService } from 'src/app/modules/shared/loading/loading.service';
+import { NotificationService } from '../../modules/shared/services/notification.service';
+import { LoggerService } from '../../modules/shared/services/logger.service';
+import { TranslationService } from '../../modules/shared/services/translation.service';
+
 
 @Injectable()
 export class ErrorInterceptor implements ErrorHandler {

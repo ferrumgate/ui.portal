@@ -1,0 +1,27 @@
+<mat-nav-list test-id="navmenu-navlist" class="navmenu" fxLayout="column">
+
+    <ng-container *ngFor="let item of items">
+
+        <a mat-list-item test-id="navmenu-item" (click)="itemClicked(item)" [class.mat-elevation-z2]="item.isClicked"
+            fxFlex="grow">
+            <span>
+                <mat-icon matListIcon>{{item.icon}}</mat-icon>
+            </span>
+            <span fxFlex="grow">{{item.name|translate}}</span>
+            <span *ngIf="item.subItems.length" fxLayout="row" fxLayoutAlign="end center">
+                <mat-icon matListIcon [@indicatorRotate]="item.isExpanded ? 'expanded': 'collapsed'">
+                    keyboard_arrow_down</mat-icon>
+            </span>
+        </a>
+        <ng-container *ngIf="item.isExpanded">
+            <a fxFlex="grow" test-id="navmenu-subitem" *ngFor="let subitem of item.subItems" mat-list-item
+                (click)="subItemClicked(item,subitem)" style="padding-left: 20px;"
+                [class.mat-elevation-z2]="subitem.isClicked">
+                <mat-icon matListIcon>{{subitem.icon}}</mat-icon>
+                <p matLine>
+                    <span>{{subitem.name|translate}} </span>
+                </p>
+            </a>
+        </ng-container>
+    </ng-container>
+</mat-nav-list>

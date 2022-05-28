@@ -7,11 +7,12 @@ import { delay, filter, of, switchMap, take } from 'rxjs';
 import { fadeAnimation } from './app.animation';
 
 
-import { AuthenticationService } from './core/services/authentication.service';
-import { ConfigService } from './core/services/config.service';
-import { LoggerService } from './core/services/logger.service';
-import { TranslationService } from './core/services/translation.service';
-import { LoadingService } from './modules/shared/loading/loading.service';
+import { AuthenticationService } from './modules/shared/services/authentication.service';
+import { ConfigService } from './modules/shared/services/config.service';
+import { LoadingService } from './modules/shared/services/loading.service';
+import { LoggerService } from './modules/shared/services/logger.service';
+import { TranslationService } from './modules/shared/services/translation.service';
+
 
 @Component({
   selector: 'app-root',

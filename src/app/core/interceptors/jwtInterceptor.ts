@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { tap } from 'rxjs/operators';
 
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthenticationService } from '../../modules/shared/services/authentication.service';
 
 
 @Injectable()

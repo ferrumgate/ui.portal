@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
   selector: 'app-themeselector',
@@ -12,7 +12,8 @@ export class ThemeSelectorComponent implements OnInit {
 
   isDarkTheme = false;
   themeName = 'White';
-
+  @Input('showThemeName')
+  showThemeName = true;
   constructor(private configService: ConfigService) {
     this.configService.themeChanged.subscribe(x => {
       this.isDarkTheme = x == 'dark';

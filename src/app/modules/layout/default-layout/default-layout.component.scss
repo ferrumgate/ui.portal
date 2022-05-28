@@ -1,0 +1,25 @@
+.default-layout-container {}
+
+.defaultlayout-container app-toolbar {
+    position: fixed;
+    width: 100%;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+    height: 60px;
+    font-size: 0.9rem;
+}
+
+
+.defaultlayout-sidenav {
+    min-width: 250px;
+}
+
+.defaultlayout-sidecontainer {
+    margin-top: 60px;
+}
+
+
+
+.defaultlayout-content {
+    min-height: calc(100vh - 60px);
+}

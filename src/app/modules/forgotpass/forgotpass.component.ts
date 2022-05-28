@@ -4,13 +4,13 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, of, switchMap } from 'rxjs';
-import { ForgotPass } from 'src/app/core/models/forgotpass';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { InputService } from 'src/app/core/services/input.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { ForgotPass } from 'src/app/modules/shared/models/forgotpass';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { InputService } from 'src/app/modules/shared/services/input.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
   selector: 'app-forgotpass',

@@ -1,18 +1,20 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { RunHelpers } from 'rxjs/testing';
-import { Login, Login2FA } from 'src/app/core/models/login';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { CaptchaService } from 'src/app/core/services/captcha.service';
-import { ConfigService } from 'src/app/core/services/config.service';
-import { InputService } from 'src/app/core/services/input.service';
-import { LoggerService } from 'src/app/core/services/logger.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { TranslationService } from 'src/app/core/services/translation.service';
+import { Login, Login2FA } from 'src/app/modules/shared/models/login';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { InputService } from 'src/app/modules/shared/services/input.service';
+import { LoggerService } from 'src/app/modules/shared/services/logger.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { RBACDefault } from '../shared/models/rbac';
 
 
 @Component({
@@ -93,6 +95,24 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  private navigateAfterLogin() {
+
+    if (!this.authService.currentSession)
+      throw new Error('something went wrong');
+
+    const isAdmin = this.authService.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
+    const isReporter = this.authService.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
+    const isUser = this.authService.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
+
+    if ((isAdmin || isReporter)) {
+      this.router.navigate(['/screenswitch']);
+    }
+    else {
+      this.router.navigate(['/dashboard']);
+    }
+
+
+  }
   private login(captcha?: string, action?: string) {
     //reset when starting login
     this.model2fa.key = undefined;//this is an impontant security enhancement
@@ -111,11 +131,17 @@ export class LoginComponent implements OnInit {
 
         } else {
 
-          return this.authService.getAccessToken(response.key).pipe(map(() => {
-            this.isLogined = true;
-            this.error = this.resetErrors();
-            this.router.navigate(['/dashboard']);
-          }))
+          return this.authService.getAccessToken(response.key)
+            .pipe(
+              switchMap(x => {
+                return this.authService.getUserCurrent();
+              }),
+              map(() => {
+                this.isLogined = true;
+                this.error = this.resetErrors();
+                this.navigateAfterLogin();
+
+              }))
         }
       }))
   }

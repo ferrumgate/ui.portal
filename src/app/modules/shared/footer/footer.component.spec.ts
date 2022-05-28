@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ConfigService } from 'src/app/core/services/config.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
 
 import { FooterComponent } from './footer.component';
 

@@ -3,10 +3,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { findEl } from '../helper.spec';
+import { LoadingService } from '../services/loading.service';
 import { SharedModule } from '../shared.module';
 
 import { LoadingComponent } from './loading.component';
-import { LoadingService } from './loading.service';
+
 
 describe('LoadingComponent', () => {
   let component: LoadingComponent;

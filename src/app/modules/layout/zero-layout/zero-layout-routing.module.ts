@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthenticationGuard } from 'src/app/core/guards/authenticationGuard';
 import { ZeroLayoutComponent } from './zero-layout.component';
 
 const routes: Routes = [
@@ -12,7 +13,6 @@ const routes: Routes = [
         loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
 
       },
-
 
       {
         path: 'login',
@@ -34,6 +34,12 @@ const routes: Routes = [
       {
         path: 'user/emailconfirm',
         loadChildren: () => import('../../emailconfirm/emailconfirm.module').then(m => m.EmailConfirmModule)
+
+      },
+      {
+        path: 'screenswitch',
+        canActivate: [AuthenticationGuard],
+        loadChildren: () => import('../../screenswitch/screenswitch.module').then(m => m.ScreenSwitchModule)
 
       },
       {

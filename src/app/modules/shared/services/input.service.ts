@@ -30,7 +30,7 @@ export class InputService {
 
   static emailValidator(control: any) {
     // RFC 2822 compliant regex
-    if (control == null || control.value == null || control.value === '') {
+    if (control == null || control.value == null || control.value === '' || control.value == 'admin') {
       return null;
     } else if (!control.value.match(/^((?!yopmail.com|boximail.com|eelmail.com|maildrop.cc|mailnesia.com|mintemail.com|mt2015.com|mt2014.com|thankyou2010.com|trash2009.com|mt2009.com|trashymail.com|mytrashmail.com|dispostable.com|trbvn.com|mailinator.com).)*$/)) {
       return { 'invalidEmail': true };

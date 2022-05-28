@@ -1,1 +1,19 @@
-<p>default-layout works!</p>
+<div class="defaultlayout-container" fxLayout="column">
+
+
+
+    <app-toolbar (menuClicked)="menuClicked($event)"></app-toolbar>
+
+
+
+    <mat-sidenav-container fxFill class="defaultlayout-sidecontainer">
+        <mat-sidenav class="defaultlayout-sidenav" #snav [mode]="'side'" opened="true">
+
+            <app-navmenu [items]="menus"></app-navmenu>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="defaultlayout-content">
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

@@ -52,5 +52,7 @@
     "Settings": "Settings",
     "Dashboard": "Dashboard",
     "ApiKey": "Api Key",
-    "Logs": "Logs"
+    "Logs": "Logs",
+    "Manage": "Manage",
+    "Use": "Use"
 }

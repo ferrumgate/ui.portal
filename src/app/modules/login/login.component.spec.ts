@@ -24,12 +24,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 
+
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
   const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
-    ['loginLocal', 'getAccessToken', 'confirm2FA', 'getUserCurrent']);
+    ['loginLocal', 'getAccessToken', 'confirm2FA', 'getUserCurrent'], ['currentSession']);
   const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
 
   let router: Router;
@@ -216,6 +217,14 @@ describe('LoginComponent', () => {
 
 
     component.isCaptchaEnabled = true;
+
+    (Object.getOwnPropertyDescriptor(authServiceSpy, 'currentSession')?.get as any)
+      .and.returnValue({
+        currentUser: {
+          roles: []
+        }
+      })
+
     captchaServiceSpy.execute.and.returnValue(of('sometoken'))
     authServiceSpy.loginLocal.and.returnValue(of({ body: true }))
     authServiceSpy.getAccessToken.and.returnValue(of({ body: true }))
@@ -225,8 +234,8 @@ describe('LoginComponent', () => {
     //click submit
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
 
-    fixture.detectChanges();
-    tick(1000);
+    //fixture.detectChanges();
+    //tick(1000);
     fixture.detectChanges();
 
     expect(captchaServiceSpy.execute).toHaveBeenCalled();

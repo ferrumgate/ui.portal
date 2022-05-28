@@ -1,1 +1,15 @@
-<p>screenswitch works!</p>
+<div fxLayout="row layout-wrap" fxLayoutAlign="center center" class="screenswitch">
+
+    <button test-id="screenswitch-manage" *ngIf="isManaged" mat-raised-button class="screenswitch-button"
+        (click)="navigateTo('manage')">
+        <mat-icon style="padding-right:5px ;">settings</mat-icon>{{"Manage"|translate}}
+
+    </button>
+    <div *ngIf="isManaged" class="screenswitch-seperator" fxLayout="row" fxLayout="start end">
+
+    </div>
+    <button test-id="screenswitch-use" *ngIf="isUse" mat-raised-button class="screenswitch-button"
+        (click)="navigateTo('use')">
+        <mat-icon style="padding-right:5px ;">turned_in_not</mat-icon>{{"Use"|translate}}
+    </button>
+</div>

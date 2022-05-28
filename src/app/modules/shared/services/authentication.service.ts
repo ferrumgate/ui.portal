@@ -69,6 +69,8 @@ export class AuthenticationService {
     return this._currentSession;
   }
 
+
+
   private _jsonHeader = {
 
     headers: new HttpHeaders({
@@ -128,8 +130,8 @@ export class AuthenticationService {
       }))
   }
 
-  loginLocal(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<Session>(this._authLocal, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader)
+  loginLocal(username: string, password: string, captcha?: string, action?: string) {
+    return this.httpService.post<Session>(this._authLocal, { username: username, password: password, captcha: captcha, action: action }, this._jsonHeader)
       .pipe(
         switchMap((res: any) => {
 
@@ -146,7 +148,7 @@ export class AuthenticationService {
   }
 
   register(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<{ result: boolean }>(this._authRegister, { email: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
+    return this.httpService.post<{ result: boolean }>(this._authRegister, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
   }
 
 
@@ -174,7 +176,7 @@ export class AuthenticationService {
   }
 
   forgotPassword(email: string, captcha?: string, action?: string): any {
-    return this.httpService.post(this._userForgotPass, { email: email, captcha: captcha, action: action }, this._jsonHeader);
+    return this.httpService.post(this._userForgotPass, { username: email, captcha: captcha, action: action }, this._jsonHeader);
   }
 
   resetPassword(key: string, password: string, captcha?: string, action?: string): any {

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthenticationGuard } from 'src/app/core/guards/authenticationGuard';
 import { ZeroLayoutComponent } from './zero-layout.component';
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'screenswitch',
+        canActivate: [AuthenticationGuard],
         loadChildren: () => import('../../screenswitch/screenswitch.module').then(m => m.ScreenSwitchModule)
 
       },

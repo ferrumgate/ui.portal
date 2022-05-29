@@ -28,7 +28,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         loading.show();
         return next.handle(request).pipe(
             map((event: any) => {
-                console.log('httperror interceptor is working');
+                //console.log('httperror interceptor is working');
                 return event;
             }),
             retryWhen(errors =>

@@ -31,6 +31,8 @@ export class AuthenticationService {
   private _userForgotPass = this.configService.getApiUrl() + '/user/forgotpass'
   private _userResetPass = this.configService.getApiUrl() + '/user/resetpass'
   private _userCurrent = this.configService.getApiUrl() + '/user/current';
+  private _authGoogle = this.configService.getApiUrl() + '/auth/google'
+  private _authGoogleCallback = this.configService.getApiUrl() + '/auth/google/callback'
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -190,6 +192,33 @@ export class AuthenticationService {
       return user;
     }))
   }
+
+  get googleAuthenticateUrl() {
+    return this._authGoogle;
+  }
+
+  authCallback(callback: { url: string; params: any; }) {
+    let url = '';
+    if (callback.url.includes('google')) {
+      url = this._authGoogle;
+    }
+
+    return this.httpService.get(this._authGoogleCallback, { params: callback.params }).pipe(
+      switchMap((res: any) => {
+        let response: {
+          key: string, is2FA: boolean
+        } = res;
+        return of(response);
+
+      }), catchError(err => {
+        this._currentSession = null;
+        this.saveSession();
+        throw err;
+      }))
+
+
+  }
+
 
 
 }

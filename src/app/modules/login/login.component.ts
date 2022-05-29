@@ -3,8 +3,8 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { delay, map, shareReplay, switchMap } from 'rxjs/operators';
 import { RunHelpers } from 'rxjs/testing';
 import { Login, Login2FA } from 'src/app/modules/shared/models/login';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
@@ -77,9 +77,20 @@ export class LoginComponent implements OnInit {
 
 
     this.route.queryParams.subscribe(params => {
+
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+      const callback = { url: '', params: {} };
+      callback.url = this.router.url;
+      callback.params = params;
+      //authenticating with google and redirect afterwards
+      if (callback.url.includes('/callback'))
+        of('').pipe(delay(1000), map(x => {
+          this.login(this.loginOther(callback)).subscribe();
+        })).subscribe();
+
     })
   }
+
   resetErrors() {
     return {
       email: '', password: '', login: ''
@@ -113,11 +124,17 @@ export class LoginComponent implements OnInit {
 
 
   }
-  private login(captcha?: string, action?: string) {
+  private loginLocal(captcha?: string, action?: string) {
+    return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action);
+  }
+  private loginOther(callback: { url: string, params: any }) {
+    return this.authService.authCallback(callback);
+  }
+  private login(firstStep: Observable<any>, captcha?: string, action?: string) {
     //reset when starting login
     this.model2fa.key = undefined;//this is an impontant security enhancement
     this.is2FA = false;
-    return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action)
+    return firstStep
       .pipe(switchMap(x => {
         this.error = this.resetErrors();
         let response: {
@@ -155,11 +172,11 @@ export class LoginComponent implements OnInit {
     if (this.isCaptchaEnabled) {
       this.captchaService.execute('login').pipe(
         switchMap((token: any) => {
-          return this.login(token, 'login');
+          return this.login(this.loginLocal(), token, 'login');
         })
       ).subscribe();
     } else {
-      this.login().subscribe();
+      this.login(this.loginLocal()).subscribe();
     }
 
   }
@@ -255,6 +272,10 @@ export class LoginComponent implements OnInit {
         }))
       }))
 
+  }
+
+  get googleAuthenticateUrl() {
+    return this.authService.googleAuthenticateUrl;
   }
 
 }

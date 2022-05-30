@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EmailConfirmComponent } from './emailconfirm.component';
+import { Confirm2FAComponent } from './confirm2fa.component';
 
 const routes: Routes = [
   {
-    path: '', component: EmailConfirmComponent
+    path: '',
+    component: Confirm2FAComponent
   }
 ];
 
@@ -12,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EmailConfirmRoutingModule { }
+export class Confirm2FARoutingModule { }

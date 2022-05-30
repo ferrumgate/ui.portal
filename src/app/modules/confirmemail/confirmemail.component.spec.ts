@@ -13,11 +13,11 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { findEl } from '../shared/helper.spec';
 import { SharedModule } from '../shared/shared.module';
 
-import { EmailConfirmComponent } from './emailconfirm.component';
+import { ConfirmEmailComponent } from './confirmemail.component';
 
-describe('EmailconfirmComponent', () => {
-  let component: EmailConfirmComponent;
-  let fixture: ComponentFixture<EmailConfirmComponent>;
+describe('ConfirmEmailComponent', () => {
+  let component: ConfirmEmailComponent;
+  let fixture: ComponentFixture<ConfirmEmailComponent>;
 
   const authServiceSpy = jasmine.createSpyObj('AuthenticationService', ['confirmUserEmail']);
   const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
@@ -26,7 +26,7 @@ describe('EmailconfirmComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EmailConfirmComponent],
+      declarations: [ConfirmEmailComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module],
       providers: [
@@ -48,7 +48,7 @@ describe('EmailconfirmComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EmailConfirmComponent);
+    fixture = TestBed.createComponent(ConfirmEmailComponent);
     component = fixture.componentInstance;
     router = TestBed.get(Router);
     fixture.detectChanges();
@@ -62,13 +62,13 @@ describe('EmailconfirmComponent', () => {
   it('email confirm show wait before confirming', fakeAsync(async () => {
     expect(component).toBeTruthy();
     //mat-card must exist
-    const view = findEl(fixture, 'emailconfirm-view');
+    const view = findEl(fixture, 'confirmemail-view');
     expect(view).toBeTruthy();
 
-    const confirmed = findEl(fixture, 'emailconfirm-confirmed', false);
+    const confirmed = findEl(fixture, 'confirmemail-confirmed', false);
     expect(confirmed).toBeFalsy();
 
-    const notconfirmed = findEl(fixture, 'emailconfirm-not-confirmed', false);
+    const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeTruthy();
 
 
@@ -80,7 +80,7 @@ describe('EmailconfirmComponent', () => {
 
     //create new elements because of spy
     authServiceSpy.confirmUserEmail.and.returnValue(of(''));
-    let fixture = TestBed.createComponent(EmailConfirmComponent);
+    let fixture = TestBed.createComponent(ConfirmEmailComponent);
     let component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -98,10 +98,10 @@ describe('EmailconfirmComponent', () => {
     expect(authServiceSpy.confirmUserEmail).toHaveBeenCalled();
 
 
-    const confirmed = findEl(fixture, 'emailconfirm-confirmed', false);
+    const confirmed = findEl(fixture, 'confirmemail-confirmed', false);
     expect(confirmed).toBeTruthy();
 
-    const notconfirmed = findEl(fixture, 'emailconfirm-not-confirmed', false);
+    const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeFalsy();
 
 

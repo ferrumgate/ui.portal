@@ -1,5 +1,5 @@
 import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -11,20 +11,22 @@ describe('AuthenticationService', () => {
   let service: AuthenticationService;
   const key = `ferrumgate_session`;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
-  let router: Router;
+  const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
   beforeEach(() => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, TranslateModule.forRoot()],
       providers: [
         { provide: HttpClient, useValue: httpClientSpy },
+        { provide: Router, useValue: routerSpy },
 
         TranslateService,
       ]
     });
 
     service = TestBed.inject(AuthenticationService);
-    router = TestBed.inject(Router);
+
 
 
   });
@@ -42,21 +44,45 @@ describe('AuthenticationService', () => {
     expect(session).toBeTruthy();
   });
 
-  it('loginLocal success', (done) => {
+  it('loginLocal success with 2FA', ((done) => {
     httpClientSpy.post.and.returnValue(of({ key: 'bla', is2FA: true }));
-    spyOn(router, 'navigate');
+    routerSpy.navigate.and.returnValue(of(''));
+
+
     service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe(x => {
-      expect(x.key).toBeTruthy();
-      expect(x.is2FA).toBeTruthy();
       expect(service.currentSession).toBeFalsy();
-      expect(router.navigate).not.toHaveBeenCalled();
+      expect(routerSpy.navigate).toHaveBeenCalled();
+
       done();
     });
-  });
+
+
+  }));
+  it('loginLocal success without 2FA', ((done) => {
+    httpClientSpy.post.and.returnValues(
+      of({ key: 'bla', is2FA: false }),
+      of({ accessToken: 'bla', refreshToken: "token", user: {} }));
+    httpClientSpy.get.and.returnValue(of({ id: 'bla', roles: [] }));
+
+
+    routerSpy.navigate.and.returnValue(of(''));
+
+
+    service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe(x => {
+      expect(service.currentSession).toBeTruthy();
+
+      //expect(getUserCurrentSpy).toHaveBeenCalled();
+      done();
+    });
+
+
+  }));
+
 
   it('loginLocal failure', (done) => {
     //mock service
     httpClientSpy.post.and.returnValue(throwError(() => { return { status: 401 } }));
+
     service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe({
       next: (x: any) => x,
       error: (err: any) => {
@@ -68,12 +94,12 @@ describe('AuthenticationService', () => {
   });
   it('logout', (done) => {
     //mock router
-    spyOn(router, 'navigate');
+    routerSpy.navigate.and.returnValue('');
     sessionStorage.setItem(AuthenticationService.SessionKey, 'something');
     service.logout();
     const item = sessionStorage.getItem(AuthenticationService.SessionKey);
     expect(item).toBeFalsy();
-    expect(router.navigate).toHaveBeenCalled();
+    expect(routerSpy.navigate).toHaveBeenCalled();
     done();
 
 
@@ -82,9 +108,14 @@ describe('AuthenticationService', () => {
   it('2fa confirm', (done) => {
 
     //mock service
-    httpClientSpy.post.and.returnValue(of({ key: 'somekey' }));
+
+    httpClientSpy.post.and.returnValues(
+      of({ key: 'bla', is2FA: false }),
+      of({ accessToken: 'bla', refreshToken: "token", user: {} }));
+    httpClientSpy.get.and.returnValue(of({ id: 'bla', roles: [] }));
+    routerSpy.navigate.and.returnValue(of(''));
     service.confirm2FA('bla', 'bla').subscribe(x => {
-      expect(x.key).toBeTruthy();
+      expect(service.currentSession).toBeTruthy();
       done();
     })
   });
@@ -114,6 +145,25 @@ describe('AuthenticationService', () => {
         expect(service.currentSession?.currentUser.id).toBe('someid');
         done();
       })
+
+    })
+
+  });
+
+  it('getRefreshToken', (done) => {
+
+    //mock service
+    httpClientSpy.post.and.returnValue(of({ accessToken: 'asd', refreshToken: 'def' }));
+
+    service.getRefreshToken().subscribe(x => {
+
+
+      expect(x).toBeTruthy();
+
+      expect(service.currentSession?.accessToken).toBeTruthy();
+      expect(service.currentSession?.refreshToken).toBeTruthy();
+      done();
+
 
     })
 

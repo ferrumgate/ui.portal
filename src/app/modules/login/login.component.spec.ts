@@ -22,6 +22,7 @@ import { LoginComponent } from './login.component';
 import { LoginModule } from './login.module';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -32,19 +33,17 @@ describe('LoginComponent', () => {
   const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
     ['loginLocal', 'getAccessToken', 'confirm2FA', 'getUserCurrent'], ['currentSession']);
   const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
-
   let router: Router;
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
       declarations: [LoginComponent, MatIcon],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,
-        { provide: AuthenticationService, useValue: authServiceSpy },
         { provide: CaptchaService, useValue: captchaServiceSpy },
-
+        { provide: AuthenticationService, useValue: authServiceSpy },
         TranslationService, NotificationService,
         ReCaptchaV3Service,
         {
@@ -60,7 +59,7 @@ describe('LoginComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
-    router = TestBed.get(Router);
+    router = TestBed.get(Router)
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -172,7 +171,6 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();
-    spyOn(router, 'navigate');
 
     expect(component.form.valid).toBeTrue();
     expect(component.model.email).toBeTruthy();
@@ -181,7 +179,7 @@ describe('LoginComponent', () => {
     expect(findEl(fixture, 'login-submit-button').properties['disabled']).toBe(false);
 
     authServiceSpy.loginLocal.and.returnValue(of({ body: true }))
-    authServiceSpy.getAccessToken.and.returnValue(of({ body: true }))
+
     //click submit
 
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
@@ -225,11 +223,10 @@ describe('LoginComponent', () => {
         }
       })
 
+
     captchaServiceSpy.execute.and.returnValue(of('sometoken'))
-    authServiceSpy.loginLocal.and.returnValue(of({ body: true }))
-    authServiceSpy.getAccessToken.and.returnValue(of({ body: true }))
-    authServiceSpy.getUserCurrent.and.returnValue(of({ id: 'someid' }))
-    spyOn(router, 'navigate')
+    authServiceSpy.loginLocal.and.returnValue(of(''))
+
 
     //click submit
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
@@ -240,87 +237,11 @@ describe('LoginComponent', () => {
 
     expect(captchaServiceSpy.execute).toHaveBeenCalled();
     expect(authServiceSpy.loginLocal).toHaveBeenCalled();
-    expect(authServiceSpy.getAccessToken).toHaveBeenCalled();
-    expect(authServiceSpy.getUserCurrent).toHaveBeenCalled();
-
-    expect(router.navigate).toHaveBeenCalled();
-
-  }));
-
-
-  it('login 2fa form token input', fakeAsync(async () => {
-    expect(component).toBeTruthy();
-    component.is2FA = true;
-    fixture.detectChanges();
-    tick(1000);
-    fixture.detectChanges();
-    expect(component.form2FA.invalid).toBe(true);
-
-    //work on password field
-    const tokenId = 'login-2fa-input';
-    const tokenForm = component.form2FA.controls['token'];
-
-    setFieldValue(fixture, tokenId, '');
-    dispatchFakeEvent(findEl(fixture, tokenId).nativeElement, 'blur');
-    fixture.detectChanges();
-    tick(1000);
-    fixture.detectChanges();
-
-
-
-
-    //check password values
-    expect(component.model2fa.token).toBe('');
-    expect(tokenForm.errors).toBeTruthy();
-    expect(component.error2fa.token).toBeTruthy();
-    expect(findEl(fixture, 'login-2fa-error')).toBeTruthy();
-
-    //set normal
-    setFieldValue(fixture, tokenId, 'somepassword');
-    dispatchFakeEvent(findEl(fixture, tokenId).nativeElement, 'blur');
-    fixture.detectChanges();
-    tick(1000);
-    fixture.detectChanges();
-
-    expect(component.model2fa.token).toBe('somepassword');
-    expect(tokenForm.errors).toBeFalsy();
-    expect(component.error2fa.token).toBeFalsy();
-    expect(findEl(fixture, 'login-2fa-error', false)).toBeFalsy();
 
 
   }));
 
 
-  it('login 2fa form submit', fakeAsync(async () => {
 
-    component.is2FA = true;
-    fixture.detectChanges();
-    const tokenId = 'login-2fa-input'
-
-
-    setFieldValue(fixture, tokenId, '123345');
-    dispatchFakeEvent(findEl(fixture, tokenId).nativeElement, 'blur');
-
-
-    fixture.detectChanges();
-    //tick(1200);
-    //fixture.detectChanges();
-    spyOn(router, 'navigate');
-
-    expect(component.form2FA.valid).toBeTrue();
-    expect(component.model2fa.token).toBeTruthy();
-    expect(findEl(fixture, 'login-2fa-button').properties['disabled']).toBe(false);
-
-    authServiceSpy.confirm2FA.and.returnValue(of({ key: 'adfaf' }))
-    authServiceSpy.getAccessToken.and.returnValue(of({ accessToken: 'adfaf' }))
-
-    //click submit
-
-    findEl(fixture, 'login-form2fa').triggerEventHandler('submit', {});
-    expect(authServiceSpy.confirm2FA).toHaveBeenCalled();
-
-    flush();
-
-  }));
 
 });

@@ -10,11 +10,11 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 @Component({
-  selector: 'app-emailconfirm',
-  templateUrl: './emailconfirm.component.html',
-  styleUrls: ['./emailconfirm.component.scss']
+  selector: 'app-confirmemail',
+  templateUrl: './confirmemail.component.html',
+  styleUrls: ['./confirmemail.component.scss']
 })
-export class EmailConfirmComponent implements OnInit, AfterViewInit {
+export class ConfirmEmailComponent implements OnInit, AfterViewInit {
 
   isThemeDark = false;
   device: any;
@@ -54,9 +54,9 @@ export class EmailConfirmComponent implements OnInit, AfterViewInit {
 
   execute(wait = 1000) {
     if (this.isCaptchaEnabled) {
-      return this.captchaService.execute('emailconfirm').pipe(
+      return this.captchaService.execute('confirmemail').pipe(
         switchMap((token: any) => {
-          return this.confirm(wait, token, 'emailconfirm');
+          return this.confirm(wait, token, 'confirmemail');
         })
       )
 

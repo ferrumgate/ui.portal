@@ -2,7 +2,9 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
+import { materialize } from 'rxjs';
 import { findEl } from '../helper.spec';
+import { MaterialModule } from '../material-module';
 import { LoadingService } from '../services/loading.service';
 import { SharedModule } from '../shared.module';
 
@@ -16,7 +18,7 @@ describe('LoadingComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoadingComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(), NoopAnimationsModule, SharedModule],
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NoopAnimationsModule, MaterialModule],
 
     })
       .compileComponents();

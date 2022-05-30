@@ -14,7 +14,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { ScreenSwitchComponent } from './screenswitch.component';
 
-describe('ScreenswitchComponent', () => {
+describe('ScreenSwitchComponent', () => {
   let component: ScreenSwitchComponent;
   let fixture: ComponentFixture<ScreenSwitchComponent>;
   const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
@@ -47,6 +47,12 @@ describe('ScreenswitchComponent', () => {
 
   it('only use button must be active', () => {
     expect(component).toBeTruthy();
+    (Object.getOwnPropertyDescriptor(authServiceSpy, 'currentSession')?.get as any)
+      .and.returnValue({
+        currentUser: {
+          roles: ['User']
+        }
+      })
     const manageEl = findEl(fixture, 'screenswitch-manage', false);
     expect(manageEl).toBeFalsy();
     const useEl = findEl(fixture, 'screenswitch-use', false);

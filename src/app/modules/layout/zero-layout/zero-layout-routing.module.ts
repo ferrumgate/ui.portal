@@ -13,6 +13,10 @@ const routes: Routes = [
         loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
 
       },
+      {
+        path: 'login/callback',
+        loadChildren: () => import('../../logincallback/logincallback.module').then(m => m.LoginCallbackModule),
+      },
 
       {
         path: 'login',
@@ -32,8 +36,13 @@ const routes: Routes = [
 
       },
       {
-        path: 'user/emailconfirm',
-        loadChildren: () => import('../../emailconfirm/emailconfirm.module').then(m => m.EmailConfirmModule)
+        path: 'user/confirmemail',
+        loadChildren: () => import('../../confirmemail/confirmemail.module').then(m => m.ConfirmEmailModule)
+
+      },
+      {
+        path: 'user/confirm2fa',
+        loadChildren: () => import('../../confirm2fa/confirm2fa.module').then(m => m.Confirm2FAModule)
 
       },
       {

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { catchError, from, map, mergeMap, Observable, of, Subscriber, switchMap, take, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { RBACDefault } from '../models/rbac';
 import { User } from '../models/user';
 import { ConfigService } from './config.service';
 
@@ -45,12 +46,12 @@ export class AuthenticationService {
     const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
     this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
       const now = new Date();
-      if (this.currentSession && this.currentSession.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS))
+      if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS))
         this.getRefreshToken().pipe(
           catchError(err => {
             this.logout();
             return '';
-          })).subscribe();;
+          })).subscribe();
     })
   }
   getSavedSession() {
@@ -119,7 +120,6 @@ export class AuthenticationService {
     return this.httpService.post(this._getRefreshToken, { refreshToken: this.currentSession?.refreshToken }, this._jsonHeader)
       .pipe(map((resp: any) => {
 
-
         this._currentSession = {
           accessToken: resp.accessToken,
           currentUser: resp.user,
@@ -128,34 +128,16 @@ export class AuthenticationService {
         this.saveSession();
         this.lastExecutionRefreshToken = new Date();
         return this._currentSession;
-
       }))
   }
 
   loginLocal(username: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<Session>(this._authLocal, { username: username, password: password, captcha: captcha, action: action }, this._jsonHeader)
-      .pipe(
-        switchMap((res: any) => {
+    return this.login(this.httpService.post<Session>(this._authLocal, { username: username, password: password, captcha: captcha, action: action }, this._jsonHeader))
 
-          let response: {
-            key: string, is2FA: boolean
-          } = res;
-          return of(response);
-
-        }), catchError(err => {
-          this._currentSession = null;
-          this.saveSession();
-          throw err;
-        }))
   }
 
   register(email: string, password: string, captcha?: string, action?: string) {
     return this.httpService.post<{ result: boolean }>(this._authRegister, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
-  }
-
-
-  loginGoogle() {
-
   }
 
 
@@ -174,7 +156,7 @@ export class AuthenticationService {
   }
 
   confirm2FA(key: string, token: string, captcha?: string, action?: string) {
-    return this.httpService.post<{ key: string }>(this._confirm2FA, { key: key, twoFAToken: token, captcha: captcha, action: action }, this._jsonHeader);
+    return this.login(this.httpService.post<{ key: string }>(this._confirm2FA, { key: key, twoFAToken: token, captcha: captcha, action: action }, this._jsonHeader))
   }
 
   forgotPassword(email: string, captcha?: string, action?: string): any {
@@ -197,24 +179,64 @@ export class AuthenticationService {
     return this._authGoogle;
   }
 
-  authCallback(callback: { url: string; params: any; }) {
-    let url = '';
-    if (callback.url.includes('google')) {
-      url = this._authGoogle;
-    }
-
-    return this.httpService.get(this._authGoogleCallback, { params: callback.params }).pipe(
+  /**
+   * 
+   * @param start start authenticating then  execute below phases
+   * @returns 
+   */
+  private login(start: Observable<any>) {
+    return start.pipe(
       switchMap((res: any) => {
         let response: {
           key: string, is2FA: boolean
         } = res;
-        return of(response);
+        if (response.is2FA) {
+          return from(this.router.navigate(['/user/confirm2fa'], { queryParams: { key: response.key } }));
+        } else {
+          return this.getAccessToken(response.key)
+            .pipe(
+              switchMap(x => {
+                return this.getUserCurrent();
+              }),
+              switchMap(x => {
+                return this.postLogin();
+              }))
+        }
 
       }), catchError(err => {
         this._currentSession = null;
         this.saveSession();
         throw err;
       }))
+  }
+
+  private postLogin() {
+
+    if (!this.currentSession)
+      throw new Error('something went wrong');
+
+    const isAdmin = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
+    const isReporter = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
+    const isUser = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
+
+    if ((isAdmin || isReporter)) {
+      return from(this.router.navigate(['/screenswitch']));
+    }
+    else {
+      return from(this.router.navigate(['/dashboard']));
+    }
+
+
+  }
+
+
+  loginCallback(callback: { url: string; params: any; }) {
+    let url = '';
+    if (callback.url.includes('google')) {
+      url = this._authGoogleCallback;
+    }
+
+    return this.login(this.httpService.get(url, { params: callback.params }));
 
 
   }

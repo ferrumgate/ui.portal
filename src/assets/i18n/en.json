@@ -54,5 +54,8 @@
     "ApiKey": "Api Key",
     "Logs": "Logs",
     "Manage": "Manage",
-    "Use": "Use"
+    "Use": "Use",
+    "TwoFAToken": "2FA token",
+    "Redirecting": "Redirecting",
+    "PleaseWait": "Please wait"
 }

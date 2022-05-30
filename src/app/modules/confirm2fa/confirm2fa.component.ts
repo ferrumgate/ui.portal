@@ -18,30 +18,31 @@ import { RBACDefault } from '../shared/models/rbac';
 
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-confirm2fa',
+  templateUrl: './confirm2fa.component.html',
+  styleUrls: ['./confirm2fa.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class Confirm2FAComponent implements OnInit {
   isThemeDark = false;
   device: any;
   title: string;
 
-  model: Login = {};
-  error: { email: string, password: string, login: string };
 
-  isLogined = false;
   isCaptchaEnabled = false;
 
-  form: FormGroup = new FormGroup(
+
+  /// 2FA 
+  is2FA = false;
+  hideToken = true;
+  form2FA: FormGroup = new FormGroup(
     {
-      email: new FormControl('', [Validators.required, InputService.emailValidator]),
-      password: new FormControl('', [Validators.required])
+
+      token: new FormControl('', [Validators.required])
     }
   );
 
-  hidePassword = true;
-
+  model2fa: Login2FA = {};
+  error2fa: { token: string };
 
   @Output() submitEM = new EventEmitter();
 
@@ -54,8 +55,8 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService,
     private captchaService: CaptchaService) {
     this.title = "Title";
-    this.error = this.resetErrors();
 
+    this.error2fa = this.resetErrors2FA();
 
     this.configService.themeChanged.subscribe(x => {
       this.isThemeDark = x == 'dark';
@@ -63,11 +64,9 @@ export class LoginComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
     this.route.queryParams.subscribe(params => {
-
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-
+      this.model2fa.key = params.key;
     })
   }
 
@@ -77,73 +76,60 @@ export class LoginComponent implements OnInit {
     };
   }
 
-
+  resetErrors2FA() {
+    return {
+      token: ''
+    };
+  }
 
   ngOnInit(): void {
 
   }
 
-  private loginLocal(captcha?: string, action?: string) {
-    return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action);
+  ///// 2fa
+
+  modelChanged2FA($event: any) {
+
+    this.checkFormError2FA();
   }
 
+  checkFormError2FA() {
+    //check errors 
+    this.error2fa = this.resetErrors2FA();
+    const tokenError = this.form2FA.controls['token'].errors;
+    if (tokenError) {
+      Object.keys(tokenError).forEach(x => {
+        switch (x) {
+          case 'required':
+            this.error2fa.token = 'TokenRequired';
+            break;
+          default:
+            this.error2fa.token = 'TokenInvalid'; break;
+        }
+      })
 
-  submit() {
+    }
 
-    if (!this.form?.valid || !this.model.email || !this.model.password) {
-      this.error.login = this.translateService.translate('FormIsInvalid');
+
+
+  }
+  submit2FA() {
+
+    if (!this.form2FA?.valid || !this.model2fa.token) {
+      this.error2fa.token = this.translateService.translate('FormIsInvalid');
       return;
     }
 
     if (this.isCaptchaEnabled) {
-      this.captchaService.execute('login').pipe(
+      this.captchaService.execute('confirm2FA').pipe(
         switchMap((token: any) => {
-          return this.loginLocal(token, 'login');
+          return this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '', token, 'confirm2FA');
         })
       ).subscribe();
     } else {
-      this.loginLocal().subscribe();
+      this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '').subscribe();
     }
 
-  }
-  checkFormError() {
-    //check errors 
-    this.error = this.resetErrors();
-    const emailError = this.form.controls['email'].errors;
-    if (emailError) {
-      Object.keys(emailError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.email = 'EmailRequired';
-            break;
-          default:
-            this.error.email = 'EmailInvalid'; break;
-        }
-      })
-
-    }
-
-    const passwordError = this.form.controls['password'].errors;
-    if (passwordError) {
-      Object.keys(passwordError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.password = 'PasswordRequired';
-            break;
-        }
-      })
-    }
-
-  }
-  modelChanged($event: any) {
-
-    this.checkFormError();
-  }
-
-
-
-  get googleAuthenticateUrl() {
-    return this.authService.googleAuthenticateUrl;
   }
 
 }

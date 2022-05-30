@@ -1,0 +1,70 @@
+<div class="confirm2fa" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="confirm2fa-container">
+        <mat-card class="confirm2fa-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="confirm2fa-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+
+
+        <mat-card fxLayout="column" fxLayoutAlign="center center" class="confirm2fa-mat-card">
+            <mat-card-title>{{"TwoFAToken"|translate}}</mat-card-title>
+            <mat-card-content>
+                <form test-id="confirm2fa-form2fa" [formGroup]="form2FA" (ngSubmit)="submit2FA()">
+
+
+
+
+                    <mat-form-field class="confirm2fa-form-field">
+                        <input [type]="hideToken?'password':'text'" test-id="confirm2fa-2fa-input" matInput
+                            placeholder="{{'Token'|translate}}" formControlName="token" [(ngModel)]="model2fa.token"
+                            (ngModelChange)="modelChanged2FA($event)">
+                        <mat-icon matSuffix (click)="hideToken = !hideToken">{{hideToken ?
+                            'visibility_off' : 'visibility'}}</mat-icon>
+                        <mat-error test-id="confirm2fa-2fa-error" class="confirm2fa-error"> {{ error2fa.token
+                            |translate}}</mat-error>
+                    </mat-form-field>
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button test-id="confirm2fa-2fa-button" type="submit" mat-raised-button
+                            [disabled]="!form2FA.valid">{{"Confirm"|translate}}</button>
+                    </div>
+
+                    <div class="confirm2fa-login" fxLayout="row" fxLayoutAlign="end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+                    <mat-divider style="margin-top:20px ;"></mat-divider>
+                    <div class="confirm2fa-qrcodeImage-text">
+                        <span> {{"2FA"|translate}}</span>
+                    </div>
+
+                    <div class="confirm2fa-qrcodeImage-text" fxLayout="row wrap" fxLayoutAlign="center center">
+                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/google-2fa-authenticator"
+                                target="_self">Google Authenticatior</a></span>
+                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/twilli-2fa-authenticator"
+                                target="_self">Twillio Authy</a></span>
+                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/microsoft-2fa-authenticator"
+                                target="_self">Microsoft Authenticator</a></span>
+                    </div>
+                </form>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+
+
+</div>

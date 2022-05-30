@@ -3,6 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { click, findEl, findEls, makeClickEvent } from '../helper.spec';
+import { MaterialModule } from '../material-module';
 
 import { NavMenuComponent } from './navmenu.component';
 
@@ -13,7 +14,7 @@ describe('NavMenuComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavMenuComponent],
-      imports: [RouterTestingModule, NoopAnimationsModule, TranslateModule.forRoot()],
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NoopAnimationsModule, MaterialModule],
       providers: [TranslateService]
     })
       .compileComponents();

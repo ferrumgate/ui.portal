@@ -53,14 +53,28 @@ export class LoginCallbackComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
 
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-      const callback = { url: '', params: {} };
+      const callback = { url: '', params: {}, captcha: null, action: null };
       callback.url = this.router.url;
-      callback.params = params;
+      callback.params = JSON.parse(JSON.stringify(params));//params object cannot extented
       //authenticating with google and redirect afterwards
       if (callback.url.includes('/callback') && Object.keys(params).filter(x => x != 'isCaptchaEnable').length)
-        of('').pipe(delay(1000), switchMap(x => {
-          return this.authService.loginCallback(callback)
-        })).subscribe();
+        of('').pipe(
+          delay(1000),
+          switchMap(y => {
+            if (this.isCaptchaEnabled)
+              return this.captchaService.execute('callback')
+                .pipe(
+                  switchMap((token: any) => {
+                    return this.authService.loginCallback(callback, token, 'callback');
+                  }));
+            else return of(null)
+              .pipe(
+                switchMap(() => {
+                  return this.authService.loginCallback(callback);
+                })
+              )
+          })
+        ).subscribe();
 
     })
   }

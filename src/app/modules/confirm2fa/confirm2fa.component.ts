@@ -33,7 +33,7 @@ export class Confirm2FAComponent implements OnInit {
 
   /// 2FA 
   is2FA = false;
-  hideToken = true;
+  hideToken = false;
   form2FA: FormGroup = new FormGroup(
     {
 
@@ -43,6 +43,7 @@ export class Confirm2FAComponent implements OnInit {
 
   model2fa: Login2FA = {};
   error2fa: { token: string };
+  //tunnelSessionKey = '';
 
   @Output() submitEM = new EventEmitter();
 
@@ -67,6 +68,16 @@ export class Confirm2FAComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
       this.model2fa.key = params.key;
+      //this.tunnelSessionKey = params.session;
+      /* //if tunnel key exits save first
+      if (this.tunnelSessionKey)
+        this.authService.setTunnelSessionKey(this.tunnelSessionKey);
+      else {
+        //check storage if exits
+        const tunnelSessionKey = this.authService.getTunnelSessionKey();
+        if (tunnelSessionKey)
+          this.router.navigate(['/user/confirm2fa'], { queryParams: { session: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled, key: this.model2fa.key } })
+      } */
     })
   }
 
@@ -85,6 +96,11 @@ export class Confirm2FAComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
+  ngAfterViewInit(): void {
+
+  }
+
 
   ///// 2fa
 

@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ThisReceiver } from '@angular/compiler';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -22,7 +22,7 @@ import { RBACDefault } from '../shared/models/rbac';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   isThemeDark = false;
   device: any;
   title: string;
@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
 
   isLogined = false;
   isCaptchaEnabled = false;
+  tunnelSessionKey = '';
 
   form: FormGroup = new FormGroup(
     {
@@ -67,6 +68,17 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
 
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+      this.tunnelSessionKey = params.session;
+      //if tunnel key exits save first
+      if (this.tunnelSessionKey)
+        this.authService.setTunnelSessionKey(this.tunnelSessionKey);
+      else {
+        //check storage if exits
+        const tunnelSessionKey = this.authService.getTunnelSessionKey();
+        if (tunnelSessionKey)
+          this.router.navigate(['/login'], { queryParams: { session: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled } })
+      }
+
 
     })
   }
@@ -81,9 +93,14 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+  }
+  ngAfterViewInit(): void {
+
   }
 
   private loginLocal(captcha?: string, action?: string) {
+
     return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action);
   }
 

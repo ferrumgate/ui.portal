@@ -21,8 +21,10 @@ export interface Session {
 })
 export class AuthenticationService {
 
-
-  static SessionKey = 'ferrumgate_session';
+  //after authentication all session related items saved to session storage
+  static StorageSessionKey = 'ferrumgate_session';
+  // we need to store tunnel session key for later usage
+  static StorateTunnelSessionKey = 'ferrumgate_tunnel_session_key';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
@@ -37,6 +39,7 @@ export class AuthenticationService {
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
+
 
   constructor(
     private router: Router,
@@ -55,17 +58,18 @@ export class AuthenticationService {
     })
   }
   getSavedSession() {
-    //sessionStorage.setItem('ferrumgate_session', JSON.stringify(this._currentSession));
-    const session = sessionStorage.getItem(AuthenticationService.SessionKey)
+    const session = sessionStorage.getItem(AuthenticationService.StorageSessionKey)
     if (!session) return null;
     return JSON.parse(session) as Session;
   }
   saveSession() {
-    if (!this._currentSession)
-      sessionStorage.clear();
-    else {
-      sessionStorage.setItem(AuthenticationService.SessionKey, JSON.stringify(this._currentSession));
+    if (!this._currentSession) {
+      sessionStorage.removeItem(AuthenticationService.StorageSessionKey);
     }
+    else {
+      sessionStorage.setItem(AuthenticationService.StorageSessionKey, JSON.stringify(this._currentSession));
+    }
+
   }
 
   get currentSession() {
@@ -103,7 +107,8 @@ export class AuthenticationService {
   }
 
   getAccessToken(key: string) {
-    return this.httpService.post(this._getAccessToken, { key: key }, this._jsonHeader)
+    const tunnelSessionKey = this.getTunnelSessionKey();
+    return this.httpService.post(this._getAccessToken, { key: key, session: tunnelSessionKey }, this._jsonHeader)
       .pipe(map((resp: any) => {
 
         this._currentSession = {
@@ -112,6 +117,7 @@ export class AuthenticationService {
           refreshToken: resp.refreshToken
         }
         this.saveSession();
+        sessionStorage.removeItem(AuthenticationService.StorateTunnelSessionKey);
         return this._currentSession;
       }))
   }
@@ -142,7 +148,6 @@ export class AuthenticationService {
 
 
   logout() {
-
     sessionStorage.clear();
     this._currentSession = null;
     this.router.navigate(['/login']);
@@ -209,7 +214,10 @@ export class AuthenticationService {
         throw err;
       }))
   }
-
+  /**
+   * @summary after login 
+   * @returns 
+   */
   private postLogin() {
 
     if (!this.currentSession)
@@ -230,14 +238,38 @@ export class AuthenticationService {
   }
 
 
-  loginCallback(callback: { url: string; params: any; }) {
+  loginCallback(callback: { url: string; params: any; }, captcha?: string, action?: string) {
     let url = '';
     if (callback.url.includes('google')) {
       url = this._authGoogleCallback;
     }
-
+    if (captcha)
+      callback.params.captcha = captcha;
+    if (action)
+      callback.params.action = action;
     return this.login(this.httpService.get(url, { params: callback.params }));
 
+
+  }
+
+  /**
+   * @summary get tunnel session key, after that remove it from storage
+   * @returns 
+   */
+  getTunnelSessionKey() {
+    const val = sessionStorage.getItem(AuthenticationService.StorateTunnelSessionKey);
+    return val;
+
+  }
+
+  /**
+   * @summary save tunnel session key, if val is empty then remove it from storage
+   * @param val 
+   */
+  setTunnelSessionKey(val: string) {
+    if (val)
+      sessionStorage.setItem(AuthenticationService.StorateTunnelSessionKey, val);
+    else sessionStorage.removeItem(AuthenticationService.StorateTunnelSessionKey);
 
   }
 

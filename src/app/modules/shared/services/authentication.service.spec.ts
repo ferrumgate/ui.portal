@@ -39,7 +39,7 @@ describe('AuthenticationService', () => {
     expect(service.currentSession).toBeNull();
   });
   it('currentSession must not be null', () => {
-    sessionStorage.setItem(AuthenticationService.SessionKey, JSON.stringify({}))
+    sessionStorage.setItem(AuthenticationService.StorageSessionKey, JSON.stringify({}))
     const session = service.getSavedSession();
     expect(session).toBeTruthy();
   });
@@ -95,9 +95,9 @@ describe('AuthenticationService', () => {
   it('logout', (done) => {
     //mock router
     routerSpy.navigate.and.returnValue('');
-    sessionStorage.setItem(AuthenticationService.SessionKey, 'something');
+    sessionStorage.setItem(AuthenticationService.StorageSessionKey, 'something');
     service.logout();
-    const item = sessionStorage.getItem(AuthenticationService.SessionKey);
+    const item = sessionStorage.getItem(AuthenticationService.StorageSessionKey);
     expect(item).toBeFalsy();
     expect(routerSpy.navigate).toHaveBeenCalled();
     done();

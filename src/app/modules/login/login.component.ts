@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(params => {
 
       this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-      this.tunnelSessionKey = params.session;
+      this.tunnelSessionKey = params.tunnel;
       //if tunnel key exits save first
       if (this.tunnelSessionKey)
         this.authService.setTunnelSessionKey(this.tunnelSessionKey);
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         //check storage if exits
         const tunnelSessionKey = this.authService.getTunnelSessionKey();
         if (tunnelSessionKey)
-          this.router.navigate(['/login'], { queryParams: { session: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled } })
+          this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled } })
       }
 
 

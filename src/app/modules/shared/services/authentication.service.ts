@@ -108,7 +108,7 @@ export class AuthenticationService {
 
   getAccessToken(key: string) {
     const tunnelSessionKey = this.getTunnelSessionKey();
-    return this.httpService.post(this._getAccessToken, { key: key, session: tunnelSessionKey }, this._jsonHeader)
+    return this.httpService.post(this._getAccessToken, { key: key, tunnelKey: tunnelSessionKey }, this._jsonHeader)
       .pipe(map((resp: any) => {
 
         this._currentSession = {

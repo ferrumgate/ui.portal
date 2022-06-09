@@ -54,14 +54,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
                         } else {
                             // auto logout if 401 response returned from api
-                            authenticationService.logout();
+
                             notificationService.error(translationService.translate('ErrNotAuthorized'));
-
-                            if (window.location.href.indexOf('/login') === -1) { // reload if not login page
-
-                                location.href = '/login';
+                            if (window.location.href.indexOf('/login') === -1 && window.location.href.indexOf('/user/confirm2fa') == -1) { // reload if not login page
 
 
+                            } else {
+                                authenticationService.logout();
                             }
 
                         }

@@ -27,11 +27,11 @@
 
 
                     <mat-form-field class="confirm2fa-form-field">
-                        <input [type]="hideToken?'password':'text'" test-id="confirm2fa-2fa-input" matInput
-                            placeholder="{{'Token'|translate}}" formControlName="token" [(ngModel)]="model2fa.token"
-                            (ngModelChange)="modelChanged2FA($event)">
-                        <mat-icon matSuffix (click)="hideToken = !hideToken">{{hideToken ?
-                            'visibility_off' : 'visibility'}}</mat-icon>
+                        <input autocomplete="off" [type]="hideToken?'password':'text'" test-id="confirm2fa-2fa-input"
+                            matInput placeholder="{{'Token'|translate}}" formControlName="token"
+                            [(ngModel)]="model2fa.token" (ngModelChange)="modelChanged2FA($event)">
+                        <!-- <mat-icon matSuffix (click)="hideToken = !hideToken">{{hideToken ?
+                            'visibility_off' : 'visibility'}}</mat-icon> -->
                         <mat-error test-id="confirm2fa-2fa-error" class="confirm2fa-error"> {{ error2fa.token
                             |translate}}</mat-error>
                     </mat-form-field>

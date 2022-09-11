@@ -53,30 +53,46 @@ export class ManageLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
-      icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
-    },
-    {
-      icon: 'vpn_key', isClicked: false, isExpanded: false, name: this.translateService.translate('ApiKey'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
-    },
-    {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'),
+      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Network'), navigate: () => { },
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
-        },
-        {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateways'), subItems: [], navigate: () => { this.router.navigate(['/manage/network/gateways']) }
         }
-      ], navigate: () => { }
+      ]
     },
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
+      icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
+          icon: 'person', isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/users']) }
         },
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/groups']) }
+
+        }]
+    },
+    {
+      icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies']) }
+    },
+    {
+      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { this.router.navigate(['/manage/settings/configuration']) },
+      subItems: [
+        {
+          icon: 'settings_applications', isClicked: false, isExpanded: false, name: this.translateService.translate('Configuration'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/configuration']) }
+        },
+        {
+          icon: 'car_rental', isClicked: false, isExpanded: false, name: this.translateService.translate('Identity Provider'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/identity']) }
+        }
+      ],
+    },
+    {
+      icon: 'receipt', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
+      subItems: [
+        {
+          icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
+        },
+        {
+          icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateway'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
         }
       ], navigate: () => { }
     }

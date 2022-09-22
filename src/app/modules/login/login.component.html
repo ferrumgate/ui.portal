@@ -50,15 +50,16 @@
                             }}</mat-error>
                     </div>
 
-                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                    <div class="button login-signin" fxLayout="row" fxLayoutAlign="center">
                         <button test-id="login-submit-button" type="submit" mat-raised-button
                             [disabled]="!form.valid">{{"SignIn"|translate}}</button>
                     </div>
-                    <div class="login-forgotpassword" fxLayout="row" fxLayoutAlign="end">
+                    <div class="login-forgotpassword" *ngIf="isForgotPasswordEnabled" fxLayout="row"
+                        fxLayoutAlign="end">
                         <span> <a mat-flat-button href="/user/forgotpass"
                                 target="_self">{{"ForgotPassword"|translate}}?</a></span>
                     </div>
-                    <div class="login-register" fxLayout="row" fxLayoutAlign="end">
+                    <div class="login-register" *ngIf="isRegisterEnabled" fxLayout="row" fxLayoutAlign="end">
                         <span><a mat-flat-button href="/register"
                                 target="_self">{{"DontHaveAnAccount"|translate}}?</a></span>
                     </div>
@@ -71,10 +72,11 @@
 
     </div>
 
-    <div test-id="login-others" fxLayout="row" fxLayoutAlign="center center" class="login-container">
+    <div test-id="login-others" *ngIf="isOthersEnabled" fxLayout="row" fxLayoutAlign="center center"
+        class="login-container">
         <mat-card>
-            <mat-card-content>
-                <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+            <mat-card-content *ngIf="isOthersEnabled">
+                <div *ngIf="isOthersEnabled" fxLayout="row" fxLayoutAlign="center center" fxFill>
                     <mat-label>
                         OR
                     </mat-label>
@@ -82,26 +84,26 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center">
 
-                    <div class="social">
+                    <div *ngIf="isGoogleEnabled" class="social">
                         <a href="{{googleAuthenticateUrl}}" mat-icon-button aria-label="google authentication"
                             matTooltip="Sign in with Google" matTooltipShowDelay="100" matTooltipHideDelay="200">
 
                             <mat-icon svgIcon="social-google"></mat-icon>
                         </a>
                     </div>
-                    <div class="social">
+                    <div *ngIf="isGithubEnabled" class="social">
                         <button mat-icon-button aria-label="github authentication" matTooltip="Sign in with Github"
                             matTooltipShowDelay="100" matTooltipHideDelay="200">
                             <mat-icon svgIcon="social-github"></mat-icon>
                         </button>
                     </div>
-                    <div class="social">
+                    <div *ngIf="isLinkedInEnabled" class="social">
                         <button mat-icon-button aria-label="linkedin authentication" matTooltip="Sign in with Linkedin"
                             matTooltipShowDelay="100" matTooltipHideDelay="200">
                             <mat-icon svgIcon="social-linkedin"></mat-icon>
                         </button>
                     </div>
-                    <div class="social">
+                    <div *ngIf="isMicrosoftEnabled" class="social">
                         <button mat-icon-button aria-label="microsoft authenticaton" matTooltip="Sign in with Microsoft"
                             matTooltipShowDelay="100" matTooltipHideDelay="200">
                             <mat-icon svgIcon="social-microsoft"></mat-icon>

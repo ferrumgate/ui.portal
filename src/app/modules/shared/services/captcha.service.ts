@@ -62,11 +62,7 @@ export class CaptchaService {
   }
   private init() {
     if (!this.initted) {
-      return this.configService.getCaptchaKey()
-        .pipe(
-          switchMap((x) => {
-            return this.initCaptcha(x);
-          }))
+      return this.initCaptcha(this.configService.captchaKey);
     } else return of(this.initted);
 
   }

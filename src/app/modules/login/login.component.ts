@@ -163,4 +163,30 @@ export class LoginComponent implements OnInit, AfterViewInit {
     return this.authService.googleAuthenticateUrl;
   }
 
+  get isForgotPasswordEnabled() {
+
+    return this.configService.isLoginEnabledForgotPassword;
+  }
+  get isRegisterEnabled() {
+    return this.configService.isLoginEnabledRegister;
+  }
+
+  get isGoogleEnabled() {
+    return this.configService.isLoginEnabledGoogle;
+  }
+  get isLinkedInEnabled() {
+    return this.configService.isLoginEnabledLinkedin;
+  }
+
+  get isGithubEnabled() {
+    return false;
+  }
+  get isMicrosoftEnabled() {
+    return false;
+  }
+
+  get isOthersEnabled() {
+    return this.isGoogleEnabled || this.isLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
+  }
+
 }

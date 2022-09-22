@@ -228,7 +228,10 @@ export class AuthenticationService {
     const isUser = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
 
     if ((isAdmin || isReporter)) {
-      return from(this.router.navigate(['/screenswitch']));
+      if (isAdmin && !this.configService.isAllReadyConfigured)
+        return from(this.router.navigate(['/configure']));
+      else
+        return from(this.router.navigate(['/screenswitch']));
     }
     else {
       return from(this.router.navigate(['/dashboard']));

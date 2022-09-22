@@ -13,7 +13,13 @@ import { TranslationService } from './translation.service';
 export class ConfigService {
   userId = 'empty';
   constructor(private translationservice: TranslationService, private http: HttpClient) {
-
+    //set default zero config
+    this.dynamicConfig = {
+      captchaSiteKey: '', isConfigured: 0,
+      login: {
+        local: { isForgotPassword: 0, isRegister: 0 }, google: undefined, linkedin: undefined
+      }
+    };
   }
   links = {
     documents: 'https://ferrumgate/document',
@@ -39,9 +45,9 @@ export class ConfigService {
     this.themeChanged.emit(theme);
 
     //try to get config
-    if (environment.production) {
-      this.getDynamicConfig().pipe(catchError(err => of())).subscribe();
-    }
+
+    this.getDynamicConfig().pipe(catchError(err => of())).subscribe();
+
   }
 
   getApiUrl(): string {
@@ -78,21 +84,54 @@ export class ConfigService {
   getTheme() {
     const theme = localStorage.getItem(`theme_for_user_${this.userId}`);
     return theme || 'white';
+
   }
+
+  dynamicConfig: {
+    captchaSiteKey: string,
+    isConfigured: number,
+    login: {
+      local: {
+        isForgotPassword: number,
+        isRegister: number,
+      },
+      google: object | undefined,
+      linkedin: object | undefined
+    }
+  };
+
   getDynamicConfig() {
 
     return this.http.get(this.getApiUrl() + `/config/public`).pipe(
-      map((x: { [key: string]: any }) => {
-        this.captchaSiteKey = x.captchaSiteKey;
+      map((x: any) => {
+        this.dynamicConfig = x;
         return x;
       }));
   }
-  captchaSiteKey: string = '';
-  getCaptchaKey() {
-    if (this.captchaSiteKey) return of(this.captchaSiteKey);
-    //we need to get it from backapi
-    return this.getDynamicConfig().pipe(map(x => {
-      return this.captchaSiteKey;
-    }))
+
+
+  get captchaKey() {
+    return this.dynamicConfig.captchaSiteKey;
+
+  }
+  get isLoginEnabledForgotPassword() {
+
+    return this.dynamicConfig.login.local.isForgotPassword;
+
+  }
+  get isLoginEnabledRegister() {
+    return this.dynamicConfig.login.local.isRegister;
+
+  }
+
+  get isLoginEnabledGoogle() {
+    return this.dynamicConfig.login.google;
+  }
+  get isLoginEnabledLinkedin() {
+    return this.dynamicConfig.login.linkedin
+  }
+
+  get isAllReadyConfigured() {
+    return this.dynamicConfig.isConfigured;
   }
 }

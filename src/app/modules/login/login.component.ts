@@ -162,10 +162,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   get isForgotPasswordEnabled() {
 
-    return this.configService.isLoginEnabledForgotPassword;
+    return this.configService.isEnabledForgotPassword;
   }
   get isRegisterEnabled() {
-    return this.configService.isLoginEnabledRegister;
+    return this.configService.isEnabledRegister;
   }
 
   get isGoogleEnabled() {

@@ -37,7 +37,8 @@ export class ForgotPassComponent implements OnInit {
   isCaptchaEnabled = false;
   @Output() submitEM = new EventEmitter();
 
-  constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
+  constructor(private breakpointObserver: BreakpointObserver,
+    private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,

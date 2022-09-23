@@ -13,7 +13,13 @@ export class RoleGuard implements CanActivate {
     ) { }
     canActivate(route: ActivatedRouteSnapshot): boolean {
 
-        return true;
+        const roleIds = route.data.roleIds as any;
+        for (let roleId in roleIds)
+            if (this.auth.currentSession?.currentUser?.roles.find(x => x.id == roleId))
+                return true;
+
+        this.router.navigate(['/login']);
+        return false;
 
     }
 }

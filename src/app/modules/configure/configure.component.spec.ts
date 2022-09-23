@@ -1,10 +1,19 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
+import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { of } from 'rxjs';
 
 import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
 import { AuthenticationService } from '../shared/services/authentication.service';
+import { CaptchaService } from '../shared/services/captcha.service';
+import { ConfigService } from '../shared/services/config.service';
+import { ConfigureService } from '../shared/services/configure.service';
+import { NotificationService } from '../shared/services/notification.service';
+import { TranslationService } from '../shared/services/translation.service';
 import { SharedModule } from '../shared/shared.module';
 
 import { ConfigureComponent } from './configure.component';
@@ -13,12 +22,28 @@ describe('ConfigureComponent', () => {
   let component: ConfigureComponent;
   let fixture: ComponentFixture<ConfigureComponent>;
   let authService: AuthenticationService;
+  let configureService: ConfigureService;
+  let router: Router;
+  const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigureComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(), NoopAnimationsModule, SharedModule],
+      imports: [RouterTestingModule, TranslateModule.forRoot(),
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
+        RouterTestingModule.withRoutes([])],
       providers: [
-        AuthenticationService
+        AuthenticationService,
+        ConfigService,
+        ConfigureService,
+        NotificationService,
+        TranslationService,
+        { provide: CaptchaService, useValue: captchaServiceSpy },
+        ReCaptchaV3Service,
+        {
+          provide: RECAPTCHA_V3_SITE_KEY,
+          useValue: '',
+
+        }
       ]
     })
       .compileComponents();
@@ -28,7 +53,8 @@ describe('ConfigureComponent', () => {
     fixture = TestBed.createComponent(ConfigureComponent);
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthenticationService);
-    //spyOn(authService,)
+    configureService = TestBed.inject(ConfigureService);
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
@@ -233,8 +259,47 @@ describe('ConfigureComponent', () => {
     expect(component.networkError.serviceNetwork).toBe('ServiceNetworkInvalid');
 
 
+  }));
 
 
+  it('checkAllError', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+    tick(1000);//wait a little
+    // on load we must load default values and form must be valid
+    fixture.detectChanges();
+    expect(component.networkFormGroup.valid).toBe(true);
+
+    //set clientnetwork to empty
+    setFieldValue(fixture, 'configure-clientnetwork-input', '');
+
+    dispatchFakeEvent(findEl(fixture, 'configure-clientnetwork-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    tick(1000);
+    fixture.detectChanges();
+    expect(component.networkError.clientNetwork).toBe('ClientNetworkRequired');
+
+    //when something goes wrong
+    // at last step we need to check it
+    component.save();
+    expect(component.checkAllError).toBeTruthy();
+
+  }));
+
+  it('save', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+    // on load we must load default values and form must be valid
+    tick();
+    fixture.detectChanges();
+    spyOn(configureService, 'configure').and.returnValue(of({}));
+    spyOn(router, 'navigate').and.resolveTo();
+    component.save();
+    tick();
+    fixture.detectChanges();
+    expect(router.navigate).toHaveBeenCalled();
+    expect(configureService.configure).toHaveBeenCalled();
+    tick(5000);
+    fixture.detectChanges();
 
   }));
 

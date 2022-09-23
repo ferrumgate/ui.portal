@@ -114,12 +114,12 @@ export class ConfigService {
     return this.dynamicConfig.captchaSiteKey;
 
   }
-  get isLoginEnabledForgotPassword() {
+  get isEnabledForgotPassword() {
 
     return this.dynamicConfig.login.local.isForgotPassword;
 
   }
-  get isLoginEnabledRegister() {
+  get isEnabledRegister() {
     return this.dynamicConfig.login.local.isRegister;
 
   }

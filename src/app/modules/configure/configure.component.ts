@@ -1,9 +1,16 @@
 import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { of, switchMap } from 'rxjs';
 import { RBACDefault } from '../shared/models/rbac';
 import { AuthenticationService } from '../shared/services/authentication.service';
+import { CaptchaService } from '../shared/services/captcha.service';
+import { ConfigService } from '../shared/services/config.service';
+import { ConfigureService } from '../shared/services/configure.service';
 import { InputService } from '../shared/services/input.service';
+import { NotificationService } from '../shared/services/notification.service';
+import { TranslationService } from '../shared/services/translation.service';
 
 @Component({
   selector: 'app-configure',
@@ -58,8 +65,27 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   networkError = { clientNetwork: '', serviceNetwork: '' };
   isLinear = true;
 
+  isThemeDark = false;
+  isCaptchaEnabled = false;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private translateService: TranslationService,
+    private authService: AuthenticationService,
+    private configService: ConfigService,
+    private captchaService: CaptchaService,
+    private configureService: ConfigureService,
+    private notificationService: NotificationService
+  ) {
 
-  constructor(private authService: AuthenticationService,) {
+    this.configService.themeChanged.subscribe(x => {
+      this.isThemeDark = x == 'dark';
+    })
+    this.isThemeDark = this.configService.getTheme() == 'dark';
+
+    this.route.queryParams.subscribe(params => {
+      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+    })
 
 
   }
@@ -78,6 +104,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
 
 
   resetUserErrors() {
+    this.checkAllError = '';
     return {
       email: '', password: '', passwordAgain: ''
     };
@@ -135,6 +162,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
   resetCommonErrors() {
+    this.checkAllError = '';
     return {
       domain: '', url: ''
     }
@@ -191,6 +219,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
   resetNetworkErrors() {
+    this.checkAllError = '';
     return {
       clientNetwork: '', serviceNetwork: ''
     }
@@ -221,10 +250,32 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
         this.networkError.serviceNetwork = 'ServiceNetworkInvalid';
     }
   }
+  checkAllError = '';
 
   save() {
+    if (!this.userFormGroup.valid || !this.commonFormGroup.valid || !this.networkFormGroup.valid) {
+      this.checkAllError = this.translateService.translate('FormIsInvalid');
+      return;
+    }
+
+    if (this.isCaptchaEnabled) {
+      this.captchaService.execute('configure').pipe(
+        switchMap((token: any) => {
+          return this.configureService.configure(this.model, token, 'configure');
+        })
+      ).subscribe(x => {
+        this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
+        this.authService.logout();
+      });
+    } else {
+      this.configureService.configure(this.model).subscribe(x => {
+        this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
+        this.authService.logout();
+      })
+    }
 
   }
+
 
 
 }

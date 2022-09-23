@@ -175,6 +175,13 @@
                             </mat-label>
                         </div>
                     </div>
+                    <div>
+
+                        <mat-error class="configure-error" matTooltip="{{checkAllError|translate}}">
+                            {{
+                            checkAllError|translate
+                            }}</mat-error>
+                    </div>
                     <div fxFill fxLayout="row" fxLayoutAlign="end">
                         <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
                         <button mat-button (click)="save()">{{"Save"|translate}}</button>

@@ -87,5 +87,6 @@
     "PrivateDomain": "Private domain",
     "RandomPasswordDefinition": "Random password generated, you can use it",
     "DefaultUsernameChangeDefinition": "Default username will be changed to this, no confirm email will be sent",
-    "AdminUser":"Admin User"
+    "AdminUser": "Admin User",
+    "SuccessfullyConfigured": "Successfully configured"
 }

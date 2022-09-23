@@ -1,0 +1,44 @@
+.configure form {
+    padding-top: 30px;
+}
+
+.configure-title {
+    padding-top: 10px;
+}
+
+.configure-common-explanation {
+    padding-bottom: 30px;
+}
+
+.configure-common-width {
+    min-width: 300px;
+}
+
+.configure-error {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+}
+
+.configure-list {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.configure-list-item {
+    padding-bottom: 10px;
+
+}
+
+.configure-list-item .configure-summary-name {
+    font-weight: bold;
+
+}
+
+.configure-list-item .configure-summary-value {
+    padding-left: 10px;
+
+}

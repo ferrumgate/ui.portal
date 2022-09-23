@@ -52,6 +52,12 @@ const routes: Routes = [
 
       },
       {
+        path: 'configure',
+        canActivate: [AuthenticationGuard],
+        loadChildren: () => import('../../configure/configure.module').then(m => m.ConfigureModule)
+
+      },
+      {
         path: '**',
         loadChildren: () => import('../../pagenotfound/pagenotfound.module').then(m => m.PagenotfoundModule)
       }

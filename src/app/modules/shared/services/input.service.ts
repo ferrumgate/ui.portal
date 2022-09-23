@@ -66,16 +66,24 @@ export class InputService {
 
   static matchingPasswords(passwordKey: string, passwordConfirmationKey: string): any {
     return (group: FormGroup) => {
+
       const password = group.controls[passwordKey];
       const confirmPassword = group.controls[passwordConfirmationKey];
-      confirmPassword.setErrors(null);
-      // password alanları boşsa null dönmeli
-      if ((password.value == null || password.value == '') && (confirmPassword.value == null || confirmPassword.value == '')) {
+
+      if (password.valid) {
+
+        if (confirmPassword.valid || (confirmPassword.invalid && confirmPassword.hasError('mismatchedPasswords'))) {
+          confirmPassword.setErrors(null);
+          if ((password.value == null || password.value == '') && (confirmPassword.value == null || confirmPassword.value == '')) {
+            return null;
+          } else if (password.value !== confirmPassword.value) {
+            return confirmPassword.setErrors({ 'mismatchedPasswords': true });
+          }
+        }
+        else return null;
+      } else {
         return null;
-      } else if (password.value !== confirmPassword.value) {
-        return confirmPassword.setErrors({ 'mismatchedPasswords': true });
       }
-      else return null;
     };
   }
 
@@ -90,5 +98,37 @@ export class InputService {
         return confirmEmail.setErrors({ 'mismatchedEmails': true });
       }
     };
+  }
+  static domainValidator(control: any) {
+
+    if (control == null || control.value == null) {
+      return null;
+    } else if (validator.isFQDN(control.value)) {
+      return null;
+    } else {
+      return { 'invalidDomain': true };
+    }
+  }
+  static urlValidator(control: any) {
+
+    if (control == null || control.value == null) {
+      return null;
+    } else
+      if (control.value.startsWith('https://') && validator.isURL(control.value)) {
+        return null;
+      } else {
+        return { 'invalidUrl': true };
+      }
+  }
+  static ipCidrValidator(control: any) {
+
+    if (control == null || control.value == null) {
+      return null;
+    } else
+      if (validator.isIPRange(control.value)) {
+        return null;
+      } else {
+        return { 'invalidUrl': true };
+      }
   }
 }

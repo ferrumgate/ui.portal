@@ -41,7 +41,6 @@ import { LoadingService } from './modules/shared/services/loading.service';
 
 
 
-
 @NgModule({
   declarations: [
     AppComponent

@@ -174,21 +174,25 @@ describe('RegisterComponent', () => {
     expect(component.error.passwordAgain).toBeTruthy();
     expect(findEl(fixture, 'register-password-again-error')).toBeTruthy();
 
+
     //set normal password
-    setFieldValue(fixture, passwordAgain, 'Deneme1234');
+    setFieldValue(fixture, 'register-password-input', 'Deneme1234');
+    dispatchFakeEvent(findEl(fixture, 'register-password-input').nativeElement, 'blur');
+    setFieldValue(fixture, passwordAgain, 'Deneme12345');
     dispatchFakeEvent(passwordAgainEl.nativeElement, 'blur');
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();
-    expect(component.model.passwordAgain).toBe('Deneme1234');
+    expect(component.model.passwordAgain).toBe('Deneme12345');
     //passwords mustbe same
     expect(passwordAgainForm.errors).toBeTruthy();
     expect(component.error.passwordAgain).toBeTruthy();
     expect(findEl(fixture, 'register-password-again-error', false)).toBeTruthy();
 
     //set the same value to first field
-    setFieldValue(fixture, 'register-password-input', 'Deneme1234');
+    setFieldValue(fixture, 'register-password-input', 'Deneme12345');
     dispatchFakeEvent(findEl(fixture, 'register-password-input').nativeElement, 'blur');
+    dispatchFakeEvent(findEl(fixture, 'register-password-again-input').nativeElement, 'blur');
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();

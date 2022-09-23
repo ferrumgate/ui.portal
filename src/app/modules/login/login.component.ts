@@ -128,27 +128,24 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.error = this.resetErrors();
     const emailError = this.form.controls['email'].errors;
     if (emailError) {
-      Object.keys(emailError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.email = 'EmailRequired';
-            break;
-          default:
-            this.error.email = 'EmailInvalid'; break;
-        }
-      })
+
+      if (emailError['required'])
+        this.error.email = 'EmailRequired';
+      else
+        this.error.email = 'EmailInvalid';
+
 
     }
 
     const passwordError = this.form.controls['password'].errors;
     if (passwordError) {
-      Object.keys(passwordError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.password = 'PasswordRequired';
-            break;
-        }
-      })
+
+      if (passwordError['required'])
+        this.error.password = 'PasswordRequired';
+      else
+        this.error.password = 'PasswordRequired';
+
+
     }
 
   }

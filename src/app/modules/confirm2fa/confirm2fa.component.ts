@@ -114,15 +114,12 @@ export class Confirm2FAComponent implements OnInit {
     this.error2fa = this.resetErrors2FA();
     const tokenError = this.form2FA.controls['token'].errors;
     if (tokenError) {
-      Object.keys(tokenError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error2fa.token = 'TokenRequired';
-            break;
-          default:
-            this.error2fa.token = 'TokenInvalid'; break;
-        }
-      })
+
+      if (tokenError['required'])
+        this.error2fa.token = 'TokenRequired';
+      else
+        this.error2fa.token = 'TokenInvalid';
+
 
     }
 

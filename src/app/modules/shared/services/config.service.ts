@@ -46,9 +46,10 @@ export class ConfigService {
 
     //try to get config
 
-    this.getDynamicConfig().pipe(catchError(err => of())).subscribe();
+    this.getPublicConfig().pipe(catchError(err => of())).subscribe();
 
   }
+
 
   getApiUrl(): string {
     return window.location.protocol
@@ -100,7 +101,7 @@ export class ConfigService {
     }
   };
 
-  getDynamicConfig() {
+  getPublicConfig() {
 
     return this.http.get(this.getApiUrl() + `/config/public`).pipe(
       map((x: any) => {

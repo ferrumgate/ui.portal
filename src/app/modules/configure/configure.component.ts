@@ -2,7 +2,7 @@ import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/cor
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 import { RBACDefault } from '../shared/models/rbac';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { CaptchaService } from '../shared/services/captcha.service';
@@ -262,13 +262,23 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
       this.captchaService.execute('configure').pipe(
         switchMap((token: any) => {
           return this.configureService.configure(this.model, token, 'configure');
+        }
+        )
+      ).pipe(
+        switchMap((x: any) => {
+          return this.configService.getPublicConfig().pipe(catchError(err => of()))
+        })
+      )
+        .subscribe(x => {
+          this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
+          this.authService.logout();
+        });
+    } else {
+      this.configureService.configure(this.model).pipe(
+        switchMap((x: any) => {
+          return this.configService.getPublicConfig().pipe(catchError(err => of()))
         })
       ).subscribe(x => {
-        this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
-        this.authService.logout();
-      });
-    } else {
-      this.configureService.configure(this.model).subscribe(x => {
         this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
         this.authService.logout();
       })

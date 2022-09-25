@@ -114,7 +114,7 @@ export class InputService {
     if (control == null || control.value == null) {
       return null;
     } else
-      if (control.value.startsWith('https://') && validator.isURL(control.value)) {
+      if ((control.value.startsWith('http://') || control.value.startsWith('https://')) && validator.isURL(control.value)) {
         return null;
       } else {
         return { 'invalidUrl': true };

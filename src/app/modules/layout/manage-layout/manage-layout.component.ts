@@ -53,30 +53,50 @@ export class ManageLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
-      icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
+      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Network'), navigate: () => { this.router.navigate(['/manage/network']) }, subItems: []
     },
     {
-      icon: 'vpn_key', isClicked: false, isExpanded: false, name: this.translateService.translate('ApiKey'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
-    },
-    {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'),
+      icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
+          icon: 'person', isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/users']) }
         },
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/groups']) }
+
+        }]
+    },
+    {
+      icon: 'swap_calls', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
+    },
+    {
+      icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies']) }
+    },
+    {
+      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
+      subItems: [
+        {
+          icon: 'settings_applications', isClicked: false, isExpanded: false, name: this.translateService.translate('Common'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/common']) }
+        },
+        {
+          icon: 'recaptcha', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Captcha'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/captcha']) }
+        },
+        {
+          icon: 'vpn_key', isClicked: false, isExpanded: false, name: this.translateService.translate('Auth'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/auth']) }
+        },
+        {
+          icon: 'email', isClicked: false, isExpanded: false, name: this.translateService.translate('Email'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/email']) }
         }
-      ], navigate: () => { }
+      ],
     },
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
+      icon: 'receipt', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
+          icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
         },
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateway'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
         }
       ], navigate: () => { }
     }

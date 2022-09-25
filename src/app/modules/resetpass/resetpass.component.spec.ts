@@ -135,6 +135,8 @@ describe('ResetPassComponent', () => {
     expect(findEl(fixture, 'resetpass-password-again-error')).toBeTruthy();
 
     //set normal password
+    setFieldValue(fixture, 'resetpass-password-input', 'Deneme123');
+    dispatchFakeEvent(findEl(fixture, 'resetpass-password-input').nativeElement, 'blur');
     setFieldValue(fixture, passwordAgain, 'Deneme1234');
     dispatchFakeEvent(passwordAgainEl.nativeElement, 'blur');
     fixture.detectChanges();

@@ -37,7 +37,8 @@ export class ForgotPassComponent implements OnInit {
   isCaptchaEnabled = false;
   @Output() submitEM = new EventEmitter();
 
-  constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
+  constructor(private breakpointObserver: BreakpointObserver,
+    private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,
@@ -112,15 +113,12 @@ export class ForgotPassComponent implements OnInit {
     this.error = this.resetErrrors();
     const emailError = this.form.controls['email'].errors;
     if (emailError) {
-      Object.keys(emailError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.email = 'EmailRequired';
-            break;
-          default:
-            this.error.email = 'EmailInvalid'; break;
-        }
-      })
+
+      if (emailError['required'])
+        this.error.email = 'EmailRequired';
+      else
+        this.error.email = 'EmailInvalid';
+
 
     }
 

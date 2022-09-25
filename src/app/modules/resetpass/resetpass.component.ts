@@ -45,7 +45,8 @@ export class ResetPassComponent implements OnInit {
   isCaptchaEnabled = false;
   @Output() submitEM = new EventEmitter();
 
-  constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
+  constructor(private breakpointObserver: BreakpointObserver,
+    private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,
@@ -124,42 +125,34 @@ export class ResetPassComponent implements OnInit {
 
     const passwordError = this.form.controls['password'].errors;
     if (passwordError) {
-      Object.keys(passwordError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.password = 'PasswordRequired';
-            break;
-          case 'minlength':
-            this.error.password = 'PasswordMinLength'; break;
 
-          case 'pattern':
-            this.error.password = 'PasswordPattern'; break;
-          case 'mismatchedPasswords':
-            this.error.password = 'PasswordsMismatch'; break;
-          default:
-            this.error.password = 'PasswordInvalid'; break;
-        }
-      })
+      if (passwordError['required'])
+        this.error.password = 'PasswordRequired';
+      else if (passwordError['minlength'])
+        this.error.password = 'PasswordMinLength';
+      else if (passwordError['pattern'])
+        this.error.password = 'PasswordPattern';
+      else if (passwordError['mismatchedPasswords'])
+        this.error.password = 'PasswordsMismatch';
+      else
+        this.error.password = 'PasswordInvalid';
+
     }
 
     const passwordAgainError = this.form.controls['passwordAgain'].errors;
     if (passwordAgainError) {
-      Object.keys(passwordAgainError).forEach(x => {
-        switch (x) {
-          case 'required':
-            this.error.passwordAgain = 'PasswordAgainRequired';
-            break;
-          case 'minlength':
-            this.error.passwordAgain = 'PasswordAgainMinLength'; break;
 
-          case 'pattern':
-            this.error.passwordAgain = 'PasswordAgainPattern'; break;
-          case 'mismatchedPasswords':
-            this.error.passwordAgain = 'PasswordsMismatch'; break;
-          default:
-            this.error.passwordAgain = 'PasswordInvalid'; break;
-        }
-      })
+      if (passwordAgainError['required'])
+        this.error.passwordAgain = 'PasswordAgainRequired';
+      else if (passwordAgainError['minlength'])
+        this.error.passwordAgain = 'PasswordAgainMinLength';
+      else if (passwordAgainError['pattern'])
+        this.error.passwordAgain = 'PasswordAgainPattern';
+      else if (passwordAgainError['mismatchedPasswords'])
+        this.error.passwordAgain = 'PasswordsMismatch';
+      else
+        this.error.passwordAgain = 'PasswordInvalid';
+
     }
   }
 

@@ -11,6 +11,7 @@ import { LoggerService } from './logger.service';
 describe('CaptchaService', () => {
   let service: CaptchaService;
   let httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+  let configService: ConfigService;
   let logger: LoggerService
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,6 +30,7 @@ describe('CaptchaService', () => {
 
     });
     service = TestBed.inject(CaptchaService);
+    configService = TestBed.inject(ConfigService);
 
   });
 
@@ -37,7 +39,8 @@ describe('CaptchaService', () => {
   });
 
   it('captcha must create a token', (done) => {
-    httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }))
+    //httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }));
+    spyOnProperty(configService, 'captchaKey', 'get').and.returnValue('6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH');
     service.execute('test').subscribe(x => {
 
       expect(x).toBeTruthy();

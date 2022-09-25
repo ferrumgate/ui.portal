@@ -1,0 +1,193 @@
+<div>
+    <mat-card class="configure">
+        <mat-card-title class="configure-title">
+            {{"Configure"|translate}}
+        </mat-card-title>
+        <mat-card-content>
+            <mat-stepper [linear]="isLinear" #stepper>
+
+
+                <mat-step [stepControl]="userFormGroup">
+                    <form [formGroup]="userFormGroup">
+                        <ng-template matStepLabel>{{"AdminUser"|translate}}</ng-template>
+                        <p fxFill>
+                            <mat-form-field class="login-form-field"
+                                class="configure-common-explanation configure-common-width">
+                                <input type="text" test-id="configure-email-input" matInput
+                                    placeholder="{{'Email'|translate}}" formControlName="email"
+                                    [(ngModel)]="model.email" (ngModelChange)="userModelChanged($event)">
+                                <mat-hint>{{"DefaultUsernameChangeDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error test-id="login-email-error" class="configure-error">
+                                    {{ userError.email | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill>
+                            <mat-form-field class="login-form-field" class="configure-common-width">
+                                <input [type]="hidePassword?'password':'text'" test-id="configure-password-input"
+                                    matInput placeholder="{{'Password'|translate}}" formControlName="password"
+                                    [(ngModel)]="model.password" (ngModelChange)="userModelChanged($event)">
+                                <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+                                <mat-hint>
+                                    {{"RandomPasswordDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error test-id="login-password-error" class="configure-error">
+                                    {{ userError.password | translate }}
+                                </mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill>
+                            <mat-form-field class="register-form-field" class="configure-common-width">
+                                <input [type]="hidePasswordAgain?'password':'text'"
+                                    test-id="configure-password-again-input" matInput
+                                    placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
+                                    [(ngModel)]="model.passwordAgain" (ngModelChange)="userModelChanged($event)">
+                                <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain
+                                    ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+
+                                <mat-error class="configure-error">
+                                    {{userError.passwordAgain | translate }}
+                                </mat-error>
+
+                            </mat-form-field>
+                        </p>
+
+                        <div fxFill fxLayout="row" fxLayoutAlign="end">
+                            <button mat-button matStepperNext>{{"Next"|translate}}</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+
+                <mat-step [stepControl]="commonFormGroup">
+                    <form [formGroup]="commonFormGroup">
+                        <ng-template matStepLabel>Domain</ng-template>
+                        <p fxFill class="configure-common-explanation">
+                            <mat-form-field appearance="fill" class="configure-common-width">
+                                <mat-label>{{"Private Domain"|translate}}</mat-label>
+                                <input matInput test-id="configure-domain-input" placeholder="ferrumgate.local"
+                                    formControlName="domain" [(ngModel)]="model.domain"
+                                    (ngModelChange)="commonModelChanged($event)" required>
+                                <mat-hint>{{"PrivateDomainDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error>{{commonError.domain|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="configure-common-explanation ">
+                            <mat-form-field appearance="fill" class="configure-common-width">
+                                <mat-label>{{"LoginUrl"|translate}}</mat-label>
+                                <input matInput test-id="configure-url-input"
+                                    placeholder="https://secure.ferrumgate.com" formControlName="url"
+                                    [(ngModel)]="model.url" (ngModelChange)="commonModelChanged($event)" required>
+                                <mat-hint>{{"UrlDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{commonError.url|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+
+                        <div fxFill fxLayout="row" fxLayoutAlign="end">
+                            <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
+                            <button mat-button matStepperNext>{{"Next"|translate}}</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="networkFormGroup">
+                    <form [formGroup]="networkFormGroup">
+                        <ng-template matStepLabel>{{"Network"|translate}}</ng-template>
+                        <p fxFill class="configure-common-explanation">
+                            <mat-form-field appearance="fill" class="configure-common-width">
+                                <mat-label>{{"ClientIpRange"|translate}}</mat-label>
+                                <input matInput test-id="configure-clientnetwork-input" placeholder="100.64.0.0/16"
+                                    formControlName="clientNetwork" [(ngModel)]="model.clientNetwork"
+                                    (ngModelChange)="networkModelChanged($event)" required>
+                                <mat-hint>{{"ClientNetworkDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error>{{networkError.clientNetwork|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="configure-common-explanation ">
+                            <mat-form-field appearance="fill" class="configure-common-width">
+                                <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
+                                <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
+                                    formControlName="serviceNetwork" [(ngModel)]="model.serviceNetwork"
+                                    (ngModelChange)="networkModelChanged($event)" required>
+                                <mat-hint>{{"ServiceNetworkDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{networkError.serviceNetwork|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+
+                        <div fxFill fxLayout="row" fxLayoutAlign="end">
+                            <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
+                            <button mat-button matStepperNext>{{"Next"|translate}}</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+
+
+
+
+                <mat-step>
+                    <ng-template matStepLabel>{{"Done"|translate}}</ng-template>
+
+                    <mat-label>
+                        {{"Summary"|translate}}
+                    </mat-label>
+
+                    <div class="configure-list">
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <mat-label>
+                                    <span class="configure-summary-name">{{"Email"|translate}}:</span>
+                                    <span class="configure-summary-value">{{model.email}}</span>
+                                </mat-label>
+                            </mat-label>
+                        </div>
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <span class="configure-summary-name">{{"Domain"|translate}}:</span>
+                                <span class="configure-summary-value">{{model.domain}}</span>
+                            </mat-label>
+                        </div>
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <span class="configure-summary-name">{{"Url"|translate}}:</span>
+                                <span class="configure-summary-value">{{model.url}}</span>
+                            </mat-label>
+                        </div>
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <span class="configure-summary-name">{{"ClientNetwork"|translate}}:</span>
+                                <span class="configure-summary-value">{{model.clientNetwork}}</span>
+                            </mat-label>
+                        </div>
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <span class="configure-summary-name">{{"ServiceNetwork"|translate}}:</span>
+                                <span class="configure-summary-value">{{model.serviceNetwork}}</span>
+                            </mat-label>
+                        </div>
+                    </div>
+                    <div>
+
+                        <mat-error class="configure-error" matTooltip="{{checkAllError|translate}}">
+                            {{
+                            checkAllError|translate
+                            }}</mat-error>
+                    </div>
+                    <div fxFill fxLayout="row" fxLayoutAlign="end">
+                        <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
+                        <button mat-button (click)="save()">{{"Save"|translate}}</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -6,7 +6,8 @@ import { LoggerService } from '../../modules/shared/services/logger.service';
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
 
-    constructor(private router: Router, private logger: LoggerService, private authService: AuthenticationService) { }
+    constructor(private router: Router, private logger: LoggerService,
+        private authService: AuthenticationService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 

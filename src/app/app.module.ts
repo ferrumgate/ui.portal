@@ -37,7 +37,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoadingService } from './modules/shared/services/loading.service';
-
+import { ConfigureGuard } from './core/guards/configureGuard';
+import { RoleGuard } from './core/guards/roleGuard';
+import { ConfigGuard } from './core/guards/configGuard';
 
 
 
@@ -77,6 +79,9 @@ import { LoadingService } from './modules/shared/services/loading.service';
   providers: [
     TranslateService,
     AuthenticationGuard,
+    ConfigureGuard,
+    ConfigGuard,
+    RoleGuard,
     AuthenticationService,
     NotificationService,
     TranslationService,

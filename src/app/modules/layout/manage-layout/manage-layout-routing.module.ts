@@ -15,7 +15,7 @@ const routes: Routes = [
         path: 'dashboard',
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['Admin', 'Reporter']
+          roleIds: ['Admin', 'Reporter']
         },
         loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
 

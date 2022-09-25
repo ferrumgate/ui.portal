@@ -67,7 +67,7 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
     expect(fixture.nativeElement.querySelector('.login')).toBeTruthy();
-    expect(fixture.nativeElement.querySelectorAll('.login > [fxLayout="row"]').length).toBe(2);
+    expect(fixture.nativeElement.querySelectorAll('.login > [fxLayout="row"]').length).toBe(1);
 
   });
 

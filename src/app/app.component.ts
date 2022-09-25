@@ -58,6 +58,10 @@ export class AppComponent implements OnInit {
       "social-microsoft",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/microsoft.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "recaptcha",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/recaptcha.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

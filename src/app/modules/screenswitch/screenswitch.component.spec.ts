@@ -17,8 +17,8 @@ import { ScreenSwitchComponent } from './screenswitch.component';
 describe('ScreenSwitchComponent', () => {
   let component: ScreenSwitchComponent;
   let fixture: ComponentFixture<ScreenSwitchComponent>;
-  const authServiceSpy = jasmine.createSpyObj('AuthenticationService',
-    [], ['currentSession']);
+  let authServiceSpy: AuthenticationService;
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -27,8 +27,7 @@ describe('ScreenSwitchComponent', () => {
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
       providers: [
         ConfigService,
-        { provide: AuthenticationService, useValue: authServiceSpy },
-        TranslationService, NotificationService,
+        TranslationService, NotificationService, AuthenticationService
       ]
 
     })
@@ -36,6 +35,7 @@ describe('ScreenSwitchComponent', () => {
   });
 
   beforeEach(() => {
+    authServiceSpy = TestBed.inject(AuthenticationService);
     fixture = TestBed.createComponent(ScreenSwitchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -47,12 +47,12 @@ describe('ScreenSwitchComponent', () => {
 
   it('only use button must be active', () => {
     expect(component).toBeTruthy();
-    (Object.getOwnPropertyDescriptor(authServiceSpy, 'currentSession')?.get as any)
-      .and.returnValue({
+    spyOnProperty(authServiceSpy, 'currentSession', 'get').and.returnValue(
+      {
         currentUser: {
-          roles: ['User']
+          roles: [{ name: 'User' }]
         }
-      })
+      } as any)
     const manageEl = findEl(fixture, 'screenswitch-manage', false);
     expect(manageEl).toBeFalsy();
     const useEl = findEl(fixture, 'screenswitch-use', false);
@@ -62,12 +62,12 @@ describe('ScreenSwitchComponent', () => {
 
   it('manage and use button must be active', () => {
 
-    (Object.getOwnPropertyDescriptor(authServiceSpy, 'currentSession')?.get as any)
-      .and.returnValue({
+    spyOnProperty(authServiceSpy, 'currentSession', 'get').and.returnValue(
+      {
         currentUser: {
           roles: [{ name: 'Admin' }]
         }
-      })
+      } as any)
     let fixture = TestBed.createComponent(ScreenSwitchComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();

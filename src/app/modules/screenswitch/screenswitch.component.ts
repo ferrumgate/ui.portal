@@ -40,7 +40,7 @@ export class ScreenSwitchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name))
+    if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name))
       this.isManaged = true;
 
   }

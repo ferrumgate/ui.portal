@@ -53,12 +53,7 @@ export class ManageLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
-      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Network'), navigate: () => { },
-      subItems: [
-        {
-          icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateways'), subItems: [], navigate: () => { this.router.navigate(['/manage/network/gateways']) }
-        }
-      ]
+      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Network'), navigate: () => { this.router.navigate(['/manage/network']) }, subItems: []
     },
     {
       icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
@@ -72,16 +67,25 @@ export class ManageLayoutComponent {
         }]
     },
     {
+      icon: 'swap_calls', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
+    },
+    {
       icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies']) }
     },
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { this.router.navigate(['/manage/settings/configuration']) },
+      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {
-          icon: 'settings_applications', isClicked: false, isExpanded: false, name: this.translateService.translate('Configuration'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/configuration']) }
+          icon: 'settings_applications', isClicked: false, isExpanded: false, name: this.translateService.translate('Common'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/common']) }
         },
         {
-          icon: 'car_rental', isClicked: false, isExpanded: false, name: this.translateService.translate('Identity Provider'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/identity']) }
+          icon: 'recaptcha', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Captcha'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/captcha']) }
+        },
+        {
+          icon: 'vpn_key', isClicked: false, isExpanded: false, name: this.translateService.translate('Auth'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/auth']) }
+        },
+        {
+          icon: 'email', isClicked: false, isExpanded: false, name: this.translateService.translate('Email'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/email']) }
         }
       ],
     },

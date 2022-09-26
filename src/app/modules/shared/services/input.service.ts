@@ -128,7 +128,7 @@ export class InputService {
       if (validator.isIPRange(control.value)) {
         return null;
       } else {
-        return { 'invalidUrl': true };
+        return { 'invalidCidr': true };
       }
   }
 }

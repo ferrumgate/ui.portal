@@ -88,5 +88,6 @@
     "RandomPasswordDefinition": "Random password generated, you can use it",
     "DefaultUsernameChangeDefinition": "Default username will be changed to this, no confirm email will be sent",
     "AdminUser": "Admin User",
-    "SuccessfullyConfigured": "Successfully configured"
+    "SuccessfullyConfigured": "Successfully configured",
+    "NameRequired": "Name required"
 }

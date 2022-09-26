@@ -1,0 +1,50 @@
+<div fxFill fxLayout="column">
+    <div class="networks networks-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                Networks
+            </div>
+            <div class="row" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="Search" />
+                </mat-form-field>
+                <div fxLayoutAlign="center center">
+                    <button mat-raised-button color="primary" class="row-pad">
+                        <mat-icon>add</mat-icon>
+                        Add
+                    </button>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+
+    </div>
+
+    <div class="networks networks-content" fxfill>
+        <div class="row" fxLayout="row" fxFill>
+
+            <div class="network-item" fxLayout="row" *ngFor="let net of networks">
+                <app-network [network]="net">
+
+                </app-network>
+                <div class="newtork-gateways" *ngIf="net.isGatewayOpened">
+                    <mat-card>
+                        <mat-card-header>
+                            <mat-label class="gateway-title">Gateways</mat-label>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="gateway-item" fxFill fxLayout="row" *ngFor="let gate of net.gateways||[]">
+                                <app-gateway [gateway]="gate"></app-gateway>
+                            </div>
+
+
+
+                        </mat-card-content>
+                    </mat-card>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

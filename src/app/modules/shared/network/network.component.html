@@ -1,0 +1,94 @@
+<div class="network">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="Network {{network.name}}">
+                <mat-icon>lan
+                </mat-icon>
+            </mat-card-title>
+
+            <mat-action-row fxFlex fxLayoutAlign="end center">
+
+                <mat-icon matBadge="{{network.gateways.length}}" matBadgeColor="warn" matTooltip="Gateways">computer
+                </mat-icon>
+                <button mat-icon-button (click)="openGatewayClicked()">
+                    <mat-icon *ngIf="network.gateways.length && !network.isGatewayOpened">arrow_right</mat-icon>
+                    <mat-icon *ngIf="network.gateways.length && network.isGatewayOpened">arrow_left</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="network-form" [formGroup]="network.formGroup">
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{"Name"|translate}}</mat-label>
+                                <input matInput test-id="network-name-input" placeholder="Network name"
+                                    formControlName="name" [(ngModel)]="network.name"
+                                    (ngModelChange)="networkModelChanged($event)" required>
+                                <mat-error>{{network.formError.name|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Labels</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip *ngFor="let label of network.labels||[]" (removed)="removeLabel(label)">
+                                        {{label}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input placeholder="New label..." [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
+                                </mat-chip-list>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{"ClientIpRange"|translate}}</mat-label>
+                                <input matInput test-id="network-clientnetwork-input" placeholder="100.64.0.0/16"
+                                    formControlName="clientNetwork" [(ngModel)]="network.clientNetwork"
+                                    (ngModelChange)="networkModelChanged($event)" required>
+                                <mat-hint>{{"ClientNetworkDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error>{{network.formError.clientNetwork|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
+                                <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
+                                    formControlName="serviceNetwork" [(ngModel)]="network.serviceNetwork"
+                                    (ngModelChange)="networkModelChanged($event)" required>
+                                <mat-hint>{{"ServiceNetworkDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{network.formError.serviceNetwork|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                    </form>
+                </div>
+                <mat-divider></mat-divider>
+                <div>
+                    <mat-toolbar *ngIf="network.isChanged" style="height:40px">
+                        <mat-action-row fxFlex fxLayoutAlign="end center">
+                            <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
+                                <mat-icon>check</mat-icon>
+                            </button>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

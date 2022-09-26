@@ -14,6 +14,8 @@ import { ReCaptchaV3ServiceCustom } from "src/app/modules/shared/services/captch
 import { QRCodeModule } from 'angularx-qrcode';
 import { NavMenuComponent } from './navmenu/navmenu.component';
 import { ToolbarComponent } from "./toolbar/toolbar.component";
+import { NetworkComponent } from './network/network.component';
+import { GatewayComponent } from "./gateway/gateway.component";
 
 
 
@@ -34,7 +36,9 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
         LoadingComponent,
         QRCodeModule,
         NavMenuComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        NetworkComponent,
+        GatewayComponent
 
 
     ],
@@ -64,7 +68,9 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
         LanguageSelectorComponent,
         LoadingComponent,
         NavMenuComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        NetworkComponent,
+        GatewayComponent
     ],
     providers: [
         {

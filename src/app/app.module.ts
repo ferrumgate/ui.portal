@@ -40,6 +40,11 @@ import { LoadingService } from './modules/shared/services/loading.service';
 import { ConfigureGuard } from './core/guards/configureGuard';
 import { RoleGuard } from './core/guards/roleGuard';
 import { ConfigGuard } from './core/guards/configGuard';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 
 
@@ -65,15 +70,9 @@ import { ConfigGuard } from './core/guards/configGuard';
         deps: [HttpClient]
       }
     }),
-    ZeroLayoutModule,
-    DefaultLayoutModule,
+
     LayoutModule,
-    SharedModule,
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule
+    SharedModule
 
   ],
   providers: [

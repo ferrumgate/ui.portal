@@ -39,11 +39,32 @@
                             </mat-form-field>
                         </p>
 
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Network</mat-label>
+                                <input type="text" placeholder="Select a network" matInput formControlName="networkId"
+                                    [matAutocomplete]="auto" (ngModelChange)="gatewayModelChanged($event)">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </p>
+
+
                     </form>
+                    <p>
+
+                        <mat-checkbox [(ngModel)]="gateway.isActive" (ngModelChange)="gatewayModelChanged($event)">
+                            Enabled</mat-checkbox>
+
+                    </p>
                 </div>
-                <mat-divider></mat-divider>
-                <div>
-                    <mat-toolbar *ngIf="gateway.isChanged" style="height:40px">
+
+                <div *ngIf="gateway.isChanged">
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:40px">
                         <mat-action-row fxFlex fxLayoutAlign="end center">
                             <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
                                 <mat-icon>close</mat-icon>

@@ -1,4 +1,4 @@
-<div fxFill fxLayout="column">
+<div class="networks-container">
     <div class="networks networks-toolbar">
         <div fxFlex fxLayout="column">
             <div class="row title">
@@ -9,7 +9,7 @@
                     <input matInput placeholder="Search" />
                 </mat-form-field>
                 <div fxLayoutAlign="center center">
-                    <button mat-raised-button color="primary" class="row-pad">
+                    <button mat-raised-button color="primary" class="add">
                         <mat-icon>add</mat-icon>
                         Add
                     </button>
@@ -17,34 +17,33 @@
             </div>
             <mat-divider></mat-divider>
         </div>
-
     </div>
 
-    <div class="networks networks-content" fxfill>
-        <div class="row" fxLayout="row" fxFill>
+    <div class="networks networks-content">
 
-            <div class="network-item" fxLayout="row" *ngFor="let net of networks">
+
+        <div class="row network-item">
+            <div *ngFor="let net of networks" fxLayout="row">
                 <app-network [network]="net">
 
                 </app-network>
-                <div class="newtork-gateways" *ngIf="net.isGatewayOpened">
+                <div class="network-gateways" *ngIf="net.isGatewayOpened">
                     <mat-card>
                         <mat-card-header>
                             <mat-label class="gateway-title">Gateways</mat-label>
                         </mat-card-header>
                         <mat-card-content>
-                            <div class="gateway-item" fxFill fxLayout="row" *ngFor="let gate of net.gateways||[]">
-                                <app-gateway [gateway]="gate"></app-gateway>
+                            <div class="gateway-item" fxFlex fxLayout="row wrap">
+                                <app-gateway [gateway]="gate" [networks]="networks"
+                                    *ngFor="let gate of filterGateways(net)"></app-gateway>
                             </div>
-
-
-
                         </mat-card-content>
                     </mat-card>
 
                 </div>
             </div>
-
         </div>
+
+
     </div>
 </div>

@@ -22,6 +22,7 @@ export interface Network {
     labels: string[];
     clientNetwork: string;
     serviceNetwork: string;
-    gateways: Gateway[];
     [key: string]: any;
 }
+
+

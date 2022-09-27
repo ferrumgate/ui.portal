@@ -13,6 +13,7 @@ export interface NetworkExtended {
   formError: { name: string, clientNetwork: string, serviceNetwork: string };
   isChanged: boolean;
   isGatewayOpened: boolean;
+  gatewaysCount: number;
 
 }
 
@@ -42,6 +43,7 @@ export class NetworkComponent implements OnInit {
 
   static prepareModel(net: Network) {
     let extended: NetworkExtended = {
+      gatewaysCount: 0,
       orig: JSON.parse(JSON.stringify(net)),
       formError: this.createFormError(),
       formGroup: this.createFormGroup(net),
@@ -156,7 +158,7 @@ export class NetworkComponent implements OnInit {
 
   clear() {
     this.network.isChanged = false;
-    const original = this.network.orig;
+    const original = JSON.parse(JSON.stringify(this.network.orig));
     Object.assign(this.network, original);
     this.checkIfModelChanged();
   }

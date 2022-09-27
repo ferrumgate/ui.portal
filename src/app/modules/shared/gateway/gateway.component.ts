@@ -4,6 +4,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../models/network';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../services/input.service';
+import { map, Observable, of, startWith } from 'rxjs';
 
 
 
@@ -32,9 +33,18 @@ export class GatewayComponent implements OnInit {
   @Output()
   saveGateway: EventEmitter<Gateway> = new EventEmitter();
   isGatewayOpened = false;
-  constructor() { }
+  @Input()
+  networks: Network[] = [];
+  filteredOptions: Observable<Network[]> = of();
+  constructor() {
+
+  }
 
   ngOnInit(): void {
+    this.filteredOptions = this.gateway?.formGroup?.controls['networkId']?.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value as string || '')),
+    );
   }
 
 
@@ -49,12 +59,14 @@ export class GatewayComponent implements OnInit {
     let item = {
       ...gate, ...extended
     }
+
     return item;
   }
 
   static createFormGroup(gate: Gateway) {
     return new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
+      networkId: new FormControl(gate.networkId, [])
 
     });
   }
@@ -96,11 +108,8 @@ export class GatewayComponent implements OnInit {
   }
   checkIfModelChanged() {
     this.gateway.isChanged = false;
-    const original = this.gateway.orig as Network;
-    if (original.clientNetwork != this.gateway.clientNetwork)
-      this.gateway.isChanged = true;
-    if (original.serviceNetwork != this.gateway.serviceNetwork)
-      this.gateway.isChanged = true;
+    const original = this.gateway.orig as Gateway;
+
     if (original.name != this.gateway.name)
       this.gateway.isChanged = true;
     original.labels.forEach(x => {
@@ -112,6 +121,8 @@ export class GatewayComponent implements OnInit {
       if (!original.labels.find(y => y == x))
         this.gateway.isChanged = true;
     })
+    if (original.isActive != this.gateway.isActive)
+      this.gateway.isChanged = true;
 
   }
 
@@ -149,6 +160,15 @@ export class GatewayComponent implements OnInit {
   openGatewayClicked() {
     this.isGatewayOpened = !this.isGatewayOpened;
     this.openGateways.emit(this.isGatewayOpened);
+  }
+
+
+
+
+  private _filter(value: string): Network[] {
+    const filterValue = value.toLowerCase();
+
+    return this.networks.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
 

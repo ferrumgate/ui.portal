@@ -8,11 +8,11 @@
 
             <mat-action-row fxFlex fxLayoutAlign="end center">
 
-                <mat-icon matBadge="{{network.gateways.length}}" matBadgeColor="warn" matTooltip="Gateways">computer
+                <mat-icon matBadge="{{network.gatewaysCount}}" matBadgeColor="warn" matTooltip="Gateways">computer
                 </mat-icon>
                 <button mat-icon-button (click)="openGatewayClicked()">
-                    <mat-icon *ngIf="network.gateways.length && !network.isGatewayOpened">arrow_right</mat-icon>
-                    <mat-icon *ngIf="network.gateways.length && network.isGatewayOpened">arrow_left</mat-icon>
+                    <mat-icon *ngIf="network.gatewaysCount && !network.isGatewayOpened">arrow_right</mat-icon>
+                    <mat-icon *ngIf="network.gatewaysCount && network.isGatewayOpened">arrow_left</mat-icon>
                 </button>
             </mat-action-row>
 
@@ -72,9 +72,10 @@
                         </p>
                     </form>
                 </div>
-                <mat-divider></mat-divider>
-                <div>
-                    <mat-toolbar *ngIf="network.isChanged" style="height:40px">
+
+                <div *ngIf="network.isChanged">
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:40px">
                         <mat-action-row fxFlex fxLayoutAlign="end center">
                             <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
                                 <mat-icon>close</mat-icon>

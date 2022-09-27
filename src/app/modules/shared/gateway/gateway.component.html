@@ -42,40 +42,51 @@
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Network</mat-label>
-                                <input type="text" placeholder="Select a network" matInput formControlName="networkId"
-                                    [matAutocomplete]="auto" (ngModelChange)="gatewayModelChanged($event)">
-                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                                <input type="text" placeholder="Select a network" matInput
+                                    [ngModel]="gateway.networkName" [formControl]="networkAutoCompleteFormControl"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                    (optionSelected)="networkChanged($event)">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                         {{option.name}}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <mat-hint>Binded network</mat-hint>
                             </mat-form-field>
                         </p>
 
 
+
                     </form>
+
                     <p>
 
                         <mat-checkbox [(ngModel)]="gateway.isActive" (ngModelChange)="gatewayModelChanged($event)">
                             Enabled</mat-checkbox>
 
                     </p>
+
+
                 </div>
 
-                <div *ngIf="gateway.isChanged">
+                <div>
                     <mat-divider></mat-divider>
-                    <mat-toolbar style="height:40px">
-                        <mat-action-row fxFlex fxLayoutAlign="end center">
-                            <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
-                                <mat-icon>close</mat-icon>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="Delete" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
                             </button>
-                            <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
-                                <mat-icon>check</mat-icon>
-                            </button>
+                            <span *ngIf="gateway.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
 
                         </mat-action-row>
                     </mat-toolbar>
-
 
                 </div>
             </div>

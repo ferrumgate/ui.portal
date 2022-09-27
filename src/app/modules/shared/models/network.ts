@@ -3,6 +3,8 @@
  * a machine that can connect to a internal network
  */
 export interface Gateway {
+    // object id for finding objects in lists or comparing if they are same object
+    objId?: string;
     id: string;
     name: string;
     labels: string[];
@@ -17,6 +19,8 @@ export interface Gateway {
  * @summary a group of @see Gateway s
  */
 export interface Network {
+    // object id for finding objects in lists or comparing if they are same object
+    objId?: string;
     id: string;
     name: string;
     labels: string[];

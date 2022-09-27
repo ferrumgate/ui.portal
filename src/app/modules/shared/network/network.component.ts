@@ -7,6 +7,7 @@ import { InputService } from '../../shared/services/input.service';
 
 
 
+
 export interface NetworkExtended {
   orig: Network;
   formGroup: FormGroup;
@@ -34,6 +35,8 @@ export class NetworkComponent implements OnInit {
   openGateways: EventEmitter<boolean> = new EventEmitter();
   @Output()
   saveNetwork: EventEmitter<Network> = new EventEmitter();
+  @Output()
+  deleteNetwork: EventEmitter<Network> = new EventEmitter();
   isGatewayOpened = false;
   constructor() { }
 
@@ -164,12 +167,17 @@ export class NetworkComponent implements OnInit {
   }
 
   saveOrUpdate() {
-
+    this.saveNetwork.emit(this.network);
   }
 
   openGatewayClicked() {
+    if (!this.network.gatewaysCount) return;
     this.network.isGatewayOpened = !this.network.isGatewayOpened;
     this.openGateways.emit(this.network.isGatewayOpened);
+  }
+
+  delete() {
+    this.deleteNetwork.emit(this.network);
   }
 
 

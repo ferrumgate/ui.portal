@@ -73,16 +73,25 @@
                     </form>
                 </div>
 
-                <div *ngIf="network.isChanged">
+                <div>
                     <mat-divider></mat-divider>
-                    <mat-toolbar style="height:40px">
-                        <mat-action-row fxFlex fxLayoutAlign="end center">
-                            <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
-                                <mat-icon>close</mat-icon>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="Delete" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
                             </button>
-                            <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
-                                <mat-icon>check</mat-icon>
-                            </button>
+                            <span *ngIf="network.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+
+
 
                         </mat-action-row>
                     </mat-toolbar>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
@@ -7,6 +7,8 @@ import { InputService } from '../../shared/services/input.service';
 import { NetworksRoutingModule } from './networks-routing.module';
 import { NetworkComponent } from '../../shared/network/network.component';
 import { GatewayComponent } from '../../shared/gateway/gateway.component';
+import { UtilService } from '../../shared/services/util.service';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 
 
@@ -15,25 +17,38 @@ import { GatewayComponent } from '../../shared/gateway/gateway.component';
   templateUrl: './networks.component.html',
   styleUrls: ['./networks.component.scss']
 })
-export class NetworksComponent implements OnInit {
+export class NetworksComponent implements OnInit, OnDestroy {
 
-
+  searchForm = new FormControl();
+  messageSubscription: Subscription;
   networks: Network[] = [];
   gateways: Gateway[] = [];
   constructor() {
 
+    //search input with wait
+    this.messageSubscription =
+      this.searchForm.valueChanges.pipe(
+        debounceTime(1000),
+        distinctUntilChanged()
+      ).subscribe(newMessage => {
+        this.search(newMessage);
+      });
   }
 
   ngOnInit(): void {
+
+
+
     let net: Network = {
+      objId: UtilService.randomNumberString(),
       id: '312', name: 'ops', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
 
       clientNetwork: '1.2.3.4/24'
     }
     let gateways: Gateway[] = [
-      { id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isActive: 1 },
-      { id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isActive: 1 },
-      { id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isActive: 1 }
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isActive: 1 },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isActive: 1 },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isActive: 1 }
     ]
 
 
@@ -43,6 +58,7 @@ export class NetworksComponent implements OnInit {
     gateways.forEach(x => {
       const extendedGateway = GatewayComponent.prepareModel(x);
       item.gatewaysCount++;
+      extendedGateway.networkName = net.name;
       this.gateways.push(extendedGateway);
     })
 
@@ -54,6 +70,11 @@ export class NetworksComponent implements OnInit {
     let item2 = NetworkComponent.prepareModel(net2);
     this.networks.push(item2);
 
+
+
+  }
+  ngOnDestroy() {
+    this.messageSubscription.unsubscribe();
   }
 
   filterGateways(net: Network): any {
@@ -64,13 +85,41 @@ export class NetworksComponent implements OnInit {
 
 
 
+  addNewNetwork() {
 
-  clearGateway(gate: Gateway) {
-
+    const net: Network = {
+      objId: UtilService.randomNumberString(),
+      id: '', name: '', clientNetwork: '', serviceNetwork: '', labels: []
+    }
+    let item = NetworkComponent.prepareModel(net);
+    this.networks.unshift(item);
   }
 
-  saveOrUpdateGateway(gate: Gateway) {
+  saveNetwork($event: Network) {
+    console.log(`save network ${$event}`)
+  }
+  deleteNetwork($event: Network) {
+    console.log(`delete network ${$event}`)
+    if (!$event.id) {
+      const index = this.networks.findIndex(x => x.objId == $event.objId)
+      if (index >= 0)
+        this.networks.splice(index, 1);
+    } else {
 
+    }
+  }
+  saveGateway($event: Gateway) {
+    console.log(`save gateway ${$event}`)
+  }
+  deleteGateway($event: Gateway) {
+    console.log(`delete gateway ${$event}`)
+  }
+
+
+  search(data: string) {
+    if (!data?.length || data?.length > 2) {
+      console.log(`data is ${data}`);
+    }
   }
 
 }

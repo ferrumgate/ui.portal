@@ -5,6 +5,7 @@ import { Gateway, Network } from '../models/network';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../services/input.service';
 import { map, Observable, of, startWith } from 'rxjs';
+import { MatOptionSelectionChange } from '@angular/material/core';
 
 
 
@@ -13,6 +14,7 @@ export interface GatewayExtended {
   formGroup: FormGroup;
   formError: { name: string };
   isChanged: boolean;
+  networkName: string;
 }
 
 @Component({
@@ -32,19 +34,48 @@ export class GatewayComponent implements OnInit {
   openGateways: EventEmitter<boolean> = new EventEmitter();
   @Output()
   saveGateway: EventEmitter<Gateway> = new EventEmitter();
+  @Output()
+  deleteGateway: EventEmitter<Gateway> = new EventEmitter();
   isGatewayOpened = false;
-  @Input()
-  networks: Network[] = [];
+
+  _networks: Network[] = [];
+  get networks(): Network[] {
+    return this._networks;
+  }
+  @Input() set networks(value: Network[]) {
+    //empty network for reseting networkId
+    this._networks = [{ id: '', name: '' } as Network].concat(value);
+  }
+
   filteredOptions: Observable<Network[]> = of();
+
+  networkAutoCompleteFormControl = new FormControl();
+  enabledFormControl = new FormControl();
   constructor() {
 
   }
 
   ngOnInit(): void {
-    this.filteredOptions = this.gateway?.formGroup?.controls['networkId']?.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value as string || '')),
+    this.filteredOptions = this.networkAutoCompleteFormControl.valueChanges.pipe(
+      startWith(""),
+      map(value => (typeof value === "string" ? value : value.name)),
+      map(name => (name ? this._filter(name) : this.networks.slice()))
     );
+  }
+  networkChanged(event: any) {
+    if (event?.option?.value) {
+      this.gateway.networkId = event.option.value.id;
+      if (this.gateway.networkId)
+        this.gateway.networkName = event.option.value.name;
+      else
+        this.gateway.networkName = ''
+      this.gatewayModelChanged(event);
+
+    } else {
+      this.gateway.networkId = '';
+      this.gateway.networkName = '';
+      this.gatewayModelChanged(event);
+    }
   }
 
 
@@ -53,7 +84,8 @@ export class GatewayComponent implements OnInit {
       orig: JSON.parse(JSON.stringify(gate)),
       formError: this.createFormError(),
       formGroup: this.createFormGroup(gate),
-      isChanged: false
+      isChanged: false,
+      networkName: ''
 
     }
     let item = {
@@ -66,7 +98,6 @@ export class GatewayComponent implements OnInit {
   static createFormGroup(gate: Gateway) {
     return new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
-      networkId: new FormControl(gate.networkId, [])
 
     });
   }
@@ -100,6 +131,7 @@ export class GatewayComponent implements OnInit {
   }
 
   gatewayModelChanged($event: any) {
+
     this.checkNetworkFormError();
     if (this.gateway.formGroup.valid)
       this.checkIfModelChanged();
@@ -122,6 +154,8 @@ export class GatewayComponent implements OnInit {
         this.gateway.isChanged = true;
     })
     if (original.isActive != this.gateway.isActive)
+      this.gateway.isChanged = true;
+    if (original.networkId != this.gateway.networkId)
       this.gateway.isChanged = true;
 
   }
@@ -148,13 +182,14 @@ export class GatewayComponent implements OnInit {
 
   clear() {
     this.gateway.isChanged = false;
-    const original = this.gateway.orig;
+    const original = this.gateway.orig as Gateway;
+    original.networkName = this.networks.find(x => x.id == original.networkId)?.name;
     Object.assign(this.gateway, original);
     this.checkIfModelChanged();
   }
 
   saveOrUpdate() {
-
+    this.saveGateway.emit(this.gateway);
   }
 
   openGatewayClicked() {
@@ -162,14 +197,18 @@ export class GatewayComponent implements OnInit {
     this.openGateways.emit(this.isGatewayOpened);
   }
 
-
-
-
-  private _filter(value: string): Network[] {
-    const filterValue = value.toLowerCase();
-
-    return this.networks.filter(option => option.name.toLowerCase().includes(filterValue));
+  delete() {
+    this.deleteGateway.emit(this.gateway);
   }
+
+
+  private _filter(name: string): Network[] {
+    const filterValue = name.toLowerCase();
+    return this.networks.filter(option => option.id == '' || option.name.toLowerCase().includes(filterValue));
+
+  }
+
+
 
 
 

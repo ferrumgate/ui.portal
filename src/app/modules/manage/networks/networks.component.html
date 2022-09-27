@@ -6,10 +6,10 @@
             </div>
             <div class="row" fxLayout="row">
                 <mat-form-field fxFlex>
-                    <input matInput placeholder="Search" />
+                    <input matInput placeholder="Search" [formControl]="searchForm" />
                 </mat-form-field>
                 <div fxLayoutAlign="center center">
-                    <button mat-raised-button color="primary" class="add">
+                    <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">
                         <mat-icon>add</mat-icon>
                         Add
                     </button>
@@ -21,27 +21,28 @@
 
     <div class="networks networks-content">
 
+        <div fxLayout="row wrap">
+            <p class="row network-item" fxLayout="row" *ngFor="let net of networks">
 
-        <div class="row network-item">
-            <div *ngFor="let net of networks" fxLayout="row">
-                <app-network [network]="net">
+                <app-network [network]="net" (deleteNetwork)="deleteNetwork($event)"
+                    (saveNetwork)="saveNetwork($event)">
 
                 </app-network>
-                <div class="network-gateways" *ngIf="net.isGatewayOpened">
+                <span class="network-gateways" *ngIf="net.isGatewayOpened">
                     <mat-card>
                         <mat-card-header>
                             <mat-label class="gateway-title">Gateways</mat-label>
                         </mat-card-header>
                         <mat-card-content>
                             <div class="gateway-item" fxFlex fxLayout="row wrap">
-                                <app-gateway [gateway]="gate" [networks]="networks"
-                                    *ngFor="let gate of filterGateways(net)"></app-gateway>
+                                <app-gateway [gateway]="gate" [networks]="networks" (saveGateway)="saveGateway($event)"
+                                    (deleteGateway)="deleteGateway($event)" *ngFor="let gate of filterGateways(net)">
+                                </app-gateway>
                             </div>
                         </mat-card-content>
                     </mat-card>
-
-                </div>
-            </div>
+                </span>
+            </p>
         </div>
 
 

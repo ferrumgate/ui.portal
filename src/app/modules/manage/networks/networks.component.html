@@ -20,7 +20,17 @@
     </div>
 
     <div class="networks networks-content">
-
+        <div *ngIf="gatewaysNotJoined.length" class="row network-item" fxLayout="column">
+            <span>
+                <mat-label>Not Joined Gateways</mat-label>
+            </span>
+            <div class="network-item" fxLayout="row wrap">
+                <app-gateway [gateway]="gate" [networks]="networks" (saveGateway)="saveGateway($event)"
+                    (deleteGateway)="deleteGateway($event)" *ngFor="let gate of gatewaysNotJoined">
+                </app-gateway>
+            </div>
+        </div>
+        <mat-divider *ngIf="gatewaysNotJoined.length" class="content-divider"></mat-divider>
         <div fxLayout="row wrap">
             <p class="row network-item" fxLayout="row" *ngFor="let net of networks">
 

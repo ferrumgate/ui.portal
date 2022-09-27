@@ -23,6 +23,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
   messageSubscription: Subscription;
   networks: Network[] = [];
   gateways: Gateway[] = [];
+  gatewaysNotJoined: Gateway[] = [];
   constructor() {
 
     //search input with wait
@@ -69,6 +70,23 @@ export class NetworksComponent implements OnInit, OnDestroy {
     }
     let item2 = NetworkComponent.prepareModel(net2);
     this.networks.push(item2);
+
+
+    const notJoinedGateway: Gateway = {
+      objId: UtilService.randomNumberString(),
+      id: '1234', networkId: '',
+      name: 'not joined ', labels: ['testme'], isActive: 1, isJoined: 0
+    };
+    const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
+    this.gatewaysNotJoined.push(notJoinedExtendedGateway);
+
+    const notJoinedGateway2: Gateway = {
+      objId: UtilService.randomNumberString(),
+      id: '12344', networkId: '',
+      name: 'not joined2 ', labels: ['testme'], isActive: 1, isJoined: 0
+    };
+    const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
+    this.gatewaysNotJoined.push(notJoinedExtendedGateway2);
 
 
 

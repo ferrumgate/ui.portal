@@ -12,7 +12,17 @@
         <mat-card-content>
             <div>
                 <div>
+
                     <form test-id="gateway-form" [formGroup]="gateway.formGroup">
+
+                        <p>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{"Id"|translate}}</mat-label>
+                                <input matInput test-id="gateway-id-input" formControlName="id" [ngModel]="gateway.id"
+                                    readonly="true">
+                                <mat-hint>/etc/ferrumgate/conf on gateway</mat-hint>
+                            </mat-form-field>
+                        </p>
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
@@ -61,7 +71,7 @@
 
                     <p>
 
-                        <mat-checkbox [(ngModel)]="gateway.isActive" (ngModelChange)="gatewayModelChanged($event)">
+                        <mat-checkbox [(ngModel)]="gateway.isEnabled" (ngModelChange)="gatewayModelChanged($event)">
                             Enabled</mat-checkbox>
 
                     </p>

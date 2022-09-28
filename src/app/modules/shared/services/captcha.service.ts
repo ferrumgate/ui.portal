@@ -44,7 +44,8 @@ export class ReCaptchaV3ServiceCustom extends (ReCaptchaV3Service as any) {
 })
 export class CaptchaService {
   private initted = false;
-  constructor(private configService: ConfigService, private recaptchaV3Service: ReCaptchaV3ServiceCustom) {
+  constructor(private configService: ConfigService,
+    private recaptchaV3Service: ReCaptchaV3ServiceCustom) {
 
   }
 
@@ -77,4 +78,5 @@ export class CaptchaService {
         })
       );
   }
+
 }

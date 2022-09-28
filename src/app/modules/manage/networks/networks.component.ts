@@ -19,6 +19,7 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 })
 export class NetworksComponent implements OnInit, OnDestroy {
 
+  gatewaysNotJoinedpanelOpenState = true;
   searchForm = new FormControl();
   messageSubscription: Subscription;
   networks: Network[] = [];
@@ -47,9 +48,9 @@ export class NetworksComponent implements OnInit, OnDestroy {
       clientNetwork: '1.2.3.4/24'
     }
     let gateways: Gateway[] = [
-      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isActive: 1 },
-      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isActive: 1 },
-      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isActive: 1 }
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
     ]
 
 
@@ -75,7 +76,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
-      name: 'not joined ', labels: ['testme'], isActive: 1, isJoined: 0
+      name: 'not joined ', labels: ['testme'], isEnabled: 1,
     };
     const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
     this.gatewaysNotJoined.push(notJoinedExtendedGateway);
@@ -83,7 +84,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
     const notJoinedGateway2: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '12344', networkId: '',
-      name: 'not joined2 ', labels: ['testme'], isActive: 1, isJoined: 0
+      name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
     };
     const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
     this.gatewaysNotJoined.push(notJoinedExtendedGateway2);

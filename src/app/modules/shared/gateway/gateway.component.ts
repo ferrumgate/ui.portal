@@ -98,6 +98,7 @@ export class GatewayComponent implements OnInit {
   static createFormGroup(gate: Gateway) {
     return new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
+      id: new FormControl(gate.id, [])
 
     });
   }
@@ -153,7 +154,7 @@ export class GatewayComponent implements OnInit {
       if (!original.labels.find(y => y == x))
         this.gateway.isChanged = true;
     })
-    if (original.isActive != this.gateway.isActive)
+    if (original.isEnabled != this.gateway.isEnabled)
       this.gateway.isChanged = true;
     if (original.networkId != this.gateway.networkId)
       this.gateway.isChanged = true;

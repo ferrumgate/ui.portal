@@ -35,7 +35,8 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>Labels</mat-label>
                                 <mat-chip-list #chipList>
-                                    <mat-chip *ngFor="let label of network.labels||[]" (removed)="removeLabel(label)">
+                                    <mat-chip test-id="network-label-chip" *ngFor="let label of network.labels||[]"
+                                        (removed)="removeLabel(label)">
                                         {{label}}
                                         <button matChipRemove>
                                             <mat-icon>cancel</mat-icon>
@@ -76,7 +77,7 @@
                 <div>
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
-                        <mat-action-row fxFlex fxLayoutAlign="start center">
+                        <mat-action-row class="network-actions" fxFlex fxLayoutAlign="start center">
                             <button mat-icon-button color="primary" matTooltip="Delete" (click)="delete()">
                                 <mat-icon>delete</mat-icon>
                             </button>
@@ -84,13 +85,11 @@
                                 <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
-                                <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
+                                <button test-id="network-ok-button" mat-icon-button color="warn"
+                                    matTooltip="Save changes" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>
                             </span>
-
-
-
 
 
                         </mat-action-row>

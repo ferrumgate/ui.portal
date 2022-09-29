@@ -52,56 +52,56 @@ export class NetworksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     // test data
-    /*  let net: Network = {
-       objId: UtilService.randomNumberString(),
-       id: '312', name: 'ops', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
- 
-       clientNetwork: '1.2.3.4/24'
-     }
-     let gateways: Gateway[] = [
-       { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
-       { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
-       { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
-     ]
- 
- 
- 
-     let item = NetworkComponent.prepareModel(net);
-     this.networks.push(item);
-     gateways.forEach(x => {
-       const extendedGateway = GatewayComponent.prepareModel(x);
-       item.gatewaysCount++;
-       extendedGateway.networkName = net.name;
-       this.gateways.push(extendedGateway);
-     })
- 
-     let net2: Network = {
-       id: '3123', name: 'ops2', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
- 
-       clientNetwork: '1.2.3.4/24'
-     }
-     let item2 = NetworkComponent.prepareModel(net2);
-     this.networks.push(item2);
- 
- 
-     const notJoinedGateway: Gateway = {
-       objId: UtilService.randomNumberString(),
-       id: '1234', networkId: '',
-       name: 'not joined ', labels: ['testme'], isEnabled: 1,
-     };
-     const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
-     this.gatewaysNotJoined.push(notJoinedExtendedGateway);
- 
-     const notJoinedGateway2: Gateway = {
-       objId: UtilService.randomNumberString(),
-       id: '12344', networkId: '',
-       name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
-     };
-     const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
-     this.gatewaysNotJoined.push(notJoinedExtendedGateway2);
-  */
+    let net: Network = {
+      objId: UtilService.randomNumberString(),
+      id: '312', name: 'ops3', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
 
-    this.initNotJoined();
+      clientNetwork: '1.2.3.4/24'
+    }
+    let gateways: Gateway[] = [
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
+    ]
+
+
+
+    let item = NetworkComponent.prepareModel(net);
+    this.networks.push(item);
+    gateways.forEach(x => {
+      const extendedGateway = GatewayComponent.prepareModel(x);
+      item.gatewaysCount++;
+      extendedGateway.networkName = net.name;
+      this.gateways.push(extendedGateway);
+    })
+
+    let net2: Network = {
+      id: '3123', name: 'ops2', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
+
+      clientNetwork: '1.2.3.4/24'
+    }
+    let item2 = NetworkComponent.prepareModel(net2);
+    this.networks.push(item2);
+
+
+    const notJoinedGateway: Gateway = {
+      objId: UtilService.randomNumberString(),
+      id: '1234', networkId: '',
+      name: 'not joined ', labels: ['testme'], isEnabled: 1,
+    };
+    const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
+    this.gatewaysNotJoined.push(notJoinedExtendedGateway);
+
+    const notJoinedGateway2: Gateway = {
+      objId: UtilService.randomNumberString(),
+      id: '12344', networkId: '',
+      name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
+    };
+    const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
+    this.gatewaysNotJoined.push(notJoinedExtendedGateway2);
+
+
+    //  this.initNotJoined();
 
   }
   ngOnDestroy() {

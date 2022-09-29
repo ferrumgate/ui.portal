@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../models/network';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../services/input.service';
-import { map, Observable, of, startWith } from 'rxjs';
+import { map, Observable, of, startWith, takeWhile } from 'rxjs';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
+
 
 
 
@@ -72,14 +73,23 @@ export class GatewayComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredOptions = this.networkAutoCompleteFormControl.valueChanges.pipe(
-      startWith(""),
-      map(value => (typeof value === "string" ? value : value.name)),
-      map(name => (name ? this._filter(name) : this.networks.slice()))
-    );
+    /*  this.filteredOptions = this.networkAutoCompleteFormControl.valueChanges.pipe(
+       takeWhile(name => typeof (name) == 'string'),
+       map(name => (name ? this.filter(name) : this.networks.slice()))
+     ); */
+    this.filteredOptions = of(this._networks).pipe(
+      map(data => {
+        data.sort((a, b) => {
+          return a.name < b.name ? -1 : 1;
+        })
+        return data;
+      })
+    )
+
 
   }
   networkChanged(event: any) {
+
     if (event?.option?.value) {
       this.gateway.networkId = event.option.value.id;
       if (this.gateway.networkId)
@@ -93,6 +103,7 @@ export class GatewayComponent implements OnInit {
       this.gateway.networkName = '';
       this.gatewayModelChanged(event);
     }
+
   }
 
 
@@ -102,12 +113,23 @@ export class GatewayComponent implements OnInit {
       formError: this.createFormError(),
       formGroup: this.createFormGroup(gate),
       isChanged: false,
-      networkName: ''
+      networkName: '',
+
+
 
     }
+
     let item = {
-      ...gate, ...extended
+      ...gate,
+      ...extended,
     }
+    Object.defineProperty(item, 'isEnabledBoolean', {
+      get() { return item.isEnabled ? true : false },
+      set(newvalue) { item.isEnabled = newvalue ? 1 : 0 },
+      enumerable: true, configurable: true
+    })
+
+
 
     return item;
   }
@@ -149,7 +171,6 @@ export class GatewayComponent implements OnInit {
   }
 
   gatewayModelChanged($event: any) {
-
     this.checkNetworkFormError();
     if (this.gateway.formGroup.valid)
       this.checkIfModelChanged();
@@ -201,12 +222,13 @@ export class GatewayComponent implements OnInit {
   clear() {
     this.gateway.isChanged = false;
     const original = this.gateway.orig as Gateway;
-    original.networkName = this.networks.find(x => x.id == original.networkId)?.name;
+    original.networkName = this.networks.find(x => x.id == original.networkId)?.name || '';
     Object.assign(this.gateway, original);
     this.checkIfModelChanged();
   }
 
   saveOrUpdate() {
+
     this.saveGateway.emit(this.gateway);
   }
 
@@ -220,10 +242,15 @@ export class GatewayComponent implements OnInit {
   }
 
 
-  private _filter(name: string): Network[] {
+  private filter(name: string): Network[] {
     const filterValue = name.toLowerCase();
-    return this.networks.filter(option => option.id == '' || option.name.toLowerCase().includes(filterValue));
+    const filteredItems = this.networks.filter(option => option.id == '' || option.name.toLowerCase().includes(filterValue));
+    return filteredItems;
 
+  }
+  displayFn(net: Network | string) {
+    if (typeof (net) == 'string') return net;
+    return net?.name || '';
   }
 
 

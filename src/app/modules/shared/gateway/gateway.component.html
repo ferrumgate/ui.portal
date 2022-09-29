@@ -36,7 +36,8 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>Labels</mat-label>
                                 <mat-chip-list #chipList>
-                                    <mat-chip *ngFor="let label of gateway.labels||[]" (removed)="removeLabel(label)">
+                                    <mat-chip test-id="gateway-label-chip" *ngFor="let label of gateway.labels||[]"
+                                        (removed)="removeLabel(label)">
                                         {{label}}
                                         <button matChipRemove>
                                             <mat-icon>cancel</mat-icon>
@@ -52,11 +53,11 @@
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>Network</mat-label>
-                                <input type="text" placeholder="Select a network" matInput
-                                    [ngModel]="gateway.networkName" [formControl]="networkAutoCompleteFormControl"
-                                    [matAutocomplete]="auto">
-                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
-                                    (optionSelected)="networkChanged($event)">
+                                <input type="text" test-id="gateway-input-network" placeholder="Select a network"
+                                    matInput [ngModel]="gateway.networkName"
+                                    [formControl]="networkAutoCompleteFormControl" [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
+                                    [displayWith]="displayFn">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                         {{option.name}}
                                     </mat-option>
@@ -71,7 +72,8 @@
 
                     <p>
 
-                        <mat-checkbox [(ngModel)]="gateway.isEnabled" (ngModelChange)="gatewayModelChanged($event)">
+                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabledBoolean"
+                            (ngModelChange)="gatewayModelChanged($event)">
                             Enabled</mat-checkbox>
 
                     </p>
@@ -83,14 +85,17 @@
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
                         <mat-action-row class="gateway-actions" fxFlex fxLayoutAlign="start center">
-                            <button mat-icon-button color="primary" matTooltip="Delete" (click)="delete()">
+                            <button test-id="gateway-delete-button" mat-icon-button color="primary" matTooltip="Delete"
+                                (click)="delete()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                             <span *ngIf="gateway.isChanged" fxFlex fxLayoutAlign="end center">
-                                <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
+                                <button test-id="gateway-close-button" mat-icon-button color="warn"
+                                    matTooltip="Cancel changes" (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
-                                <button mat-icon-button color="warn" matTooltip="Save changes" (click)="saveOrUpdate()">
+                                <button test-id="gateway-ok-button" mat-icon-button color="warn"
+                                    matTooltip="Save changes" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>
                             </span>

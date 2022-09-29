@@ -16,6 +16,7 @@ import { NavMenuComponent } from './navmenu/navmenu.component';
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { NetworkComponent } from './network/network.component';
 import { GatewayComponent } from "./gateway/gateway.component";
+import { ConfirmComponent } from "./confirm/confirm.component";
 
 
 
@@ -38,7 +39,8 @@ import { GatewayComponent } from "./gateway/gateway.component";
         NavMenuComponent,
         ToolbarComponent,
         NetworkComponent,
-        GatewayComponent
+        GatewayComponent,
+        ConfirmComponent
 
 
     ],
@@ -70,7 +72,8 @@ import { GatewayComponent } from "./gateway/gateway.component";
         NavMenuComponent,
         ToolbarComponent,
         NetworkComponent,
-        GatewayComponent
+        GatewayComponent,
+        ConfirmComponent
     ],
     providers: [
         {

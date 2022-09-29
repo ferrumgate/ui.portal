@@ -27,10 +27,6 @@ export class Confirm2FAComponent implements OnInit {
   device: any;
   title: string;
 
-
-  isCaptchaEnabled = false;
-
-
   /// 2FA 
   is2FA = false;
   hideToken = false;
@@ -66,18 +62,9 @@ export class Confirm2FAComponent implements OnInit {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+
       this.model2fa.key = params.key;
-      //this.tunnelSessionKey = params.session;
-      /* //if tunnel key exits save first
-      if (this.tunnelSessionKey)
-        this.authService.setTunnelSessionKey(this.tunnelSessionKey);
-      else {
-        //check storage if exits
-        const tunnelSessionKey = this.authService.getTunnelSessionKey();
-        if (tunnelSessionKey)
-          this.router.navigate(['/user/confirm2fa'], { queryParams: { session: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled, key: this.model2fa.key } })
-      } */
+
     })
   }
 
@@ -133,15 +120,9 @@ export class Confirm2FAComponent implements OnInit {
       return;
     }
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('confirm2FA').pipe(
-        switchMap((token: any) => {
-          return this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '', token, 'confirm2FA');
-        })
-      ).subscribe();
-    } else {
-      this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '').subscribe();
-    }
+
+    this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '').subscribe();
+
 
   }
 

@@ -42,7 +42,7 @@ export class ResetPassComponent implements OnInit {
 
   error: { password: string, passwordAgain: string, save: string };
 
-  isCaptchaEnabled = false;
+
   @Output() submitEM = new EventEmitter();
 
   constructor(private breakpointObserver: BreakpointObserver,
@@ -61,7 +61,6 @@ export class ResetPassComponent implements OnInit {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
       this.key = params.key;
     })
 
@@ -70,17 +69,6 @@ export class ResetPassComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    /* this.device = this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-      ])
-      .pipe(
-        map(result => { this.loggerService.debug(result); return result.matches; }),
-        shareReplay(),
-
-      ).subscribe(); */
 
 
   }
@@ -98,25 +86,13 @@ export class ResetPassComponent implements OnInit {
       return;
     }
 
+    this.authService.resetPassword(this.key, this.model.password)
+      .subscribe((x: any) => {
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('resetpass').pipe(
-        switchMap((token: any) => {
-          return this.authService.resetPassword(this.key, this.model.password || '', token, 'resetpass')
-        })
-      ).subscribe(x => {
         this.isPasswordChanged = true;
         this.error = this.resetErrrors();
-      });
-    } else {
+      })
 
-      this.authService.resetPassword(this.key, this.model.password)
-        .subscribe((x: any) => {
-
-          this.isPasswordChanged = true;
-          this.error = this.resetErrrors();
-        })
-    }
 
   }
   checkFormError() {

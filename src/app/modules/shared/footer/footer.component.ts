@@ -13,10 +13,10 @@ export class FooterComponent implements OnInit {
   supportLink: string;
 
   constructor(private configService: ConfigService) {
-    this.aboutLink = configService.links.about;
-    this.privacyLink = configService.links.privacy;
-    this.documentsLink = configService.links.documents;
-    this.supportLink = configService.links.support;
+    this.aboutLink = this.configService.links.about;
+    this.privacyLink = this.configService.links.privacy;
+    this.documentsLink = this.configService.links.documents;
+    this.supportLink = this.configService.links.support;
   }
 
   ngOnInit(): void {

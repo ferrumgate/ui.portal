@@ -1,10 +1,11 @@
 import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { catchError, concat, delay, flatMap, map, merge, mergeAll, mergeMap, Observable, of, Subject, Subscription, switchMap, take, tap, throwError } from 'rxjs';
 
+
 import { ConfigService } from './config.service';
 
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 
 /**
  * a little bit force ng-recaptcha library to load site key late
@@ -45,8 +46,11 @@ export class ReCaptchaV3ServiceCustom extends (ReCaptchaV3Service as any) {
 export class CaptchaService {
   private initted = false;
   constructor(private configService: ConfigService,
-    private recaptchaV3Service: ReCaptchaV3ServiceCustom) {
-
+    private recaptchaV3Service: ReCaptchaV3ServiceCustom,
+    private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+    })
   }
 
 
@@ -77,6 +81,24 @@ export class CaptchaService {
           return throwError(err);
         })
       );
+  }
+  private isCaptchaEnabled: boolean = false;
+  setIsEnabled(value: boolean) {
+    this.isCaptchaEnabled = value;
+  }
+  getIsEnabled() {
+    return this.isCaptchaEnabled;
+  }
+
+  executeIfEnabled(action: string) {
+    if (this.isCaptchaEnabled)
+      return this.execute(action).pipe(
+        map((x) => {
+          this.isCaptchaEnabled = false;
+          return x;
+        }))
+    else
+      return of(false)
   }
 
 }

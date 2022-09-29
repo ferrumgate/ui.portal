@@ -34,7 +34,7 @@ export class ForgotPassComponent implements OnInit {
 
   error: { email: string, send: string };
 
-  isCaptchaEnabled = false;
+
   @Output() submitEM = new EventEmitter();
 
   constructor(private breakpointObserver: BreakpointObserver,
@@ -52,26 +52,11 @@ export class ForgotPassComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-    })
 
   }
 
 
   ngOnInit(): void {
-
-    /* this.device = this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-      ])
-      .pipe(
-        map(result => { this.loggerService.debug(result); return result.matches; }),
-        shareReplay(),
-
-      ).subscribe(); */
-
 
   }
 
@@ -88,24 +73,12 @@ export class ForgotPassComponent implements OnInit {
       return;
     }
 
+    this.authService.forgotPassword(this.model.email).subscribe((x: any) => {
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('forgotpass').pipe(
-        switchMap((token: any) => {
-          return this.authService.forgotPassword(this.model.email || '', token, 'forgotpass')
-        })
-      ).subscribe(x => {
-        this.isForgotPassSended = true;
-        this.error = this.resetErrrors();
-      });
-    } else {
+      this.isForgotPassSended = true;
+      this.error = this.resetErrrors();
+    })
 
-      this.authService.forgotPassword(this.model.email).subscribe((x: any) => {
-
-        this.isForgotPassSended = true;
-        this.error = this.resetErrrors();
-      })
-    }
 
   }
   checkFormError() {

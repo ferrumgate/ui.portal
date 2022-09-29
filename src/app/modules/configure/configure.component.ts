@@ -66,7 +66,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   isLinear = true;
 
   isThemeDark = false;
-  isCaptchaEnabled = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -82,10 +82,6 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
       this.isThemeDark = x == 'dark';
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-    this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-    })
 
 
   }
@@ -258,35 +254,16 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
       return;
     }
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('configure').pipe(
-        switchMap((token: any) => {
-          return this.configureService.configure(this.model, token, 'configure');
-        }
-        )
-      ).pipe(
-        switchMap((x: any) => {
-          return this.configService.getPublicConfig().pipe(catchError(err => of()))
-        })
-      )
-        .subscribe(x => {
-          this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
-          this.authService.logout();
-        });
-    } else {
-      this.configureService.configure(this.model).pipe(
-        switchMap((x: any) => {
-          return this.configService.getPublicConfig().pipe(catchError(err => of()))
-        })
-      ).subscribe(x => {
-        this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
-        this.authService.logout();
+
+    this.configureService.configure(this.model).pipe(
+      switchMap((x: any) => {
+        return this.configService.getPublicConfig().pipe(catchError(err => of()))
       })
-    }
+    ).subscribe(x => {
+      this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
+      this.authService.logout();
+    })
 
   }
-
-
-
 
 }

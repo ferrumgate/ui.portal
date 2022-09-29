@@ -3,9 +3,13 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
 import { catchError, map, of, throwError } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { CaptchaService, ReCaptchaV3ServiceCustom } from './captcha.service';
+import { ConfigService } from './config.service';
+import { TranslationService } from './translation.service';
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
@@ -13,19 +17,27 @@ describe('AuthenticationService', () => {
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
   const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
+  const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['executeIfEnabled']);
   beforeEach(() => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, TranslateModule.forRoot()],
+      imports: [RouterTestingModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), RecaptchaV3Module],
       providers: [
         { provide: HttpClient, useValue: httpClientSpy },
         { provide: Router, useValue: routerSpy },
-
+        { provide: CaptchaService, useValue: captchaServiceSpy },
+        TranslationService,
         TranslateService,
+        ConfigService,
+
+
       ]
     });
 
+    //captchaService = TestBed.inject(CaptchaService);
+    //captchaService.setIsEnabled(false);
     service = TestBed.inject(AuthenticationService);
+    captchaServiceSpy.executeIfEnabled.and.returnValue(of(false));
 
 
 

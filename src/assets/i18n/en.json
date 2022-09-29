@@ -89,5 +89,8 @@
     "DefaultUsernameChangeDefinition": "Default username will be changed to this, no confirm email will be sent",
     "AdminUser": "Admin User",
     "SuccessfullyConfigured": "Successfully configured",
-    "NameRequired": "Name required"
+    "NameRequired": "Name required",
+    "Confirm": "Confirm",
+    "DoYouWantToDeleteGateway": "Do you want to delete gateway",
+    "DoYouWantToDeleteNetwork": "Do you want to delete network"
 }

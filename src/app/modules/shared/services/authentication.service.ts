@@ -7,6 +7,8 @@ import { catchError, from, map, mergeMap, Observable, of, Subscriber, switchMap,
 import { environment } from 'src/environments/environment';
 import { RBACDefault } from '../models/rbac';
 import { User } from '../models/user';
+import { BaseService } from './base.service';
+import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 
@@ -19,7 +21,7 @@ export interface Session {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService extends BaseService {
 
   //after authentication all session related items saved to session storage
   static StorageSessionKey = 'ferrumgate_session';
@@ -44,7 +46,9 @@ export class AuthenticationService {
   constructor(
     private router: Router,
     private configService: ConfigService,
-    private httpService: HttpClient) {
+    private httpService: HttpClient,
+    private captchaService: CaptchaService) {
+    super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
     const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
     this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
@@ -78,13 +82,7 @@ export class AuthenticationService {
 
 
 
-  private _jsonHeader = {
 
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    })
-
-  }
 
   checkSessionIsValid() {
     try {
@@ -108,7 +106,7 @@ export class AuthenticationService {
 
   getAccessToken(key: string) {
     const tunnelSessionKey = this.getTunnelSessionKey();
-    return this.httpService.post(this._getAccessToken, { key: key, tunnelKey: tunnelSessionKey }, this._jsonHeader)
+    return this.httpService.post(this._getAccessToken, { key: key, tunnelKey: tunnelSessionKey }, this.jsonHeader)
       .pipe(map((resp: any) => {
 
         this._currentSession = {
@@ -123,7 +121,7 @@ export class AuthenticationService {
   }
 
   getRefreshToken() {
-    return this.httpService.post(this._getRefreshToken, { refreshToken: this.currentSession?.refreshToken }, this._jsonHeader)
+    return this.httpService.post(this._getRefreshToken, { refreshToken: this.currentSession?.refreshToken }, this.jsonHeader)
       .pipe(map((resp: any) => {
 
         this._currentSession = {
@@ -137,13 +135,19 @@ export class AuthenticationService {
       }))
   }
 
-  loginLocal(username: string, password: string, captcha?: string, action?: string) {
-    return this.login(this.httpService.post<Session>(this._authLocal, { username: username, password: password, captcha: captcha, action: action }, this._jsonHeader))
+  loginLocal(username: string, password: string) {
+    let data = { username: username, password: password };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.login(this.httpService.post<Session>(this._authLocal, y, this.jsonHeader))
+      ))
 
   }
 
-  register(email: string, password: string, captcha?: string, action?: string) {
-    return this.httpService.post<{ result: boolean }>(this._authRegister, { username: email, password: password, captcha: captcha, action: action }, this._jsonHeader);
+  register(email: string, password: string) {
+    let data = { username: email, password: password };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegister, y, this.jsonHeader))
+    );
   }
 
 
@@ -152,24 +156,34 @@ export class AuthenticationService {
     this._currentSession = null;
     this.router.navigate(['/login']);
   }
-  confirmUserEmail(key: string, captcha?: string, action?: string) {
-
-    if (!captcha)
-      return this.httpService.post(this._confirmUser, { key: key }, this._jsonHeader);
-    else
-      return this.httpService.post(this._confirmUser, { key: key, captcha: captcha, action: action }, this._jsonHeader);
+  confirmUserEmail(key: string) {
+    let data = { key: key };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post(this._confirmUser, y, this.jsonHeader))
+    )
   }
 
-  confirm2FA(key: string, token: string, captcha?: string, action?: string) {
-    return this.login(this.httpService.post<{ key: string }>(this._confirm2FA, { key: key, twoFAToken: token, captcha: captcha, action: action }, this._jsonHeader))
+  confirm2FA(key: string, token: string) {
+    let data = { key: key, twoFAToken: token };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.login(this.httpService.post<{ key: string }>(this._confirm2FA, y, this.jsonHeader)))
+    )
+
   }
 
-  forgotPassword(email: string, captcha?: string, action?: string): any {
-    return this.httpService.post(this._userForgotPass, { username: email, captcha: captcha, action: action }, this._jsonHeader);
+  forgotPassword(email: string): any {
+    let data = { username: email };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post(this._userForgotPass, y, this.jsonHeader))
+    )
   }
 
-  resetPassword(key: string, password: string, captcha?: string, action?: string): any {
-    return this.httpService.post(this._userResetPass, { key: key, pass: password, captcha: captcha, action: action }, this._jsonHeader);
+  resetPassword(key: string, password: string): any {
+    let data = { key: key, pass: password };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post(this._userResetPass, y, this.jsonHeader))
+    )
+
   }
 
   getUserCurrent() {
@@ -234,6 +248,7 @@ export class AuthenticationService {
         return from(this.router.navigate(['/screenswitch']));
     }
     else {
+
       return from(this.router.navigate(['/dashboard']));
     }
 
@@ -241,16 +256,21 @@ export class AuthenticationService {
   }
 
 
-  loginCallback(callback: { url: string; params: any; }, captcha?: string, action?: string) {
-    let url = '';
-    if (callback.url.includes('google')) {
-      url = this._authGoogleCallback;
-    }
-    if (captcha)
-      callback.params.captcha = captcha;
-    if (action)
-      callback.params.action = action;
-    return this.login(this.httpService.get(url, { params: callback.params }));
+  loginCallback(callback: { url: string; params: any; }) {
+    return this.preExecute({}).pipe(
+      switchMap(y => {
+        let url = '';
+        if (callback.url.includes('google')) {
+          url = this._authGoogleCallback;
+        }
+        if (y.captcha)
+          callback.params.captcha = y.captcha;
+        if (y.action)
+          callback.params.action = y.action;
+        return this.login(this.httpService.get(url, { params: callback.params }));
+      })
+    )
+
 
 
   }

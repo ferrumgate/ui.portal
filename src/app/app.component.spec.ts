@@ -12,10 +12,12 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { of } from 'rxjs';
 
 describe('AppComponent', () => {
 
   beforeEach(async () => {
+    let httpClient: HttpClient;
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule, HttpClientModule, TranslateModule.forRoot(), SharedModule, MaterialModule, MatIconTestingModule, NoopAnimationsModule
@@ -28,7 +30,8 @@ describe('AppComponent', () => {
 
       ]
     }).compileComponents();
-
+    httpClient = TestBed.inject(HttpClient);
+    spyOn(httpClient, 'get').and.returnValue(of({}))
 
   });
 

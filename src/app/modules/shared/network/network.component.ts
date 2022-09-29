@@ -38,9 +38,12 @@ export class NetworkComponent implements OnInit {
   @Output()
   deleteNetwork: EventEmitter<Network> = new EventEmitter();
   isGatewayOpened = false;
-  constructor() { }
+  constructor() {
+    this.network = NetworkComponent.prepareModel(this.network);
+  }
 
   ngOnInit(): void {
+
   }
 
 

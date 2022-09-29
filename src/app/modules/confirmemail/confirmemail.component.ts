@@ -20,7 +20,6 @@ export class ConfirmEmailComponent implements OnInit, AfterViewInit {
   device: any;
   model: any = {};
   isConfirmed = false;
-  isCaptchaEnabled = false;
   confirmKey: string | null | undefined;
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
@@ -37,7 +36,7 @@ export class ConfirmEmailComponent implements OnInit, AfterViewInit {
 
 
     this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+
       this.confirmKey = params.key;
     })
 
@@ -53,26 +52,18 @@ export class ConfirmEmailComponent implements OnInit, AfterViewInit {
   }
 
   execute(wait = 1000) {
-    if (this.isCaptchaEnabled) {
-      return this.captchaService.execute('confirmemail').pipe(
-        switchMap((token: any) => {
-          return this.confirm(wait, token, 'confirmemail');
-        })
-      )
 
-    } else {
-      return this.confirm(wait);
-    }
+    return this.confirm(wait);
+
   }
 
-  private confirm(wait: number, captcha?: string, action?: string) {
+  private confirm(wait: number) {
     return of('').pipe(
       delay(wait),
       switchMap(x => {
-        return this.authService.confirmUserEmail(this.confirmKey || '', captcha, action);
+        return this.authService.confirmUserEmail(this.confirmKey || '');
       }),
       map(x => {
-
         this.isConfirmed = true;
       }),
       delay(2000),

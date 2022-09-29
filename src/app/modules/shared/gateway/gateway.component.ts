@@ -6,6 +6,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../services/input.service';
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatOptionSelectionChange } from '@angular/material/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfigService } from '../services/config.service';
+import { TranslationService } from '../services/translation.service';
 
 
 
@@ -51,8 +54,21 @@ export class GatewayComponent implements OnInit {
 
   networkAutoCompleteFormControl = new FormControl();
   enabledFormControl = new FormControl();
-  constructor() {
+  isThemeDark = false;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private configService: ConfigService,
+    private translateService: TranslationService,
+  ) {
 
+    this.configService.themeChanged.subscribe(x => {
+      this.isThemeDark = x == 'dark';
+
+    })
+    this.isThemeDark = this.configService.getTheme() == 'dark';
+    //for testing;
+    this.gateway = GatewayComponent.prepareModel(this.gateway);
   }
 
   ngOnInit(): void {
@@ -61,6 +77,7 @@ export class GatewayComponent implements OnInit {
       map(value => (typeof value === "string" ? value : value.name)),
       map(name => (name ? this._filter(name) : this.networks.slice()))
     );
+
   }
   networkChanged(event: any) {
     if (event?.option?.value) {

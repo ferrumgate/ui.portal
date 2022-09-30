@@ -28,10 +28,10 @@ export class GatewayService extends BaseService {
   }
 
   getNotJoined() {
-    const searchParams = new URLSearchParams({ notJoined: 'true' });
+    const searchParams = new URLSearchParams({});
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
-        const url = this._gatewayUrl + `?${searchParams.toString()}`;
+        const url = this.joinUrl(this._gatewayUrl, y);
         return this.httpService.get<{ items: Gateway[] }>(url);
       })
     )
@@ -47,25 +47,50 @@ export class GatewayService extends BaseService {
     return this.preExecute(gate).pipe(
       switchMap(y => {
         if (gate.id)
-          return this.httpService.put(this._gatewayUrl, gate, this.jsonHeader)
-        else return this.httpService.post(this._gatewayUrl, gate, this.jsonHeader)
+          return this.httpService.put(this._gatewayUrl, y, this.jsonHeader)
+        else return this.httpService.post(this._gatewayUrl, y, this.jsonHeader)
       }))
 
   }
 
   delete(gateway: Gateway) {
-    const gate: Gateway = {
-      id: gateway.id, labels: gateway.labels, name: gateway.name,
-      isEnabled: gateway.isEnabled, networkId: gateway.networkId
-    }
 
 
-    return this.preExecute(gate).pipe(
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
       switchMap(y => {
-        return of('');
-        //this.httpService.delete(this._gatewayUrl + `/${gate.id}`)
+
+        let url = this.joinUrl(this._gatewayUrl, `${gateway.id}`, y);
+        return this.httpService.delete(url);
 
       }))
+  }
+
+  get(id: string) {
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._gatewayUrl, `${id}`, urlParams);
+        return this.httpService.delete(url);
+
+      }))
+  }
+
+  get2(search?: string, ids?: string) {
+
+    const searchParams = new URLSearchParams();
+    if (search)
+      searchParams.append('search', search);
+    if (ids)
+      searchParams.append('ids', ids);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._gatewayUrl, y);
+        return this.httpService.get<{ items: Gateway[] }>(url);
+      })
+    )
+
   }
 
 

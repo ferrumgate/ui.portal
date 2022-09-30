@@ -23,6 +23,7 @@ export class ConfirmService {
 
     constructor(
         private configService: ConfigService,
+        private translateService: TranslationService,
         private dialog: MatDialog) {
 
     }
@@ -41,7 +42,20 @@ export class ConfirmService {
         return dialogRef.afterClosed();
     }
 
+    showSave() {
 
+        return this.show(
+            this.translateService.translate('Confirm'),
+            this.translateService.translate("DoYouWantToSave")
+        )
+    }
 
+    showDelete() {
+
+        return this.show(
+            this.translateService.translate('Confirm'),
+            this.translateService.translate("DoYouWantToDelete")
+        )
+    }
 
 }

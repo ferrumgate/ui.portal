@@ -1,7 +1,7 @@
 <div class="gateway">
     <mat-card>
         <mat-card-header>
-            <mat-card-title matTooltip="Gateway {{gateway.name}}">
+            <mat-card-title matTooltip="{{'Gateway'|translate}} {{gateway.name}}">
                 <mat-icon>computer
                 </mat-icon>
             </mat-card-title>
@@ -20,7 +20,7 @@
                                 <mat-label>{{"Id"|translate}}</mat-label>
                                 <input matInput test-id="gateway-id-input" formControlName="id" [ngModel]="gateway.id"
                                     readonly="true">
-                                <mat-hint>/etc/ferrumgate/conf on gateway</mat-hint>
+                                <mat-hint>{{"GatewayIdHint"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
                         <p>
@@ -34,7 +34,7 @@
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
-                                <mat-label>Labels</mat-label>
+                                <mat-label>{{"Labels"|translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip test-id="gateway-label-chip" *ngFor="let label of gateway.labels||[]"
                                         (removed)="removeLabel(label)">
@@ -43,7 +43,7 @@
                                             <mat-icon>cancel</mat-icon>
                                         </button>
                                     </mat-chip>
-                                    <input placeholder="New label..." [matChipInputFor]="chipList"
+                                    <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                         [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
                                 </mat-chip-list>
@@ -52,17 +52,18 @@
 
                         <p>
                             <mat-form-field appearance="fill">
-                                <mat-label>Network</mat-label>
-                                <input type="text" test-id="gateway-input-network" placeholder="Select a network"
-                                    matInput [ngModel]="gateway.networkName"
-                                    [formControl]="networkAutoCompleteFormControl" [matAutocomplete]="auto">
+                                <mat-label>{{"Network"|translate}}</mat-label>
+                                <input type="text" test-id="gateway-input-network"
+                                    placeholder="{{'SelectANetwork'|translate}}" matInput
+                                    [ngModel]="gateway.networkName" [formControl]="networkAutoCompleteFormControl"
+                                    [matAutocomplete]="auto">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
                                     [displayWith]="displayFn">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                                         {{option.name}}
                                     </mat-option>
                                 </mat-autocomplete>
-                                <mat-hint>Binded network</mat-hint>
+                                <mat-hint>{{"BindedNetwork"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
 
@@ -74,7 +75,7 @@
 
                         <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabledBoolean"
                             (ngModelChange)="gatewayModelChanged($event)">
-                            Enabled</mat-checkbox>
+                            {{"Enabled"|translate}}</mat-checkbox>
 
                     </p>
 
@@ -85,17 +86,17 @@
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
                         <mat-action-row class="gateway-actions" fxFlex fxLayoutAlign="start center">
-                            <button test-id="gateway-delete-button" mat-icon-button color="primary" matTooltip="Delete"
-                                (click)="delete()">
+                            <button test-id="gateway-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                             <span *ngIf="gateway.isChanged" fxFlex fxLayoutAlign="end center">
                                 <button test-id="gateway-close-button" mat-icon-button color="warn"
-                                    matTooltip="Cancel changes" (click)="clear()">
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
                                 <button test-id="gateway-ok-button" mat-icon-button color="warn"
-                                    matTooltip="Save changes" (click)="saveOrUpdate()">
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>
                             </span>

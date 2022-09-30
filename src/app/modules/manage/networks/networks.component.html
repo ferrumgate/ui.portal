@@ -2,16 +2,16 @@
     <div class="networks networks-toolbar">
         <div fxFlex fxLayout="column">
             <div class="row title">
-                Networks
+                {{'Networks'|translate}}
             </div>
             <div class="row" fxLayout="row">
                 <mat-form-field fxFlex>
-                    <input matInput placeholder="Search" [formControl]="searchForm" />
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
                 </mat-form-field>
                 <div fxLayoutAlign="center center">
                     <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">
                         <mat-icon>add</mat-icon>
-                        Add
+                        {{"Add"|translate}}
                     </button>
                 </div>
             </div>
@@ -24,7 +24,7 @@
             <mat-expansion-panel [expanded]="gatewaysNotJoinedpanelOpenState">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        Not Joined Gateways(For activating bind them to a network)
+                        {{"NotJoinedGateways"|translate}}
                     </mat-panel-title>
 
                 </mat-expansion-panel-header>
@@ -50,7 +50,7 @@
                 <span class="network-gateways" *ngIf="net.isGatewayOpened">
                     <mat-card>
                         <mat-card-header>
-                            <mat-label class="gateway-title">Gateways</mat-label>
+                            <mat-label class="gateway-title">{{'Gateways'|translate}}</mat-label>
                         </mat-card-header>
                         <mat-card-content>
                             <div class="gateway-item" fxFlex fxLayout="row wrap">

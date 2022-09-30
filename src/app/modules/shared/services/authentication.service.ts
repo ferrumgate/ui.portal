@@ -257,7 +257,7 @@ export class AuthenticationService extends BaseService {
 
 
   loginCallback(callback: { url: string; params: any; }) {
-    return this.preExecute({}).pipe(
+    return this.preExecute({} as any).pipe(
       switchMap(y => {
         let url = '';
         if (callback.url.includes('google')) {

@@ -71,7 +71,7 @@ describe('ConfigureComponent', () => {
 
   it('default admin user input', fakeAsync(async () => {
     expect(component).toBeTruthy();
-
+    fixture.detectChanges();
     tick(1000);//wait a little
     // on load we must load default values and form must be valid
     fixture.detectChanges();

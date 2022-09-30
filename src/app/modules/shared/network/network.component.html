@@ -1,14 +1,15 @@
 <div class="network">
     <mat-card>
         <mat-card-header>
-            <mat-card-title matTooltip="Network {{network.name}}">
+            <mat-card-title matTooltip="{{'Network'|translate}} {{network.name}}">
                 <mat-icon>lan
                 </mat-icon>
             </mat-card-title>
 
             <mat-action-row fxFlex fxLayoutAlign="end center">
 
-                <mat-icon matBadge="{{network.gatewaysCount}}" matBadgeColor="warn" matTooltip="Gateways">computer
+                <mat-icon matBadge="{{network.gatewaysCount}}" matBadgeColor="warn"
+                    matTooltip="{{'Gateways'|translate}}">computer
                 </mat-icon>
                 <button mat-icon-button (click)="openGatewayClicked()">
                     <mat-icon *ngIf="network.gatewaysCount && !network.isGatewayOpened">arrow_right</mat-icon>
@@ -25,7 +26,7 @@
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
-                                <input matInput test-id="network-name-input" placeholder="Network name"
+                                <input matInput test-id="network-name-input" placeholder="{{'NetworkName'|translate}}"
                                     formControlName="name" [(ngModel)]="network.name"
                                     (ngModelChange)="networkModelChanged($event)" required>
                                 <mat-error>{{network.formError.name|translate}}</mat-error>
@@ -33,7 +34,7 @@
                         </p>
                         <p>
                             <mat-form-field appearance="fill">
-                                <mat-label>Labels</mat-label>
+                                <mat-label>{{"Labels"|translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip test-id="network-label-chip" *ngFor="let label of network.labels||[]"
                                         (removed)="removeLabel(label)">
@@ -42,7 +43,7 @@
                                             <mat-icon>cancel</mat-icon>
                                         </button>
                                     </mat-chip>
-                                    <input placeholder="New label..." [matChipInputFor]="chipList"
+                                    <input placeholder="{{'NewLabel'|translate}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                         [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
                                 </mat-chip-list>
@@ -78,15 +79,17 @@
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
                         <mat-action-row class="network-actions" fxFlex fxLayoutAlign="start center">
-                            <button mat-icon-button color="primary" matTooltip="Delete" (click)="delete()">
+                            <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                                (click)="delete()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                             <span *ngIf="network.isChanged" fxFlex fxLayoutAlign="end center">
-                                <button mat-icon-button color="warn" matTooltip="Cancel changes" (click)="clear()">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
                                 <button test-id="network-ok-button" mat-icon-button color="warn"
-                                    matTooltip="Save changes" (click)="saveOrUpdate()">
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>
                             </span>

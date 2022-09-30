@@ -247,6 +247,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
       takeWhile(x => x),
       switchMap(y => this.gatewayService.saveOrupdate($event)),
     ).subscribe(y => {
+
       //original list
       const networkId = ($event.orig as Gateway).networkId;
       const net = this.networks.find(x => x.id == networkId);
@@ -257,6 +258,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
       if (net2) this.filterGateways(net2, true);
       $event.orig = y;
       $event.isChanged = false;
+
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))

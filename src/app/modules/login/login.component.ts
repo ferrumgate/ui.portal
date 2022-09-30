@@ -139,8 +139,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
     }
-    console.log('form is valid or ' + this.form.valid);
-    console.log(this.form);
+
   }
   modelChanged($event: any) {
 

@@ -18,7 +18,7 @@ describe('ConfigureService', () => {
     localStorage.clear();
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, TranslateModule.forRoot(), HttpClientModule],
-      providers: [TranslateService, { provider: ConfigService, useValue: {} }, HttpClient,
+      providers: [TranslateService, HttpClient,
         CaptchaService,
         ReCaptchaV3Service,
         {

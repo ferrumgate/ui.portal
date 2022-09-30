@@ -53,16 +53,16 @@ export class ManageLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
-      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Network'), navigate: () => { this.router.navigate(['/manage/network']) }, subItems: []
+      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
     },
     {
       icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
       subItems: [
         {
-          icon: 'person', isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/users']) }
+          icon: 'person', isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/users']) }
         },
         {
-          icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/account/groups']) }
+          icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/groups']) }
 
         }]
     },

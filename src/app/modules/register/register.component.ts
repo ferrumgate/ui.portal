@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
 
   error: { email: string, password: string, passwordAgain: string, save: string };
 
-  isCaptchaEnabled = false;
+
   @Output() submitEM = new EventEmitter();
 
   constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
@@ -57,26 +57,11 @@ export class RegisterComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-    })
 
   }
 
 
   ngOnInit(): void {
-
-    /* this.device = this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-      ])
-      .pipe(
-        map(result => { this.loggerService.debug(result); return result.matches; }),
-        shareReplay(),
-
-      ).subscribe(); */
-
 
   }
 
@@ -94,23 +79,12 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('register').pipe(
-        switchMap((token: any) => {
-          return this.authService.register(this.model.email || '', this.model.password || '', token, 'register')
-        })
-      ).subscribe(x => {
-        this.isRegistered = true;
-        this.error = this.resetErrrors();
-      });
-    } else {
+    this.authService.register(this.model.email, this.model.password).subscribe(x => {
 
-      this.authService.register(this.model.email, this.model.password).subscribe(x => {
+      this.isRegistered = true;
+      this.error = this.resetErrrors();
+    })
 
-        this.isRegistered = true;
-        this.error = this.resetErrrors();
-      })
-    }
 
   }
   checkFormError() {

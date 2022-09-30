@@ -91,6 +91,11 @@ export function getText<T>(fixture: ComponentFixture<T>, testId: string): string
     return findEl(fixture, testId).nativeElement.textContent;
 }
 
+
+
+
+
+
 /**
  * Expects that the element with the given `test-id` attribute
  * has the given text content.
@@ -105,6 +110,60 @@ export function expectText<T>(
     text: string,
 ): void {
     expect(getText(fixture, testId)).toBe(text);
+}
+
+
+/**
+ * Gets the value content of an element with the given `test-id` attribute.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ */
+export function getValue<T>(fixture: ComponentFixture<T>, testId: string): string {
+    return findEl(fixture, testId).nativeElement.value;
+}
+
+/**
+ * Gets the value content of an element with the given `test-id` attribute.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ */
+export function getCheckValue<T>(fixture: ComponentFixture<T>, testId: string): boolean {
+    const { nativeElement } = findEl(fixture, testId);
+    return nativeElement.checked;
+}
+
+/**
+ * Expects that the element with the given `test-id` attribute
+ * has the given text content.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ * @param text Expected text
+ */
+export function expectValue<T>(
+    fixture: ComponentFixture<T>,
+    testId: string,
+    text: string,
+): void {
+    expect(getValue(fixture, testId)).toBe(text);
+}
+
+/**
+ * Expects that the element with the given `test-id` attribute
+ * has the given text content.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ * @param text Expected text
+ */
+export function expectCheckValue<T>(
+    fixture: ComponentFixture<T>,
+    testId: string,
+    val: boolean,
+): void {
+    expect(getCheckValue(fixture, testId)).toBe(val);
 }
 
 /**

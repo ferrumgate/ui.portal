@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   error: { email: string, password: string, login: string };
 
   isLogined = false;
-  isCaptchaEnabled = false;
+
   tunnelSessionKey = '';
 
   form: FormGroup = new FormGroup(
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     this.route.queryParams.subscribe(params => {
 
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
+      let isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
       this.tunnelSessionKey = params.tunnel;
       //if tunnel key exits save first
       if (this.tunnelSessionKey)
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         //check storage if exits
         const tunnelSessionKey = this.authService.getTunnelSessionKey();
         if (tunnelSessionKey)
-          this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: this.isCaptchaEnabled } })
+          this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
       }
 
 
@@ -99,9 +99,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   }
 
-  private loginLocal(captcha?: string, action?: string) {
-
-    return this.authService.loginLocal(this.model.email || '', this.model.password || '', captcha, action);
+  private loginLocal() {
+    return this.authService.loginLocal(this.model.email || '', this.model.password || '');
   }
 
 
@@ -112,15 +111,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.isCaptchaEnabled) {
-      this.captchaService.execute('login').pipe(
-        switchMap((token: any) => {
-          return this.loginLocal(token, 'login');
-        })
-      ).subscribe();
-    } else {
-      this.loginLocal().subscribe();
-    }
+    this.loginLocal().subscribe();
+
 
   }
   checkFormError() {

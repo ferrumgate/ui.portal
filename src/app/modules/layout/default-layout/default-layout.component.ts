@@ -53,7 +53,7 @@ export class DefaultLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: 'Dashboard', subItems: [], navigate: () => { this.router.navigate(['/dashboard']) }
     },
     {
-      icon: 'lan', isClicked: false, isExpanded: false, name: 'Network', navigate: () => { },
+      icon: 'lan', isClicked: false, isExpanded: false, name: 'Networks', navigate: () => { },
       subItems: [
         {
           icon: 'folder', isClicked: false, isExpanded: false, name: 'Gateways', subItems: [], navigate: () => { this.router.navigate(['/network/dashboard']) }

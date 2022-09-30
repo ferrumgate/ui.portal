@@ -15,7 +15,7 @@ import { TranslationService } from '../shared/services/translation.service';
 })
 export class ScreenSwitchComponent implements OnInit {
   isThemeDark = false;
-  isCaptchaEnabled = false;
+
   isManaged = false;
   isUse = true;
   constructor(private breakpointObserver: BreakpointObserver,
@@ -32,10 +32,6 @@ export class ScreenSwitchComponent implements OnInit {
       this.isThemeDark = x == 'dark';
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-    this.route.queryParams.subscribe(params => {
-      this.isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
-    })
 
   }
 

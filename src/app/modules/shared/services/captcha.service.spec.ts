@@ -1,5 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { fakeAsync, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { defer, of } from 'rxjs';
@@ -12,10 +14,11 @@ describe('CaptchaService', () => {
   let service: CaptchaService;
   let httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
   let configService: ConfigService;
-  let logger: LoggerService
+  let logger: LoggerService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), RecaptchaV3Module, HttpClientModule],
+      imports: [RouterTestingModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), RecaptchaV3Module, HttpClientModule],
       providers: [
         { provide: HttpClient, useValue: httpClientSpy },
         {
@@ -25,12 +28,17 @@ describe('CaptchaService', () => {
         },
         ReCaptchaV3Service,
         ConfigService,
-        LoggerService
+        LoggerService,
       ]
 
     });
-    service = TestBed.inject(CaptchaService);
+
     configService = TestBed.inject(ConfigService);
+
+    service = TestBed.inject(CaptchaService);
+    service.setIsEnabled(false);
+
+
 
   });
 
@@ -41,8 +49,10 @@ describe('CaptchaService', () => {
   it('captcha must create a token', (done) => {
     //httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }));
     spyOnProperty(configService, 'captchaKey', 'get').and.returnValue('6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH');
-    service.execute('test').subscribe(x => {
 
+    service.setIsEnabled(true);
+    service.executeIfEnabled('test').subscribe(x => {
+      expect(service.getIsEnabled()).toBeTrue;
       expect(x).toBeTruthy();
       done();
     }, (err) => {

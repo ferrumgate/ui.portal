@@ -11,6 +11,7 @@ import { TranslationService } from './translation.service';
   providedIn: 'root'
 })
 export class ConfigService {
+
   userId = 'empty';
   constructor(private translationservice: TranslationService, private http: HttpClient) {
     //set default zero config

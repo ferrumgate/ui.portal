@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,7 +25,8 @@ describe('ConfigureComponent', () => {
   let authService: AuthenticationService;
   let configureService: ConfigureService;
   let router: Router;
-  const captchaServiceSpy = jasmine.createSpyObj('CaptchaService', ['execute']);
+  let captchaService: CaptchaService;
+  const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigureComponent],
@@ -32,12 +34,13 @@ describe('ConfigureComponent', () => {
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
         RouterTestingModule.withRoutes([])],
       providers: [
+        { provide: HttpClient, useValue: httpClientSpy },
         AuthenticationService,
         ConfigService,
         ConfigureService,
         NotificationService,
         TranslationService,
-        { provide: CaptchaService, useValue: captchaServiceSpy },
+        CaptchaService,
         ReCaptchaV3Service,
         {
           provide: RECAPTCHA_V3_SITE_KEY,
@@ -55,6 +58,9 @@ describe('ConfigureComponent', () => {
     authService = TestBed.inject(AuthenticationService);
     configureService = TestBed.inject(ConfigureService);
     router = TestBed.inject(Router);
+    captchaService = TestBed.inject(CaptchaService);
+    httpClientSpy.post.and.returnValue(of({}));
+    httpClientSpy.get.and.returnValue(of({}));
     fixture.detectChanges();
   });
 
@@ -65,7 +71,7 @@ describe('ConfigureComponent', () => {
 
   it('default admin user input', fakeAsync(async () => {
     expect(component).toBeTruthy();
-
+    fixture.detectChanges();
     tick(1000);//wait a little
     // on load we must load default values and form must be valid
     fixture.detectChanges();

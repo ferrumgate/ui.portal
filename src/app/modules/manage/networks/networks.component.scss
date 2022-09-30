@@ -1,0 +1,72 @@
+.networks-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.networks-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 120px;
+
+}
+
+.networks .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.networks .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.networks .add {
+    margin-left: 15px;
+}
+
+.networks .network-item {
+    //max-width: 700px;
+    //max-height: 700px;
+    //padding-right: 30px;
+}
+
+.networks .gateway-title {
+    padding-left: 10px;
+}
+
+.networks .network-gateways {
+    padding: 10px;
+
+}
+
+.networks .network-gateways mat-card {
+    background-color: #a7a7a7;
+
+}
+
+.networks .gateway-item {
+    // max-width: 120px;
+
+}
+
+
+.networks app-gateway {
+    padding-right: 10px;
+    padding-bottom: 10px;
+
+}
+
+.networks-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 120px - 10px);
+    overflow: auto;
+}
+
+.networks .content-divider {
+    padding-bottom: 10px;
+}

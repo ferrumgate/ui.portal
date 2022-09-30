@@ -41,7 +41,7 @@ describe('Confirm2FAComponent', () => {
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
       providers: [
-        ConfigService,
+
         { provide: AuthenticationService, useValue: authServiceSpy },
         { provide: CaptchaService, useValue: captchaServiceSpy },
 

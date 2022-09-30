@@ -1,0 +1,24 @@
+<div fxFlex fxLayout="column">
+
+    <h2 test-id="confirm-title" mat-dialog-title>
+        <p>{{title}}</p>
+    </h2>
+
+
+    <h3 test-id="confirm-message">
+
+        <p>{{message}}</p>
+    </h3>
+
+    <mat-dialog-actions fxFlex fxLayoutAlign="end center">
+        <button test-id="confirm-button-no" mat-button (click)="onDismiss()">
+            <mat-icon color="accent">close</mat-icon>
+            {{"No"|translate}}
+        </button>
+        <button test-id="confirm-button-yes" class="confirm-yes-button" mat-raised-button color="primary"
+            (click)="onConfirm()">
+            <mat-icon color="accent">check</mat-icon>
+            {{"Yes"|translate}}
+        </button>
+    </mat-dialog-actions>
+</div>

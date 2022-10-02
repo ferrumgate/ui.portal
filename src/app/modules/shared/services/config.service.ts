@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ConfigCommon } from '../models/config';
+import { BaseService } from './base.service';
+import { CaptchaService } from './captcha.service';
 
 import { TranslationService } from './translation.service';
 
@@ -10,10 +13,12 @@ import { TranslationService } from './translation.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService {
+export class ConfigService extends BaseService {
 
   userId = 'empty';
-  constructor(private translationservice: TranslationService, private http: HttpClient) {
+  constructor(private translationservice: TranslationService, private http: HttpClient,
+    private captchaService: CaptchaService) {
+    super('config', captchaService)
     //set default zero config
     this.dynamicConfig = {
       captchaSiteKey: '', isConfigured: 0,
@@ -103,12 +108,15 @@ export class ConfigService {
   };
 
   getPublicConfig() {
-
-    return this.http.get(this.getApiUrl() + `/config/public`).pipe(
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x =>
+        this.http.get(this.getApiUrl() + `/config/public`)
+      ),
       map((x: any) => {
         this.dynamicConfig = x;
         return x;
-      }));
+      }))
   }
 
 
@@ -135,5 +143,25 @@ export class ConfigService {
 
   get isAllReadyConfigured() {
     return this.dynamicConfig.isConfigured;
+  }
+
+
+  getCommonConfig() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigCommon>(this.getApiUrl() + `/config/common`);
+      }))
+  }
+
+  saveCommonConfig(config: ConfigCommon) {
+    const parameter: ConfigCommon = {
+      url: config.url, domain: config.domain
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigCommon>(this.getApiUrl() + `/config/common`, x, this.jsonHeader);
+      })
+    )
   }
 }

@@ -1,0 +1,75 @@
+<div class="config-common">
+    <div class="config-common-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Common'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Common"|translate}}'>
+                <mat-icon>settings_applications
+                </mat-icon>
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="config-common-form" [formGroup]="commonFormGroup">
+                        <p fxFill class="config-common-exp">
+                            <mat-form-field appearance="fill" fxFill class="config-common-width">
+                                <mat-label>{{"PrivateDomain"|translate}}</mat-label>
+                                <input matInput test-id="config-common-domain-input" placeholder="ferrumgate.local"
+                                    formControlName="domain" [(ngModel)]="model.domain"
+                                    (ngModelChange)="commonModelChanged($event)" required>
+                                <mat-hint>{{"PrivateDomainDefinition"|translate}}
+                                </mat-hint>
+                                <mat-error>
+                                    {{commonError.domain|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="config-common-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="config-common-width">
+                                <mat-label>{{"LoginUrl"|translate}}</mat-label>
+                                <input matInput test-id="config-common-url-input"
+                                    placeholder="https://secure.ferrumgate.com" formControlName="url"
+                                    [(ngModel)]="model.url" (ngModelChange)="commonModelChanged($event)" required>
+                                <mat-hint>{{"UrlDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{commonError.url|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="config-common-config-common-actions" fxFlex fxLayoutAlign="start center">
+
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="setttings-config-common-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

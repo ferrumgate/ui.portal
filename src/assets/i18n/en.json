@@ -114,5 +114,6 @@
     "Networks": "Networks",
     "Search": "Search",
     "Add": "Add",
-    "NotJoinedGateways": "Not Joined Gateways(For activating bind them to a network)"
+    "NotJoinedGateways": "Not Joined Gateways(For activating bind them to a network)",
+    "Common": "Common"
 }

@@ -5,10 +5,12 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { click, queryAllByCss, queryByCss } from '../helper.spec';
 import { MaterialModule } from '../material-module';
+import { CaptchaService } from '../services/captcha.service';
 import { SharedModule } from '../shared.module';
 
 import { LanguageSelectorComponent } from './languageselector.component';
@@ -31,7 +33,15 @@ describe('LanguageSelectorComponent', () => {
         ConfigService,
         {
           provide: TranslationService, useValue: translationService
+        },
+        CaptchaService,
+        ReCaptchaV3Service,
+        {
+          provide: RECAPTCHA_V3_SITE_KEY,
+          useValue: '',
+
         }
+
       ]
     })
       .compileComponents();

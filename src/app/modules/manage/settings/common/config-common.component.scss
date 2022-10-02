@@ -1,0 +1,29 @@
+.config-common-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+
+}
+
+.config-common mat-card {
+    min-width: 400px;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.config-common-explanation {
+    padding-top: 20px;
+}
+
+.config-common .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-common .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}

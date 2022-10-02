@@ -115,5 +115,11 @@
     "Search": "Search",
     "Add": "Add",
     "NotJoinedGateways": "Not Joined Gateways(For activating bind them to a network)",
-    "Common": "Common"
+    "Common": "Common",
+    "Captcha": "Captcha",
+    "ServerKey": "Server key",
+    "ClientKey": "Client key",
+    "CaptchaServerKeyHint": "Google Captcha server key",
+    "CaptchaClientKeyHint": "Google Captcha client key",
+    "Help": "Help"
 }

@@ -28,6 +28,7 @@ interface Model extends BaseModel {
 export class ConfigCommonComponent implements OnInit, AfterViewInit {
 
 
+
   isThemeDark = false;
   private _model: Model = { url: '', domain: '', isChanged: false, orig: { url: '', domain: '' } };
   public get model() {
@@ -44,6 +45,7 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
     this.commonFormGroup = this.createFormGroup(this._model);
   }
 
+  helpLink = '';
 
   //common settings
   commonFormGroup: FormGroup = this.createFormGroup(this.model);
@@ -60,16 +62,17 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.configService.getCommonConfig().pipe().subscribe(x => {
-      this.model = { ...x, isChanged: false };
-    })
+
+    this.helpLink = this.configService.links.commonHelp;
 
   }
 
 
 
   ngOnInit(): void {
-
+    this.configService.getCommonConfig().pipe().subscribe(x => {
+      this.model = { ...x, isChanged: false };
+    })
 
   }
   ngAfterViewInit(): void {
@@ -156,5 +159,13 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
     })
   }
+
+  openHelp() {
+    if (this.helpLink) {
+      window.open(this.helpLink, '_blank');
+    }
+  }
+
+
 
 }

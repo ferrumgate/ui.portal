@@ -47,8 +47,8 @@ describe('CaptchaService', () => {
   });
 
   it('captcha must create a token', (done) => {
-    //httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }));
 
+    httpClientSpy.get.and.returnValue(of({ captchaSiteKey: '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH' }));
     service.captchaKey = '6Lcw_scfAAAAABL_DeZVQNd-yNHp0CnNYE55rifH';
     service.setIsEnabled(true);
     service.executeIfEnabled('test').subscribe(x => {

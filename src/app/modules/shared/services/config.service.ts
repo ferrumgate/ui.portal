@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ConfigCommon } from '../models/config';
+import { ConfigCaptcha, ConfigCommon } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 
@@ -31,7 +31,9 @@ export class ConfigService extends BaseService {
     documents: 'https://ferrumgate/document',
     support: "https://ferrumgate/support",
     privacy: "https://ferrumgate/privacy",
-    about: "https://ferrumgate/about"
+    about: "https://ferrumgate/about",
+    commonHelp: "https://ferrumgate/doc/settings/common",
+    captchaHelp: "https://ferrumgate/doc/captcha"
 
   }
   changeUser(userId: string) {
@@ -164,4 +166,24 @@ export class ConfigService extends BaseService {
       })
     )
   }
+
+  getCaptcha() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`);
+      }))
+  }
+
+  saveCaptcha(config: ConfigCaptcha) {
+    const parameter: ConfigCaptcha = {
+      server: config.server, client: config.client
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`, x, this.jsonHeader);
+      })
+    )
+  }
+
 }

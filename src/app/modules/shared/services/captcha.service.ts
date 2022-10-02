@@ -46,6 +46,7 @@ export class ReCaptchaV3ServiceCustom extends (ReCaptchaV3Service as any) {
 })
 export class CaptchaService {
   private initted = false;
+  private captchaKeyGetted = false;
   constructor(private http: HttpClient,
     private recaptchaV3Service: ReCaptchaV3ServiceCustom,
     private route: ActivatedRoute) {
@@ -55,11 +56,12 @@ export class CaptchaService {
   }
 
   getCaptchaKey() {
-    if (this.captchaKey)
+    if (this.captchaKeyGetted)
       return of({ captchaSiteKey: this.captchaKey });
     else
       return this.http.get<{ captchaSiteKey: string }>(this.getApiUrl() + `/config/public`).pipe(map(x => {
-        this.captchaKey = x.captchaSiteKey;
+        this.captchaKey = x.captchaSiteKey || '';
+        this.captchaKeyGetted = true;
         return x;
       }))
   }
@@ -93,6 +95,7 @@ export class CaptchaService {
 
   }
   execute(action: string) {
+
     return this.init()
       .pipe(
         switchMap((x) =>
@@ -112,7 +115,7 @@ export class CaptchaService {
   }
 
   executeIfEnabled(action: string) {
-    if (this.isCaptchaEnabled)
+    if (this.isCaptchaEnabled && this.captchaKey)
       return this.execute(action).pipe(
         map((x) => {
           this.isCaptchaEnabled = false;

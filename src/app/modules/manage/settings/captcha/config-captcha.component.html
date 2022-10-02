@@ -1,1 +1,83 @@
-<p>config-captcha works!</p>
+<div class="config-captcha">
+    <div class="config-captcha-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Captcha'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Captcha"|translate}}'>
+                <mat-icon svgIcon="recaptcha"></mat-icon>
+
+            </mat-card-title>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="config-captcha-form" [formGroup]="captchaFormGroup">
+                        <p fxFill class="config-captcha-exp">
+                            <mat-form-field appearance="fill" fxFill class="config-captcha-width">
+                                <mat-label>{{"ServerKey"|translate}}</mat-label>
+                                <input matInput test-id="config-captcha-server-input" placeholder="6Lcw_scfAAAAAFKwZu"
+                                    formControlName="server" [(ngModel)]="model.server"
+                                    (ngModelChange)="captchaModelChanged($event)" required>
+                                <mat-hint>{{"CaptchaServerKeyHint"|translate}}
+                                </mat-hint>
+                                <mat-error>
+                                    {{captchaError.server|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="config-captcha-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="config-captcha-width">
+                                <mat-label>{{"ClientKey"|translate}}</mat-label>
+                                <input matInput test-id="config-captcha-client-input" placeholder="6Lcw_scfAAAAA"
+                                    formControlName="client" [(ngModel)]="model.client"
+                                    (ngModelChange)="captchaModelChanged($event)" required>
+                                <mat-hint>{{"CaptchaClientKeyHint"|translate}}</mat-hint>
+
+                                <mat-error>{{captchaError.client|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="config-captcha-config-captcha-actions" fxFlex
+                            fxLayoutAlign="start center">
+
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="setttings-config-captcha-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

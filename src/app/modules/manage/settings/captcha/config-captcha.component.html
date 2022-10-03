@@ -59,7 +59,10 @@
                     <mat-toolbar style="height:35px">
                         <mat-action-row class="config-captcha-config-captcha-actions" fxFlex
                             fxLayoutAlign="start center">
-
+                            <button *ngIf="canDelete()" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
                             <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
                                 <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
                                     (click)="clear()">

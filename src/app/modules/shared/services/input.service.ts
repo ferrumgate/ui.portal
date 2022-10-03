@@ -42,6 +42,7 @@ export class InputService {
   }
 
 
+
   static captchaValidator(control: any) {
     // RFC 2822 compliant regex
     if (control != null && control.value != '') {

@@ -121,5 +121,14 @@
     "ClientKey": "Client key",
     "CaptchaServerKeyHint": "Google Captcha server key",
     "CaptchaClientKeyHint": "Google Captcha client key",
-    "Help": "Help"
+    "Help": "Help",
+    "EmailUserHint": "Email address",
+    "EmailPassHint": "Email or app password",
+    "EmailSendedSuccessfully": "Email sended successfully",
+    "CouldNotSendEmail": "Could not send email",
+    "DoYouWantSendEmail": "Do you want to send email",
+    "EmailTo": "Send email to this address",
+    "Send": "Send",
+    "PleaseCheckYourEmail": "Please check your email",
+    "EmailSendedSuccessfullyPleaseCheckYourEmail": "Email sended successfully, please check your email"
 }

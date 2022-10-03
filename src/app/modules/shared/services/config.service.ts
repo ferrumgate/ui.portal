@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ConfigCaptcha, ConfigCommon } from '../models/config';
+
+import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 
@@ -33,7 +34,8 @@ export class ConfigService extends BaseService {
     privacy: "https://ferrumgate/privacy",
     about: "https://ferrumgate/about",
     commonHelp: "https://ferrumgate/doc/settings/common",
-    captchaHelp: "https://ferrumgate/doc/captcha"
+    captchaHelp: "https://ferrumgate/doc/captcha",
+    emailHelp: "https://ferrumgate/doc/email"
 
   }
   changeUser(userId: string) {
@@ -185,5 +187,47 @@ export class ConfigService extends BaseService {
       })
     )
   }
+
+
+  getEmailSettings() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigEmail>(this.getApiUrl() + `/config/email`);
+      }))
+  }
+
+  saveEmailSettings(config: ConfigEmail) {
+    const parameter: ConfigEmail = {
+      fromname: config.fromname, pass: config.pass, type: config.type, user: config.user,
+      //TODO make this code safe
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigEmail>(this.getApiUrl() + `/config/email`, x, this.jsonHeader);
+      })
+    )
+  }
+  deleteEmailSettings() {
+    const parameter = new URLSearchParams();
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/email', x);
+        return this.http.delete(url);
+      })
+    )
+  }
+  checkEmailSettings(config: ConfigEmail) {
+    const parameter: ConfigEmail = {
+      fromname: config.fromname, pass: config.pass, type: config.type, user: config.user,
+      //TODO make this code safe
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.post<{ isError: false, errorMessage: string }>(this.getApiUrl() + `/config/email/check`, x, this.jsonHeader);
+      })
+    )
+  }
+
 
 }

@@ -83,8 +83,8 @@ export class ConfigCaptchaComponent implements OnInit {
   createFormGroup(model: any) {
     return new FormGroup(
       {
-        server: new FormControl(model.domain, []),
-        client: new FormControl(model.url, []),
+        server: new FormControl(model.server, []),
+        client: new FormControl(model.client, []),
       });
   }
   resetCaptchaErrors() {
@@ -140,6 +140,26 @@ export class ConfigCaptchaComponent implements OnInit {
       (this.model as Model).orig = y;
       this.model.isChanged = false;
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+    })
+  }
+
+  canDelete() {
+    if (this.captchaFormGroup.valid && !this.model.isChanged && (this.model.client || this.model.server))
+      return true;
+    return false;
+  }
+
+  delete() {
+    this.confirmService.showDelete().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.configService.saveCaptcha({ server: '', client: '' }))
+    ).subscribe(y => {
+      this.model.client = y.client;
+      this.model.server = y.server;
+      (this.model as Model).orig = y;
+      this.model.isChanged = false;
+      this.captchaFormGroup.markAsUntouched();
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
     })
   }
 

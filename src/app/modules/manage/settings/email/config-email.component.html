@@ -1,1 +1,35 @@
-<p>config-email works!</p>
+<div class="config-email">
+    <div class="config-email-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Email'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Email"|translate}}'>
+                <mat-icon>email</mat-icon>
+
+            </mat-card-title>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <app-config-email-external [model]="model" (saveEmail)="saveEmail($event)" (deleteEmail)="deleteEmail()"
+                    (checkEmail)="checkEmail($event)">
+
+                </app-config-email-external>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

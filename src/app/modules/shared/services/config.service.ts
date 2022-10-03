@@ -199,8 +199,8 @@ export class ConfigService extends BaseService {
 
   saveEmailSettings(config: ConfigEmail) {
     const parameter: ConfigEmail = {
-      fromname: config.fromname, pass: config.pass, type: config.type, user: config.user,
-      //TODO make this code safe
+      ...config
+
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -219,8 +219,8 @@ export class ConfigService extends BaseService {
   }
   checkEmailSettings(config: ConfigEmail) {
     const parameter: ConfigEmail = {
-      fromname: config.fromname, pass: config.pass, type: config.type, user: config.user,
-      //TODO make this code safe
+      ...config
+
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {

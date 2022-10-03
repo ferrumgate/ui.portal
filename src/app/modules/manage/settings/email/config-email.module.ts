@@ -5,6 +5,7 @@ import { ConfigEmailRoutingModule } from './config-email-routing.module';
 import { ConfigEmailComponent } from './config-email.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigEmailExternalComponent } from './custom/config-email-external.component';
+import { ConfigEmailSmtpComponent } from './smtp/config-email-smtp.component';
 
 
 
@@ -12,7 +13,8 @@ import { ConfigEmailExternalComponent } from './custom/config-email-external.com
 @NgModule({
   declarations: [
     ConfigEmailComponent,
-    ConfigEmailExternalComponent
+    ConfigEmailExternalComponent,
+    ConfigEmailSmtpComponent
   ],
   imports: [
     CommonModule,

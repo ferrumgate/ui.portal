@@ -122,7 +122,8 @@
     "CaptchaServerKeyHint": "Google Captcha server key",
     "CaptchaClientKeyHint": "Google Captcha client key",
     "Help": "Help",
-    "EmailUserHint": "Email address",
+    "EmailUserHint": "Username or email address",
+    "EmailEmailHint": "Email address",
     "EmailPassHint": "Email or app password",
     "EmailSendedSuccessfully": "Email sended successfully",
     "CouldNotSendEmail": "Could not send email",
@@ -132,5 +133,13 @@
     "PleaseCheckYourEmail": "Please check your email",
     "EmailSendedSuccessfullyPleaseCheckYourEmail": "Email sended successfully, please check your email",
     "SelectProvider": "Select provider",
-    "EmailProvider": "Email provider"
+    "EmailProvider": "Email provider",
+    "Host": "Host",
+    "HostRequired": "Host required",
+    "Port": "Port",
+    "PortRequired": "Port required",
+    "EmailHostHint": "Smtp host",
+    "EmailPortHint": "Smtp port",
+    "TLS": "TLS",
+    "User": "User"
 }

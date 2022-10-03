@@ -45,12 +45,16 @@
 
                 <app-config-email-external *ngIf="model.type=='google'" [model]="model" (saveEmail)="saveEmail($event)"
                     (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
-
                 </app-config-email-external>
+
                 <app-config-email-external *ngIf="model.type=='office365'" [model]="model"
                     (saveEmail)="saveEmail($event)" (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
-
                 </app-config-email-external>
+
+                <app-config-email-smtp *ngIf="model.type=='smtp'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-smtp>
+
             </div>
         </mat-card-content>
     </mat-card>

@@ -10,8 +10,15 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
 
 
-interface Model extends ConfigEmail {
-  isChanged: boolean
+
+
+interface SmtpModel extends ConfigEmail {
+  host: string;
+  port: number;
+  isSecure: boolean;
+}
+interface Model extends SmtpModel {
+  isChanged: boolean;
   orig: ConfigEmail
 }
 
@@ -21,11 +28,11 @@ interface Model extends ConfigEmail {
 
 
 @Component({
-  selector: 'app-config-email-external',
-  templateUrl: './config-email-external.component.html',
-  styleUrls: ['./config-email-external.component.scss']
+  selector: 'app-config-email-smtp',
+  templateUrl: './config-email-smtp.component.html',
+  styleUrls: ['./config-email-smtp.component.scss']
 })
-export class ConfigEmailExternalComponent implements OnInit {
+export class ConfigEmailSmtpComponent implements OnInit {
 
 
 
@@ -33,7 +40,8 @@ export class ConfigEmailExternalComponent implements OnInit {
   isThemeDark = false;
   private _model: Model = {
     fromname: '', type: 'empty', pass: '', user: '',
-    isChanged: false, orig: { fromname: '', type: 'empty', pass: '', user: '' }
+    host: 'localhost', port: 587, isSecure: true,
+    isChanged: false, orig: { fromname: '', type: 'empty', pass: '', user: '', host: '', port: 587, isSecure: true }
   };
   public get model() {
     return this._model;
@@ -42,7 +50,7 @@ export class ConfigEmailExternalComponent implements OnInit {
   @Input()
   public set model(val: ConfigEmail) {
     this._model = {
-      ...val,
+      ...val as SmtpModel,
       isChanged: false,
       orig: val,
 
@@ -64,7 +72,9 @@ export class ConfigEmailExternalComponent implements OnInit {
   formGroup: FormGroup = this.createFormGroup(this.model);
 
 
-  error: { user: string, pass: string } = { user: '', pass: '' };
+  error: { user: string, pass: string, host: string, port: string } = {
+    user: '', pass: '', host: '', port: ''
+  };
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -91,17 +101,17 @@ export class ConfigEmailExternalComponent implements OnInit {
   createFormGroup(model: any) {
     return new FormGroup(
       {
-        user: new FormControl(model.user, [Validators.required, InputService.emailValidator]),
-        pass: new FormControl(model.pass, [Validators.required]),
-
-
+        user: new FormControl(model.user, []),
+        pass: new FormControl(model.pass, []),
+        host: new FormControl(model.host, [Validators.required]),
+        port: new FormControl(model.port, [Validators.required])
       });
   }
 
   resetFormErrors() {
 
     return {
-      user: '', pass: '', fromname: ''
+      user: '', pass: '', fromname: '', host: '', port: ''
     }
   }
 
@@ -136,6 +146,24 @@ export class ConfigEmailExternalComponent implements OnInit {
         this.error.pass = 'PasswordRequired';
     }
 
+    const hostError = this.formGroup.controls['host'].errors;
+
+    if (hostError) {
+      if (hostError['required'])
+        this.error.host = 'HostRequired';
+      else
+        this.error.pass = 'PasswordRequired';
+    }
+
+    const portError = this.formGroup.controls['port'].errors;
+
+    if (portError) {
+      if (portError['required'])
+        this.error.port = 'PortRequired';
+      else
+        this.error.port = 'PortRequired';
+    }
+
 
 
   }
@@ -152,6 +180,11 @@ export class ConfigEmailExternalComponent implements OnInit {
     if (original.fromname != model.fromname)
       model.isChanged = true;
 
+    if (original.host != model.host)
+      model.isChanged = true;
+    if (original.port != model.port)
+      model.isChanged = true;
+
   }
 
 
@@ -166,13 +199,21 @@ export class ConfigEmailExternalComponent implements OnInit {
     }
     this.model.isChanged = false;
     this.model.orig = orig;
-    this.model.checkEmail = false;
-    this.model.to = '';
-  }
-  createBaseModel(): ConfigEmail {
-    return { fromname: this.model.user, type: this.model.type, user: this.model.user, pass: this.model.user };
+
   }
 
+  createBaseModel(): SmtpModel {
+    return {
+      fromname: this.model.user,
+      type: this.model.type,
+      user: this.model.user,
+      pass: this.model.pass,
+      host: this.model.host,
+      port: this.model.port,
+      isSecure: this.model.isSecure,
+
+    };
+  }
   saveOrUpdate() {
     if (this.formGroup.valid) {
       //make it safe from too much properties

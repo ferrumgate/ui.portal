@@ -25,8 +25,30 @@
 
         <mat-card-content>
             <div>
-                <app-config-email-external [model]="model" (saveEmail)="saveEmail($event)" (deleteEmail)="deleteEmail()"
-                    (checkEmail)="checkEmail($event)">
+                <form test-id="config-email-form" [formGroup]="formGroup">
+                    <p>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{"Type"|translate}}</mat-label>
+                            <input type="text" test-id="config-email-input-type"
+                                placeholder="{{'SelectProvider'|translate}}" matInput [(ngModel)]="model.type"
+                                [formControl]="emailTypeFormControl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of emailProviders" [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>{{"EmailProvider"|translate}}</mat-hint>
+                        </mat-form-field>
+                    </p>
+                </form>
+
+                <app-config-email-external *ngIf="model.type=='google'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+
+                </app-config-email-external>
+                <app-config-email-external *ngIf="model.type=='office365'" [model]="model"
+                    (saveEmail)="saveEmail($event)" (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
 
                 </app-config-email-external>
             </div>

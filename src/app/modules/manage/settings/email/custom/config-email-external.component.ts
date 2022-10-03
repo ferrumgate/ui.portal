@@ -96,7 +96,7 @@ export class ConfigEmailExternalComponent implements OnInit {
       {
         user: new FormControl(model.user, [Validators.required, InputService.emailValidator]),
         pass: new FormControl(model.pass, [Validators.required]),
-        to: new FormControl(model.to, [InputService.emailValidator])
+
 
       });
   }
@@ -175,8 +175,10 @@ export class ConfigEmailExternalComponent implements OnInit {
 
 
   saveOrUpdate() {
-    if (this.formGroup.valid)
-      this.saveEmail.emit(this.model);
+    if (this.formGroup.valid) {
+      //make it safe from too much properties
+      this.saveEmail.emit({ fromname: this.model.user, type: this.model.type, user: this.model.user, pass: this.model.user });
+    }
   }
 
   delete() {

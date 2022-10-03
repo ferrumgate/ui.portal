@@ -40,7 +40,7 @@ export class ConfigEmailComponent implements OnInit {
 
   helpLink = '';
 
-
+  emailProviders = ['google', 'office365', 'smtp'];
   isThemeDark = false;
   private _model: Model = { fromname: '', type: 'empty', pass: '', user: '', isChanged: false, orig: { fromname: '', type: 'empty', pass: '', user: '' } };
   public get model() {
@@ -53,10 +53,12 @@ export class ConfigEmailComponent implements OnInit {
       isChanged: false,
       orig: val
     }
+    this.formGroup = this.createFormGroup(this.model);
 
   }
-
-
+  error = { type: '' };
+  formGroup = this.createFormGroup(this.model);
+  emailTypeFormControl = new FormControl();
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -74,7 +76,34 @@ export class ConfigEmailComponent implements OnInit {
     this.helpLink = this.configService.links.emailHelp;
 
   }
+  createFormGroup(model: any) {
+    return new FormGroup(
+      {
+        type: new FormControl(model.type, [Validators.required]),
+      });
+  }
 
+  resetFormErrors() {
+
+    return {
+      type: ''
+    }
+  }
+  checkFormError() {
+    //check errors 
+    this.error = this.resetFormErrors();
+
+
+    const userError = this.formGroup.controls['user'].errors;
+
+    if (userError) {
+      if (userError['required'])
+        this.error.type = 'TypeRequired';
+      else
+        this.error.type = 'TypeRequired';
+    }
+
+  }
   openHelp() {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');

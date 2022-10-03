@@ -130,5 +130,7 @@
     "EmailTo": "Send email to this address",
     "Send": "Send",
     "PleaseCheckYourEmail": "Please check your email",
-    "EmailSendedSuccessfullyPleaseCheckYourEmail": "Email sended successfully, please check your email"
+    "EmailSendedSuccessfullyPleaseCheckYourEmail": "Email sended successfully, please check your email",
+    "SelectProvider": "Select provider",
+    "EmailProvider": "Email provider"
 }

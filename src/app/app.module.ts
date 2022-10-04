@@ -49,9 +49,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,

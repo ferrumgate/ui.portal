@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
@@ -45,7 +46,8 @@ export class ReCaptchaV3ServiceCustom extends (ReCaptchaV3Service as any) {
 })
 export class CaptchaService {
   private initted = false;
-  constructor(private configService: ConfigService,
+  private captchaKeyGetted = false;
+  constructor(private http: HttpClient,
     private recaptchaV3Service: ReCaptchaV3ServiceCustom,
     private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
@@ -53,7 +55,25 @@ export class CaptchaService {
     })
   }
 
+  getCaptchaKey() {
+    if (this.captchaKeyGetted)
+      return of({ captchaSiteKey: this.captchaKey });
+    else
+      return this.http.get<{ captchaSiteKey: string }>(this.getApiUrl() + `/config/public`).pipe(map(x => {
+        this.captchaKey = x.captchaSiteKey || '';
+        this.captchaKeyGetted = true;
+        return x;
+      }))
+  }
 
+  captchaKey = '';
+  //same method in configservice
+  private getApiUrl(): string {
+    return window.location.protocol
+      + '//' + window.location.hostname
+      // tslint:disable-next-line: triple-equals
+      + (window.location.port != '' ? (':' + window.location.port) : '') + '/api';
+  }
   private initCaptcha(key: string) {
     const onload = this.recaptchaV3Service.onLoad.pipe(map(x => {
       this.initted = true;
@@ -67,11 +87,15 @@ export class CaptchaService {
   }
   private init() {
     if (!this.initted) {
-      return this.initCaptcha(this.configService.captchaKey);
+      return this.getCaptchaKey()
+        .pipe(
+          switchMap(z => this.initCaptcha(this.captchaKey))
+        )
     } else return of(this.initted);
 
   }
   execute(action: string) {
+
     return this.init()
       .pipe(
         switchMap((x) =>
@@ -91,7 +115,7 @@ export class CaptchaService {
   }
 
   executeIfEnabled(action: string) {
-    if (this.isCaptchaEnabled)
+    if (this.isCaptchaEnabled && this.captchaKey)
       return this.execute(action).pipe(
         map((x) => {
           this.isCaptchaEnabled = false;

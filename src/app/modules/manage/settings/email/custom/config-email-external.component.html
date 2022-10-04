@@ -1,0 +1,58 @@
+<div>
+    <div>
+        <form test-id="config-email-external-form" [formGroup]="formGroup">
+            <p fxFill class="config-email-external-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-external-width">
+                    <mat-label>{{"Email"|translate}}</mat-label>
+                    <input matInput test-id="config-email-external-user-input" placeholder="ferrumgate@gmail.com"
+                        formControlName="user" [(ngModel)]="model.user" (ngModelChange)="modelChanged($event)" required>
+                    <mat-hint>{{"EmailEmailHint"|translate}}</mat-hint>
+                    <mat-error>{{error.user|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-external-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-external-width">
+                    <mat-label>{{"Password"|translate}}</mat-label>
+                    <input matInput test-id="config-email-external-pass-input" placeholder="PaSSwoRd"
+                        formControlName="pass" [(ngModel)]="model.pass" (ngModelChange)="modelChanged($event)" required>
+                    <mat-hint>{{"EmailPassHint"|translate}}</mat-hint>
+                    <mat-error>{{error.pass|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+
+        </form>
+    </div>
+
+    <div>
+        <mat-divider></mat-divider>
+        <mat-toolbar style="height:40px">
+            <mat-action-row class="config-email-external-actions" fxFlex fxLayoutAlign="start center">
+                <button *ngIf="canDelete()" test-id="config-email-external-delete-button" mat-icon-button
+                    color="primary" matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button *ngIf="canSend()" test-id="config-email-external-send-button" mat-icon-button color="primary"
+                    matTooltip="{{'Check'|translate}}" (click)="check()">
+                    <mat-icon>send</mat-icon>
+                </button>
+
+                <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                    <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <button test-id="setttings-config-email-external-ok-button" mat-icon-button color="warn"
+                        matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </span>
+
+
+            </mat-action-row>
+        </mat-toolbar>
+
+
+    </div>
+
+</div>

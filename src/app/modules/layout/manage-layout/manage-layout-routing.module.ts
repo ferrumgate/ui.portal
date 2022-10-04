@@ -23,13 +23,49 @@ const routes: Routes = [
       },
       {
         path: 'networks',
-        //canActivate: [RoleGuard],
+        canActivate: [RoleGuard],
         data: {
           roleIds: [RBACDefault.roleAdmin.id]
         },
         loadChildren: () => import('../../manage/networks/networks.module').then(m => m.NetworksModule)
 
-      }
+      },
+      {
+        path: 'settings/common',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/common/config-common.module').then(m => m.ConfigCommonModule)
+
+      },
+      {
+        path: 'settings/email',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/email/config-email.module').then(m => m.ConfigEmailModule)
+
+      },
+      {
+        path: 'settings/captcha',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/captcha/config-captcha.module').then(m => m.ConfigCaptchaModule)
+
+      },
+      {
+        path: 'settings/auth',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/auth/config-auth.module').then(m => m.ConfigAuthModule)
+
+      },
 
     ]
   }

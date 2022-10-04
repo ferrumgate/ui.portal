@@ -1,0 +1,61 @@
+<div class="config-email">
+    <div class="config-email-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Email'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Email"|translate}}'>
+                <mat-icon>email</mat-icon>
+
+            </mat-card-title>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <form test-id="config-email-form" [formGroup]="formGroup">
+                    <p>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{"Type"|translate}}</mat-label>
+                            <input type="text" test-id="config-email-input-type"
+                                placeholder="{{'SelectProvider'|translate}}" matInput [(ngModel)]="model.type"
+                                [formControl]="emailTypeFormControl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of emailProviders" [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>{{"EmailProvider"|translate}}</mat-hint>
+                        </mat-form-field>
+                    </p>
+                </form>
+
+                <app-config-email-external *ngIf="model.type=='google'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-external>
+
+                <app-config-email-external *ngIf="model.type=='office365'" [model]="model"
+                    (saveEmail)="saveEmail($event)" (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-external>
+
+                <app-config-email-smtp *ngIf="model.type=='smtp'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-smtp>
+
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

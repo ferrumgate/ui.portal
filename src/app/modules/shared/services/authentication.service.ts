@@ -51,9 +51,11 @@ export class AuthenticationService extends BaseService {
     super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
     const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
+
     this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
       const now = new Date();
       if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS))
+
         this.getRefreshToken().pipe(
           catchError(err => {
             this.logout();
@@ -91,6 +93,9 @@ export class AuthenticationService extends BaseService {
       if (session) {
         this._currentSession = session;
         this.getRefreshToken().pipe(
+          switchMap(x => {
+            return this.getUserCurrent();
+          }),
           catchError(err => {
             this.logout();
             return '';

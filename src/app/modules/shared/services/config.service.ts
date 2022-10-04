@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+
+import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
+import { BaseService } from './base.service';
+import { CaptchaService } from './captcha.service';
 
 import { TranslationService } from './translation.service';
 
@@ -10,10 +14,12 @@ import { TranslationService } from './translation.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService {
+export class ConfigService extends BaseService {
 
   userId = 'empty';
-  constructor(private translationservice: TranslationService, private http: HttpClient) {
+  constructor(private translationservice: TranslationService, private http: HttpClient,
+    private captchaService: CaptchaService) {
+    super('config', captchaService)
     //set default zero config
     this.dynamicConfig = {
       captchaSiteKey: '', isConfigured: 0,
@@ -26,7 +32,10 @@ export class ConfigService {
     documents: 'https://ferrumgate/document',
     support: "https://ferrumgate/support",
     privacy: "https://ferrumgate/privacy",
-    about: "https://ferrumgate/about"
+    about: "https://ferrumgate/about",
+    commonHelp: "https://ferrumgate/doc/settings/common",
+    captchaHelp: "https://ferrumgate/doc/captcha",
+    emailHelp: "https://ferrumgate/doc/email"
 
   }
   changeUser(userId: string) {
@@ -103,12 +112,15 @@ export class ConfigService {
   };
 
   getPublicConfig() {
-
-    return this.http.get(this.getApiUrl() + `/config/public`).pipe(
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x =>
+        this.http.get(this.getApiUrl() + `/config/public`)
+      ),
       map((x: any) => {
         this.dynamicConfig = x;
         return x;
-      }));
+      }))
   }
 
 
@@ -136,4 +148,86 @@ export class ConfigService {
   get isAllReadyConfigured() {
     return this.dynamicConfig.isConfigured;
   }
+
+
+  getCommonConfig() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigCommon>(this.getApiUrl() + `/config/common`);
+      }))
+  }
+
+  saveCommonConfig(config: ConfigCommon) {
+    const parameter: ConfigCommon = {
+      url: config.url, domain: config.domain
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigCommon>(this.getApiUrl() + `/config/common`, x, this.jsonHeader);
+      })
+    )
+  }
+
+  getCaptcha() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`);
+      }))
+  }
+
+  saveCaptcha(config: ConfigCaptcha) {
+    const parameter: ConfigCaptcha = {
+      server: config.server, client: config.client
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`, x, this.jsonHeader);
+      })
+    )
+  }
+
+
+  getEmailSettings() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        return this.http.get<ConfigEmail>(this.getApiUrl() + `/config/email`);
+      }))
+  }
+
+  saveEmailSettings(config: ConfigEmail) {
+    const parameter: ConfigEmail = {
+      ...config
+
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigEmail>(this.getApiUrl() + `/config/email`, x, this.jsonHeader);
+      })
+    )
+  }
+  deleteEmailSettings() {
+    const parameter = new URLSearchParams();
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/email', x);
+        return this.http.delete(url);
+      })
+    )
+  }
+  checkEmailSettings(config: ConfigEmail) {
+    const parameter: ConfigEmail = {
+      ...config
+
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.post<{ isError: false, errorMessage: string }>(this.getApiUrl() + `/config/email/check`, x, this.jsonHeader);
+      })
+    )
+  }
+
+
 }

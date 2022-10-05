@@ -8,8 +8,8 @@ import { LoggerService } from '../../modules/shared/services/logger.service';
 export class RoleGuard implements CanActivate {
     constructor(
         private logger: LoggerService,
-        public auth: AuthenticationService,
-        public router: Router,
+        private auth: AuthenticationService,
+        private router: Router,
     ) { }
     canActivate(route: ActivatedRouteSnapshot): boolean {
 
@@ -17,7 +17,7 @@ export class RoleGuard implements CanActivate {
         for (let roleId of roleIds)
             if (this.auth.currentSession?.currentUser?.roles?.find(x => x.id == roleId))
                 return true;
-
+        console.log(`${roleIds} roleGuard`)
         this.router.navigate(['/login']);
         return false;
 

@@ -6,8 +6,11 @@
                 </mat-icon>
             </mat-card-title>
 
-            <mat-action-row fxFlex fxLayoutAlign="end center">
-
+            <mat-action-row class="network-header-actions" fxFlex fxLayoutAlign="end center">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
                 <mat-icon matBadge="{{network.gatewaysCount}}" matBadgeColor="warn"
                     matTooltip="{{'Gateways'|translate}}">computer
                 </mat-icon>

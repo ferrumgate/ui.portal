@@ -4,6 +4,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../../shared/services/input.service';
+import { ConfigService } from '../services/config.service';
 
 
 
@@ -25,6 +26,7 @@ export interface NetworkExtended {
 })
 
 export class NetworkComponent implements OnInit {
+  helpLink = '';
   @Input()
   network: Network =
     {
@@ -38,12 +40,19 @@ export class NetworkComponent implements OnInit {
   @Output()
   deleteNetwork: EventEmitter<Network> = new EventEmitter();
   isGatewayOpened = false;
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.network = NetworkComponent.prepareModel(this.network);
+    this.helpLink = this.configService.links.networkHelp;
   }
 
   ngOnInit(): void {
 
+  }
+
+  openHelp() {
+    if (this.helpLink) {
+      window.open(this.helpLink, '_blank');
+    }
   }
 
 

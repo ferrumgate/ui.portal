@@ -5,8 +5,11 @@
                 <mat-icon>computer
                 </mat-icon>
             </mat-card-title>
-
-
+            <mat-action-row class="gateway-header-actions" fxFlex fxLayoutAlign="end start" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
         </mat-card-header>
 
         <mat-card-content>
@@ -73,7 +76,7 @@
 
                     <p>
 
-                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabledBoolean"
+                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabled"
                             (ngModelChange)="gatewayModelChanged($event)">
                             {{"Enabled"|translate}}</mat-checkbox>
 

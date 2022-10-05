@@ -28,6 +28,7 @@ export interface GatewayExtended {
 })
 
 export class GatewayComponent implements OnInit {
+  helpLink = '';
   @Input()
   gateway: Gateway =
     {
@@ -70,6 +71,7 @@ export class GatewayComponent implements OnInit {
     this.isThemeDark = this.configService.getTheme() == 'dark';
     //for testing;
     this.gateway = GatewayComponent.prepareModel(this.gateway);
+    this.helpLink = this.configService.links.gatewayHelp;
   }
 
   ngOnInit(): void {
@@ -87,6 +89,12 @@ export class GatewayComponent implements OnInit {
     )
 
 
+  }
+
+  openHelp() {
+    if (this.helpLink) {
+      window.open(this.helpLink, '_blank');
+    }
   }
   networkChanged(event: any) {
 
@@ -123,12 +131,12 @@ export class GatewayComponent implements OnInit {
       ...gate,
       ...extended,
     }
-    Object.defineProperty(item, 'isEnabledBoolean', {
-      get() { return item.isEnabled ? true : false },
-      set(newvalue) { item.isEnabled = newvalue ? 1 : 0 },
-      enumerable: true, configurable: true
-    })
-
+    /*     Object.defineProperty(item, 'isEnabledBoolean', {
+          get() { return item.isEnabled ? true : false },
+          set(newvalue) { item.isEnabled = newvalue ? 1 : 0 },
+          enumerable: true, configurable: true
+        })
+     */
 
 
     return item;
@@ -226,6 +234,7 @@ export class GatewayComponent implements OnInit {
     Object.assign(this.gateway, original);
     this.checkIfModelChanged();
   }
+
 
   saveOrUpdate() {
 

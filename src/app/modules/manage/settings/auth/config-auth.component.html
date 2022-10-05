@@ -1,1 +1,42 @@
-<p>config-auth works!</p>
+<div class="config-auth-container">
+    <div class="config-auth config-auth-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Authentication'|translate}}
+            </div>
+
+            <div class="row" fxLayout="row">
+                <div fxFlex fxLayoutAlign="end center">
+                    <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+                        <mat-icon>add</mat-icon>
+                        {{"Add"|translate}}
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngFor="let menu of addMenus" (click)="menu.click()">
+                            <mat-icon *ngIf="menu.svg" svgIcon="{{menu.svg}}"></mat-icon>
+                            <mat-icon *ngIf="menu.icon">{{menu.icon}}</mat-icon>
+                            <span>{{menu.name|translate}}</span>
+                        </button>
+
+                    </mat-menu>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <div class="config-auth config-auth-content">
+        <div fxLayout="row wrap">
+            <p class="config-auth-item">
+                <app-auth-local [model]="model.local"></app-auth-local>
+            </p>
+            <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.oauth?.providers||[]">
+
+                <app-auth-oauth [model]="provider" (saveOAuth)="saveOAuth($event)" (deleteOAuth)="deleteOAuth($event)">
+                </app-auth-oauth>
+
+            </p>
+        </div>
+    </div>
+</div>

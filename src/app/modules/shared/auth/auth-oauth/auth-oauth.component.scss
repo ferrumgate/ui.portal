@@ -1,35 +1,39 @@
-.gateway .row {
+.auth-oauth {
+    min-width: 300px;
+}
+
+.auth-oauth .row {
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 15px;
 }
 
-.gateway .title {
+.auth-oauth .title {
     padding-top: 20px;
     font-size: 1.5rem;
 }
 
-.gateway .row-pad {
+.auth-oauth .row-pad {
     margin-left: 15px;
 }
 
-.gateway .gateway-item {
+.auth-oauth .auth-oauth-item {
     max-width: 700px;
     max-height: 700px;
     padding-right: 30px;
 }
 
-.gateway .gateway-title {
+.auth-oauth .auth-oauth-title {
     padding-left: 10px;
 }
 
-.gateway .gateway-actions {
+.auth-oauth .auth-oauth-actions {
     padding: 0px;
     border-top-style: none;
 }
 
 
-.gateway .gateway-header-actions {
+.auth-oauth .auth-oauth-header-actions {
     padding: 0px;
     border-top-style: none;
 }

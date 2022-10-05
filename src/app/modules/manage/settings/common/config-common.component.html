@@ -13,9 +13,7 @@
                 <mat-icon>settings_applications
                 </mat-icon>
             </mat-card-title>
-            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
-
-
+            <mat-action-row class="config-common-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
                 <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>

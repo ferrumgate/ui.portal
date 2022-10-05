@@ -56,7 +56,7 @@ describe('GatewayComponent', () => {
       id: '12123',
       name: 'test',
       labels: ['testlabel', 'testlabel2'],
-      isEnabled: 1,
+      isEnabled: true,
       networkId: '22',
 
     }
@@ -68,7 +68,7 @@ describe('GatewayComponent', () => {
     component.networks = [network1];
     component.gateway = GatewayComponent.prepareModel(gateway);
     component.gateway.networkName = network1.name;
-    component.gateway.isEnabledBoolean = true;
+    component.gateway.isEnabled = true;
     tick(1000);
     fixture.detectChanges();
     expectValue(fixture, 'gateway-id-input', gateway.id);

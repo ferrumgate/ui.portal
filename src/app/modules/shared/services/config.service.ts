@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthCommon, AuthLocal, BaseOAuth } from '../models/auth';
 
 import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
@@ -22,9 +23,9 @@ export class ConfigService extends BaseService {
     super('config', captchaService)
     //set default zero config
     this.dynamicConfig = {
-      captchaSiteKey: '', isConfigured: 0,
+      captchaSiteKey: '', isConfigured: false,
       login: {
-        local: { isForgotPassword: 0, isRegister: 0 }, google: undefined, linkedin: undefined
+        local: { isForgotPassword: false, isRegister: false }, google: undefined, linkedin: undefined
       }
     };
   }
@@ -35,7 +36,15 @@ export class ConfigService extends BaseService {
     about: "https://ferrumgate/about",
     commonHelp: "https://ferrumgate/doc/settings/common",
     captchaHelp: "https://ferrumgate/doc/captcha",
-    emailHelp: "https://ferrumgate/doc/email"
+    emailHelp: "https://ferrumgate/doc/email",
+    gatewayHelp: "https://ferrumgate/doc/network",
+    networkHelp: "https://ferrumgate/doc/network",
+    authLocalHelp: "https://ferrumgate/doc/auth/local",
+    authOauthHelp: "https://ferrumgate/doc/auth/oauth",
+    authLdapHelp: "https://ferrumgate/doc/auth/ldap",
+    authSamlHelp: "https://ferrumgate/doc/auth/saml",
+
+
 
   }
   changeUser(userId: string) {
@@ -100,11 +109,11 @@ export class ConfigService extends BaseService {
 
   dynamicConfig: {
     captchaSiteKey: string,
-    isConfigured: number,
+    isConfigured: boolean,
     login: {
       local: {
-        isForgotPassword: number,
-        isRegister: number,
+        isForgotPassword: boolean,
+        isRegister: boolean,
       },
       google: object | undefined,
       linkedin: object | undefined
@@ -114,8 +123,10 @@ export class ConfigService extends BaseService {
   getPublicConfig() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
-      switchMap(x =>
-        this.http.get(this.getApiUrl() + `/config/public`)
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/public', x);
+        return this.http.get(url)
+      }
       ),
       map((x: any) => {
         this.dynamicConfig = x;
@@ -154,7 +165,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigCommon>(this.getApiUrl() + `/config/common`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/common', x);
+        return this.http.get<ConfigCommon>(url);
       }))
   }
 
@@ -173,7 +185,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/captcha', x);
+        return this.http.get<ConfigCaptcha>(url);
       }))
   }
 
@@ -193,7 +206,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigEmail>(this.getApiUrl() + `/config/email`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/email', x);
+        return this.http.get<ConfigEmail>(url);
       }))
   }
 
@@ -228,6 +242,86 @@ export class ConfigService extends BaseService {
       })
     )
   }
+
+
+  getAuthCommon() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/common', x);
+        return this.http.get<AuthCommon>(url);
+      }))
+  }
+
+  getAuthLocal() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/local', x);
+        return this.http.get<AuthLocal>(url);
+      }))
+  }
+
+  saveAuthLocal(local: AuthLocal) {
+    const parameter: AuthLocal = {
+      id: local.id,
+      baseType: local.baseType,
+      name: local.name,
+      type: local.type,
+      isForgotPassword: local.isForgotPassword,
+      isRegister: local.isRegister,
+      tags: local.tags
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
+        else
+          return this.http.post<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
+      })
+    )
+  }
+
+
+  getAuthOAuthProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/oauth/providers', x);
+        return this.http.get<{ items: BaseOAuth[] }>(url);
+      }))
+  }
+
+
+  saveAuthOAuthProvider(oauth: BaseOAuth) {
+    const parameter: BaseOAuth = {
+      id: oauth.id,
+      baseType: oauth.baseType,
+      name: oauth.name,
+      type: oauth.type,
+      tags: oauth.tags,
+      clientId: oauth.clientId,
+      clientSecret: oauth.clientSecret
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseOAuth>(this.getApiUrl() + `/config/auth/oauth/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseOAuth>(this.getApiUrl() + `/config/auth/oauth/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthOAuthProvider(oauth: BaseOAuth) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/oauth/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
+
 
 
 }

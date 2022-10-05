@@ -55,7 +55,7 @@ describe('NetworkComponent', () => {
       id: '12123',
       name: 'test',
       labels: ['testlabel', 'testlabel2'],
-      isEnabled: 1,
+      isEnabled: true,
       networkId: '22',
 
     }

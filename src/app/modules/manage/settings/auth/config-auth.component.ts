@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, takeWhile } from 'rxjs';
-import { AuthSettings, BaseOAuth } from 'src/app/modules/shared/models/auth';
+import { AuthLocal, AuthSettings, BaseOAuth } from 'src/app/modules/shared/models/auth';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -88,7 +88,18 @@ export class ConfigAuthComponent implements OnInit {
   }
 
 
-
+  saveAuthLocal($event: AuthLocal) {
+    this.confirmService.showSave().pipe(
+      takeWhile(x => x),
+      switchMap(x =>
+        this.configService.saveAuthLocal($event))
+    ).subscribe(x => {
+      this.model.local = {
+        ...x
+      }
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+    })
+  }
 
   saveOAuth($event: BaseOAuth) {
     this.confirmService.showSave().pipe(

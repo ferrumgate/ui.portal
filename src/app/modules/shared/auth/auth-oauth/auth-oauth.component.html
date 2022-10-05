@@ -8,8 +8,6 @@
             </mat-card-title>
             <h3>{{model.name}}</h3>
             <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
-
-
                 <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>
@@ -24,7 +22,7 @@
                         <p fxFill class="auth-oauth-exp">
                             <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
                                 <mat-label>{{"ClientId"|translate}}</mat-label>
-                                <input matInput test-id="auth-oauth-server-input" placeholder="scfAAAAAFKwZu"
+                                <input matInput test-id="auth-oauth-clientid-input" placeholder="scfAAAAAFKwZu"
                                     formControlName="clientId" [(ngModel)]="model.clientId"
                                     (ngModelChange)="modelChanged($event)" required>
                                 <mat-hint>{{"OAuthClientIdHint"|translate}}
@@ -36,7 +34,7 @@
                         <p fxFill class="auth-oauth-explanation ">
                             <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
                                 <mat-label>{{"ClientKey"|translate}}</mat-label>
-                                <input matInput test-id="auth-oauth-client-input" placeholder="LeAscfAAAAA"
+                                <input matInput test-id="auth-oauth-clientkey-input" placeholder="LeAscfAAAAA"
                                     formControlName="clientSecret" [(ngModel)]="model.clientSecret"
                                     (ngModelChange)="modelChanged($event)" required>
                                 <mat-hint>{{"OAuthClientKeyHint"|translate}}</mat-hint>
@@ -51,7 +49,7 @@
                 <div>
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
-                        <mat-action-row class="auth-oauth-auth-oauth-actions" fxFlex fxLayoutAlign="start center">
+                        <mat-action-row class="auth-oauth-actions" fxFlex fxLayoutAlign="start center">
                             <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
                                 (click)="delete()">
                                 <mat-icon>delete</mat-icon>
@@ -61,7 +59,7 @@
                                     (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
-                                <button test-id="setttings-auth-oauth-ok-button" mat-icon-button color="warn"
+                                <button test-id="auth-oauth-ok-button" mat-icon-button color="warn"
                                     matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>

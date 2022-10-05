@@ -76,9 +76,9 @@ describe('NetworksComponent', () => {
       clientNetwork: '1.2.3.4/24'
     }
     let gateways: Gateway[] = [
-      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: true }
     ]
 
     let thisnetworks: Network[] = [];
@@ -106,7 +106,7 @@ describe('NetworksComponent', () => {
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
-      name: 'not joined ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined ', labels: ['testme'], isEnabled: true,
     };
     const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
     thisgatewaysNotJoined.push(notJoinedExtendedGateway);
@@ -114,7 +114,7 @@ describe('NetworksComponent', () => {
     const notJoinedGateway2: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '12344', networkId: '',
-      name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined2 ', labels: ['testme'], isEnabled: true,
     };
     const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
     thisgatewaysNotJoined.push(notJoinedExtendedGateway2);

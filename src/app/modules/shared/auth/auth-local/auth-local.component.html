@@ -18,14 +18,14 @@
             <div style="padding-top:15px">
                 <div>
                     <p>
-                        <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isForgotPassword"
-                            (ngModelChange)="modelChanged($event)">
+                        <mat-checkbox test-id="auth-local-forgotpassword-enabled" [(ngModel)]="model.isForgotPassword"
+                            [checked]="model.isForgotPassword" (ngModelChange)="modelChanged($event)">
                             {{"IsForgotPasswordEnabled"|translate}}</mat-checkbox>
 
                     </p>
                     <p>
                         <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isRegister"
-                            (ngModelChange)="modelChanged($event)">
+                            [checked]="model.isRegister" (ngModelChange)="modelChanged($event)">
                             {{"IsRegisterEnabled"|translate}}</mat-checkbox>
 
                     </p>

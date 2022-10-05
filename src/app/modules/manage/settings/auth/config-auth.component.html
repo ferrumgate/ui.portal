@@ -8,8 +8,9 @@
             <div class="row" fxLayout="row">
                 <div fxFlex fxLayoutAlign="end center">
                     <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
-                        <mat-icon>add</mat-icon>
+
                         {{"Add"|translate}}
+                        <mat-icon>keyboard_arrow_down</mat-icon>
                     </button>
 
                     <mat-menu #menu="matMenu">
@@ -29,11 +30,13 @@
     <div class="config-auth config-auth-content">
         <div fxLayout="row wrap">
             <p class="config-auth-item">
-                <app-auth-local [model]="model.local"></app-auth-local>
+                <app-auth-local test-id="config-auth-local" [model]="model.local"
+                    (saveAuthLocal)="saveAuthLocal($event)"></app-auth-local>
             </p>
             <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.oauth?.providers||[]">
 
-                <app-auth-oauth [model]="provider" (saveOAuth)="saveOAuth($event)" (deleteOAuth)="deleteOAuth($event)">
+                <app-auth-oauth test-id="config-auth-oauth" [model]="provider" (saveOAuth)="saveOAuth($event)"
+                    (deleteOAuth)="deleteOAuth($event)">
                 </app-auth-oauth>
 
             </p>

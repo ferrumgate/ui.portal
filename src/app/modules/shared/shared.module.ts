@@ -31,6 +31,7 @@ import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
     exports: [
         MaterialModule,
         TranslateModule,
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,

@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, takeWhile } from 'rxjs';
-import { AuthLocal, AuthSettings, BaseOAuth } from 'src/app/modules/shared/models/auth';
+import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth } from 'src/app/modules/shared/models/auth';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -139,7 +139,62 @@ export class ConfigAuthComponent implements OnInit {
 
 
 
+  saveLdap($event: BaseLdap) {
+    /*  this.confirmService.showSave().pipe(
+       takeWhile(x => x),
+       switchMap(x =>
+         this.configService.saveAuthOAuthProvider($event))
+     ).subscribe(x => {
+       if (!this.model.oauth)
+         this.model.oauth = { providers: [] };
+       //set a follow id
+       x.objId = UtilService.randomNumberString();
+       const index = this.model.oauth.providers.findIndex(x => x.id == $event.id);
+       if (Number(index) >= 0)
+         this.model.oauth.providers[Number(index)] = { ...x };
+       else
+         this.model.oauth.providers.push(x);
+       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+     }) */
+  }
+  deleteLdap($event: BaseLdap) {
+    /* if (!$event.id) {//not saved before
+      const index = this.model.oauth?.providers.findIndex(x => x.objId == $event.objId)
+      if (Number(index) >= 0)
+        this.model.oauth?.providers.splice(Number(index), 1);
+    } else {
+      this.confirmService.showDelete().pipe(
+        takeWhile(x => x),
+        switchMap(x => this.configService.deleteAuthOAuthProvider($event))
+      ).subscribe(x => {
+        const index = this.model.oauth?.providers.findIndex(x => x.objId == $event.objId)
+        if (Number(index) >= 0)
+          this.model.oauth?.providers.splice(Number(index), 1);
+        this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
+      })
+    } */
+  }
+
+
+
+
   addActiveDirectory() {
+    const activeDirectory = this.model.ldap?.providers.find(x => x.baseType == 'oauth' && x.type == 'google');
+    if (activeDirectory) {
+      this.notificationService.error(`Active Directory/Ldap  ${this.translateService.translate('AllreadyExists')}`);
+      return;
+    }
+    const ldap: BaseLdap = {
+      baseType: 'ldap', type: 'activedirectory', objId: UtilService.randomNumberString(),
+      name: 'Active Directory/Ldap', tags: [],
+      id: '', host: '', groupnameField: 'memberOf', usernameField: 'sAMAccountName',
+      searchBase: 'CN=Users,DC=ferrum,DC=local', allowedGroups: [], bindDN: 'CN=yourAdminAccount,CN=Users,DC=ferrum,DC=local', bindPass: '',
+      searchFilter: '', securityProfile: {}
+    }
+    if (!this.model.ldap)
+      this.model.ldap = { providers: [] };
+    this.model.ldap.providers.push(ldap);
+
 
   }
 
@@ -150,7 +205,8 @@ export class ConfigAuthComponent implements OnInit {
       return;
     }
     const oauth: BaseOAuth = {
-      baseType: 'oauth', type: 'google', objId: UtilService.randomNumberString(), name: 'Google/OAuth2', tags: [],
+      baseType: 'oauth', type: 'google', objId: UtilService.randomNumberString(),
+      name: 'Google/OAuth2', tags: [],
       id: '', clientId: '', clientSecret: ''
     }
     if (!this.model.oauth)
@@ -177,5 +233,7 @@ export class ConfigAuthComponent implements OnInit {
   addGoogleWorkspace() {
 
   }
+
+
 }
 

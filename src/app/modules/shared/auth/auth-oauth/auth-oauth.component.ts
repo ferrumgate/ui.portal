@@ -90,7 +90,7 @@ export class AuthOauthComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.helpLink = this.configService.links.captchaHelp;
+    this.helpLink = this.configService.links.authOauthHelp;
 
   }
 

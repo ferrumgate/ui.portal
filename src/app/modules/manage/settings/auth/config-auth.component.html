@@ -40,6 +40,13 @@
                 </app-auth-oauth>
 
             </p>
+            <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.ldap?.providers||[]">
+
+                <app-auth-ldap test-id="config-auth-ldap" [model]="provider" (saveLdap)="saveLdap($event)"
+                    (deleteLdap)="deleteLdap($event)">
+                </app-auth-ldap>
+
+            </p>
         </div>
     </div>
 </div>

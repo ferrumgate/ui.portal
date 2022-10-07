@@ -151,5 +151,22 @@
     "OAuthClientKeyHint": "Client secret key for authentication",
     "ClientIdRequired": "Client id required",
     "ClientSecretRequired": "Client secret key required",
-    "AllreadyExists": "Allready exists"
+    "AllreadyExists": "Allready exists",
+    "LdapHostHint": "Ldap server",
+    "LdapBindDNHint": "Read only administrator",
+    "LdapBindPassHint": "Read only administrator password",
+    "LdapSearchPath": "Search path",
+    "LdapUsernameField": "Username field",
+    "LdapUsernameFieldHint": "Ldap object username field like sAMAccountName",
+    "LdapGroupnameField": "Groupname field",
+    "LdapGroupnameFieldHint": "Ldap object groupname field like memberOf",
+    "AllowedGroups": "Allowed groups",
+    "LdapAlloweGroupsHint": "If not empty then only these groups members will authenticate",
+    "LdapBindSearchPathHint": "User search path",
+    "NewGroup": "New group...",
+    "BindDNRequired": "Bind DN required",
+    "BindPassRequired": "Bind password required",
+    "UserSearchBasePathRequired": "User search path required",
+    "UsernameFieldRequired": "Username field name required",
+    "GroupnameFieldRequired": "Groupname field name required"
 }

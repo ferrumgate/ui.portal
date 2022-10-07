@@ -1,1 +1,142 @@
-<p>auth-ldap works!</p>
+<div class="auth-ldap">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{model.name}}">
+                <mat-icon *ngIf="model.svgIcon" [svgIcon]="model.svgIcon"></mat-icon>
+                <mat-icon *ngIf="!model.svgIcon">local_library</mat-icon>
+            </mat-card-title>
+            <h3>{{model.name}}</h3>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="auth-ldap-form" [formGroup]="formGroup">
+                        <p fxFill class="auth-ldap-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"Host"|translate}}</mat-label>
+                                <input matInput test-id="auth-ldap-host-input"
+                                    placeholder="ldap://youractivedirectory:389" [(ngModel)]="model.host"
+                                    (ngModelChange)="modelChanged($event,'host')" [ngModelOptions]="{standalone:true}"
+                                    required>
+                                <mat-hint>{{"LdapHostHint"|translate}} </mat-hint>
+                                <mat-error>{{error.host|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"LdapBindDN"|translate}}</mat-label>
+                                <input matInput test-id="auth-ldap-binddn-input"
+                                    placeholder="CN=youradmin,CN=users,DC=ferrumgate,DC=local"
+                                    [(ngModel)]="model.bindDN" (ngModelChange)="modelChanged($event,'bindDN')"
+                                    [ngModelOptions]="{standalone:true}" required>
+                                <mat-hint>{{"LdapBindDNHint"|translate}}</mat-hint>
+                                <mat-error>{{error.bindDN|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"LdapBindPass"|translate}}</mat-label>
+                                <input matInput [type]="hidePassword?'password':'text'"
+                                    test-id="auth-ldap-bindpass-input" placeholder="PasSWord"
+                                    [(ngModel)]="model.bindPass" (ngModelChange)="modelChanged($event,'bindPass')"
+                                    [ngModelOptions]="{standalone:true}" required>
+                                <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+                                <mat-hint>{{"LdapBindPassHint"|translate}}</mat-hint>
+                                <mat-error>{{error.bindPass|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"LdapBindSearchPath"|translate}}</mat-label>
+                                <input matInput test-id="auth-ldap-searchbase-input" placeholder="PasSWord"
+                                    [(ngModel)]="model.searchBase" (ngModelChange)="modelChanged($event,'searchBase')"
+                                    [ngModelOptions]="{standalone:true}" required>
+                                <mat-hint>{{"LdapBindSearchPathHint"|translate}}</mat-hint>
+                                <mat-error>{{error.searchBase|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"LdapUsernameField"|translate}}</mat-label>
+                                <input matInput test-id="auth-ldap-usernamefield-input" placeholder="sAMAccountName"
+                                    [(ngModel)]="model.usernameField"
+                                    (ngModelChange)="modelChanged($event,'usernameField')"
+                                    [ngModelOptions]="{standalone:true}" required>
+                                <mat-hint>{{"LdapUsernameFieldHint"|translate}}</mat-hint>
+                                <mat-error>{{error.usernameField|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"LdapGroupnameField"|translate}}</mat-label>
+                                <input matInput test-id="auth-ldap-groupnamefield-input" placeholder="sAMAccountName"
+                                    [(ngModel)]="model.groupnameField"
+                                    (ngModelChange)="modelChanged($event,'groupnameField')"
+                                    [ngModelOptions]="{standalone:true}" required>
+                                <mat-hint>{{"LdapGroupnameFieldHint"|translate}}</mat-hint>
+                                <mat-error>{{error.groupnameField|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-ldap-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
+                                <mat-label>{{"AllowedGroups"|translate}}</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip test-id="auth-ldap-allowedgroups-chip"
+                                        *ngFor="let group of model.allowedGroups||[]" (removed)="removeGroup(group)">
+                                        {{group}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input placeholder="{{'NewGroup' |translate}}" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addGroup($event)">
+                                </mat-chip-list>
+                                <mat-hint>{{"LdapAlloweGroupsHint"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="auth-ldap-actions" fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                                (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="auth-ldap-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

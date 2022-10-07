@@ -39,7 +39,7 @@ export class ConfigAuthComponent implements OnInit {
     this.getAuthCommon().pipe(
       switchMap(y => this.getAuthLocal()),
       switchMap(y => this.getAuthOAuthProvides()),
-
+      switchMap(y => this.getAuthLdapProvides()),
     ).subscribe(x => {
       this.model.oauth?.providers.forEach(x => x.objId = UtilService.randomNumberString());
       this.model.ldap?.providers.forEach(x => x.objId = UtilService.randomNumberString());
@@ -81,6 +81,16 @@ export class ConfigAuthComponent implements OnInit {
     return this.configService.getAuthOAuthProviders().pipe(
       map(x => {
         this.model.oauth = {
+          providers: x.items
+        }
+      })
+    )
+  }
+
+  getAuthLdapProvides() {
+    return this.configService.getAuthLdapProviders().pipe(
+      map(x => {
+        this.model.ldap = {
           providers: x.items
         }
       })
@@ -140,46 +150,46 @@ export class ConfigAuthComponent implements OnInit {
 
 
   saveLdap($event: BaseLdap) {
-    /*  this.confirmService.showSave().pipe(
-       takeWhile(x => x),
-       switchMap(x =>
-         this.configService.saveAuthOAuthProvider($event))
-     ).subscribe(x => {
-       if (!this.model.oauth)
-         this.model.oauth = { providers: [] };
-       //set a follow id
-       x.objId = UtilService.randomNumberString();
-       const index = this.model.oauth.providers.findIndex(x => x.id == $event.id);
-       if (Number(index) >= 0)
-         this.model.oauth.providers[Number(index)] = { ...x };
-       else
-         this.model.oauth.providers.push(x);
-       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
-     }) */
+    this.confirmService.showSave().pipe(
+      takeWhile(x => x),
+      switchMap(x =>
+        this.configService.saveAuthLdapProvider($event))
+    ).subscribe(x => {
+      if (!this.model.ldap)
+        this.model.ldap = { providers: [] };
+      //set a follow id
+      x.objId = UtilService.randomNumberString();
+      const index = this.model.ldap.providers.findIndex(x => x.id == $event.id);
+      if (Number(index) >= 0)
+        this.model.ldap.providers[Number(index)] = { ...x };
+      else
+        this.model.ldap.providers.push(x);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+    })
   }
   deleteLdap($event: BaseLdap) {
-    /* if (!$event.id) {//not saved before
-      const index = this.model.oauth?.providers.findIndex(x => x.objId == $event.objId)
+    if (!$event.id) {//not saved before
+      const index = this.model.ldap?.providers.findIndex(x => x.objId == $event.objId)
       if (Number(index) >= 0)
-        this.model.oauth?.providers.splice(Number(index), 1);
+        this.model.ldap?.providers.splice(Number(index), 1);
     } else {
       this.confirmService.showDelete().pipe(
         takeWhile(x => x),
-        switchMap(x => this.configService.deleteAuthOAuthProvider($event))
+        switchMap(x => this.configService.deleteAuthLdapProvider($event))
       ).subscribe(x => {
-        const index = this.model.oauth?.providers.findIndex(x => x.objId == $event.objId)
+        const index = this.model.ldap?.providers.findIndex(x => x.objId == $event.objId)
         if (Number(index) >= 0)
-          this.model.oauth?.providers.splice(Number(index), 1);
+          this.model.ldap?.providers.splice(Number(index), 1);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
       })
-    } */
+    }
   }
 
 
 
 
   addActiveDirectory() {
-    const activeDirectory = this.model.ldap?.providers.find(x => x.baseType == 'oauth' && x.type == 'google');
+    const activeDirectory = this.model.ldap?.providers.find(x => x.baseType == 'ldap' && x.type == 'activedirectory');
     if (activeDirectory) {
       this.notificationService.error(`Active Directory/Ldap  ${this.translateService.translate('AllreadyExists')}`);
       return;

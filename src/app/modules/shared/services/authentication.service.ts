@@ -57,6 +57,9 @@ export class AuthenticationService extends BaseService {
       if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS))
 
         this.getRefreshToken().pipe(
+          switchMap(x => {
+            return this.getUserCurrent();
+          }),
           catchError(err => {
             this.logout();
             return '';

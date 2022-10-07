@@ -23,9 +23,7 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"Host"|translate}}</mat-label>
                                 <input matInput test-id="auth-ldap-host-input"
-                                    placeholder="ldap://youractivedirectory:389" [(ngModel)]="model.host"
-                                    (ngModelChange)="modelChanged($event,'host')" [ngModelOptions]="{standalone:true}"
-                                    required>
+                                    placeholder="ldap://youractivedirectory:389" formControlName="host" required>
                                 <mat-hint>{{"LdapHostHint"|translate}} </mat-hint>
                                 <mat-error>{{error.host|translate}}</mat-error>
                             </mat-form-field>
@@ -34,9 +32,8 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapBindDN"|translate}}</mat-label>
                                 <input matInput test-id="auth-ldap-binddn-input"
-                                    placeholder="CN=youradmin,CN=users,DC=ferrumgate,DC=local"
-                                    [(ngModel)]="model.bindDN" (ngModelChange)="modelChanged($event,'bindDN')"
-                                    [ngModelOptions]="{standalone:true}" required>
+                                    placeholder="CN=youradmin,CN=users,DC=ferrumgate,DC=local" formControlName="bindDN"
+                                    required>
                                 <mat-hint>{{"LdapBindDNHint"|translate}}</mat-hint>
                                 <mat-error>{{error.bindDN|translate}}</mat-error>
                             </mat-form-field>
@@ -45,9 +42,8 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapBindPass"|translate}}</mat-label>
                                 <input matInput [type]="hidePassword?'password':'text'"
-                                    test-id="auth-ldap-bindpass-input" placeholder="PasSWord"
-                                    [(ngModel)]="model.bindPass" (ngModelChange)="modelChanged($event,'bindPass')"
-                                    [ngModelOptions]="{standalone:true}" required>
+                                    test-id="auth-ldap-bindpass-input" placeholder="PasSWord" formControlName="bindPass"
+                                    required>
                                 <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                     'visibility_off' : 'visibility'}}</mat-icon>
                                 <mat-hint>{{"LdapBindPassHint"|translate}}</mat-hint>
@@ -59,8 +55,7 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapBindSearchPath"|translate}}</mat-label>
                                 <input matInput test-id="auth-ldap-searchbase-input" placeholder="PasSWord"
-                                    [(ngModel)]="model.searchBase" (ngModelChange)="modelChanged($event,'searchBase')"
-                                    [ngModelOptions]="{standalone:true}" required>
+                                    formControlName="searchBase" required>
                                 <mat-hint>{{"LdapBindSearchPathHint"|translate}}</mat-hint>
                                 <mat-error>{{error.searchBase|translate}}</mat-error>
 
@@ -70,9 +65,7 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapUsernameField"|translate}}</mat-label>
                                 <input matInput test-id="auth-ldap-usernamefield-input" placeholder="sAMAccountName"
-                                    [(ngModel)]="model.usernameField"
-                                    (ngModelChange)="modelChanged($event,'usernameField')"
-                                    [ngModelOptions]="{standalone:true}" required>
+                                    formControlName="usernameField" required>
                                 <mat-hint>{{"LdapUsernameFieldHint"|translate}}</mat-hint>
                                 <mat-error>{{error.usernameField|translate}}</mat-error>
 
@@ -82,9 +75,7 @@
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapGroupnameField"|translate}}</mat-label>
                                 <input matInput test-id="auth-ldap-groupnamefield-input" placeholder="sAMAccountName"
-                                    [(ngModel)]="model.groupnameField"
-                                    (ngModelChange)="modelChanged($event,'groupnameField')"
-                                    [ngModelOptions]="{standalone:true}" required>
+                                    formControlName="groupnameField" required>
                                 <mat-hint>{{"LdapGroupnameFieldHint"|translate}}</mat-hint>
                                 <mat-error>{{error.groupnameField|translate}}</mat-error>
 

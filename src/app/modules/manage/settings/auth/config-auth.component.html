@@ -31,7 +31,8 @@
         <div fxLayout="row wrap">
             <p class="config-auth-item">
                 <app-auth-local test-id="config-auth-local" [model]="model.local"
-                    (saveAuthLocal)="saveAuthLocal($event)"></app-auth-local>
+                    (saveAuthLocal)="saveAuthLocal($event)">
+                </app-auth-local>
             </p>
             <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.oauth?.providers||[]">
 

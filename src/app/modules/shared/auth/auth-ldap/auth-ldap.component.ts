@@ -46,8 +46,11 @@ export class AuthLdapComponent implements OnInit {
       orig: val,
       svgIcon: this.findIconName(val)
     }
+
     this.formGroup = this.createFormGroup(this._model);
+
   }
+
   findIconName(val: BaseLdap) {
     if (val.name.startsWith('Active Directory'))
       return 'social-microsoft';
@@ -111,19 +114,34 @@ export class AuthLdapComponent implements OnInit {
 
   }
 
+
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
-        host: new FormControl(model.host, [Validators.required, InputService.emailValidator]),
+        host: new FormControl(model.host, [Validators.required]),
         bindDN: new FormControl(model.bindDN, [Validators.required]),
         bindPass: new FormControl(model.bindPass, [Validators.required]),
         searchBase: new FormControl(model.searchBase, [Validators.required]),
-        searchFilter: new FormControl(model.searchFilter, [Validators.required]),
+        searchFilter: new FormControl(model.searchFilter, []),
         usernameField: new FormControl(model.usernameField, [Validators.required]),
         groupnameField: new FormControl(model.groupnameField, [Validators.required])
 
       });
+
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
+
   resetErrors() {
 
     return {
@@ -132,8 +150,8 @@ export class AuthLdapComponent implements OnInit {
     }
   }
 
-  modelChanged($event: any, formControlName: string) {
-    this.formGroup.controls[formControlName].setValue($event);
+  modelChanged($event?: any) {
+
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -151,7 +169,7 @@ export class AuthLdapComponent implements OnInit {
       if (hostError['required'])
         this.error.host = 'HostRequired';
       else
-        this.error.host = 'SOMEHostRequired';
+        this.error.host = 'HostRequired';
     }
 
     const bindDNError = this.formGroup.controls.bindDN.errors;
@@ -238,6 +256,7 @@ export class AuthLdapComponent implements OnInit {
       ...this.model.orig
     }
     this.model.isChanged = false;
+    this.formGroup = this.createFormGroup(this.model);
     this.formGroup.markAsUntouched();
   }
 
@@ -256,6 +275,7 @@ export class AuthLdapComponent implements OnInit {
       usernameField: this.model.usernameField,
       bindDN: this.model.bindDN,
       bindPass: this.model.bindPass,
+      allowedGroups: this.model.allowedGroups
 
     }
   }
@@ -274,7 +294,7 @@ export class AuthLdapComponent implements OnInit {
   addGroup(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
+    // Add our
     if (value) {
       const isExits = this.model.allowedGroups?.find(x => x == value);
       if (!isExits) {

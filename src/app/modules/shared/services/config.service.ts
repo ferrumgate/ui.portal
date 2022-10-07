@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthCommon, AuthLocal, BaseOAuth } from '../models/auth';
+import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth } from '../models/auth';
 
 import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
@@ -317,6 +317,54 @@ export class ConfigService extends BaseService {
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
         const url = this.joinUrl(this.getApiUrl(), '/config/auth/oauth/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
+  ///////////// ldap
+
+  getAuthLdapProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/ldap/providers', x);
+        return this.http.get<{ items: BaseLdap[] }>(url);
+      }))
+  }
+
+
+  saveAuthLdapProvider(auth: BaseLdap) {
+    const parameter: BaseLdap = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      groupnameField: auth.groupnameField,
+      host: auth.host,
+      searchBase: auth.searchBase,
+      usernameField: auth.usernameField,
+      allowedGroups: auth.allowedGroups,
+      bindDN: auth.bindDN,
+      bindPass: auth.bindPass,
+      searchFilter: auth.searchFilter,
+      securityProfile: auth.securityProfile
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseLdap>(this.getApiUrl() + `/config/auth/ldap/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseLdap>(this.getApiUrl() + `/config/auth/ldap/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthLdapProvider(oauth: BaseLdap) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/ldap/providers', oauth.id, x);
         return this.http.delete<{}>(url);
       }))
   }

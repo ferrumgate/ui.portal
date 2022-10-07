@@ -31,8 +31,7 @@
                             <mat-form-field appearance="fill" fxFill class="config-captcha-width">
                                 <mat-label>{{"ServerKey"|translate}}</mat-label>
                                 <input matInput test-id="config-captcha-server-input" placeholder="6Lcw_scfAAAAAFKwZu"
-                                    formControlName="server" [(ngModel)]="model.server"
-                                    (ngModelChange)="captchaModelChanged($event)" required>
+                                    formControlName="server" required>
                                 <mat-hint>{{"CaptchaServerKeyHint"|translate}}
                                 </mat-hint>
                                 <mat-error>
@@ -43,8 +42,7 @@
                             <mat-form-field appearance="fill" fxFill class="config-captcha-width">
                                 <mat-label>{{"ClientKey"|translate}}</mat-label>
                                 <input matInput test-id="config-captcha-client-input" placeholder="6Lcw_scfAAAAA"
-                                    formControlName="client" [(ngModel)]="model.client"
-                                    (ngModelChange)="captchaModelChanged($event)" required>
+                                    formControlName="client" required>
                                 <mat-hint>{{"CaptchaClientKeyHint"|translate}}</mat-hint>
 
                                 <mat-error>{{captchaError.client|translate}}</mat-error>

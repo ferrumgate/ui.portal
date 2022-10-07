@@ -34,13 +34,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   tunnelSessionKey = '';
 
-  form: FormGroup = new FormGroup(
-    {
-      email: new FormControl('', [Validators.required, InputService.emailValidator]),
-      password: new FormControl('', [Validators.required])
-    }
-  );
-
+  form: FormGroup = this.createFormGroup(this.model);
   hidePassword = true;
 
 
@@ -98,6 +92,27 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
   }
+  createFormGroup(model: Login) {
+    const fmg = new FormGroup(
+      {
+        email: new FormControl('', [Validators.required, InputService.emailValidator]),
+        password: new FormControl('', [Validators.required])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
+
+  }
 
   private loginLocal() {
     return this.authService.loginLocal(this.model.email || '', this.model.password || '');
@@ -141,7 +156,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
   }
-  modelChanged($event: any) {
+  modelChanged() {
 
     this.checkFormError();
   }

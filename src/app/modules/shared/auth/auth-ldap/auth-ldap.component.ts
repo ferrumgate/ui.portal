@@ -256,7 +256,6 @@ export class AuthLdapComponent implements OnInit {
       ...this.model.orig
     }
     this.model.isChanged = false;
-    this.formGroup = this.createFormGroup(this.model);
     this.formGroup.markAsUntouched();
   }
 

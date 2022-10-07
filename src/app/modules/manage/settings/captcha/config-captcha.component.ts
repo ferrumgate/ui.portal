@@ -81,11 +81,23 @@ export class ConfigCaptchaComponent implements OnInit {
   }
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         server: new FormControl(model.server, []),
         client: new FormControl(model.client, []),
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.captchaModelChanged();
+    })
+    return fmg;
   }
   resetCaptchaErrors() {
 
@@ -94,7 +106,7 @@ export class ConfigCaptchaComponent implements OnInit {
     }
   }
 
-  captchaModelChanged($event: any) {
+  captchaModelChanged() {
     this.checkCaptchaFormError();
     if (this.captchaFormGroup.valid)
       this.checkIfModelChanged();

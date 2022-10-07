@@ -24,8 +24,7 @@
                     <p>
                         <mat-form-field class="forgotpass-form-field">
                             <input type="text" test-id="forgotpass-email-input" matInput
-                                placeholder="{{'Email'|translate}}" formControlName="email" [(ngModel)]="model.email"
-                                (ngModelChange)="modelChanged($event)">
+                                placeholder="{{'Email'|translate}}" formControlName="email">
                             <mat-error test-id="forgotpass-email-error" class="forgotpass-error"> {{ error.email
                                 |translate
                                 }}
@@ -66,8 +65,6 @@
             fxLayoutAlign="center center" class="forgotpass-mat-card">
             <mat-card-title></mat-card-title>
             <mat-card-content>
-
-
 
 
                 <div fxLayout="row" fxLayoutAlign="center">

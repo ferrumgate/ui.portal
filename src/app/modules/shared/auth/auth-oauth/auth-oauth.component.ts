@@ -104,11 +104,23 @@ export class AuthOauthComponent implements OnInit {
   }
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         clientId: new FormControl(model.clientId, [Validators.required]),
         clientSecret: new FormControl(model.clientSecret, [Validators.required]),
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
   resetErrors() {
 
@@ -117,7 +129,7 @@ export class AuthOauthComponent implements OnInit {
     }
   }
 
-  modelChanged($event: any) {
+  modelChanged() {
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -165,6 +177,7 @@ export class AuthOauthComponent implements OnInit {
       ...this.model.orig
     }
     this.model.isChanged = false;
+
     this.formGroup.markAsUntouched();
   }
 

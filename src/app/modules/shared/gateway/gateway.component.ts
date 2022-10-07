@@ -143,11 +143,12 @@ export class GatewayComponent implements OnInit {
   }
 
   static createFormGroup(gate: Gateway) {
-    return new FormGroup({
+    const fmg = new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
       id: new FormControl(gate.id, [])
 
     });
+    return fmg;
   }
   static createFormError() {
     return { name: '' };

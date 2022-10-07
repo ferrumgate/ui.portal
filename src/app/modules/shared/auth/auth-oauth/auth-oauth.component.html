@@ -23,22 +23,18 @@
                             <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
                                 <mat-label>{{"ClientId"|translate}}</mat-label>
                                 <input matInput test-id="auth-oauth-clientid-input" placeholder="scfAAAAAFKwZu"
-                                    formControlName="clientId" [(ngModel)]="model.clientId"
-                                    (ngModelChange)="modelChanged($event)" required>
+                                    formControlName="clientId" required>
                                 <mat-hint>{{"OAuthClientIdHint"|translate}}
                                 </mat-hint>
-                                <mat-error>
-                                    {{error.clientId|translate}}</mat-error>
+                                <mat-error>{{error.clientId|translate}}</mat-error>
                             </mat-form-field>
                         </p>
                         <p fxFill class="auth-oauth-explanation ">
                             <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
                                 <mat-label>{{"ClientKey"|translate}}</mat-label>
                                 <input matInput test-id="auth-oauth-clientkey-input" placeholder="LeAscfAAAAA"
-                                    formControlName="clientSecret" [(ngModel)]="model.clientSecret"
-                                    (ngModelChange)="modelChanged($event)" required>
+                                    formControlName="clientSecret" required>
                                 <mat-hint>{{"OAuthClientKeyHint"|translate}}</mat-hint>
-
                                 <mat-error>{{error.clientSecret|translate}}</mat-error>
 
                             </mat-form-field>

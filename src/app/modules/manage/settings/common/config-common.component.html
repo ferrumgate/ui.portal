@@ -29,8 +29,7 @@
                             <mat-form-field appearance="fill" fxFill class="config-common-width">
                                 <mat-label>{{"PrivateDomain"|translate}}</mat-label>
                                 <input matInput test-id="config-common-domain-input" placeholder="ferrumgate.local"
-                                    formControlName="domain" [(ngModel)]="model.domain"
-                                    (ngModelChange)="commonModelChanged($event)" required>
+                                    formControlName="domain" required>
                                 <mat-hint>{{"PrivateDomainDefinition"|translate}}
                                 </mat-hint>
                                 <mat-error>
@@ -41,8 +40,7 @@
                             <mat-form-field appearance="fill" fxFill class="config-common-width">
                                 <mat-label>{{"LoginUrl"|translate}}</mat-label>
                                 <input matInput test-id="config-common-url-input"
-                                    placeholder="https://secure.ferrumgate.com" formControlName="url"
-                                    [(ngModel)]="model.url" (ngModelChange)="commonModelChanged($event)" required>
+                                    placeholder="https://secure.ferrumgate.com" formControlName="url" required>
                                 <mat-hint>{{"UrlDefinition"|translate}}</mat-hint>
 
                                 <mat-error>{{commonError.url|translate}}</mat-error>

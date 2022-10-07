@@ -19,7 +19,14 @@ export interface AuthLocalExtended extends AuthLocal {
 export class AuthLocalComponent implements OnInit {
 
   helpLink = '';
-  _model: AuthLocalExtended;
+  _model: AuthLocalExtended = {
+    id: '', baseType: 'local', isChanged: false, name: 'Local',
+    type: 'local', isForgotPassword: false, isRegister: false, tags: [],
+    orig: {
+      id: '', baseType: 'local', name: '',
+      type: 'local', isForgotPassword: false, isRegister: false, tags: []
+    }
+  };
 
   get model(): AuthLocalExtended { return this._model; }
   @Input()
@@ -32,28 +39,22 @@ export class AuthLocalComponent implements OnInit {
       isChanged: false
 
     }
+    this.formGroup = this.createFormGroup(this.model);
 
   }
   @Output()
   saveAuthLocal: EventEmitter<AuthLocal> = new EventEmitter();
 
 
-  formGroup: FormGroup;
+  formGroup: FormGroup = this.createFormGroup(this.model);
   error = { type: '' };
   isThemeDark = false;
   constructor(
     private configService: ConfigService,
     private translateService: TranslationService,
   ) {
-    this._model = {
-      id: '', baseType: 'local', isChanged: false, name: 'Local',
-      type: 'local', isForgotPassword: false, isRegister: false, tags: [],
-      orig: {
-        id: '', baseType: 'local', name: '',
-        type: 'local', isForgotPassword: false, isRegister: false, tags: []
-      }
-    }
-    this.formGroup = this.createFormGroup(this.model);
+
+
     this.configService.themeChanged.subscribe(x => {
       this.isThemeDark = x == 'dark';
 
@@ -69,10 +70,22 @@ export class AuthLocalComponent implements OnInit {
 
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         type: new FormControl(model.type, []),
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
 
   resetFormErrors() {
@@ -81,7 +94,7 @@ export class AuthLocalComponent implements OnInit {
       type: ''
     }
   }
-  modelChanged($event: any) {
+  modelChanged() {
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();

@@ -80,11 +80,23 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
   }
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         domain: new FormControl(model.domain, [Validators.required, InputService.domainValidator]),
         url: new FormControl(model.url, [Validators.required, InputService.urlValidator]),
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.commonModelChanged();
+    })
+    return fmg;
   }
   resetCommonErrors() {
 
@@ -93,7 +105,7 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
     }
   }
 
-  commonModelChanged($event: any) {
+  commonModelChanged() {
     this.checkCommonFormError();
     if (this.commonFormGroup.valid)
       this.checkIfModelChanged();

@@ -23,8 +23,7 @@
                     <p>
                         <mat-form-field class="register-form-field">
                             <input type="text" test-id="register-email-input" matInput
-                                placeholder="{{'Email'|translate}}" formControlName="email" [(ngModel)]="model.email"
-                                (ngModelChange)="modelChanged($event)">
+                                placeholder="{{'Email'|translate}}" formControlName="email">
                             <mat-error test-id="register-email-error" class="register-error"> {{ error.email |translate
                                 }}
                             </mat-error>
@@ -34,8 +33,7 @@
                     <p>
                         <mat-form-field class="register-form-field">
                             <input [type]="hidePassword?'password':'text'" test-id="register-password-input" matInput
-                                placeholder="{{'Password'|translate}}" formControlName="password"
-                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                                placeholder="{{'Password'|translate}}" formControlName="password">
                             <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
                             <mat-error test-id="register-password-error" class="register-error"> {{ error.password
@@ -47,8 +45,7 @@
                     <p>
                         <mat-form-field class="register-form-field">
                             <input [type]="hidePasswordAgain?'password':'text'" test-id="register-password-again-input"
-                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
-                                [(ngModel)]="model.passwordAgain" (ngModelChange)="modelChanged($event)">
+                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain">
                             <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
 

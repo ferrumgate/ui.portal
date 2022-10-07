@@ -29,15 +29,7 @@ export class ResetPassComponent implements OnInit {
   hidePasswordAgain = true;
   hidePassword = true;
   key: string = '';
-  form: FormGroup = new FormGroup(
-    {
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
-      passwordAgain: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
-    },
-    {
-      validators: Validators.compose([InputService.matchingPasswords('password', 'passwordAgain')])
-    }
-  );
+  form: FormGroup = this.createFormGroup(this.model);
 
 
   error: { password: string, passwordAgain: string, save: string };
@@ -71,6 +63,29 @@ export class ResetPassComponent implements OnInit {
   ngOnInit(): void {
 
 
+  }
+  createFormGroup(model: ResetPass) {
+    const fmg = new FormGroup(
+      {
+        password: new FormControl(model.password, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+        passwordAgain: new FormControl(model.passwordAgain, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+      },
+      {
+        validators: Validators.compose([InputService.matchingPasswords('password', 'passwordAgain')])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
 
   resetErrrors() {
@@ -132,7 +147,7 @@ export class ResetPassComponent implements OnInit {
     }
   }
 
-  modelChanged($event: any) {
+  modelChanged() {
 
     this.checkFormError();
   }

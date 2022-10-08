@@ -111,25 +111,28 @@ export class NetworksComponent implements OnInit, OnDestroy {
   }
 
   prepareGateway(gateway: Gateway) {
-    const model = GatewayComponent.prepareModel(gateway);
-    model.objId = UtilService.randomNumberString();
-    return model;
+    //const model = GatewayComponent.prepareModel(gateway);
+    gateway.objId = UtilService.randomNumberString();
+    return gateway;
   }
   prepareNetwork(network: Network) {
-    const model = NetworkComponent.prepareModel(network);
-    model.objId = UtilService.randomNumberString();
-    model.gatewaysCount = 0;
-    return model
+
+    network.objId = UtilService.randomNumberString();
+    network.gatewaysCount = 0;
+    return network
   }
   prepareNetworks() {
     this.networks.forEach(a => {
       a.gatewaysCount = this.gateways.filter(x => x.networkId == a.id).length;
-      a.isGatewayOpened = a.isGatewayOpened & a.gatewaysCount;//close if zero gateway
+      if (!a.gatewaysCount)
+        a.isGatewayOpened = false;//close if zero gateway
       this.gateways.filter(z => z.networkId == a.id).forEach(b => b.networkName = a.name);
 
     })
+
   }
   prepareNotJoinedGateways() {
+
     this.gatewaysNotJoined = this.gateways.filter(x => !x.networkId);
   }
 
@@ -181,10 +184,11 @@ export class NetworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterGateways(net: Network, force = false): any {
-    if (!net.gateways || force)
-      net.gateways = this.gateways.filter(x => x.networkId == net.id);
-    return net.gateways;
+  filterGateways(net: Network): any {
+
+    //if (!net.gateways || force)
+    return this.gateways.filter(x => x.networkId == net.id);
+    //return net.gateways;
   }
 
 
@@ -203,12 +207,19 @@ export class NetworksComponent implements OnInit, OnDestroy {
       takeWhile(x => x),
       switchMap(y => this.networkService.saveOrupdate($event)),
     ).subscribe((item) => {
-      //if saved, a new id comes, set it back
-      if (item.id != $event.id) {
-        $event.id = item.id;
+
+      //find saved item and replace it
+      const index = this.networks.findIndex(x => x.objId == $event.objId)
+      const current = this.networks[index];
+      this.networks[index] = {
+        ...item
+
       }
-      $event.orig = item;
-      $event.isChanged = false;
+
+      this.prepareNetwork(this.networks[index]);
+      this.prepareNotJoinedGateways();
+      this.prepareNetworks();
+      this.networks[index].isGatewayOpened = current.isGatewayOpened;
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     });
   }
@@ -248,19 +259,14 @@ export class NetworksComponent implements OnInit, OnDestroy {
       switchMap(y => this.gatewayService.saveOrupdate($event)),
     ).subscribe(y => {
 
-      //original list
-      const networkId = ($event.orig as Gateway).networkId;
-      const net = this.networks.find(x => x.id == networkId);
-      if (net) this.filterGateways(net, true);
-      //new network
-      const networkId2 = ($event.networkId);
-      const net2 = this.networks.find(x => x.id == networkId2);
-      if (net2) this.filterGateways(net2, true);
-      $event.orig = y;
-      $event.isChanged = false;
-
+      const index = this.gateways.findIndex(x => x.objId == $event.objId);
+      this.gateways[index] = {
+        ...y
+      }
+      this.prepareGateway(this.gateways[index]);
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
+
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })
   }

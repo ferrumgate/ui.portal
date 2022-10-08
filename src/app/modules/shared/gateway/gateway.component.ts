@@ -13,10 +13,8 @@ import { TranslationService } from '../services/translation.service';
 
 
 
-export interface GatewayExtended {
+export interface GatewayExtended extends Gateway {
   orig: Gateway;
-  formGroup: FormGroup;
-  formError: { name: string };
   isChanged: boolean;
   networkName: string;
 }
@@ -29,11 +27,27 @@ export interface GatewayExtended {
 
 export class GatewayComponent implements OnInit {
   helpLink = '';
-  @Input()
-  gateway: Gateway =
+  _gateway: Gateway =
     {
       id: '', name: '', labels: []
     };
+
+
+  get gateway() {
+    return this._gateway;
+  }
+  @Input()
+  set gateway(val: Gateway) {
+    this._gateway = {
+      ...val,
+      isChanged: false,
+      orig: val,
+      networkName: this.networks.find(x => x.id == val.networkId)?.name || ''
+
+    }
+    this.gateway.labels = Array.from(val.labels);
+    this.formGroup = this.createFormGroup(this.gateway);
+  }
 
   @Output()
   openGateways: EventEmitter<boolean> = new EventEmitter();
@@ -47,9 +61,14 @@ export class GatewayComponent implements OnInit {
   get networks(): Network[] {
     return this._networks;
   }
+  formGroup: FormGroup = this.createFormGroup(this.gateway);
+  formError: { name: string } = { name: '' }
+
   @Input() set networks(value: Network[]) {
     //empty network for reseting networkId
     this._networks = [{ id: '', name: '' } as Network].concat(value);
+    this.gateway.networkName = this.networks.find(x => x.id == this.gateway.networkId)?.name || ''
+
   }
 
   filteredOptions: Observable<Network[]> = of();
@@ -70,25 +89,26 @@ export class GatewayComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
     //for testing;
-    this.gateway = GatewayComponent.prepareModel(this.gateway);
+    //this.gateway = this.prepareModel(this.gateway);
     this.helpLink = this.configService.links.gatewayHelp;
   }
 
   ngOnInit(): void {
-    /*  this.filteredOptions = this.networkAutoCompleteFormControl.valueChanges.pipe(
-       takeWhile(name => typeof (name) == 'string'),
-       map(name => (name ? this.filter(name) : this.networks.slice()))
-     ); */
+
+    this.prepareAutoComplete();
+
+
+  }
+  prepareAutoComplete() {
     this.filteredOptions = of(this._networks).pipe(
       map(data => {
+
         data.sort((a, b) => {
           return a.name < b.name ? -1 : 1;
         })
         return data;
       })
     )
-
-
   }
 
   openHelp() {
@@ -104,53 +124,56 @@ export class GatewayComponent implements OnInit {
         this.gateway.networkName = event.option.value.name;
       else
         this.gateway.networkName = ''
-      this.gatewayModelChanged(event);
+      this.gatewayModelChanged();
 
     } else {
       this.gateway.networkId = '';
       this.gateway.networkName = '';
-      this.gatewayModelChanged(event);
+      this.gatewayModelChanged();
     }
 
   }
 
 
-  static prepareModel(gate: Gateway) {
-    let extended: GatewayExtended = {
-      orig: JSON.parse(JSON.stringify(gate)),
-      formError: this.createFormError(),
-      formGroup: this.createFormGroup(gate),
-      isChanged: false,
-      networkName: '',
+  /*   prepareModel(gate: Gateway) {
+      let extended: GatewayExtended = {
+        orig: JSON.parse(JSON.stringify(gate)),
+        isChanged: false,
+        networkName: '',
+  
+  
+  
+      }
+  
+      let item = {
+        ...gate,
+        ...extended,
+      }
+  
+      return item;
+    } */
 
-
-
-    }
-
-    let item = {
-      ...gate,
-      ...extended,
-    }
-    /*     Object.defineProperty(item, 'isEnabledBoolean', {
-          get() { return item.isEnabled ? true : false },
-          set(newvalue) { item.isEnabled = newvalue ? 1 : 0 },
-          enumerable: true, configurable: true
-        })
-     */
-
-
-    return item;
-  }
-
-  static createFormGroup(gate: Gateway) {
+  createFormGroup(gate: Gateway) {
     const fmg = new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
       id: new FormControl(gate.id, [])
 
     });
+
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.gateway as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.gatewayModelChanged();
+    })
     return fmg;
   }
-  static createFormError() {
+  createFormError() {
     return { name: '' };
   }
 
@@ -168,20 +191,20 @@ export class GatewayComponent implements OnInit {
 
     // Clear the input value
     event.chipInput!.clear();
-    if (this.gateway.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
   }
 
   removeLabel(label: string): void {
     this.gateway.labels = this.gateway.labels.filter(x => x != label);
-    if (this.gateway.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
 
   }
 
-  gatewayModelChanged($event: any) {
+  gatewayModelChanged() {
     this.checkNetworkFormError();
-    if (this.gateway.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
     else this.gateway.isChanged = false;
 
@@ -210,9 +233,9 @@ export class GatewayComponent implements OnInit {
 
   checkNetworkFormError() {
     //check errors 
-    let error = GatewayComponent.createFormError();
+    let error = this.createFormError();
 
-    const nameError = this.gateway.formGroup.controls['name'].errors;
+    const nameError = this.formGroup.controls['name'].errors;
 
     if (nameError) {
       if (nameError['required'])
@@ -223,16 +246,21 @@ export class GatewayComponent implements OnInit {
 
 
 
-    this.gateway.formError = error;
-    (this.gateway.formGroup as FormGroup).markAllAsTouched();
+    this.formError = error;
+    (this.formGroup as FormGroup).markAllAsTouched();
 
   }
 
   clear() {
     this.gateway.isChanged = false;
     const original = this.gateway.orig as Gateway;
-    original.networkName = this.networks.find(x => x.id == original.networkId)?.name || '';
-    Object.assign(this.gateway, original);
+    //original.networkName = this.networks.find(x => x.id == original.networkId)?.name || '';
+    //Object.assign(this.gateway, original);
+    this.gateway = {
+      ...original
+    }
+
+    this.gateway.networkName = this.networks.find(x => x.id == original.networkId)?.name || '';
     this.checkIfModelChanged();
   }
 

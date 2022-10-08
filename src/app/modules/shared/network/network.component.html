@@ -11,12 +11,12 @@
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>
-                <mat-icon matBadge="{{network.gatewaysCount}}" matBadgeColor="warn"
-                    matTooltip="{{'Gateways'|translate}}">computer
+                <mat-icon matBadge="{{gatewaysCount}}" matBadgeColor="warn" matTooltip="{{'Gateways'|translate}}">
+                    computer
                 </mat-icon>
-                <button mat-icon-button (click)="openGatewayClicked()">
-                    <mat-icon *ngIf="network.gatewaysCount && !network.isGatewayOpened">arrow_right</mat-icon>
-                    <mat-icon *ngIf="network.gatewaysCount && network.isGatewayOpened">arrow_left</mat-icon>
+                <button [disabled]="!gatewaysCount" mat-icon-button (click)="openGatewayClicked()">
+                    <mat-icon *ngIf="!network.isGatewayOpened">arrow_right</mat-icon>
+                    <mat-icon *ngIf="network.isGatewayOpened">arrow_left</mat-icon>
                 </button>
             </mat-action-row>
 
@@ -25,14 +25,13 @@
         <mat-card-content>
             <div>
                 <div>
-                    <form test-id="network-form" [formGroup]="network.formGroup">
+                    <form test-id="network-form" [formGroup]="formGroup">
                         <p>
                             <mat-form-field appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
                                 <input matInput test-id="network-name-input" placeholder="{{'NetworkName'|translate}}"
-                                    formControlName="name" [(ngModel)]="network.name"
-                                    (ngModelChange)="networkModelChanged($event)" required>
-                                <mat-error>{{network.formError.name|translate}}</mat-error>
+                                    formControlName="name" required>
+                                <mat-error>{{formError.name|translate}}</mat-error>
                             </mat-form-field>
                         </p>
                         <p>
@@ -46,7 +45,7 @@
                                             <mat-icon>cancel</mat-icon>
                                         </button>
                                     </mat-chip>
-                                    <input placeholder="{{'NewLabel'|translate}" [matChipInputFor]="chipList"
+                                    <input placeholder="{{'NewLabel' | translate}}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                         [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
                                 </mat-chip-list>
@@ -56,22 +55,20 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>{{"ClientIpRange"|translate}}</mat-label>
                                 <input matInput test-id="network-clientnetwork-input" placeholder="100.64.0.0/16"
-                                    formControlName="clientNetwork" [(ngModel)]="network.clientNetwork"
-                                    (ngModelChange)="networkModelChanged($event)" required>
+                                    formControlName="clientNetwork" required>
                                 <mat-hint>{{"ClientNetworkDefinition"|translate}}
                                 </mat-hint>
-                                <mat-error>{{network.formError.clientNetwork|translate}}</mat-error>
+                                <mat-error>{{formError.clientNetwork|translate}}</mat-error>
                             </mat-form-field>
                         </p>
                         <p fxFill>
                             <mat-form-field appearance="fill">
                                 <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
                                 <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
-                                    formControlName="serviceNetwork" [(ngModel)]="network.serviceNetwork"
-                                    (ngModelChange)="networkModelChanged($event)" required>
+                                    formControlName="serviceNetwork" required>
                                 <mat-hint>{{"ServiceNetworkDefinition"|translate}}</mat-hint>
 
-                                <mat-error>{{network.formError.serviceNetwork|translate}}</mat-error>
+                                <mat-error>{{formError.serviceNetwork|translate}}</mat-error>
 
                             </mat-form-field>
                         </p>

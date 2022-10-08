@@ -18,8 +18,12 @@ export class RoleGuard implements CanActivate {
             if (this.auth.currentSession?.currentUser?.roles?.find(x => x.id == roleId)) {
                 return true;
             }
-        for (let roleId of roleIds)
+        for (let roleId of roleIds) {
+            console.log(this.auth.currentSession)
+            console.log(this.auth.currentSession?.currentUser)
+            console.log(this.auth.currentSession?.currentUser?.roles)
             console.log(this.auth.currentSession?.currentUser?.roles?.find(x => x.id == roleId))
+        }
 
         console.log(this.auth.currentSession)
         console.log(`${roleIds} roleGuard`)

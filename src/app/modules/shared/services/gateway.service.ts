@@ -47,8 +47,8 @@ export class GatewayService extends BaseService {
     return this.preExecute(gate).pipe(
       switchMap(y => {
         if (gate.id)
-          return this.httpService.put(this._gatewayUrl, y, this.jsonHeader)
-        else return this.httpService.post(this._gatewayUrl, y, this.jsonHeader)
+          return this.httpService.put<Gateway>(this._gatewayUrl, y, this.jsonHeader)
+        else return this.httpService.post<Gateway>(this._gatewayUrl, y, this.jsonHeader)
       }))
 
   }
@@ -72,7 +72,7 @@ export class GatewayService extends BaseService {
       switchMap(y => {
 
         let url = this.joinUrl(this._gatewayUrl, `${id}`, urlParams);
-        return this.httpService.delete(url);
+        return this.httpService.get<Gateway>(url);
 
       }))
   }

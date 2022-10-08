@@ -66,7 +66,7 @@ describe('GatewayComponent', () => {
       labels: [], clientNetwork: '', serviceNetwork: ''
     }
     component.networks = [network1];
-    component.gateway = GatewayComponent.prepareModel(gateway);
+    component.gateway = gateway;
     component.gateway.networkName = network1.name;
     component.gateway.isEnabled = true;
     tick(1000);

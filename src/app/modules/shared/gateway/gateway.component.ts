@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../models/network';
@@ -36,6 +36,7 @@ export class GatewayComponent implements OnInit {
   get gateway() {
     return this._gateway;
   }
+
   @Input()
   set gateway(val: Gateway) {
     this._gateway = {
@@ -58,17 +59,19 @@ export class GatewayComponent implements OnInit {
   isGatewayOpened = false;
 
   _networks: Network[] = [];
+
   get networks(): Network[] {
     return this._networks;
   }
   formGroup: FormGroup = this.createFormGroup(this.gateway);
   formError: { name: string } = { name: '' }
 
-  @Input() set networks(value: Network[]) {
+  @Input()
+  set networks(value: Network[]) {
     //empty network for reseting networkId
     this._networks = [{ id: '', name: '' } as Network].concat(value);
     this.gateway.networkName = this.networks.find(x => x.id == this.gateway.networkId)?.name || ''
-
+    this.prepareAutoComplete();
   }
 
   filteredOptions: Observable<Network[]> = of();
@@ -100,7 +103,8 @@ export class GatewayComponent implements OnInit {
 
   }
   prepareAutoComplete() {
-    this.filteredOptions = of(this._networks).pipe(
+    this.filteredOptions = of(this.networks).pipe(
+
       map(data => {
 
         data.sort((a, b) => {

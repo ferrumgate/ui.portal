@@ -19,22 +19,22 @@
                     <form test-id="gateway-form" [formGroup]="formGroup">
 
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Id"|translate}}</mat-label>
                                 <input matInput test-id="gateway-id-input" formControlName="id" readonly="true">
                                 <mat-hint>{{"GatewayIdHint"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
-                                <input matInput test-id="gateway-name-input" placeholder="Network name"
+                                <input matInput test-id="gateway-name-input" placeholder="{{'NetworkName'|translate}}"
                                     formControlName="name" required>
                                 <mat-error>{{formError.name|translate}}</mat-error>
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Labels"|translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip test-id="gateway-label-chip" *ngFor="let label of gateway.labels||[]"
@@ -52,7 +52,7 @@
                         </p>
 
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Network"|translate}}</mat-label>
                                 <input type="text" test-id="gateway-input-network"
                                     placeholder="{{'SelectANetwork'|translate}}" matInput

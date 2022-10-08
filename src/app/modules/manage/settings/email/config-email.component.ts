@@ -58,7 +58,7 @@ export class ConfigEmailComponent implements OnInit {
   }
   error = { type: '' };
   formGroup = this.createFormGroup(this.model);
-  emailTypeFormControl = new FormControl();
+
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -76,6 +76,7 @@ export class ConfigEmailComponent implements OnInit {
     this.helpLink = this.configService.links.emailHelp;
 
   }
+
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
@@ -131,6 +132,11 @@ export class ConfigEmailComponent implements OnInit {
   }
   ngAfterViewInit(): void {
 
+  }
+
+  emailTypeChanged($event: any) {
+
+    this.model.type = $event.option.value;
   }
 
 

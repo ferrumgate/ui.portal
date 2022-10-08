@@ -27,7 +27,7 @@
                 <div>
                     <form test-id="network-form" [formGroup]="formGroup">
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
                                 <input matInput test-id="network-name-input" placeholder="{{'NetworkName'|translate}}"
                                     formControlName="name" required>
@@ -35,7 +35,7 @@
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Labels"|translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip test-id="network-label-chip" *ngFor="let label of network.labels||[]"
@@ -51,8 +51,8 @@
                                 </mat-chip-list>
                             </mat-form-field>
                         </p>
-                        <p fxFill>
-                            <mat-form-field appearance="fill">
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"ClientIpRange"|translate}}</mat-label>
                                 <input matInput test-id="network-clientnetwork-input" placeholder="100.64.0.0/16"
                                     formControlName="clientNetwork" required>
@@ -61,8 +61,8 @@
                                 <mat-error>{{formError.clientNetwork|translate}}</mat-error>
                             </mat-form-field>
                         </p>
-                        <p fxFill>
-                            <mat-form-field appearance="fill">
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
                                 <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
                                     formControlName="serviceNetwork" required>

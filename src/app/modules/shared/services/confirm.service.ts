@@ -28,12 +28,13 @@ export class ConfirmService {
 
     }
 
-    show(title: string, message: string, width = "400px") {
+    show(title: string, message: string, width = "300px") {
 
         const dialogData = new ConfirmDialogModel(title, message);
 
         const dialogRef = this.dialog.open(ConfirmComponent, {
-            maxWidth: width,
+
+            width: width,
             data: dialogData,
             panelClass: 'confirm-background',
 

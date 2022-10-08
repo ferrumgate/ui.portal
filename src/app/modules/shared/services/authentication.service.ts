@@ -26,7 +26,7 @@ export class AuthenticationService extends BaseService {
   //after authentication all session related items saved to session storage
   static StorageSessionKey = 'ferrumgate_session';
   // we need to store tunnel session key for later usage
-  static StorateTunnelSessionKey = 'ferrumgate_tunnel_session_key';
+  static StorageTunnelSessionKey = 'ferrumgate_tunnel_session_key';
   private _authLocal = this.configService.getApiUrl() + '/auth/local';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
@@ -123,7 +123,7 @@ export class AuthenticationService extends BaseService {
           refreshToken: resp.refreshToken
         }
         this.saveSession();
-        sessionStorage.removeItem(AuthenticationService.StorateTunnelSessionKey);
+        sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
         return this._currentSession;
       }))
   }
@@ -288,7 +288,7 @@ export class AuthenticationService extends BaseService {
    * @returns 
    */
   getTunnelSessionKey() {
-    const val = sessionStorage.getItem(AuthenticationService.StorateTunnelSessionKey);
+    const val = sessionStorage.getItem(AuthenticationService.StorageTunnelSessionKey);
     return val;
 
   }
@@ -299,8 +299,8 @@ export class AuthenticationService extends BaseService {
    */
   setTunnelSessionKey(val: string) {
     if (val)
-      sessionStorage.setItem(AuthenticationService.StorateTunnelSessionKey, val);
-    else sessionStorage.removeItem(AuthenticationService.StorateTunnelSessionKey);
+      sessionStorage.setItem(AuthenticationService.StorageTunnelSessionKey, val);
+    else sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
 
   }
 

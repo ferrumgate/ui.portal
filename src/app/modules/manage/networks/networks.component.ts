@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
@@ -31,13 +31,14 @@ export class NetworksComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   gateways: Gateway[] = [];
   gatewaysNotJoined: Gateway[] = [];
+
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
     private gatewayService: GatewayService,
     private networkService: NetworkService,
-    private confirmService: ConfirmService
-
+    private confirmService: ConfirmService,
+    private ref: ApplicationRef
   ) {
 
     //search input with wait
@@ -49,6 +50,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
         this.search(newMessage);
       });
   }
+
 
   ngOnInit(): void {
 
@@ -130,10 +132,12 @@ export class NetworksComponent implements OnInit, OnDestroy {
 
     })
 
+
   }
   prepareNotJoinedGateways() {
 
     this.gatewaysNotJoined = this.gateways.filter(x => !x.networkId);
+    return this.gatewaysNotJoined;
   }
 
 
@@ -220,9 +224,13 @@ export class NetworksComponent implements OnInit, OnDestroy {
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
       this.networks[index].isGatewayOpened = current.isGatewayOpened;
-      this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
+      this.gatewaysNotJoined[0].name = new Date().toISOString();
+      this.networks = [].concat(this.networks as any);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
     });
   }
+
   deleteNetwork($event: Network) {
 
     if (!$event.id) {//network we created temporarily
@@ -241,6 +249,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
         //delete from network list
         const index = this.networks.findIndex(x => x.objId == $event.objId);
         this.networks.splice(index, 1);
+
         //delete from gateway list
         this.gateways.
           filter(y => y.networkId == $event.id)
@@ -249,6 +258,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
             y.networkId = ''
           });
         this.prepareNotJoinedGateways();
+        this.networks = [].concat(this.networks as any);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
     }
@@ -266,7 +276,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
       this.prepareGateway(this.gateways[index]);
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
-
+      this.gateways = [].concat(this.gateways as any);
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })
   }
@@ -283,6 +293,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
         this.gateways.splice(index, 1);
         this.prepareNotJoinedGateways();
         this.prepareNetworks();
+        this.gateways = [].concat(this.gateways as any);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
   }

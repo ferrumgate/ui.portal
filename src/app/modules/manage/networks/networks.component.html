@@ -18,7 +18,6 @@
             <mat-divider></mat-divider>
         </div>
     </div>
-
     <div class="networks networks-content">
         <mat-accordion test-id="networks-gatewaynotjoined-accordion" *ngIf="gatewaysNotJoined.length">
             <mat-expansion-panel [expanded]="gatewaysNotJoinedpanelOpenState">
@@ -56,7 +55,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="gateway-item" fxFlex fxLayout="row wrap">
-                                <app-gateway test-id="networks-app-network-app-gateway" [networks]=" networks"
+                                <app-gateway test-id="networks-app-network-app-gateway" [networks]="networks"
                                     [gateway]="gate" *ngFor="let gate of filterGateways(net)"
                                     (saveGateway)=" saveGateway($event)" (deleteGateway)="deleteGateway($event)">
                                 </app-gateway>

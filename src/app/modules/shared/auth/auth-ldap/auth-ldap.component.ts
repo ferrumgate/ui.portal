@@ -237,6 +237,8 @@ export class AuthLdapComponent implements OnInit {
 
     if (original.allowedGroups?.length || 0 != model.allowedGroups?.length || 0)
       model.isChanged = true;
+    if (original.isEnabled != model.isEnabled)
+      model.isChanged = true;
 
     for (const item of original.allowedGroups || []) {
       if (model.allowedGroups && !model.allowedGroups?.find(x => x == item))

@@ -122,7 +122,9 @@ export class AuthenticationService extends BaseService {
           currentUser: resp.user,
           refreshToken: resp.refreshToken
         }
-        this.saveSession();
+
+
+        //this.saveSession();
         sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
         return this._currentSession;
       }))
@@ -131,13 +133,11 @@ export class AuthenticationService extends BaseService {
   getRefreshToken() {
     return this.httpService.post(this._getRefreshToken, { refreshToken: this.currentSession?.refreshToken }, this.jsonHeader)
       .pipe(map((resp: any) => {
-
-        this._currentSession = {
-          accessToken: resp.accessToken,
-          currentUser: resp.user,
-          refreshToken: resp.refreshToken
+        if (this._currentSession) {
+          this._currentSession.accessToken = resp.accessToken,
+            this._currentSession.refreshToken = resp.refreshToken
         }
-        this.saveSession();
+        //this.saveSession();
         this.lastExecutionRefreshToken = new Date();
         return this._currentSession;
       }))
@@ -198,6 +198,7 @@ export class AuthenticationService extends BaseService {
     return this.httpService.get<User>(this._userCurrent).pipe(map(user => {
       if (this.currentSession)
         this.currentSession.currentUser = user;
+      this.saveSession();
       return user;
     }))
   }

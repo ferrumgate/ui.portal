@@ -25,7 +25,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         const authenticationService = this.injector.get(AuthenticationService);
         const translationService = this.injector.get(TranslationService);
         const loading = this.injector.get(LoadingService);
-        loading.show();
+        const excludeLoadingUrls = ['/auth/refreshtoken', '/user/current'];
+        const isExclude = excludeLoadingUrls.find(x => request.url.includes(x))
+        if (!isExclude)
+            loading.show();
         return next.handle(request).pipe(
             map((event: any) => {
                 //console.log('httperror interceptor is working');
@@ -55,7 +58,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                         } else {
                             // auto logout if 401 response returned from api
 
-                            notificationService.error(translationService.translate('ErrNotAuthorized'));
+                            notificationService.error(translationService.translate('ErrNotAuthenticated'));
                             if (window.location.href.indexOf('/login') === -1 && window.location.href.indexOf('/user/confirm2fa') == -1) { // reload if not login page
 
 
@@ -69,7 +72,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     }
                 return throwError(resp);
             }),
-            finalize(() => loading.hide())
+            finalize(() => {
+                if (!isExclude)
+                    loading.hide();
+
+            })
         );
     }
 }

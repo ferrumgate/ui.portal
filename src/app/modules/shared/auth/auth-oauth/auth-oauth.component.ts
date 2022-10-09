@@ -168,6 +168,8 @@ export class AuthOauthComponent implements OnInit {
       model.isChanged = true;
     if (original.clientSecret != model.clientSecret)
       model.isChanged = true;
+    if (original.isEnabled != model.isEnabled)
+      model.isChanged = true;
 
   }
 

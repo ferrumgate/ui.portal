@@ -44,6 +44,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -74,7 +75,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     }),
 
     LayoutModule,
-    SharedModule
+    SharedModule,
+    NgIdleKeepaliveModule.forRoot(),
 
   ],
   providers: [

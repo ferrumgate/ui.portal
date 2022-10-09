@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http'
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
+import { Keepalive } from '@ng-idle/keepalive';
 
 import { catchError, from, map, mergeMap, Observable, of, Subscriber, switchMap, take, throwError, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -41,13 +43,14 @@ export class AuthenticationService extends BaseService {
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
-
+  private lastPing = new Date();
 
   constructor(
     private router: Router,
     private configService: ConfigService,
     private httpService: HttpClient,
-    private captchaService: CaptchaService) {
+    private captchaService: CaptchaService,
+    private idle: Idle, private keepalive: Keepalive) {
     super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
     const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
@@ -60,12 +63,42 @@ export class AuthenticationService extends BaseService {
           switchMap(x => {
             return this.getUserCurrent();
           }),
+          map(x => { this.startIdleWatching(); return x; }),
           catchError(err => {
             this.logout();
             return '';
-          })).subscribe();
-    })
+          })
+        ).subscribe();
+    });
+    this.initIdleWatching();
+
   }
+
+
+  initIdleWatching() {
+    //idle timeout of 10 minutes
+    this.idle.setIdle(10 * 60);
+    //a timeout period of 5 minutes. after 10 minutes of inactivity, the user will be considered timed out.
+    this.idle.setTimeout(5 * 60);
+    //the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+
+    this.idle.onTimeout.subscribe(() => {
+      if (this.currentSession) {
+        this.logout();
+        console.log('session expired');
+      }
+    });
+
+    //the ping interval to 15 seconds
+    this.keepalive.interval(15);
+
+    this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
+
+  }
+
+
   getSavedSession() {
     const session = sessionStorage.getItem(AuthenticationService.StorageSessionKey)
     if (!session) return null;
@@ -110,6 +143,11 @@ export class AuthenticationService extends BaseService {
       this.logout();
     }
 
+  }
+  startIdleWatching() {
+    if (this.currentSession && !this.idle.isRunning()) {
+      this.idle.watch();
+    }
   }
 
   getAccessToken(key: string) {
@@ -162,6 +200,7 @@ export class AuthenticationService extends BaseService {
   logout() {
     sessionStorage.clear();
     this._currentSession = null;
+    this.idle.stop();
     this.router.navigate(['/login']);
   }
   confirmUserEmail(key: string) {
@@ -228,7 +267,9 @@ export class AuthenticationService extends BaseService {
               }),
               switchMap(x => {
                 return this.postLogin();
-              }))
+              })
+
+            )
         }
 
       }), catchError(err => {
@@ -249,7 +290,7 @@ export class AuthenticationService extends BaseService {
     const isAdmin = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
     const isReporter = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
     const isUser = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
-
+    this.startIdleWatching();
     if ((isAdmin || isReporter)) {
       if (isAdmin && !this.configService.isAllReadyConfigured)
         return from(this.router.navigate(['/configure']));

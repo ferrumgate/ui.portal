@@ -31,7 +31,10 @@ export class ConfigAuthComponent implements OnInit {
   }
   model: AuthSettings = {
     common: {},
-    local: { id: '', type: 'local', baseType: 'local', name: 'local', tags: [] }
+    local: {
+      id: '', type: 'local', baseType: 'local',
+      name: 'local', tags: [], isEnabled: true
+    }
   }
 
 
@@ -199,7 +202,7 @@ export class ConfigAuthComponent implements OnInit {
       name: 'Active Directory/Ldap', tags: [],
       id: '', host: '', groupnameField: 'memberOf', usernameField: 'sAMAccountName',
       searchBase: 'CN=Users,DC=ferrum,DC=local', allowedGroups: [], bindDN: 'CN=yourAdminAccount,CN=Users,DC=ferrum,DC=local', bindPass: '',
-      searchFilter: '', securityProfile: {}
+      searchFilter: '', securityProfile: {}, isEnabled: true,
     }
     if (!this.model.ldap)
       this.model.ldap = { providers: [] };
@@ -217,7 +220,7 @@ export class ConfigAuthComponent implements OnInit {
     const oauth: BaseOAuth = {
       baseType: 'oauth', type: 'google', objId: UtilService.randomNumberString(),
       name: 'Google/OAuth2', tags: [],
-      id: '', clientId: '', clientSecret: ''
+      id: '', clientId: '', clientSecret: '', isEnabled: true
     }
     if (!this.model.oauth)
       this.model.oauth = { providers: [] };
@@ -233,7 +236,7 @@ export class ConfigAuthComponent implements OnInit {
     }
     const oauth: BaseOAuth = {
       baseType: 'oauth', type: 'linkedin', objId: UtilService.randomNumberString(), name: 'Linkedin/OAuth2', tags: [],
-      id: '', clientId: '', clientSecret: ''
+      id: '', clientId: '', clientSecret: '', isEnabled: true,
     }
     if (!this.model.oauth)
       this.model.oauth = { providers: [] };

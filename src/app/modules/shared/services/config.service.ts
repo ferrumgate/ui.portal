@@ -270,7 +270,8 @@ export class ConfigService extends BaseService {
       type: local.type,
       isForgotPassword: local.isForgotPassword,
       isRegister: local.isRegister,
-      tags: local.tags
+      tags: local.tags,
+      isEnabled: local.isEnabled
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -301,7 +302,8 @@ export class ConfigService extends BaseService {
       type: oauth.type,
       tags: oauth.tags,
       clientId: oauth.clientId,
-      clientSecret: oauth.clientSecret
+      clientSecret: oauth.clientSecret,
+      isEnabled: oauth.isEnabled
     }
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -348,7 +350,8 @@ export class ConfigService extends BaseService {
       bindDN: auth.bindDN,
       bindPass: auth.bindPass,
       searchFilter: auth.searchFilter,
-      securityProfile: auth.securityProfile
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled
 
     }
     return this.preExecute(parameter).pipe(

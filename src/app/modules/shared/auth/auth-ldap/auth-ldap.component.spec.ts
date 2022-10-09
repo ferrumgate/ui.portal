@@ -47,7 +47,9 @@ describe('AuthLdapComponent', () => {
       id: '', baseType: 'ldap', type: 'activedirectory',
       name: 'Active Directory', host: 'ldaphost', bindDN: 'myadmin',
       bindPass: 'mypass', groupnameField: 'memberOf', searchBase: 'cn=users',
-      usernameField: 'usernamefield', allowedGroups: ['testgroup']
+      usernameField: 'usernamefield', allowedGroups: ['testgroup'],
+      isEnabled: true
+
     }
     component.model = model;
     tick(100);

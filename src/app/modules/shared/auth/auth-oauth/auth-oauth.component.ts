@@ -75,11 +75,12 @@ export class AuthOauthComponent implements OnInit {
     this._model = {
       clientId: '', clientSecret: '',
       baseType: 'oauth', type: 'google', id: '', name: 'OAuth',
-      isChanged: false,
+      isChanged: false, isEnabled: true,
       orig:
       {
         clientId: '', clientSecret: '',
         baseType: 'oauth', type: 'google', id: '', name: 'OAuth',
+        isEnabled: true
 
       }
     };
@@ -190,7 +191,8 @@ export class AuthOauthComponent implements OnInit {
       clientId: this.model.clientId,
       clientSecret: this.model.clientSecret,
       name: this.model.name,
-      tags: this.model.tags
+      tags: this.model.tags,
+      isEnabled: this.model.isEnabled
     }
   }
   saveOrUpdate() {

@@ -46,7 +46,7 @@ describe('AuthOauthComponent', () => {
     expect(component).toBeTruthy();
     const model: BaseOAuth = {
       id: '', baseType: 'oauth', type: 'google', name: 'Google', clientId: 'someid',
-      clientSecret: 'somesecret'
+      clientSecret: 'somesecret', isEnabled: true
     }
     component.model = model;
     tick(100);

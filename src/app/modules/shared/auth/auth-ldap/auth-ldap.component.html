@@ -99,6 +99,11 @@
                                 <mat-hint>{{"LdapAlloweGroupsHint"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
+                        <p>
+                            <mat-checkbox test-id="auth-ldap-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
                     </form>
                 </div>
 

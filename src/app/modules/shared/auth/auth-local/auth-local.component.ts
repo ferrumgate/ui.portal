@@ -22,9 +22,11 @@ export class AuthLocalComponent implements OnInit {
   _model: AuthLocalExtended = {
     id: '', baseType: 'local', isChanged: false, name: 'Local',
     type: 'local', isForgotPassword: false, isRegister: false, tags: [],
+    isEnabled: true,
     orig: {
       id: '', baseType: 'local', name: '',
-      type: 'local', isForgotPassword: false, isRegister: false, tags: []
+      type: 'local', isForgotPassword: false, isRegister: false, tags: [],
+      isEnabled: true
     }
   };
 
@@ -108,6 +110,8 @@ export class AuthLocalComponent implements OnInit {
     if (original.isForgotPassword != model.isForgotPassword)
       model.isChanged = true;
     if (original.isRegister != model.isRegister)
+      model.isChanged = true;
+    if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
 
 

@@ -27,7 +27,11 @@
                         <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isRegister"
                             [checked]="model.isRegister" (ngModelChange)="modelChanged()">
                             {{"IsRegisterEnabled"|translate}}</mat-checkbox>
-
+                    </p>
+                    <p>
+                        <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                            (ngModelChange)="modelChanged()">
+                            {{"Enabled"|translate}}</mat-checkbox>
                     </p>
 
 
@@ -53,6 +57,7 @@
                     </mat-toolbar>
 
                 </div>
+
             </div>
         </mat-card-content>
     </mat-card>

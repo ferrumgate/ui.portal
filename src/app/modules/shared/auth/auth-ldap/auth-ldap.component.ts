@@ -85,12 +85,13 @@ export class AuthLdapComponent implements OnInit {
       baseType: 'ldap', type: 'activedirectory', id: '', name: 'Active Directory',
       host: '', groupnameField: '', searchBase: '', usernameField: '', bindDN: '', bindPass: '',
       searchFilter: '',
-
+      isEnabled: true,
       isChanged: false,
       orig: {
         baseType: 'ldap', type: 'activedirectory', id: '', name: 'Active Directory',
         host: '', groupnameField: '', searchBase: '', usernameField: '', bindDN: '', bindPass: '',
-        searchFilter: ''
+        searchFilter: '',
+        isEnabled: true
       }
 
     };
@@ -274,7 +275,8 @@ export class AuthLdapComponent implements OnInit {
       usernameField: this.model.usernameField,
       bindDN: this.model.bindDN,
       bindPass: this.model.bindPass,
-      allowedGroups: this.model.allowedGroups
+      allowedGroups: this.model.allowedGroups,
+      isEnabled: this.model.isEnabled
 
     }
   }

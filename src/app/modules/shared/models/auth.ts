@@ -8,6 +8,7 @@ export interface BaseAuth {
     type: 'local' | 'google' | 'linkedin' | 'activedirectory';
     tags?: string[];
     securityProfile?: SecurityProfile;
+    isEnabled: boolean;
 }
 
 

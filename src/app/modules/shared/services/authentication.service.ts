@@ -29,7 +29,7 @@ export class AuthenticationService extends BaseService {
   static StorageSessionKey = 'ferrumgate_session';
   // we need to store tunnel session key for later usage
   static StorageTunnelSessionKey = 'ferrumgate_tunnel_session_key';
-  private _authLocal = this.configService.getApiUrl() + '/auth/local';
+  private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
@@ -40,6 +40,8 @@ export class AuthenticationService extends BaseService {
   private _userCurrent = this.configService.getApiUrl() + '/user/current';
   private _authGoogle = this.configService.getApiUrl() + '/auth/google'
   private _authGoogleCallback = this.configService.getApiUrl() + '/auth/google/callback'
+  private _authLinkedin = this.configService.getApiUrl() + '/auth/linkedin'
+  private _authLinkedinCallback = this.configService.getApiUrl() + '/auth/linkedin/callback'
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -184,7 +186,7 @@ export class AuthenticationService extends BaseService {
   loginLocal(username: string, password: string) {
     let data = { username: username, password: password };
     return this.preExecute(data).pipe(
-      switchMap(y => this.login(this.httpService.post<Session>(this._authLocal, y, this.jsonHeader))
+      switchMap(y => this.login(this.httpService.post<Session>(this._auth, y, this.jsonHeader))
       ))
 
   }
@@ -244,6 +246,9 @@ export class AuthenticationService extends BaseService {
 
   get googleAuthenticateUrl() {
     return this._authGoogle;
+  }
+  get linkedinAuthenticateUrl() {
+    return this._authLinkedin;
   }
 
   /**
@@ -312,6 +317,9 @@ export class AuthenticationService extends BaseService {
         let url = '';
         if (callback.url.includes('google')) {
           url = this._authGoogleCallback;
+        }
+        if (callback.url.includes('linkedin')) {
+          url = this._authLinkedinCallback;
         }
         if (y.captcha)
           callback.params.captcha = y.captcha;

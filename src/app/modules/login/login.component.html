@@ -22,8 +22,8 @@
                 <form test-id="login-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>
                         <mat-form-field class="login-form-field">
-                            <input type="text" test-id="login-email-input" matInput placeholder="{{'Email'|translate}}"
-                                formControlName="email">
+                            <input type="text" test-id="login-email-input" matInput
+                                placeholder="{{'EmailOrUsername'|translate}}" formControlName="email">
                             <mat-error test-id="login-email-error" class="login-error"> {{ error.email |translate
                                 }}
                             </mat-error>
@@ -96,10 +96,12 @@
                         </button>
                     </div>
                     <div *ngIf="isLinkedInEnabled" class="social">
-                        <button mat-icon-button aria-label="linkedin authentication" matTooltip="Sign in with Linkedin"
-                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                        <a href="{{linkedinAuthenticateUrl}}" mat-icon-button aria-label="linkedin authentication"
+                            matTooltip="Sign in with Linkedin" matTooltipShowDelay="100" matTooltipHideDelay="200">
+
                             <mat-icon svgIcon="social-linkedin"></mat-icon>
-                        </button>
+                        </a>
+
                     </div>
                     <div *ngIf="isMicrosoftEnabled" class="social">
                         <button mat-icon-button aria-label="microsoft authenticaton" matTooltip="Sign in with Microsoft"

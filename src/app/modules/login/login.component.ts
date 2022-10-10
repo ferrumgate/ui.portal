@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   createFormGroup(model: Login) {
     const fmg = new FormGroup(
       {
-        email: new FormControl('', [Validators.required, InputService.emailValidator]),
+        email: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required])
       }
     );
@@ -137,9 +137,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (emailError) {
 
       if (emailError['required'])
-        this.error.email = 'EmailRequired';
+        this.error.email = 'EmailOrUsernameRequired';
       else
-        this.error.email = 'EmailInvalid';
+        this.error.email = 'EmailOrUsernameInvalid';
 
 
     }
@@ -165,6 +165,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   get googleAuthenticateUrl() {
     return this.authService.googleAuthenticateUrl;
+  }
+  get linkedinAuthenticateUrl() {
+    return this.authService.linkedinAuthenticateUrl;
   }
 
   get isForgotPasswordEnabled() {

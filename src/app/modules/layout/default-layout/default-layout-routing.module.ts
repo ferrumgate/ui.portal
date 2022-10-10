@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from 'src/app/core/guards/authenticationGuard';
 import { RoleGuard } from 'src/app/core/guards/roleGuard';
+import { RBACDefault } from '../../shared/models/rbac';
 import { DefaultLayoutComponent } from './default-layout.component';
 
 
@@ -15,7 +16,7 @@ const routes: Routes = [
         path: 'dashboard',
         canActivate: [RoleGuard],
         data: {
-          expectedRole: ['Admin', 'Reporter', 'User']
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id]
         },
         loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
 

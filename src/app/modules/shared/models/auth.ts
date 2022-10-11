@@ -33,7 +33,12 @@ export interface BaseLdap extends BaseAuth {
     allowedGroups?: string[];
 }
 export interface BaseSaml extends BaseAuth {
-
+    issuer: string;
+    cert: string;
+    fingerPrint?: string;
+    loginUrl: string;
+    nameField: string;
+    usernameField: string;
 }
 export interface BaseLocal extends BaseAuth {
     isForgotPassword?: boolean;

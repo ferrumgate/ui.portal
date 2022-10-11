@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, JsonpInterceptor } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, JsonpInterceptor } from '@angular/common/http';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -38,10 +38,13 @@ export class AuthenticationService extends BaseService {
   private _userForgotPass = this.configService.getApiUrl() + '/user/forgotpass'
   private _userResetPass = this.configService.getApiUrl() + '/user/resetpass'
   private _userCurrent = this.configService.getApiUrl() + '/user/current';
-  private _authGoogle = this.configService.getApiUrl() + '/auth/google'
-  private _authGoogleCallback = this.configService.getApiUrl() + '/auth/google/callback'
-  private _authLinkedin = this.configService.getApiUrl() + '/auth/linkedin'
-  private _authLinkedinCallback = this.configService.getApiUrl() + '/auth/linkedin/callback'
+  private _authOAuthGoogle = this.configService.getApiUrl() + '/auth/oauth/google'
+  private _authOAuthGoogleCallback = this.configService.getApiUrl() + '/auth/oauth/google/callback'
+  private _authOAuthLinkedin = this.configService.getApiUrl() + '/auth/oauth/linkedin'
+  private _authOAuthLinkedinCallback = this.configService.getApiUrl() + '/auth/oauth/linkedin/callback'
+  private _authSamlAuth0 = this.configService.getApiUrl() + '/auth/saml/auth0'
+  //private _authSamlAuth0Callback = this.configService.getApiUrl() + '/auth/saml/auth0/callback'
+
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
@@ -245,10 +248,14 @@ export class AuthenticationService extends BaseService {
   }
 
   get googleAuthenticateUrl() {
-    return this._authGoogle;
+    return this._authOAuthGoogle;
   }
   get linkedinAuthenticateUrl() {
-    return this._authLinkedin;
+    return this._authOAuthLinkedin;
+  }
+
+  get auth0AuthenticateUrl() {
+    return this._authSamlAuth0;
   }
 
   /**
@@ -314,18 +321,27 @@ export class AuthenticationService extends BaseService {
   loginCallback(callback: { url: string; params: any; }) {
     return this.preExecute({} as any).pipe(
       switchMap(y => {
+        let isSaml = false;
         let url = '';
-        if (callback.url.includes('google')) {
-          url = this._authGoogleCallback;
+        if (callback.url.includes('google') && callback.url.includes('oauth')) {
+          url = this._authOAuthGoogleCallback;
         }
-        if (callback.url.includes('linkedin')) {
-          url = this._authLinkedinCallback;
+        if (callback.url.includes('linkedin') && callback.url.includes('oauth')) {
+          url = this._authOAuthLinkedinCallback;
+        }
+        if (callback.url.includes('auth0') && callback.url.includes('saml')) {
+          //url = this._authSamlAuth0Callback;
+          isSaml = true;
         }
         if (y.captcha)
           callback.params.captcha = y.captcha;
         if (y.action)
           callback.params.action = y.action;
-        return this.login(this.httpService.get(url, { params: callback.params }));
+        if (!isSaml)
+          return this.login(this.httpService.get(url, { params: callback.params }));
+        else {
+          return this.login(of({ key: callback.params.key, is2FA: callback.params.is2FA == 'true' ? true : false }))
+        }
       })
     )
 

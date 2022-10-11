@@ -170,6 +170,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     return this.authService.linkedinAuthenticateUrl;
   }
 
+  get auth0AuthenticateUrl() {
+    return this.authService.auth0AuthenticateUrl;
+  }
+
   get isForgotPasswordEnabled() {
 
     return this.configService.isEnabledForgotPassword;
@@ -190,6 +194,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
   get isMicrosoftEnabled() {
     return false;
+  }
+  get isAuth0Enabled() {
+    return true;
   }
 
   get isOthersEnabled() {

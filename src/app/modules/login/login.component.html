@@ -109,6 +109,13 @@
                             <mat-icon svgIcon="social-microsoft"></mat-icon>
                         </button>
                     </div>
+                    <div *ngIf="isAuth0Enabled" class="social">
+                        <a href="{{auth0AuthenticateUrl}}" mat-icon-button aria-label="auth0 authentication"
+                            matTooltip="Sign in with Auth0" matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="social-auth0"></mat-icon>
+                        </a>
+                    </div>
                 </div>
 
 

@@ -179,6 +179,12 @@ export class AuthenticationService extends BaseService {
         if (this._currentSession) {
           this._currentSession.accessToken = resp.accessToken,
             this._currentSession.refreshToken = resp.refreshToken
+        } else {
+          this._currentSession = {
+            accessToken: resp.accessToken,
+            currentUser: resp.user,
+            refreshToken: resp.refreshToken
+          }
         }
         //this.saveSession();
         this.lastExecutionRefreshToken = new Date();

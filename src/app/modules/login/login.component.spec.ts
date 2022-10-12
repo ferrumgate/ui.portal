@@ -96,7 +96,7 @@ describe('LoginComponent', () => {
     const emailId = 'login-email-input';
     const emailForm = component.form.controls['email'];
 
-    setFieldValue(fixture, emailId, 'someone');
+    setFieldValue(fixture, emailId, '');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
     fixture.detectChanges();
     tick(1000);
@@ -104,7 +104,7 @@ describe('LoginComponent', () => {
 
 
     //email
-    expect(component.model.email).toBe('someone');
+    expect(component.model.email).toBe('');
     expect(emailForm.errors).toBeTruthy();
     expect(component.error.email).toBeTruthy();
     expect(findEl(fixture, 'login-email-error')).toBeTruthy();

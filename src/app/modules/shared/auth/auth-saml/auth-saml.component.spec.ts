@@ -63,12 +63,12 @@ describe('AuthSamlComponent', () => {
     component.model = model;
     tick(100);
     fixture.detectChanges();
-    const testIdLoginUrl = 'auth-oauth-loginurl-input';
-    const testIdIssuer = 'auth-oauth-issuer-input';
-    const testIdCert = 'auth-oauth-cert-input';
-    const testIdUsernameField = 'auth-oauth-usernamefield-input';
-    const testIdNameField = 'auth-oauth-namefield-input';
-    const testIdSaveButton = 'auth-oauth-ok-button';
+    const testIdLoginUrl = 'auth-saml-loginurl-input';
+    const testIdIssuer = 'auth-saml-issuer-input';
+    const testIdCert = 'auth-saml-cert-input';
+    const testIdUsernameField = 'auth-saml-usernamefield-input';
+    const testIdNameField = 'auth-saml-namefield-input';
+    const testIdSaveButton = 'auth-saml-ok-button';
     //check value binding
     expectValue(fixture, testIdLoginUrl, model.loginUrl);
     expectValue(fixture, testIdIssuer, model.issuer);

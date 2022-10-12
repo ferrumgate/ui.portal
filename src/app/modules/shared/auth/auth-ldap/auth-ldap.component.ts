@@ -278,7 +278,10 @@ export class AuthLdapComponent implements OnInit {
       bindDN: this.model.bindDN,
       bindPass: this.model.bindPass,
       allowedGroups: this.model.allowedGroups,
-      isEnabled: this.model.isEnabled
+      isEnabled: this.model.isEnabled,
+      securityProfile: {
+        ...this.model.securityProfile
+      }
 
     }
   }

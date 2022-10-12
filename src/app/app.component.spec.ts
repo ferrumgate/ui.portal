@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 describe('AppComponent', () => {
 
@@ -20,7 +21,8 @@ describe('AppComponent', () => {
     let httpClient: HttpClient;
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, TranslateModule.forRoot(), SharedModule, MaterialModule, MatIconTestingModule, NoopAnimationsModule
+        RouterTestingModule, HttpClientModule, NgIdleKeepaliveModule.forRoot(),
+        TranslateModule.forRoot(), SharedModule, MaterialModule, MatIconTestingModule, NoopAnimationsModule
       ],
       declarations: [
         AppComponent, MatIcon

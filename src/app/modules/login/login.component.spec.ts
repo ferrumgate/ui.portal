@@ -23,6 +23,7 @@ import { LoginModule } from './login.module';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -41,6 +42,7 @@ describe('LoginComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent, MatIcon],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
+        NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         HttpClient,

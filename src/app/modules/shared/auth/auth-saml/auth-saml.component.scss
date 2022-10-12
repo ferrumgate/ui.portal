@@ -1,0 +1,43 @@
+.auth-saml {
+    min-width: 400px;
+}
+
+.auth-saml .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.auth-saml .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.auth-saml .row-pad {
+    margin-left: 15px;
+}
+
+.auth-saml .auth-saml-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+}
+
+.auth-saml .auth-saml-title {
+    padding-left: 10px;
+}
+
+.auth-saml .auth-saml-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+
+.auth-saml .auth-saml-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.auth-saml .auth-saml-cert {
+    min-height: 100px;
+}

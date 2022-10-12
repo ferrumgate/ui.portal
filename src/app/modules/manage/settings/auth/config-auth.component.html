@@ -48,6 +48,13 @@
                 </app-auth-ldap>
 
             </p>
+            <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.saml?.providers||[]">
+
+                <app-auth-saml test-id="config-auth-saml" [model]="provider" (saveSaml)="saveSaml($event)"
+                    (deleteSaml)="deleteSaml($event)">
+                </app-auth-saml>
+
+            </p>
         </div>
     </div>
 </div>

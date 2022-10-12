@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, takeWhile } from 'rxjs';
-import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth } from 'src/app/modules/shared/models/auth';
+import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth, BaseSaml } from 'src/app/modules/shared/models/auth';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -43,10 +43,12 @@ export class ConfigAuthComponent implements OnInit {
       switchMap(y => this.getAuthLocal()),
       switchMap(y => this.getAuthOAuthProvides()),
       switchMap(y => this.getAuthLdapProvides()),
+      switchMap(y => this.getAuthSamlProvides()),
     ).subscribe(x => {
       this.model.oauth?.providers.forEach(x => x.objId = UtilService.randomNumberString());
       this.model.ldap?.providers.forEach(x => x.objId = UtilService.randomNumberString());
       this.model.saml?.providers.forEach(x => x.objId = UtilService.randomNumberString());
+
     });
 
   }
@@ -63,9 +65,13 @@ export class ConfigAuthComponent implements OnInit {
       name: 'Linkedin/OAuth2', type: 'oauth', isVisible: true, svg: 'social-linkedin', icon: undefined,
       click: () => { this.addLinkedinOAuth() }
     },
-    {
+    /* {
       name: 'Google Workspace/SAML', type: 'saml', isVisible: true, svg: 'social-google', icon: undefined,
       click: () => { this.addGoogleWorkspace() }
+    }, */
+    {
+      name: 'Auth0/SAML', type: 'saml', isVisible: true, svg: 'social-auth0', icon: undefined,
+      click: () => { this.addAuth0Saml() }
     },
   ]
 
@@ -94,6 +100,16 @@ export class ConfigAuthComponent implements OnInit {
     return this.configService.getAuthLdapProviders().pipe(
       map(x => {
         this.model.ldap = {
+          providers: x.items
+        }
+      })
+    )
+  }
+
+  getAuthSamlProvides() {
+    return this.configService.getAuthSamlProviders().pipe(
+      map(x => {
+        this.model.saml = {
           providers: x.items
         }
       })
@@ -188,6 +204,44 @@ export class ConfigAuthComponent implements OnInit {
     }
   }
 
+  saveSaml($event: BaseSaml) {
+    this.confirmService.showSave().pipe(
+      takeWhile(x => x),
+      switchMap(x =>
+        this.configService.saveAuthSamlProvider($event))
+    ).subscribe(x => {
+      if (!this.model.saml)
+        this.model.saml = { providers: [] };
+      //set a follow id
+      x.objId = UtilService.randomNumberString();
+      const index = this.model.saml.providers.findIndex(x => x.id == $event.id);
+      if (Number(index) >= 0)
+        this.model.saml.providers[Number(index)] = { ...x };
+      else
+        this.model.saml.providers.push(x);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+    })
+  }
+  deleteSaml($event: BaseSaml) {
+    if (!$event.id) {//not saved before
+      const index = this.model.saml?.providers.findIndex(x => x.objId == $event.objId)
+      if (Number(index) >= 0)
+        this.model.saml?.providers.splice(Number(index), 1);
+    } else {
+      this.confirmService.showDelete().pipe(
+        takeWhile(x => x),
+        switchMap(x => this.configService.deleteAuthSamlProvider($event))
+      ).subscribe(x => {
+        const index = this.model.saml?.providers.findIndex(x => x.objId == $event.objId)
+        if (Number(index) >= 0)
+          this.model.saml?.providers.splice(Number(index), 1);
+        this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
+      })
+    }
+  }
+
+
+
 
 
 
@@ -246,6 +300,25 @@ export class ConfigAuthComponent implements OnInit {
   addGoogleWorkspace() {
 
   }
+  addAuth0Saml() {
+    const auth = this.model.saml?.providers.find(x => x.baseType == 'saml' && x.type == 'auth0');
+    if (auth) {
+      this.notificationService.error(`Auth0/SAML  ${this.translateService.translate('AllreadyExists')}`);
+      return;
+    }
+    const saml: BaseSaml = {
+      baseType: 'saml', type: 'auth0', objId: UtilService.randomNumberString(), name: 'Auth0/SAML', tags: [],
+      id: '', isEnabled: true,
+      loginUrl: '', usernameField: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress', nameField: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
+      cert: '', issuer: ''
+
+    }
+    if (!this.model.saml)
+      this.model.saml = { providers: [] };
+    this.model.saml.providers.push(saml);
+  }
+
+
 
 
 }

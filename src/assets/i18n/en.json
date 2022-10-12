@@ -173,5 +173,18 @@
     "BindPassRequired": "Bind password required",
     "UserSearchBasePathRequired": "User search path required",
     "UsernameFieldRequired": "Username field name required",
-    "GroupnameFieldRequired": "Groupname field name required"
+    "GroupnameFieldRequired": "Groupname field name required",
+    "IssuerRequired": "Issuer required",
+    "CertRequired": "Cert required",
+    "LoginUrlRequired": "Login url required",
+    "NameFieldRequired": "Name field required",
+    "LoginUrlHint": "Login url for authentication",
+    "Issuer": "Issuer",
+    "IssuerHint": "Issuer definition",
+    "Cert": "Certificate",
+    "Certificate": "Certificate for authentication",
+    "UsernameField": "Username field",
+    "UsernameFieldHint": "Username property name on object",
+    "NameField": "Name field",
+    "NameFieldHint": "Name property name on object"
 }

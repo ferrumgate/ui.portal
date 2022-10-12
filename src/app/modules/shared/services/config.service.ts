@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth } from '../models/auth';
+import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
 import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
@@ -25,7 +25,10 @@ export class ConfigService extends BaseService {
     this.dynamicConfig = {
       captchaSiteKey: '', isConfigured: false,
       login: {
-        local: { isForgotPassword: false, isRegister: false }, google: undefined, linkedin: undefined
+        local: { isForgotPassword: false, isRegister: false },
+        oAuthGoogle: undefined,
+        oAuthLinkedin: undefined,
+        samlAuth0: undefined
       }
     };
   }
@@ -115,8 +118,9 @@ export class ConfigService extends BaseService {
         isForgotPassword: boolean,
         isRegister: boolean,
       },
-      google: object | undefined,
-      linkedin: object | undefined
+      oAuthGoogle: object | undefined,
+      oAuthLinkedin: object | undefined,
+      samlAuth0: object | undefined
     }
   };
 
@@ -149,11 +153,14 @@ export class ConfigService extends BaseService {
 
   }
 
-  get isLoginEnabledGoogle() {
-    return this.dynamicConfig.login.google;
+  get isLoginEnabledOAuthGoogle() {
+    return this.dynamicConfig.login.oAuthGoogle;
   }
-  get isLoginEnabledLinkedin() {
-    return this.dynamicConfig.login.linkedin
+  get isLoginEnabledOAuthLinkedin() {
+    return this.dynamicConfig.login.oAuthLinkedin
+  }
+  get isLoginEnabledSamlAuth0() {
+    return this.dynamicConfig.login.oAuthLinkedin
   }
 
   get isAllReadyConfigured() {
@@ -372,7 +379,52 @@ export class ConfigService extends BaseService {
       }))
   }
 
+  ///////////// saml
 
+  getAuthSamlProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', x);
+        return this.http.get<{ items: BaseSaml[] }>(url);
+      }))
+  }
+
+
+  saveAuthSamlProvider(auth: BaseSaml) {
+    const parameter: BaseSaml = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled,
+      cert: auth.cert,
+      issuer: auth.issuer,
+      loginUrl: auth.loginUrl,
+      nameField: auth.nameField,
+      usernameField: auth.usernameField,
+      fingerPrint: auth.fingerPrint
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseSaml>(this.getApiUrl() + `/config/auth/saml/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseSaml>(this.getApiUrl() + `/config/auth/saml/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthSamlProvider(oauth: BaseSaml) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
 
 
 }

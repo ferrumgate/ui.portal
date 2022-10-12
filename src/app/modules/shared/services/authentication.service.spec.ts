@@ -2,6 +2,7 @@ import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 
@@ -21,7 +22,8 @@ describe('AuthenticationService', () => {
   beforeEach(() => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), RecaptchaV3Module],
+      imports: [RouterTestingModule, RouterTestingModule.withRoutes([]),
+        TranslateModule.forRoot(), RecaptchaV3Module, NgIdleKeepaliveModule.forRoot()],
       providers: [
         { provide: HttpClient, useValue: httpClientSpy },
         { provide: Router, useValue: routerSpy },

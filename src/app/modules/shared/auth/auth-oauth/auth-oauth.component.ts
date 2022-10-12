@@ -194,7 +194,11 @@ export class AuthOauthComponent implements OnInit {
       clientSecret: this.model.clientSecret,
       name: this.model.name,
       tags: this.model.tags,
-      isEnabled: this.model.isEnabled
+      isEnabled: this.model.isEnabled,
+      securityProfile: {
+        ...this.model.securityProfile
+      }
+
     }
   }
   saveOrUpdate() {

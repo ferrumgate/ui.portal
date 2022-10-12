@@ -163,14 +163,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
 
-  get googleAuthenticateUrl() {
+  get oAuthGoogleAuthenticateUrl() {
     return this.authService.googleAuthenticateUrl;
   }
-  get linkedinAuthenticateUrl() {
+  get oAuthLinkedinAuthenticateUrl() {
     return this.authService.linkedinAuthenticateUrl;
   }
 
-  get auth0AuthenticateUrl() {
+  get samlAuth0AuthenticateUrl() {
     return this.authService.auth0AuthenticateUrl;
   }
 
@@ -182,11 +182,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
     return this.configService.isEnabledRegister;
   }
 
-  get isGoogleEnabled() {
-    return this.configService.isLoginEnabledGoogle;
+  get isOAuthGoogleEnabled() {
+    return this.configService.isLoginEnabledOAuthGoogle;
   }
-  get isLinkedInEnabled() {
-    return this.configService.isLoginEnabledLinkedin;
+  get isOAuthLinkedInEnabled() {
+    return this.configService.isLoginEnabledOAuthLinkedin;
+  }
+  get isSamlAuth0Enabled() {
+    return this.configService.isLoginEnabledSamlAuth0;
   }
 
   get isGithubEnabled() {
@@ -200,7 +203,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   get isOthersEnabled() {
-    return this.isGoogleEnabled || this.isLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
+    return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
   }
 
 }

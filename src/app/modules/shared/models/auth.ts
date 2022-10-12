@@ -5,7 +5,7 @@ export interface BaseAuth {
     id: string;
     name: string;
     baseType: 'local' | 'oauth' | 'saml' | 'ldap';
-    type: 'local' | 'google' | 'linkedin' | 'activedirectory';
+    type: 'local' | 'google' | 'linkedin' | 'activedirectory' | 'auth0';
     tags?: string[];
     securityProfile?: SecurityProfile;
     isEnabled: boolean;

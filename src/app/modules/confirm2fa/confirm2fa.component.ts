@@ -30,14 +30,9 @@ export class Confirm2FAComponent implements OnInit {
   /// 2FA 
   is2FA = false;
   hideToken = false;
-  form2FA: FormGroup = new FormGroup(
-    {
-
-      token: new FormControl('', [Validators.required])
-    }
-  );
-
   model2fa: Login2FA = {};
+  form2FA: FormGroup = this.createFormGroup(this.model2fa);
+
   error2fa: { token: string };
   //tunnelSessionKey = '';
 
@@ -90,8 +85,28 @@ export class Confirm2FAComponent implements OnInit {
 
 
   ///// 2fa
+  createFormGroup(model: Login2FA) {
+    const fmg = new FormGroup(
+      {
 
-  modelChanged2FA($event: any) {
+        token: new FormControl(model.token, [Validators.required])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model2fa as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged2FA();
+    })
+    return fmg;
+  }
+
+  modelChanged2FA() {
 
     this.checkFormError2FA();
   }
@@ -106,8 +121,6 @@ export class Confirm2FAComponent implements OnInit {
         this.error2fa.token = 'TokenRequired';
       else
         this.error2fa.token = 'TokenInvalid';
-
-
     }
 
 
@@ -116,10 +129,10 @@ export class Confirm2FAComponent implements OnInit {
   submit2FA() {
 
     if (!this.form2FA?.valid || !this.model2fa.token) {
+      //TODO notification message can be all so good
       this.error2fa.token = this.translateService.translate('FormIsInvalid');
       return;
     }
-
 
     this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '').subscribe();
 

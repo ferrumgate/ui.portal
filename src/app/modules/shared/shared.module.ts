@@ -17,6 +17,10 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { NetworkComponent } from './network/network.component';
 import { GatewayComponent } from "./gateway/gateway.component";
 import { ConfirmComponent } from "./confirm/confirm.component";
+import { AuthLdapComponent } from './auth/auth-ldap/auth-ldap.component';
+import { AuthSamlComponent } from './auth/auth-saml/auth-saml.component';
+import { AuthOauthComponent } from './auth/auth-oauth/auth-oauth.component';
+import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
 
 
 
@@ -27,6 +31,7 @@ import { ConfirmComponent } from "./confirm/confirm.component";
     exports: [
         MaterialModule,
         TranslateModule,
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -40,7 +45,11 @@ import { ConfirmComponent } from "./confirm/confirm.component";
         ToolbarComponent,
         NetworkComponent,
         GatewayComponent,
-        ConfirmComponent
+        ConfirmComponent,
+        AuthOauthComponent,
+        AuthLdapComponent,
+        AuthLocalComponent,
+        AuthSamlComponent
 
 
     ],
@@ -73,7 +82,11 @@ import { ConfirmComponent } from "./confirm/confirm.component";
         ToolbarComponent,
         NetworkComponent,
         GatewayComponent,
-        ConfirmComponent
+        ConfirmComponent,
+        AuthLdapComponent,
+        AuthSamlComponent,
+        AuthOauthComponent,
+        AuthLocalComponent
     ],
     providers: [
         {

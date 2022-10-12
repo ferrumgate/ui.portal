@@ -58,7 +58,7 @@ describe('ForgotPassComponent', () => {
   });
   it('forgotpass form email input', fakeAsync(async () => {
     const formvalues = {
-      email: undefined,
+      email: null,
     }
 
     expect(component.form.invalid).toBe(true);

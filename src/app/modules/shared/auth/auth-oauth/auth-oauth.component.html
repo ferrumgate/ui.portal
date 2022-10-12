@@ -1,0 +1,77 @@
+<div class="auth-oauth">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{model.name}}">
+                <mat-icon *ngIf="model.svgIcon" [svgIcon]="model.svgIcon"></mat-icon>
+                <mat-icon *ngIf="!model.svgIcon">local_library</mat-icon>
+            </mat-card-title>
+            <h3>{{model.name}}</h3>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="auth-oauth-form" [formGroup]="formGroup">
+                        <p fxFill class="auth-oauth-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
+                                <mat-label>{{"ClientId"|translate}}</mat-label>
+                                <input matInput test-id="auth-oauth-clientid-input" placeholder="scfAAAAAFKwZu"
+                                    formControlName="clientId" required>
+                                <mat-hint>{{"OAuthClientIdHint"|translate}}
+                                </mat-hint>
+                                <mat-error>{{error.clientId|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-oauth-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
+                                <mat-label>{{"ClientKey"|translate}}</mat-label>
+                                <input matInput test-id="auth-oauth-clientkey-input" placeholder="LeAscfAAAAA"
+                                    formControlName="clientSecret" required>
+                                <mat-hint>{{"OAuthClientKeyHint"|translate}}</mat-hint>
+                                <mat-error>{{error.clientSecret|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="auth-oauth-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="auth-oauth-actions" fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                                (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="auth-oauth-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

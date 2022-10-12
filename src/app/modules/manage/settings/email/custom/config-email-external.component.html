@@ -5,7 +5,7 @@
                 <mat-form-field appearance="fill" fxFill class="config-email-external-width">
                     <mat-label>{{"Email"|translate}}</mat-label>
                     <input matInput test-id="config-email-external-user-input" placeholder="ferrumgate@gmail.com"
-                        formControlName="user" [(ngModel)]="model.user" (ngModelChange)="modelChanged($event)" required>
+                        formControlName="user" required>
                     <mat-hint>{{"EmailEmailHint"|translate}}</mat-hint>
                     <mat-error>{{error.user|translate}}</mat-error>
 
@@ -15,7 +15,7 @@
                 <mat-form-field appearance="fill" fxFill class="config-email-external-width">
                     <mat-label>{{"Password"|translate}}</mat-label>
                     <input matInput test-id="config-email-external-pass-input" placeholder="PaSSwoRd"
-                        formControlName="pass" [(ngModel)]="model.pass" (ngModelChange)="modelChanged($event)" required>
+                        formControlName="pass" required>
                     <mat-hint>{{"EmailPassHint"|translate}}</mat-hint>
                     <mat-error>{{error.pass|translate}}</mat-error>
 

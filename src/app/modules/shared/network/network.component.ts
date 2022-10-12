@@ -4,17 +4,17 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../../shared/services/input.service';
+import { ConfigService } from '../services/config.service';
+import { UtilService } from '../services/util.service';
 
 
 
 
-export interface NetworkExtended {
+export interface NetworkExtended extends Network {
   orig: Network;
-  formGroup: FormGroup;
-  formError: { name: string, clientNetwork: string, serviceNetwork: string };
   isChanged: boolean;
   isGatewayOpened: boolean;
-  gatewaysCount: number;
+
 
 }
 
@@ -25,52 +25,88 @@ export interface NetworkExtended {
 })
 
 export class NetworkComponent implements OnInit {
-  @Input()
-  network: Network =
-    {
-      id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: ''
-    };
+  helpLink = '';
+  _network: Network = {
+    id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: ''
+  };
+  get network() { return this._network; }
 
+  @Input()
+  set network(val: Network) {
+    this._network = {
+      ...val,
+      orig: val,
+      isChanged: false,
+      isGatewayOpened: false
+    }
+    this._network.labels = Array.from(val.labels);
+    this.formGroup = this.createFormGroup(this.network);
+  };
+
+  formError = { name: '', clientNetwork: '', serviceNetwork: '' };
+  formGroup = this.createFormGroup(this.network);
+  @Input()
+  gatewaysCount = 0;
   @Output()
   openGateways: EventEmitter<boolean> = new EventEmitter();
   @Output()
   saveNetwork: EventEmitter<Network> = new EventEmitter();
   @Output()
   deleteNetwork: EventEmitter<Network> = new EventEmitter();
-  isGatewayOpened = false;
-  constructor() {
-    this.network = NetworkComponent.prepareModel(this.network);
+
+  constructor(private configService: ConfigService) {
+
+    this.helpLink = this.configService.links.networkHelp;
   }
 
   ngOnInit(): void {
 
   }
 
-
-  static prepareModel(net: Network) {
-    let extended: NetworkExtended = {
-      gatewaysCount: 0,
-      orig: JSON.parse(JSON.stringify(net)),
-      formError: this.createFormError(),
-      formGroup: this.createFormGroup(net),
-      isChanged: false,
-      isGatewayOpened: false
-
+  openHelp() {
+    if (this.helpLink) {
+      window.open(this.helpLink, '_blank');
     }
-    let item = {
-      ...net, ...extended
-    }
-    return item;
   }
 
-  static createFormGroup(net: Network) {
-    return new FormGroup({
+
+  /*   static prepareModel(net: Network) {
+      let extended: NetworkExtended = {
+        gatewaysCount: 0,
+        orig: JSON.parse(JSON.stringify(net)),
+        formError: this.createFormError(),
+        formGroup: this.createFormGroup(net),
+        isChanged: false,
+        isGatewayOpened: false
+  
+      }
+      let item = {
+        ...net, ...extended
+      }
+      return item;
+    }
+   */
+  createFormGroup(net: Network) {
+    const fmg = new FormGroup({
       name: new FormControl(net.name, [Validators.required]),
       clientNetwork: new FormControl(net.clientNetwork, [Validators.required, InputService.ipCidrValidator]),
       serviceNetwork: new FormControl(net.serviceNetwork, [Validators.required, InputService.ipCidrValidator]),
     });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.network as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.networkModelChanged();
+    })
+    return fmg;
   }
-  static createFormError() {
+
+  createFormError() {
     return { name: '', clientNetwork: '', serviceNetwork: '' };
   }
 
@@ -88,20 +124,20 @@ export class NetworkComponent implements OnInit {
 
     // Clear the input value
     event.chipInput!.clear();
-    if (this.network.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
   }
 
   removeLabel(label: string): void {
     this.network.labels = this.network.labels.filter(x => x != label);
-    if (this.network.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
 
   }
 
-  networkModelChanged($event: any) {
+  networkModelChanged() {
     this.checkNetworkFormError();
-    if (this.network.formGroup.valid)
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
     else this.network.isChanged = false;
 
@@ -129,9 +165,9 @@ export class NetworkComponent implements OnInit {
 
   checkNetworkFormError() {
     //check errors 
-    let error = NetworkComponent.createFormError();
+    let error = this.createFormError();
 
-    const nameError = this.network.formGroup.controls['name'].errors;
+    const nameError = this.formGroup.controls['name'].errors;
 
     if (nameError) {
       if (nameError['required'])
@@ -141,7 +177,7 @@ export class NetworkComponent implements OnInit {
     }
 
 
-    const clientNetworkError = this.network.formGroup.controls['clientNetwork'].errors;
+    const clientNetworkError = this.formGroup.controls['clientNetwork'].errors;
 
     if (clientNetworkError) {
       if (clientNetworkError['required'])
@@ -150,22 +186,26 @@ export class NetworkComponent implements OnInit {
         error.clientNetwork = 'ClientNetworkInvalid';
     }
 
-    const serviceNetworkError = this.network.formGroup.controls['serviceNetwork'].errors;
+    const serviceNetworkError = this.formGroup.controls['serviceNetwork'].errors;
     if (serviceNetworkError) {
       if (serviceNetworkError['required'])
         error.serviceNetwork = 'ServiceNetworkRequired';
       else
         error.serviceNetwork = 'ServiceNetworkInvalid';
     }
-    this.network.formError = error;
-    (this.network.formGroup as FormGroup).markAllAsTouched();
+    this.formError = error;
+    (this.formGroup as FormGroup).markAllAsTouched();
 
   }
 
   clear() {
     this.network.isChanged = false;
-    const original = JSON.parse(JSON.stringify(this.network.orig));
-    Object.assign(this.network, original);
+    const original = this.network.orig;// JSON.parse(JSON.stringify(this.network.orig));
+    //Object.assign(this.network, original);
+    this.network = {
+      ...original
+    }
+
     this.checkIfModelChanged();
   }
 
@@ -174,7 +214,7 @@ export class NetworkComponent implements OnInit {
   }
 
   openGatewayClicked() {
-    if (!this.network.gatewaysCount) return;
+    if (!this.gatewaysCount) return;
     this.network.isGatewayOpened = !this.network.isGatewayOpened;
     this.openGateways.emit(this.network.isGatewayOpened);
   }

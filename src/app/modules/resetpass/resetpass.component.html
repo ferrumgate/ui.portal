@@ -25,8 +25,7 @@
                     <p>
                         <mat-form-field class="resetpass-form-field">
                             <input [type]="hidePassword?'password':'text'" test-id="resetpass-password-input" matInput
-                                placeholder="{{'Password'|translate}}" formControlName="password"
-                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                                placeholder="{{'Password'|translate}}" formControlName="password">
                             <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
                             <mat-error test-id="resetpass-password-error" class="resetpass-error"> {{
@@ -39,8 +38,7 @@
                     <p>
                         <mat-form-field class="resetpass-form-field">
                             <input [type]="hidePasswordAgain?'password':'text'" test-id="resetpass-password-again-input"
-                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
-                                [(ngModel)]="model.passwordAgain" (ngModelChange)="modelChanged($event)">
+                                matInput placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain">
                             <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
 

@@ -8,7 +8,8 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   declarations: [
-    ConfigAuthComponent
+    ConfigAuthComponent,
+
   ],
   imports: [
     CommonModule,

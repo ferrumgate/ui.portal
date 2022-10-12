@@ -1,0 +1,64 @@
+<div class="auth-local">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Local'|translate}}">
+                <mat-icon>local_library
+                </mat-icon>
+            </mat-card-title>
+            <h3>{{model.name}}</h3>
+
+            <mat-action-row class="auth-local-header-actions" fxFlex fxLayoutAlign="end start" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div style="padding-top:15px">
+                <div>
+                    <p>
+                        <mat-checkbox test-id="auth-local-forgotpassword-enabled" [(ngModel)]="model.isForgotPassword"
+                            [checked]="model.isForgotPassword" (ngModelChange)="modelChanged()">
+                            {{"IsForgotPasswordEnabled"|translate}}</mat-checkbox>
+
+                    </p>
+                    <p>
+                        <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isRegister"
+                            [checked]="model.isRegister" (ngModelChange)="modelChanged()">
+                            {{"IsRegisterEnabled"|translate}}</mat-checkbox>
+                    </p>
+                    <p>
+                        <mat-checkbox test-id="auth-local-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                            (ngModelChange)="modelChanged()">
+                            {{"Enabled"|translate}}</mat-checkbox>
+                    </p>
+
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="auth-local-actions" fxFlex fxLayoutAlign="start center">
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="auth-local-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="auth-local-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

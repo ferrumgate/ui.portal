@@ -76,47 +76,58 @@ describe('NetworksComponent', () => {
       clientNetwork: '1.2.3.4/24'
     }
     let gateways: Gateway[] = [
-      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: true }
     ]
 
     let thisnetworks: Network[] = [];
     let thisgateways: Gateway[] = [];
     let thisgatewaysNotJoined: Gateway[] = [];
 
-    let item = NetworkComponent.prepareModel(net);
+    let item = net;
     thisnetworks.push(item);
     gateways.forEach(x => {
-      const extendedGateway = GatewayComponent.prepareModel(x);
+      const extendedGateway = x;
+      extendedGateway.orig = x;
       item.gatewaysCount++;
       extendedGateway.networkName = net.name;
       thisgateways.push(extendedGateway);
     })
 
     let net2: Network = {
+      objId: UtilService.randomNumberString(),
       id: '3123', name: 'ops2', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
 
       clientNetwork: '1.2.3.4/24'
     }
-    let item2 = NetworkComponent.prepareModel(net2);
+    let item2 = net2;
     thisnetworks.push(item2);
 
 
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
-      name: 'not joined ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined ', labels: ['testme'], isEnabled: true,
+      orig: {
+        id: '1234', networkId: '',
+        name: 'not joined ', labels: ['testme'], isEnabled: true,
+      }
     };
-    const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
+    const notJoinedExtendedGateway = notJoinedGateway;
     thisgatewaysNotJoined.push(notJoinedExtendedGateway);
 
     const notJoinedGateway2: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '12344', networkId: '',
-      name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined2 ', labels: ['testme'], isEnabled: true,
+      orig: {
+        id: '12344', networkId: '',
+        name: 'not joined2 ', labels: ['testme'], isEnabled: true,
+      }
+
     };
-    const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
+    const notJoinedExtendedGateway2 = notJoinedGateway2;
     thisgatewaysNotJoined.push(notJoinedExtendedGateway2);
     return { networks: thisnetworks, gateways: thisgateways, gatewaysNotJoined: thisgatewaysNotJoined };
   }
@@ -180,6 +191,8 @@ describe('NetworksComponent', () => {
     component.networks[0].isGatewayOpened = true;
     tick(1000);
     fixture.detectChanges();
+
+
     //find a gateway
     const gateway = component.gateways.find(x => x.networkId == component.networks[0].id);
     if (!gateway) throw Error('must found');
@@ -205,17 +218,19 @@ describe('NetworksComponent', () => {
     component.networks[0].isGatewayOpened = true;
     tick(1000);
     fixture.detectChanges();
-    // gateway count must be from 3 to 2
+    // networks gateway count must be from 3 to 2
     const elements2 = findEls(fixture, 'networks-app-network-app-gateway');
     expect(elements2.length).toBe(2);
 
     //and move gateway back by selecting network again
-    gateway.networkId = component.networks[0].id;
+    const gateway2 = component.gatewaysNotJoined[0];
+    if (!gateway2) throw new Error('not found')
+    gateway2.networkId = component.networks[0].id;
 
-    let savedGateway2: Gateway = { id: gateway.id, labels: gateway.labels, name: gateway.name, isEnabled: gateway.isEnabled, networkId: gateway.networkId };
+    let savedGateway2: Gateway = { id: gateway2.id, labels: gateway2.labels, name: gateway2.name, isEnabled: gateway2.isEnabled, networkId: gateway2.networkId };
     saveOrUpdate.and.returnValue(of(savedGateway2));
 
-    component.saveGateway(gateway);
+    component.saveGateway(gateway2);
     tick(1000);
     fixture.detectChanges();
     // gateway not joined must be visible

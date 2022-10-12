@@ -55,7 +55,7 @@ describe('NetworkComponent', () => {
       id: '12123',
       name: 'test',
       labels: ['testlabel', 'testlabel2'],
-      isEnabled: 1,
+      isEnabled: true,
       networkId: '22',
 
     }
@@ -64,7 +64,7 @@ describe('NetworkComponent', () => {
       name: 'testnetwork',
       labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: '10.0.0.0/24'
     }
-    component.network = NetworkComponent.prepareModel(network1);
+    component.network = network1;
     component.network.gatewaysCount = 1;
 
 
@@ -110,14 +110,14 @@ describe('NetworkComponent', () => {
       name: 'testnetwork',
       labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: ''
     }
-    component.network = NetworkComponent.prepareModel(network1);
+    component.network = network1;
     component.network.gatewaysCount = 1;
 
 
     tick(1000);
     fixture.detectChanges();
 
-    expect(component.network.formGroup.valid).toBe(false);
+    expect(component.formGroup.valid).toBe(false);
   }))
 
 

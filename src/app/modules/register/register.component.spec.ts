@@ -57,7 +57,7 @@ describe('RegisterComponent', () => {
   });
   it('register form email input', fakeAsync(async () => {
     const formvalues = {
-      email: undefined, password: undefined, passwordAgain: undefined
+      email: null, password: null, passwordAgain: null
     }
 
     expect(component.form.invalid).toBe(true);
@@ -100,7 +100,7 @@ describe('RegisterComponent', () => {
 
   it('register form password input', fakeAsync(async () => {
     const formvalues = {
-      email: undefined, password: undefined, passwordAgain: undefined
+      email: null, password: null, passwordAgain: null
     }
 
     expect(component.form.invalid).toBe(true);
@@ -146,7 +146,7 @@ describe('RegisterComponent', () => {
 
   it('register form passwordAgain input', fakeAsync(async () => {
     const formvalues = {
-      email: undefined, password: undefined, passwordAgain: undefined
+      email: null, password: null, passwordAgain: null
     }
 
     expect(component.form.invalid).toBe(true);

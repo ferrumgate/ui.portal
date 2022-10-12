@@ -32,16 +32,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   };
 
   //change default user 
-  userFormGroup = new FormGroup(
-    {
-      email: new FormControl(this.model.email, [Validators.required, InputService.emailValidator]),
-      password: new FormControl(this.model.password, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
-      passwordAgain: new FormControl(this.model.passwordAgain, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
-    },
-    {
-      validators: Validators.compose([InputService.matchingPasswords('password', 'passwordAgain')])
-    }
-  );
+  userFormGroup = this.createFormGroupUser(this.model);
 
   userError = { email: '', password: '', passwordAgain: '' };
   hidePassword = true;
@@ -49,18 +40,12 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
 
 
   //common settings
-  commonFormGroup = new FormGroup(
-    {
-      domain: new FormControl(this.model.domain, [Validators.required, InputService.domainValidator]),
-      url: new FormControl(this.model.url, [Validators.required, InputService.urlValidator]),
-    });
+  commonFormGroup = this.createFormGroupCommon(this.model);
+
   commonError = { domain: '', url: '' };
 
   // network settings
-  networkFormGroup = new FormGroup({
-    clientNetwork: new FormControl(this.model.clientNetwork, [Validators.required, InputService.ipCidrValidator]),
-    serviceNetwork: new FormControl(this.model.serviceNetwork, [Validators.required, InputService.ipCidrValidator]),
-  });
+  networkFormGroup = this.createFormGroupNetwork(this.model);
 
   networkError = { clientNetwork: '', serviceNetwork: '' };
   isLinear = true;
@@ -96,6 +81,72 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
   ngAfterContentInit(): void {
 
 
+  }
+
+
+  createFormGroupCommon(model: any) {
+    const fmg = new FormGroup(
+      {
+        domain: new FormControl(model.domain, [Validators.required, InputService.domainValidator]),
+        url: new FormControl(model.url, [Validators.required, InputService.urlValidator]),
+      });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.commonModelChanged();
+    })
+    return fmg;
+  }
+
+  createFormGroupNetwork(model: any) {
+
+    const fmg = new FormGroup({
+      clientNetwork: new FormControl(model.clientNetwork, [Validators.required, InputService.ipCidrValidator]),
+      serviceNetwork: new FormControl(model.serviceNetwork, [Validators.required, InputService.ipCidrValidator]),
+    });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.networkModelChanged();
+    })
+    return fmg;
+  }
+
+  createFormGroupUser(model: any) {
+    const fmg = new FormGroup(
+      {
+        email: new FormControl(model.email, [Validators.required, InputService.emailValidator]),
+        password: new FormControl(model.password, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+        passwordAgain: new FormControl(model.passwordAgain, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+      },
+      {
+        validators: Validators.compose([InputService.matchingPasswords('password', 'passwordAgain')])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.userModelChanged();
+    })
+    return fmg;
   }
 
 
@@ -152,7 +203,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
     }
 
   }
-  userModelChanged($event: any) {
+  userModelChanged() {
 
     this.checkUserFormError();
   }
@@ -163,7 +214,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
       domain: '', url: ''
     }
   }
-  commonModelChanged($event: any) {
+  commonModelChanged() {
     this.checkCommonFormError();
 
   }
@@ -209,9 +260,9 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
 
 
 
-  networkModelChanged($event: any) {
+  networkModelChanged() {
 
-    this.checkNetworkModelChanged($event);
+    this.checkNetworkModelChanged();
   }
 
   resetNetworkErrors() {
@@ -220,7 +271,7 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
       clientNetwork: '', serviceNetwork: ''
     }
   }
-  checkNetworkModelChanged($event: any) {
+  checkNetworkModelChanged() {
 
     this.checkNetworkFormError();
 

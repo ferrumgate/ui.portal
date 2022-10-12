@@ -5,35 +5,36 @@
                 <mat-icon>computer
                 </mat-icon>
             </mat-card-title>
-
-
+            <mat-action-row class="gateway-header-actions" fxFlex fxLayoutAlign="end start" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
         </mat-card-header>
 
         <mat-card-content>
             <div>
                 <div>
 
-                    <form test-id="gateway-form" [formGroup]="gateway.formGroup">
+                    <form test-id="gateway-form" [formGroup]="formGroup">
 
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Id"|translate}}</mat-label>
-                                <input matInput test-id="gateway-id-input" formControlName="id" [ngModel]="gateway.id"
-                                    readonly="true">
+                                <input matInput test-id="gateway-id-input" formControlName="id" readonly="true">
                                 <mat-hint>{{"GatewayIdHint"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
-                                <input matInput test-id="gateway-name-input" placeholder="Network name"
-                                    formControlName="name" [(ngModel)]="gateway.name"
-                                    (ngModelChange)="gatewayModelChanged($event)" required>
-                                <mat-error>{{gateway.formError.name|translate}}</mat-error>
+                                <input matInput test-id="gateway-name-input" placeholder="{{'NetworkName'|translate}}"
+                                    formControlName="name" required>
+                                <mat-error>{{formError.name|translate}}</mat-error>
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Labels"|translate}}</mat-label>
                                 <mat-chip-list #chipList>
                                     <mat-chip test-id="gateway-label-chip" *ngFor="let label of gateway.labels||[]"
@@ -51,11 +52,11 @@
                         </p>
 
                         <p>
-                            <mat-form-field appearance="fill">
+                            <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Network"|translate}}</mat-label>
                                 <input type="text" test-id="gateway-input-network"
                                     placeholder="{{'SelectANetwork'|translate}}" matInput
-                                    [ngModel]="gateway.networkName" [formControl]="networkAutoCompleteFormControl"
+                                    [ngModel]="gateway.networkName" [ngModelOptions]="{standalone:true}"
                                     [matAutocomplete]="auto">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
                                     [displayWith]="displayFn">
@@ -72,11 +73,9 @@
                     </form>
 
                     <p>
-
-                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabledBoolean"
-                            (ngModelChange)="gatewayModelChanged($event)">
+                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabled"
+                            (ngModelChange)="gatewayModelChanged()">
                             {{"Enabled"|translate}}</mat-checkbox>
-
                     </p>
 
 

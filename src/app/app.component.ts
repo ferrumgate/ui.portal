@@ -59,6 +59,10 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/microsoft.svg")
     );
     this.matIconRegistry.addSvgIcon(
+      "social-auth0",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/auth0.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
       "recaptcha",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/recaptcha.svg")
     );

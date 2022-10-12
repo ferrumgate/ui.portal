@@ -58,7 +58,7 @@ export class ConfigEmailComponent implements OnInit {
   }
   error = { type: '' };
   formGroup = this.createFormGroup(this.model);
-  emailTypeFormControl = new FormControl();
+
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -76,11 +76,24 @@ export class ConfigEmailComponent implements OnInit {
     this.helpLink = this.configService.links.emailHelp;
 
   }
+
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         type: new FormControl(model.type, [Validators.required]),
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      //this.modelChanged();
+    })
+    return fmg;
   }
 
   resetFormErrors() {
@@ -119,6 +132,11 @@ export class ConfigEmailComponent implements OnInit {
   }
   ngAfterViewInit(): void {
 
+  }
+
+  emailTypeChanged($event: any) {
+
+    this.model.type = $event.option.value;
   }
 
 

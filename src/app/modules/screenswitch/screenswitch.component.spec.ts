@@ -3,6 +3,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module } from 'ng-recaptcha';
 import { findEl } from '../shared/helper.spec';
@@ -23,7 +24,7 @@ describe('ScreenSwitchComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ScreenSwitchComponent, MatIcon],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule],
       providers: [
         ConfigService,

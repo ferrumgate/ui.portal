@@ -1,3 +1,7 @@
+.network {
+    min-width: 300px;
+}
+
 .network .row {
     padding-left: 25px;
     padding-right: 25px;
@@ -19,10 +23,14 @@
     padding-right: 30px;
 }
 
-.network .gateway-title {
-    padding-left: 10px;
-}
 
 .network .network-actions {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+.network .network-header-actions {
     padding: 0px;
+    border-top-style: none;
 }

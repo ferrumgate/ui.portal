@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
 import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
@@ -22,9 +23,12 @@ export class ConfigService extends BaseService {
     super('config', captchaService)
     //set default zero config
     this.dynamicConfig = {
-      captchaSiteKey: '', isConfigured: 0,
+      captchaSiteKey: '', isConfigured: false,
       login: {
-        local: { isForgotPassword: 0, isRegister: 0 }, google: undefined, linkedin: undefined
+        local: { isForgotPassword: false, isRegister: false },
+        oAuthGoogle: undefined,
+        oAuthLinkedin: undefined,
+        samlAuth0: undefined
       }
     };
   }
@@ -35,7 +39,15 @@ export class ConfigService extends BaseService {
     about: "https://ferrumgate/about",
     commonHelp: "https://ferrumgate/doc/settings/common",
     captchaHelp: "https://ferrumgate/doc/captcha",
-    emailHelp: "https://ferrumgate/doc/email"
+    emailHelp: "https://ferrumgate/doc/email",
+    gatewayHelp: "https://ferrumgate/doc/network",
+    networkHelp: "https://ferrumgate/doc/network",
+    authLocalHelp: "https://ferrumgate/doc/auth/local",
+    authOauthHelp: "https://ferrumgate/doc/auth/oauth",
+    authLdapHelp: "https://ferrumgate/doc/auth/ldap",
+    authSamlHelp: "https://ferrumgate/doc/auth/saml",
+
+
 
   }
   changeUser(userId: string) {
@@ -100,22 +112,25 @@ export class ConfigService extends BaseService {
 
   dynamicConfig: {
     captchaSiteKey: string,
-    isConfigured: number,
+    isConfigured: boolean,
     login: {
       local: {
-        isForgotPassword: number,
-        isRegister: number,
+        isForgotPassword: boolean,
+        isRegister: boolean,
       },
-      google: object | undefined,
-      linkedin: object | undefined
+      oAuthGoogle: object | undefined,
+      oAuthLinkedin: object | undefined,
+      samlAuth0: object | undefined
     }
   };
 
   getPublicConfig() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
-      switchMap(x =>
-        this.http.get(this.getApiUrl() + `/config/public`)
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/public', x);
+        return this.http.get(url)
+      }
       ),
       map((x: any) => {
         this.dynamicConfig = x;
@@ -138,11 +153,14 @@ export class ConfigService extends BaseService {
 
   }
 
-  get isLoginEnabledGoogle() {
-    return this.dynamicConfig.login.google;
+  get isLoginEnabledOAuthGoogle() {
+    return this.dynamicConfig.login.oAuthGoogle;
   }
-  get isLoginEnabledLinkedin() {
-    return this.dynamicConfig.login.linkedin
+  get isLoginEnabledOAuthLinkedin() {
+    return this.dynamicConfig.login.oAuthLinkedin
+  }
+  get isLoginEnabledSamlAuth0() {
+    return this.dynamicConfig.login.oAuthLinkedin
   }
 
   get isAllReadyConfigured() {
@@ -154,7 +172,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigCommon>(this.getApiUrl() + `/config/common`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/common', x);
+        return this.http.get<ConfigCommon>(url);
       }))
   }
 
@@ -173,7 +192,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigCaptcha>(this.getApiUrl() + `/config/captcha`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/captcha', x);
+        return this.http.get<ConfigCaptcha>(url);
       }))
   }
 
@@ -193,7 +213,8 @@ export class ConfigService extends BaseService {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
-        return this.http.get<ConfigEmail>(this.getApiUrl() + `/config/email`);
+        const url = this.joinUrl(this.getApiUrl(), '/config/email', x);
+        return this.http.get<ConfigEmail>(url);
       }))
   }
 
@@ -227,6 +248,182 @@ export class ConfigService extends BaseService {
         return this.http.post<{ isError: false, errorMessage: string }>(this.getApiUrl() + `/config/email/check`, x, this.jsonHeader);
       })
     )
+  }
+
+
+  getAuthCommon() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/common', x);
+        return this.http.get<AuthCommon>(url);
+      }))
+  }
+
+  getAuthLocal() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/local', x);
+        return this.http.get<AuthLocal>(url);
+      }))
+  }
+
+  saveAuthLocal(local: AuthLocal) {
+    const parameter: AuthLocal = {
+      id: local.id,
+      baseType: local.baseType,
+      name: local.name,
+      type: local.type,
+      isForgotPassword: local.isForgotPassword,
+      isRegister: local.isRegister,
+      tags: local.tags,
+      isEnabled: local.isEnabled
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
+        else
+          return this.http.post<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
+      })
+    )
+  }
+
+
+  getAuthOAuthProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/oauth/providers', x);
+        return this.http.get<{ items: BaseOAuth[] }>(url);
+      }))
+  }
+
+
+  saveAuthOAuthProvider(oauth: BaseOAuth) {
+    const parameter: BaseOAuth = {
+      id: oauth.id,
+      baseType: oauth.baseType,
+      name: oauth.name,
+      type: oauth.type,
+      tags: oauth.tags,
+      clientId: oauth.clientId,
+      clientSecret: oauth.clientSecret,
+      isEnabled: oauth.isEnabled
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseOAuth>(this.getApiUrl() + `/config/auth/oauth/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseOAuth>(this.getApiUrl() + `/config/auth/oauth/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthOAuthProvider(oauth: BaseOAuth) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/oauth/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
+  ///////////// ldap
+
+  getAuthLdapProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/ldap/providers', x);
+        return this.http.get<{ items: BaseLdap[] }>(url);
+      }))
+  }
+
+
+  saveAuthLdapProvider(auth: BaseLdap) {
+    const parameter: BaseLdap = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      groupnameField: auth.groupnameField,
+      host: auth.host,
+      searchBase: auth.searchBase,
+      usernameField: auth.usernameField,
+      allowedGroups: auth.allowedGroups,
+      bindDN: auth.bindDN,
+      bindPass: auth.bindPass,
+      searchFilter: auth.searchFilter,
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseLdap>(this.getApiUrl() + `/config/auth/ldap/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseLdap>(this.getApiUrl() + `/config/auth/ldap/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthLdapProvider(oauth: BaseLdap) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/ldap/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
+  ///////////// saml
+
+  getAuthSamlProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', x);
+        return this.http.get<{ items: BaseSaml[] }>(url);
+      }))
+  }
+
+
+  saveAuthSamlProvider(auth: BaseSaml) {
+    const parameter: BaseSaml = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled,
+      cert: auth.cert,
+      issuer: auth.issuer,
+      loginUrl: auth.loginUrl,
+      nameField: auth.nameField,
+      usernameField: auth.usernameField,
+      fingerPrint: auth.fingerPrint
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseSaml>(this.getApiUrl() + `/config/auth/saml/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseSaml>(this.getApiUrl() + `/config/auth/saml/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthSamlProvider(oauth: BaseSaml) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
   }
 
 

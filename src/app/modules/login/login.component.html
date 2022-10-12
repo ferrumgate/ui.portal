@@ -22,9 +22,8 @@
                 <form test-id="login-form" [formGroup]="form" (ngSubmit)="submit()">
                     <p>
                         <mat-form-field class="login-form-field">
-                            <input type="text" test-id="login-email-input" matInput placeholder="{{'Email'|translate}}"
-                                formControlName="email" [(ngModel)]="model.email"
-                                (ngModelChange)="modelChanged($event)">
+                            <input type="text" test-id="login-email-input" matInput
+                                placeholder="{{'EmailOrUsername'|translate}}" formControlName="email">
                             <mat-error test-id="login-email-error" class="login-error"> {{ error.email |translate
                                 }}
                             </mat-error>
@@ -35,8 +34,7 @@
                     <p>
                         <mat-form-field class="login-form-field">
                             <input [type]="hidePassword?'password':'text'" test-id="login-password-input" matInput
-                                placeholder="{{'Password'|translate}}" formControlName="password"
-                                [(ngModel)]="model.password" (ngModelChange)="modelChanged($event)">
+                                placeholder="{{'Password'|translate}}" formControlName="password">
                             <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
                             <mat-error test-id="login-password-error" class="login-error"> {{ error.password
@@ -84,8 +82,8 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center">
 
-                    <div *ngIf="isGoogleEnabled" class="social">
-                        <a href="{{googleAuthenticateUrl}}" mat-icon-button aria-label="google authentication"
+                    <div *ngIf="isOAuthGoogleEnabled" class="social">
+                        <a href="{{oAuthGoogleAuthenticateUrl}}" mat-icon-button aria-label="google authentication"
                             matTooltip="Sign in with Google" matTooltipShowDelay="100" matTooltipHideDelay="200">
 
                             <mat-icon svgIcon="social-google"></mat-icon>
@@ -97,17 +95,26 @@
                             <mat-icon svgIcon="social-github"></mat-icon>
                         </button>
                     </div>
-                    <div *ngIf="isLinkedInEnabled" class="social">
-                        <button mat-icon-button aria-label="linkedin authentication" matTooltip="Sign in with Linkedin"
-                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+                    <div *ngIf="isOAuthLinkedInEnabled" class="social">
+                        <a href="{{oAuthLinkedinAuthenticateUrl}}" mat-icon-button aria-label="linkedin authentication"
+                            matTooltip="Sign in with Linkedin" matTooltipShowDelay="100" matTooltipHideDelay="200">
+
                             <mat-icon svgIcon="social-linkedin"></mat-icon>
-                        </button>
+                        </a>
+
                     </div>
                     <div *ngIf="isMicrosoftEnabled" class="social">
                         <button mat-icon-button aria-label="microsoft authenticaton" matTooltip="Sign in with Microsoft"
                             matTooltipShowDelay="100" matTooltipHideDelay="200">
                             <mat-icon svgIcon="social-microsoft"></mat-icon>
                         </button>
+                    </div>
+                    <div *ngIf="isSamlAuth0Enabled" class="social">
+                        <a href="{{samlAuth0AuthenticateUrl}}" mat-icon-button aria-label="auth0 authentication"
+                            matTooltip="Sign in with Auth0" matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="social-auth0"></mat-icon>
+                        </a>
                     </div>
                 </div>
 

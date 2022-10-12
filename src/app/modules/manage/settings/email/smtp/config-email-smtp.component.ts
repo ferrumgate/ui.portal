@@ -99,13 +99,25 @@ export class ConfigEmailSmtpComponent implements OnInit {
   }
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         user: new FormControl(model.user, []),
         pass: new FormControl(model.pass, []),
         host: new FormControl(model.host, [Validators.required]),
         port: new FormControl(model.port, [Validators.required])
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
 
   resetFormErrors() {
@@ -115,7 +127,7 @@ export class ConfigEmailSmtpComponent implements OnInit {
     }
   }
 
-  modelChanged($event: any) {
+  modelChanged() {
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();

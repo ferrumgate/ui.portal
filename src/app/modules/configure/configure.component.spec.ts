@@ -4,6 +4,7 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
@@ -30,7 +31,7 @@ describe('ConfigureComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigureComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
         RouterTestingModule.withRoutes([])],
       providers: [

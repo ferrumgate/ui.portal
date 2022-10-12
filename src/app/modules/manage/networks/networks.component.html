@@ -18,7 +18,6 @@
             <mat-divider></mat-divider>
         </div>
     </div>
-
     <div class="networks networks-content">
         <mat-accordion test-id="networks-gatewaynotjoined-accordion" *ngIf="gatewaysNotJoined.length">
             <mat-expansion-panel [expanded]="gatewaysNotJoinedpanelOpenState">
@@ -31,9 +30,9 @@
 
                 <div class="row network-item" fxLayout="column">
                     <div class="network-item" fxLayout="row wrap">
-                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [gateway]="gate"
-                            [networks]="networks" (saveGateway)="saveGateway($event)"
-                            (deleteGateway)="deleteGateway($event)" *ngFor="let gate of gatewaysNotJoined">
+                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [networks]="networks"
+                            [gateway]="gate" (saveGateway)="saveGateway($event)" (deleteGateway)="deleteGateway($event)"
+                            *ngFor="let gate of gatewaysNotJoined">
                         </app-gateway>
                     </div>
                 </div>
@@ -44,8 +43,9 @@
         <div fxLayout="row wrap">
             <p class="row network-item" fxLayout="row" *ngFor="let net of networks">
 
-                <app-network test-id="networks-app-network" [network]="net" (deleteNetwork)="deleteNetwork($event)"
-                    (saveNetwork)="saveNetwork($event)">
+                <app-network test-id="networks-app-network" [network]="net" [gatewaysCount]="net.gatewaysCount"
+                    (deleteNetwork)="deleteNetwork($event)" (saveNetwork)="saveNetwork($event)"
+                    (openGateways)="net.isGatewayOpened=$event">
 
                 </app-network>
                 <span class="network-gateways" *ngIf="net.isGatewayOpened">
@@ -55,9 +55,9 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="gateway-item" fxFlex fxLayout="row wrap">
-                                <app-gateway test-id="networks-app-network-app-gateway" [gateway]="gate"
-                                    [networks]="networks" (saveGateway)="saveGateway($event)"
-                                    (deleteGateway)="deleteGateway($event)" *ngFor="let gate of filterGateways(net)">
+                                <app-gateway test-id="networks-app-network-app-gateway" [networks]="networks"
+                                    [gateway]="gate" *ngFor="let gate of filterGateways(net)"
+                                    (saveGateway)=" saveGateway($event)" (deleteGateway)="deleteGateway($event)">
                                 </app-gateway>
                             </div>
                         </mat-card-content>

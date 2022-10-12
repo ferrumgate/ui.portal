@@ -5,7 +5,7 @@
                 <mat-form-field appearance="fill" fxFill class="config-email-smtp-width">
                     <mat-label>{{"User"|translate}}</mat-label>
                     <input matInput test-id="config-email-smtp-user-input" placeholder="ferrumgate"
-                        formControlName="user" [(ngModel)]="model.user" (ngModelChange)="modelChanged($event)">
+                        formControlName="user">
                     <mat-hint>{{"EmailUserHint"|translate}}</mat-hint>
                     <mat-error>{{error.user|translate}}</mat-error>
 
@@ -14,8 +14,8 @@
             <p fxFill class="config-email-smtp-explanation ">
                 <mat-form-field appearance="fill" fxFill class="config-email-smtp-width">
                     <mat-label>{{"Password"|translate}}</mat-label>
-                    <input matInput test-id="config-email-smtp-pass-input" placeholder="PaSSwoRd" formControlName="pass"
-                        [(ngModel)]="model.pass" (ngModelChange)="modelChanged($event)">
+                    <input matInput test-id="config-email-smtp-pass-input" placeholder="PaSSwoRd"
+                        formControlName="pass">
                     <mat-hint>{{"EmailPassHint"|translate}}</mat-hint>
                     <mat-error>{{error.pass|translate}}</mat-error>
 
@@ -25,7 +25,7 @@
                 <mat-form-field appearance="fill" fxFill class="config-email-smtp-width">
                     <mat-label>{{"Host"|translate}}</mat-label>
                     <input matInput test-id="config-email-smtp-host-input" placeholder="localhost"
-                        formControlName="host" [(ngModel)]="model.host" (ngModelChange)="modelChanged($event)" required>
+                        formControlName="host" required>
                     <mat-hint>{{"EmailHostHint"|translate}}</mat-hint>
                     <mat-error>{{error.host|translate}}</mat-error>
 
@@ -36,7 +36,7 @@
                     <mat-label>{{"Port"|translate}}</mat-label>
 
                     <input type="number" matInput test-id="config-email-smtp-port-input" placeholder="587"
-                        formControlName="port" [(ngModel)]="model.port" (ngModelChange)="modelChanged($event)" required>
+                        formControlName="port" required>
                     <mat-hint>{{"EmailPortHint"|translate}}</mat-hint>
                     <mat-error>{{error.port|translate}}</mat-error>
 
@@ -47,7 +47,7 @@
         </form>
         <p fxFill class="config-email-smtp-explanation ">
             <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="model.isSecure"
-                (ngModelChange)="modelChanged($event)">
+                (ngModelChange)="modelChanged()">
                 {{"TLS"|translate}}</mat-checkbox>
         </p>
     </div>

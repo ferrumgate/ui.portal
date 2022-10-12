@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
@@ -31,13 +31,14 @@ export class NetworksComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   gateways: Gateway[] = [];
   gatewaysNotJoined: Gateway[] = [];
+
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
     private gatewayService: GatewayService,
     private networkService: NetworkService,
-    private confirmService: ConfirmService
-
+    private confirmService: ConfirmService,
+    private ref: ApplicationRef
   ) {
 
     //search input with wait
@@ -50,6 +51,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
       });
   }
 
+
   ngOnInit(): void {
 
     // test data
@@ -60,9 +62,9 @@ export class NetworksComponent implements OnInit, OnDestroy {
       clientNetwork: '1.2.3.4/24'
     }
     let gateways: Gateway[] = [
-      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: 1 },
-      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: 1 }
+      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: true },
+      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: true }
     ]
 
 
@@ -88,7 +90,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
-      name: 'not joined ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined ', labels: ['testme'], isEnabled: true,
     };
     const notJoinedExtendedGateway = GatewayComponent.prepareModel(notJoinedGateway);
     this.gatewaysNotJoined.push(notJoinedExtendedGateway);
@@ -96,7 +98,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
     const notJoinedGateway2: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '12344', networkId: '',
-      name: 'not joined2 ', labels: ['testme'], isEnabled: 1,
+      name: 'not joined2 ', labels: ['testme'], isEnabled: true,
     };
     const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
     this.gatewaysNotJoined.push(notJoinedExtendedGateway2); */
@@ -111,26 +113,31 @@ export class NetworksComponent implements OnInit, OnDestroy {
   }
 
   prepareGateway(gateway: Gateway) {
-    const model = GatewayComponent.prepareModel(gateway);
-    model.objId = UtilService.randomNumberString();
-    return model;
+    //const model = GatewayComponent.prepareModel(gateway);
+    gateway.objId = UtilService.randomNumberString();
+    return gateway;
   }
   prepareNetwork(network: Network) {
-    const model = NetworkComponent.prepareModel(network);
-    model.objId = UtilService.randomNumberString();
-    model.gatewaysCount = 0;
-    return model
+
+    network.objId = UtilService.randomNumberString();
+    network.gatewaysCount = 0;
+    return network
   }
   prepareNetworks() {
     this.networks.forEach(a => {
       a.gatewaysCount = this.gateways.filter(x => x.networkId == a.id).length;
-      a.isGatewayOpened = a.isGatewayOpened & a.gatewaysCount;//close if zero gateway
+      if (!a.gatewaysCount)
+        a.isGatewayOpened = false;//close if zero gateway
       this.gateways.filter(z => z.networkId == a.id).forEach(b => b.networkName = a.name);
 
     })
+
+
   }
   prepareNotJoinedGateways() {
+
     this.gatewaysNotJoined = this.gateways.filter(x => !x.networkId);
+    return this.gatewaysNotJoined;
   }
 
 
@@ -181,10 +188,11 @@ export class NetworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterGateways(net: Network, force = false): any {
-    if (!net.gateways || force)
-      net.gateways = this.gateways.filter(x => x.networkId == net.id);
-    return net.gateways;
+  filterGateways(net: Network): any {
+
+    //if (!net.gateways || force)
+    return this.gateways.filter(x => x.networkId == net.id);
+    //return net.gateways;
   }
 
 
@@ -203,15 +211,26 @@ export class NetworksComponent implements OnInit, OnDestroy {
       takeWhile(x => x),
       switchMap(y => this.networkService.saveOrupdate($event)),
     ).subscribe((item) => {
-      //if saved, a new id comes, set it back
-      if (item.id != $event.id) {
-        $event.id = item.id;
+
+      //find saved item and replace it
+      const index = this.networks.findIndex(x => x.objId == $event.objId)
+      const current = this.networks[index];
+      this.networks[index] = {
+        ...item
+
       }
-      $event.orig = item;
-      $event.isChanged = false;
-      this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
+
+      this.prepareNetwork(this.networks[index]);
+      this.prepareNotJoinedGateways();
+      this.prepareNetworks();
+      this.networks[index].isGatewayOpened = current.isGatewayOpened;
+      this.gatewaysNotJoined[0].name = new Date().toISOString();
+      this.networks = [].concat(this.networks as any);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
     });
   }
+
   deleteNetwork($event: Network) {
 
     if (!$event.id) {//network we created temporarily
@@ -230,6 +249,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
         //delete from network list
         const index = this.networks.findIndex(x => x.objId == $event.objId);
         this.networks.splice(index, 1);
+
         //delete from gateway list
         this.gateways.
           filter(y => y.networkId == $event.id)
@@ -238,6 +258,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
             y.networkId = ''
           });
         this.prepareNotJoinedGateways();
+        this.networks = [].concat(this.networks as any);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
     }
@@ -248,19 +269,14 @@ export class NetworksComponent implements OnInit, OnDestroy {
       switchMap(y => this.gatewayService.saveOrupdate($event)),
     ).subscribe(y => {
 
-      //original list
-      const networkId = ($event.orig as Gateway).networkId;
-      const net = this.networks.find(x => x.id == networkId);
-      if (net) this.filterGateways(net, true);
-      //new network
-      const networkId2 = ($event.networkId);
-      const net2 = this.networks.find(x => x.id == networkId2);
-      if (net2) this.filterGateways(net2, true);
-      $event.orig = y;
-      $event.isChanged = false;
-
+      const index = this.gateways.findIndex(x => x.objId == $event.objId);
+      this.gateways[index] = {
+        ...y
+      }
+      this.prepareGateway(this.gateways[index]);
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
+      this.gateways = [].concat(this.gateways as any);
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })
   }
@@ -277,6 +293,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
         this.gateways.splice(index, 1);
         this.prepareNotJoinedGateways();
         this.prepareNetworks();
+        this.gateways = [].concat(this.gateways as any);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
   }

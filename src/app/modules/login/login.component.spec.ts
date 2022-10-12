@@ -23,6 +23,7 @@ import { LoginModule } from './login.module';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -41,6 +42,7 @@ describe('LoginComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent, MatIcon],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
+        NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         HttpClient,
@@ -94,7 +96,7 @@ describe('LoginComponent', () => {
     const emailId = 'login-email-input';
     const emailForm = component.form.controls['email'];
 
-    setFieldValue(fixture, emailId, 'someone');
+    setFieldValue(fixture, emailId, '');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
     fixture.detectChanges();
     tick(1000);
@@ -102,7 +104,7 @@ describe('LoginComponent', () => {
 
 
     //email
-    expect(component.model.email).toBe('someone');
+    expect(component.model.email).toBe('');
     expect(emailForm.errors).toBeTruthy();
     expect(component.error.email).toBeTruthy();
     expect(findEl(fixture, 'login-email-error')).toBeTruthy();

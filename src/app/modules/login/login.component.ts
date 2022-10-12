@@ -34,13 +34,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   tunnelSessionKey = '';
 
-  form: FormGroup = new FormGroup(
-    {
-      email: new FormControl('', [Validators.required, InputService.emailValidator]),
-      password: new FormControl('', [Validators.required])
-    }
-  );
-
+  form: FormGroup = this.createFormGroup(this.model);
   hidePassword = true;
 
 
@@ -98,6 +92,27 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
   }
+  createFormGroup(model: Login) {
+    const fmg = new FormGroup(
+      {
+        email: new FormControl('', [Validators.required]),
+        password: new FormControl('', [Validators.required])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
+
+  }
 
   private loginLocal() {
     return this.authService.loginLocal(this.model.email || '', this.model.password || '');
@@ -122,9 +137,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (emailError) {
 
       if (emailError['required'])
-        this.error.email = 'EmailRequired';
+        this.error.email = 'EmailOrUsernameRequired';
       else
-        this.error.email = 'EmailInvalid';
+        this.error.email = 'EmailOrUsernameInvalid';
 
 
     }
@@ -141,15 +156,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
   }
-  modelChanged($event: any) {
+  modelChanged() {
 
     this.checkFormError();
   }
 
 
 
-  get googleAuthenticateUrl() {
+  get oAuthGoogleAuthenticateUrl() {
     return this.authService.googleAuthenticateUrl;
+  }
+  get oAuthLinkedinAuthenticateUrl() {
+    return this.authService.linkedinAuthenticateUrl;
+  }
+
+  get samlAuth0AuthenticateUrl() {
+    return this.authService.auth0AuthenticateUrl;
   }
 
   get isForgotPasswordEnabled() {
@@ -160,11 +182,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
     return this.configService.isEnabledRegister;
   }
 
-  get isGoogleEnabled() {
-    return this.configService.isLoginEnabledGoogle;
+  get isOAuthGoogleEnabled() {
+    return this.configService.isLoginEnabledOAuthGoogle;
   }
-  get isLinkedInEnabled() {
-    return this.configService.isLoginEnabledLinkedin;
+  get isOAuthLinkedInEnabled() {
+    return this.configService.isLoginEnabledOAuthLinkedin;
+  }
+  get isSamlAuth0Enabled() {
+    return this.configService.isLoginEnabledSamlAuth0;
   }
 
   get isGithubEnabled() {
@@ -173,9 +198,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   get isMicrosoftEnabled() {
     return false;
   }
+  get isAuth0Enabled() {
+    return true;
+  }
 
   get isOthersEnabled() {
-    return this.isGoogleEnabled || this.isLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
+    return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
   }
 
 }

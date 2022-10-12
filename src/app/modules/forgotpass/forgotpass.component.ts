@@ -25,15 +25,11 @@ export class ForgotPassComponent implements OnInit {
   isForgotPassSended = false;
 
 
-  form: FormGroup = new FormGroup(
-    {
-      email: new FormControl('', [Validators.required, InputService.emailValidator])
-    }
-  );
+
 
 
   error: { email: string, send: string };
-
+  form: FormGroup = this.createFormGroup(this.model);
 
   @Output() submitEM = new EventEmitter();
 
@@ -58,6 +54,25 @@ export class ForgotPassComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  createFormGroup(model: ForgotPass) {
+    const fmg = new FormGroup(
+      {
+        email: new FormControl(model.email, [Validators.required, InputService.emailValidator])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this.model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
 
   resetErrrors() {
@@ -96,7 +111,7 @@ export class ForgotPassComponent implements OnInit {
     }
 
   }
-  modelChanged($event: any) {
+  modelChanged() {
     this.checkFormError();
   }
 

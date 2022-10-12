@@ -31,9 +31,9 @@
                         <mat-form-field appearance="fill">
                             <mat-label>{{"Type"|translate}}</mat-label>
                             <input type="text" test-id="config-email-input-type"
-                                placeholder="{{'SelectProvider'|translate}}" matInput [(ngModel)]="model.type"
-                                [formControl]="emailTypeFormControl" [matAutocomplete]="auto">
-                            <mat-autocomplete #auto="matAutocomplete">
+                                placeholder="{{'SelectProvider'|translate}}" matInput [ngModel]="model.type"
+                                [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="emailTypeChanged($event)">
                                 <mat-option *ngFor="let option of emailProviders" [value]="option">
                                     {{option}}
                                 </mat-option>

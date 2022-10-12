@@ -62,7 +62,7 @@ describe('ResetPassComponent', () => {
 
   it('reset password form password input', fakeAsync(async () => {
     const formvalues = {
-      password: undefined, passwordAgain: undefined
+      password: null, passwordAgain: null
     }
 
     expect(component.form.invalid).toBe(true);
@@ -108,7 +108,7 @@ describe('ResetPassComponent', () => {
 
   it('reset password form passwordAgain input', fakeAsync(async () => {
     const formvalues = {
-      password: undefined, passwordAgain: undefined
+      password: null, passwordAgain: null
     }
 
     expect(component.form.invalid).toBe(true);

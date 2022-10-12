@@ -124,14 +124,25 @@ export function getValue<T>(fixture: ComponentFixture<T>, testId: string): strin
 }
 
 /**
- * Gets the value content of an element with the given `test-id` attribute.
+ * Gets the value content of an checkbox element with the given `test-id` attribute.
  *
  * @param fixture Component fixture
  * @param testId Test id set by `test-id`
  */
 export function getCheckValue<T>(fixture: ComponentFixture<T>, testId: string): boolean {
-    const { nativeElement } = findEl(fixture, testId);
+    const { nativeElement } = queryByCss<T>(fixture, `${testIdSelector(testId)} input`, true);
     return nativeElement.checked;
+}
+
+/**
+ * Sets the value content of an checkbox element with the given `test-id` attribute.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ */
+export function setCheckValue<T>(fixture: ComponentFixture<T>, testId: string, val: boolean) {
+    const { nativeElement } = queryByCss<T>(fixture, `${testIdSelector(testId)} input`, true);
+    nativeElement.checked = val;
 }
 
 /**

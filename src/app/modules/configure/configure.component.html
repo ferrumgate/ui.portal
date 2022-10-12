@@ -14,8 +14,7 @@
                             <mat-form-field class="login-form-field"
                                 class="configure-common-explanation configure-common-width">
                                 <input type="text" test-id="configure-email-input" matInput
-                                    placeholder="{{'Email'|translate}}" formControlName="email"
-                                    [(ngModel)]="model.email" (ngModelChange)="userModelChanged($event)">
+                                    placeholder="{{'Email'|translate}}" formControlName="email">
                                 <mat-hint>{{"DefaultUsernameChangeDefinition"|translate}}
                                 </mat-hint>
                                 <mat-error test-id="login-email-error" class="configure-error">
@@ -26,8 +25,7 @@
                         <p fxFill>
                             <mat-form-field class="login-form-field" class="configure-common-width">
                                 <input [type]="hidePassword?'password':'text'" test-id="configure-password-input"
-                                    matInput placeholder="{{'Password'|translate}}" formControlName="password"
-                                    [(ngModel)]="model.password" (ngModelChange)="userModelChanged($event)">
+                                    matInput placeholder="{{'Password'|translate}}" formControlName="password">
                                 <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                     'visibility_off' : 'visibility'}}</mat-icon>
                                 <mat-hint>
@@ -42,8 +40,7 @@
                             <mat-form-field class="register-form-field" class="configure-common-width">
                                 <input [type]="hidePasswordAgain?'password':'text'"
                                     test-id="configure-password-again-input" matInput
-                                    placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain"
-                                    [(ngModel)]="model.passwordAgain" (ngModelChange)="userModelChanged($event)">
+                                    placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain">
                                 <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain
                                     ?
                                     'visibility_off' : 'visibility'}}</mat-icon>
@@ -69,8 +66,7 @@
                             <mat-form-field appearance="fill" class="configure-common-width">
                                 <mat-label>{{"PrivateDomain"|translate}}</mat-label>
                                 <input matInput test-id="configure-domain-input" placeholder="ferrumgate.local"
-                                    formControlName="domain" [(ngModel)]="model.domain"
-                                    (ngModelChange)="commonModelChanged($event)" required>
+                                    formControlName="domain" required>
                                 <mat-hint>{{"PrivateDomainDefinition"|translate}}
                                 </mat-hint>
                                 <mat-error>{{commonError.domain|translate}}</mat-error>
@@ -80,8 +76,7 @@
                             <mat-form-field appearance="fill" class="configure-common-width">
                                 <mat-label>{{"LoginUrl"|translate}}</mat-label>
                                 <input matInput test-id="configure-url-input"
-                                    placeholder="https://secure.ferrumgate.com" formControlName="url"
-                                    [(ngModel)]="model.url" (ngModelChange)="commonModelChanged($event)" required>
+                                    placeholder="https://secure.ferrumgate.com" formControlName="url" required>
                                 <mat-hint>{{"UrlDefinition"|translate}}</mat-hint>
 
                                 <mat-error>{{commonError.url|translate}}</mat-error>
@@ -103,8 +98,7 @@
                             <mat-form-field appearance="fill" class="configure-common-width">
                                 <mat-label>{{"ClientIpRange"|translate}}</mat-label>
                                 <input matInput test-id="configure-clientnetwork-input" placeholder="100.64.0.0/16"
-                                    formControlName="clientNetwork" [(ngModel)]="model.clientNetwork"
-                                    (ngModelChange)="networkModelChanged($event)" required>
+                                    formControlName="clientNetwork" required>
                                 <mat-hint>{{"ClientNetworkDefinition"|translate}}
                                 </mat-hint>
                                 <mat-error>{{networkError.clientNetwork|translate}}</mat-error>
@@ -114,8 +108,7 @@
                             <mat-form-field appearance="fill" class="configure-common-width">
                                 <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
                                 <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
-                                    formControlName="serviceNetwork" [(ngModel)]="model.serviceNetwork"
-                                    (ngModelChange)="networkModelChanged($event)" required>
+                                    formControlName="serviceNetwork" required>
                                 <mat-hint>{{"ServiceNetworkDefinition"|translate}}</mat-hint>
 
                                 <mat-error>{{networkError.serviceNetwork|translate}}</mat-error>

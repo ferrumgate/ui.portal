@@ -89,13 +89,25 @@ export class ConfigEmailExternalComponent implements OnInit {
   }
 
   createFormGroup(model: any) {
-    return new FormGroup(
+    const fmg = new FormGroup(
       {
         user: new FormControl(model.user, [Validators.required, InputService.emailValidator]),
         pass: new FormControl(model.pass, [Validators.required]),
 
 
       });
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      fm.valueChanges.subscribe(x => {
+        (this._model as any)[iterator] = x;
+      })
+    }
+    fmg.valueChanges.subscribe(x => {
+      this.modelChanged();
+    })
+    return fmg;
   }
 
   resetFormErrors() {
@@ -105,7 +117,7 @@ export class ConfigEmailExternalComponent implements OnInit {
     }
   }
 
-  modelChanged($event: any) {
+  modelChanged() {
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -167,7 +179,7 @@ export class ConfigEmailExternalComponent implements OnInit {
     this.model.isChanged = false;
     this.model.orig = orig;
     this.model.checkEmail = false;
-    this.model.to = '';
+
   }
   createBaseModel(): ConfigEmail {
     return { fromname: this.model.user, type: this.model.type, user: this.model.user, pass: this.model.user };

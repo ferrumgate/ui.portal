@@ -31,6 +31,24 @@ const routes: Routes = [
 
       },
       {
+        path: 'accounts/users',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/accounts/users/accounts-users.module').then(m => m.AccountsUsersModule)
+
+      },
+      {
+        path: 'accounts/groups',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/accounts/groups/accounts-groups.module').then(m => m.AccountsGroupsModule)
+
+      },
+      {
         path: 'settings/common',
         canActivate: [RoleGuard],
         data: {

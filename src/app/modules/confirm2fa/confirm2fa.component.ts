@@ -3,7 +3,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { delay, map, shareReplay, switchMap } from 'rxjs/operators';
 import { RunHelpers } from 'rxjs/testing';
 import { Login, Login2FA } from 'src/app/modules/shared/models/login';
@@ -15,6 +15,7 @@ import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { RBACDefault } from '../shared/models/rbac';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 
 @Component({
@@ -22,7 +23,8 @@ import { RBACDefault } from '../shared/models/rbac';
   templateUrl: './confirm2fa.component.html',
   styleUrls: ['./confirm2fa.component.scss']
 })
-export class Confirm2FAComponent implements OnInit {
+export class Confirm2FAComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   isThemeDark = false;
   device: any;
   title: string;
@@ -38,6 +40,7 @@ export class Confirm2FAComponent implements OnInit {
 
   @Output() submitEM = new EventEmitter();
 
+
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
@@ -49,18 +52,19 @@ export class Confirm2FAComponent implements OnInit {
     this.title = "Title";
 
     this.error2fa = this.resetErrors2FA();
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
+      })
 
-    })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
+
     this.route.queryParams.subscribe(params => {
-
       this.model2fa.key = params.key;
-
     })
+
   }
 
   resetErrors() {
@@ -77,6 +81,9 @@ export class Confirm2FAComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
 
   ngAfterViewInit(): void {
@@ -96,13 +103,15 @@ export class Confirm2FAComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model2fa as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model2fa as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged2FA();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged2FA();
+      })
     return fmg;
   }
 

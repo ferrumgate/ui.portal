@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,6 +10,7 @@ import { ConfigService } from '../shared/services/config.service';
 import { ConfigureService } from '../shared/services/configure.service';
 import { InputService } from '../shared/services/input.service';
 import { NotificationService } from '../shared/services/notification.service';
+import { SSubscription } from '../shared/services/SSubscribtion';
 import { TranslationService } from '../shared/services/translation.service';
 
 @Component({
@@ -17,8 +18,9 @@ import { TranslationService } from '../shared/services/translation.service';
   templateUrl: './configure.component.html',
   styleUrls: ['./configure.component.scss']
 })
-export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
 
+  allSub = new SSubscription();
   randomPassword = this.generatePassword();
   model = {
 
@@ -63,9 +65,11 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
     private notificationService: NotificationService
   ) {
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
+
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
 
@@ -73,6 +77,9 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
 
   ngOnInit(): void {
 
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
   ngAfterViewInit(): void {
 
@@ -94,13 +101,15 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.commonModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.commonModelChanged();
+      })
     return fmg;
   }
 
@@ -114,13 +123,15 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.networkModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.networkModelChanged();
+      })
     return fmg;
   }
 
@@ -139,13 +150,15 @@ export class ConfigureComponent implements OnInit, AfterViewInit, AfterContentIn
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.userModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.userModelChanged();
+      })
     return fmg;
   }
 

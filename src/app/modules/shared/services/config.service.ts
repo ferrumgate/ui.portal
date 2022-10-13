@@ -46,7 +46,8 @@ export class ConfigService extends BaseService {
     authOauthHelp: "https://ferrumgate/doc/auth/oauth",
     authLdapHelp: "https://ferrumgate/doc/auth/ldap",
     authSamlHelp: "https://ferrumgate/doc/auth/saml",
-
+    accountGroupHelp: "https://ferrumgate/doc/account/group",
+    accountUserHelp: "https://ferrumgate/doc/account/user"
 
 
   }
@@ -160,7 +161,7 @@ export class ConfigService extends BaseService {
     return this.dynamicConfig.login.oAuthLinkedin
   }
   get isLoginEnabledSamlAuth0() {
-    return this.dynamicConfig.login.oAuthLinkedin
+    return this.dynamicConfig.login.samlAuth0;
   }
 
   get isAllReadyConfigured() {

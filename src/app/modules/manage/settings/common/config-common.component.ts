@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { delay, switchMap, takeWhile } from 'rxjs';
@@ -8,6 +8,7 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
 
@@ -25,9 +26,9 @@ interface Model extends BaseModel {
   templateUrl: './config-common.component.html',
   styleUrls: ['./config-common.component.scss']
 })
-export class ConfigCommonComponent implements OnInit, AfterViewInit {
+export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
 
-
+  allSub = new SSubscription();
 
   isThemeDark = false;
   private _model: Model = { url: '', domain: '', isChanged: false, orig: { url: '', domain: '' } };
@@ -51,15 +52,17 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
   commonFormGroup: FormGroup = this.createFormGroup(this.model);
 
   commonError: { url: string, domain: string } = { url: '', domain: '' };
+
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
 
@@ -75,6 +78,9 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
     })
 
   }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
   ngAfterViewInit(): void {
 
   }
@@ -89,13 +95,15 @@ export class ConfigCommonComponent implements OnInit, AfterViewInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this._model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this._model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.commonModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.commonModelChanged();
+      })
     return fmg;
   }
   resetCommonErrors() {

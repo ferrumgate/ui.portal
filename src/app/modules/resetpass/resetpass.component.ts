@@ -14,14 +14,15 @@ import { InputService } from 'src/app/modules/shared/services/input.service';
 import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-resetpass',
   templateUrl: './resetpass.component.html',
   styleUrls: ['./resetpass.component.scss']
 })
-export class ResetPassComponent implements OnInit {
-
+export class ResetPassComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   isThemeDark = false;
   device: any;
   model: ResetPass = {};
@@ -47,9 +48,10 @@ export class ResetPassComponent implements OnInit {
   ) {
     this.error = this.resetErrrors();
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.route.queryParams.subscribe(params => {
@@ -63,6 +65,9 @@ export class ResetPassComponent implements OnInit {
   ngOnInit(): void {
 
 
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
   createFormGroup(model: ResetPass) {
     const fmg = new FormGroup(
@@ -78,13 +83,15 @@ export class ResetPassComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
     return fmg;
   }
 

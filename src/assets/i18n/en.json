@@ -186,5 +186,6 @@
     "UsernameField": "Username field",
     "UsernameFieldHint": "Username property name on object",
     "NameField": "Name field",
-    "NameFieldHint": "Name property name on object"
+    "NameFieldHint": "Name property name on object",
+    "Groups": "Groups"
 }

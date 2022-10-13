@@ -15,6 +15,8 @@ import { GatewayService } from '../../shared/services/gateway.service';
 import { NetworkService } from '../../shared/services/network.service';
 import { ConfirmService } from '../../shared/services/confirm.service';
 import { ThemeSelectorComponent } from '../../shared/themeselector/themeselector.component';
+import { ConfigService } from '../../shared/services/config.service';
+import { SSubscription } from '../../shared/services/SSubscribtion';
 
 
 
@@ -27,22 +29,27 @@ export class NetworksComponent implements OnInit, OnDestroy {
 
   gatewaysNotJoinedpanelOpenState = true;
   searchForm = new FormControl();
-  messageSubscription: Subscription;
+  allSubs: SSubscription = new SSubscription();
   networks: Network[] = [];
   gateways: Gateway[] = [];
   gatewaysNotJoined: Gateway[] = [];
-
+  isThemeDark = false;
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
     private gatewayService: GatewayService,
     private networkService: NetworkService,
     private confirmService: ConfirmService,
-    private ref: ApplicationRef
+    private configService: ConfigService
   ) {
+    this.allSubs.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
 
+      })
+    this.isThemeDark = this.configService.getTheme() == 'dark';
     //search input with wait
-    this.messageSubscription =
+    this.allSubs.addThis =
       this.searchForm.valueChanges.pipe(
         debounceTime(1000),
         distinctUntilChanged()
@@ -109,7 +116,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
 
   }
   ngOnDestroy() {
-    this.messageSubscription.unsubscribe();
+    this.allSubs.unsubscribe();
   }
 
   prepareGateway(gateway: Gateway) {

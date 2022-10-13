@@ -36,7 +36,8 @@
                         <mat-card-content class="group-user-item">
                             <mat-list>
 
-                                <mat-list-item *ngFor="let user of group.searchedUsers">
+                                <mat-list-item test-id="accounts-groups-users-item"
+                                    *ngFor="let user of group.searchedUsers">
 
                                     <div class="accounts-groups-user-item" fxFill fxLayout="row"
                                         fxLayoutAlign="start center">

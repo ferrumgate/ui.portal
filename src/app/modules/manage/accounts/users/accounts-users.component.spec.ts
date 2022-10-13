@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 
 import { AccountsUsersComponent } from './accounts-users.component';
 
@@ -19,7 +19,8 @@ describe('AccountsUsersComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', fakeAsync(async () => {
     expect(component).toBeTruthy();
-  });
+  }));
+
 });

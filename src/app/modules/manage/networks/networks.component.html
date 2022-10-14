@@ -2,11 +2,13 @@
     <div class="networks networks-toolbar">
         <div fxFlex fxLayout="column">
             <div class="row title">
-                {{'Networks'|translate}}
+                <span matBadge="{{networks.length}}" matBadgeOverlap="false">{{'Networks'|translate}}</span>
+
             </div>
             <div class="row" fxLayout="row">
                 <mat-form-field fxFlex>
                     <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"NetworksSearchHint"|translate}}</mat-hint>
                 </mat-form-field>
                 <div fxLayoutAlign="center center">
                     <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">

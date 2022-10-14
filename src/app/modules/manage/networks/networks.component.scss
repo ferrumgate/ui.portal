@@ -8,7 +8,7 @@
 
     /* Make sure the toolbar will stay on top of the content as it scrolls past. */
     font-size: 0.9rem;
-    height: 120px;
+    height: 130px;
 
 }
 
@@ -19,7 +19,7 @@
 }
 
 .networks .title {
-    padding-top: 15px;
+    padding-top: 25px;
     padding-bottom: 10px;
     font-size: 1.2rem;
 }
@@ -28,11 +28,7 @@
     margin-left: 15px;
 }
 
-.networks .network-item {
-    //max-width: 700px;
-    //max-height: 700px;
-    //padding-right: 30px;
-}
+
 
 .networks .gateway-title {
     padding-left: 10px;
@@ -53,10 +49,6 @@
 
 }
 
-.networks .gateway-item {
-    // max-width: 120px;
-
-}
 
 
 .networks app-gateway {
@@ -68,7 +60,7 @@
 .networks-content {
     margin-top: 10px;
     margin-bottom: 10px;
-    height: calc(100vh - 60px - 120px - 10px);
+    height: calc(100vh - 60px - 130px - 10px);
     overflow: auto;
 }
 

@@ -4,7 +4,7 @@
 
             <div class="row title">
 
-                <span matBadge="4" matBadgeOverlap="false">{{'Users'|translate}}</span>
+                <span matBadge="{{totalUsers}}" matBadgeOverlap="false">{{'Users'|translate}}</span>
 
             </div>
 
@@ -12,45 +12,45 @@
 
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"Verified"|translate}}</mat-label>
-                    <mat-select [(value)]="searchIsVerified" onchange="search()">
+                    <mat-select [(value)]="searchIsVerified" (selectionChange)="search()">
                         <mat-option value="none">{{"None"|translate}}</mat-option>
-                        <mat-option value="yes">{{"Yes"|translate}}</mat-option>
-                        <mat-option value="no">{{"No"|translate}}</mat-option>
+                        <mat-option value="true">{{"Yes"|translate}}</mat-option>
+                        <mat-option value="false">{{"No"|translate}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"Locked"|translate}}</mat-label>
-                    <mat-select [(value)]="searchIsLocked" onchange="search()">
+                    <mat-select [(value)]="searchIsLocked" (selectionChange)="search()">
                         <mat-option value="none">{{"None"|translate}}</mat-option>
-                        <mat-option value="yes">{{"Yes"|translate}}</mat-option>
-                        <mat-option value="no">{{"No"|translate}}</mat-option>
+                        <mat-option value="true">{{"Yes"|translate}}</mat-option>
+                        <mat-option value="false">{{"No"|translate}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"EmailVerified"|translate}}</mat-label>
-                    <mat-select [(value)]="searchIsEmailVerified" onchange="search()">
+                    <mat-select [(value)]="searchIsEmailVerified" (selectionChange)="search()">
                         <mat-option value="none">{{"None"|translate}}</mat-option>
-                        <mat-option value="yes">{{"Yes"|translate}}</mat-option>
-                        <mat-option value="no">{{"No"|translate}}</mat-option>
+                        <mat-option value="true">{{"Yes"|translate}}</mat-option>
+                        <mat-option value="false">{{"No"|translate}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"2FA"|translate}}</mat-label>
-                    <mat-select [(value)]="searchIs2FA" onchange="search()">
+                    <mat-select [(value)]="searchIs2FA" (selectionChange)="search()">
                         <mat-option value="none">{{"None"|translate}}</mat-option>
-                        <mat-option value="yes">{{"Yes"|translate}}</mat-option>
-                        <mat-option value="no">{{"No"|translate}}</mat-option>
+                        <mat-option value="true">{{"Yes"|translate}}</mat-option>
+                        <mat-option value="false">{{"No"|translate}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"Groups"|translate}}</mat-label>
-                    <mat-select [formControl]="groupFormControl" multiple onchange="search()">
+                    <mat-select [formControl]="groupFormControl" multiple (selectionChange)="search()">
                         <mat-option *ngFor="let group of groups" [value]="group">{{group.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="accounts-users-search-item">
                     <mat-label>{{"Roles"|translate}}</mat-label>
-                    <mat-select [formControl]="roleFormControl" multiple onchange="search()">
+                    <mat-select [formControl]="roleFormControl" multiple (selectionChange)="search()">
                         <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -68,13 +68,13 @@
                     <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
                     <mat-hint>{{"UsersSearchHint"|translate}}</mat-hint>
                 </mat-form-field>
-                <div fxLayoutAlign="center center">
+                <!--  <div fxLayoutAlign="center center">
                     <button mat-raised-button color="primary" class="add">
                         <mat-icon>add</mat-icon>
                         {{"Add"|translate}}
                     </button>
                 </div>
-
+ -->
 
             </div>
             <div class="row" fxLayout="row wrap">
@@ -85,7 +85,8 @@
         </div>
     </div>
     <div class="accounts-users-paginator" fxLayoutAlign="end center">
-        <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+        <mat-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="[1,5, 10, 25, 100]"
+            aria-label="Select page" (page)="pageChanged($event)" size>
         </mat-paginator>
     </div>
     <div class="accounts-users-content" fxLayout="column">
@@ -95,7 +96,8 @@
 
             <p class="row accounts-users-item" fxLayout="row" *ngFor="let user of users">
 
-                <app-user test-id="accounts-users-user" [roles]="roles" [groups]="groups" [user]="user">
+                <app-user test-id="accounts-users-user" [roles]="roles" [groups]="groups" [user]="user"
+                    (deleteUser)="deleteUser($event)" (saveUser)="saveUser($event)">
                 </app-user>
 
             </p>

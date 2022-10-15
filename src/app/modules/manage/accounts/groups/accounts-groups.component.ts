@@ -12,10 +12,11 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { ThemeSelectorComponent } from '../../../shared/themeselector/themeselector.component';
 import { Group } from 'src/app/modules/shared/models/group';
-import { User } from 'src/app/modules/shared/models/user';
+import { User, User2 } from 'src/app/modules/shared/models/user';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
+import { UserService } from 'src/app/modules/shared/services/user.service';
 @Component({
   selector: 'app-accounts-groups',
   templateUrl: './accounts-groups.component.html',
@@ -35,7 +36,8 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private confirmService: ConfirmService,
     private configService: ConfigService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private userService: UserService
   ) {
 
     this.allSubs.addThis =
@@ -108,10 +110,10 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
       ...group,
       labels: Array.from(group.labels),
       users: users.map(x => {
-        return { id: x.id, username: x.username }
+        return { id: x.id, username: x.username, groupIds: x.groupIds }
       }),
       searchedUsers: users.map(x => {
-        return { id: x.id, username: x.username }
+        return { id: x.id, username: x.username, groupIds: x.groupIds }
       }),
       usersCount: users.length,
       isUsersOpened: false,
@@ -129,9 +131,9 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
 
   }
   getAllData() {
-    return this.groupService.getUsers().pipe(
+    return this.userService.get2(0, 0, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, 'simple').pipe(
       map(y => {
-        this.users = y.items as User[];
+        this.users = y.items as any;
       }),
       switchMap(y => this.groupService.get2()),
       map(z => {
@@ -200,8 +202,44 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
   }
 
 
-  deleteUserFromGroup(user: User, group: Group) {
+  deleteUserFromGroup(user: User2, group: Group) {
 
+    this.confirmService.showDelete().pipe(
+      takeWhile(x => x),
+      switchMap(y => {
+        let index = user.groupIds.findIndex(x => x == group.id);
+        if (index >= 0)
+          user.groupIds.splice(index, 1);
+        return this.userService.saveOrupdate(user);
+      }
+      ),
+    ).subscribe((x) => {
+
+      //delete from group list
+      const groupLocal = this.groups.find(x => x.id == group.id);
+
+      if (groupLocal) {
+        const userFounded = this.users.find(x => x.id == user.id)
+        if (userFounded)
+          userFounded.groupIds = user.groupIds;
+
+        const prepared = this.prepareGroup(groupLocal, this.users);
+        if (!prepared.usersCount)
+          prepared.isUsersOpened = false;
+        else
+          prepared.isUsersOpened = true;
+
+        let index3 = this.groups.findIndex(x => x.id == group.id);
+
+        this.groups[index3] = {
+          ...prepared
+        }
+      }
+
+
+
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
+    });
   }
 
 

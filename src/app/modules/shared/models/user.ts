@@ -30,5 +30,6 @@ export interface User2 {
     email?: string;
     isEmailVerified?: boolean;
     labels?: string[];
+    [key: string]: any;
 
 }

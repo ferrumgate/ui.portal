@@ -31,7 +31,7 @@ export class UserComponent implements OnInit, OnDestroy {
     {
       id: '', name: '',
       labels: [], groupIds: [], insertDate: '', updateDate: '',
-      source: '', username: '', isChanged: false,
+      source: '', username: '', isChanged: false, isExpanded: false,
 
       orig: {
         id: '', name: '',
@@ -64,12 +64,13 @@ export class UserComponent implements OnInit, OnDestroy {
 
   @Input()
   set user(val: User2) {
+
     this._model = {
+
       ...val,
       orig: val,
       labels: Array.from(val.labels || []),
-      isChanged: false,
-
+      isChanged: false
 
     }
 
@@ -281,6 +282,10 @@ export class UserComponent implements OnInit, OnDestroy {
       twoFASecret: this.user.twoFASecret
 
     }
+  }
+  expand($event: any) {
+
+    this._model.isExpanded = $event
   }
 
   userGroupChanged() {

@@ -53,6 +53,8 @@ export class ConfigService extends BaseService {
   }
   changeUser(userId: string) {
     this.userId = userId;
+    const theme = this.getTheme();
+    this.themeChanged.emit(theme);
   }
 
 
@@ -64,8 +66,8 @@ export class ConfigService extends BaseService {
       this.translationservice.setDefaultLang(language);
       this.translationservice.use(language);
     }
-    const theme = this.getTheme();
-    this.themeChanged.emit(theme);
+    //const theme = this.getTheme();
+    //this.themeChanged.emit(theme);
 
     //try to get config
 
@@ -110,6 +112,7 @@ export class ConfigService extends BaseService {
     return theme || 'white';
 
   }
+
 
   dynamicConfig: {
     captchaSiteKey: string,

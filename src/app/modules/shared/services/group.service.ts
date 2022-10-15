@@ -85,7 +85,7 @@ export class GroupService extends BaseService {
   }
 
 
-  getUsers() {
+  /* getUsers() {
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
@@ -94,7 +94,7 @@ export class GroupService extends BaseService {
         return this.httpService.get<{ items: { id: string, username: string, groupIds: string[] }[] }>(url);
 
       }))
-  }
+  } */
 
 
 }

@@ -65,10 +65,10 @@ export class ManageLayoutComponent {
           icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/groups']) }
 
         },
-        {
+        /* {
           icon: 'grain', isClicked: false, isExpanded: false, name: this.translateService.translate('ApiKeys'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/apikeys']) }
 
-        }]
+        } */]
     },
     {
       icon: 'swap_calls', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }

@@ -52,7 +52,7 @@ export class BaseService {
             else {
                 const param = x?.toString();
                 if (param)
-                    url += `/${param}`
+                    url += param.startsWith('/') ? `${param}` : `/${param}`;
             }
 
         }

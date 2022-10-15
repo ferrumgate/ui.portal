@@ -15,6 +15,7 @@ import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { RBACDefault } from '../shared/models/rbac';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 
 @Component({
@@ -22,7 +23,8 @@ import { RBACDefault } from '../shared/models/rbac';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
+  allSub = new SSubscription();
   isThemeDark = false;
   device: any;
   title: string;
@@ -51,13 +53,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.title = "Title";
     this.error = this.resetErrors();
 
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-
-    })
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
+    this.configService.getPublicConfig().subscribe();
 
     this.route.queryParams.subscribe(params => {
 
@@ -89,6 +91,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 
   }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
   ngAfterViewInit(): void {
 
   }
@@ -103,13 +108,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
     return fmg;
 
   }

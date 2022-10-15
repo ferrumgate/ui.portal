@@ -186,5 +186,19 @@
     "UsernameField": "Username field",
     "UsernameFieldHint": "Username property name on object",
     "NameField": "Name field",
-    "NameFieldHint": "Name property name on object"
+    "NameFieldHint": "Name property name on object",
+    "Groups": "Groups",
+    "Users": "Users",
+    "Verified": "Verified",
+    "Locked": "Locked",
+    "EmailVerified": "Email verified",
+    "None": "None",
+    "Yes": "Yes",
+    "No": "No",
+    "UsersSearchHint": "Search by name, username, email,labels, source with above",
+    "GroupsSearchHint": "Search by name, labels",
+    "NetworksSearchHint": "Search by name, labels, serviceNetwork, clientNetwork",
+    "Details": "Details",
+    "UserNameSurnameHint": "User name surname",
+    "UserEmailHint": "User extra email address if username is not email this will be used for sending email,not used for login"
 }

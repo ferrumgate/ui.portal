@@ -114,6 +114,7 @@ export class AuthenticationService extends BaseService {
       sessionStorage.removeItem(AuthenticationService.StorageSessionKey);
     }
     else {
+      this.configService.changeUser(this._currentSession.currentUser.id);
       sessionStorage.setItem(AuthenticationService.StorageSessionKey, JSON.stringify(this._currentSession));
     }
 

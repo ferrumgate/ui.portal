@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthLocal } from '../../models/auth';
 import { ConfigService } from '../../services/config.service';
+import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
 
 
@@ -16,8 +17,8 @@ export interface AuthLocalExtended extends AuthLocal {
   templateUrl: './auth-local.component.html',
   styleUrls: ['./auth-local.component.scss']
 })
-export class AuthLocalComponent implements OnInit {
-
+export class AuthLocalComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   helpLink = '';
   _model: AuthLocalExtended = {
     id: '', baseType: 'local', isChanged: false, name: 'Local',
@@ -56,11 +57,11 @@ export class AuthLocalComponent implements OnInit {
     private translateService: TranslationService,
   ) {
 
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-
-    })
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
     //for testing;
     this.helpLink = this.configService.links.authLocalHelp;
@@ -68,6 +69,9 @@ export class AuthLocalComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
 
 
@@ -80,13 +84,15 @@ export class AuthLocalComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this._model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this._model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
     return fmg;
   }
 

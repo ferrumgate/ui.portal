@@ -17,4 +17,20 @@ export class UtilService {
     static clone<T>(obj: T) {
         return JSON.parse(JSON.stringify(obj)) as T;
     }
+
+    static checkChanged(source?: string[], target?: string[]) {
+        if (!target && !source) return false;
+        if (!source && target?.length)
+            return true;
+        if (!target && source?.length)
+            return true;
+        if (source && target) {
+            if (source.length != target.length) return true;
+            const founded = source.find(x => !target.includes(x))
+            if (founded)
+                return true;
+
+        }
+        return false;
+    }
 }

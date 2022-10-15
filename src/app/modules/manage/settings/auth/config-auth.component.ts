@@ -318,6 +318,13 @@ export class ConfigAuthComponent implements OnInit {
     this.model.saml.providers.push(saml);
   }
 
+  get totalCount() {
+    return 1
+      + (this.model.ldap?.providers?.length || 0)
+      + (this.model.saml?.providers?.length || 0)
+      + (this.model.oauth?.providers?.length || 0)
+  }
+
 
 
 

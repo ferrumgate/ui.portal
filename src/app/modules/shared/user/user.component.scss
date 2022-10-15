@@ -1,0 +1,49 @@
+.user {
+    min-width: 300px;
+}
+
+.user .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.user .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.user .row-pad {
+    margin-left: 15px;
+}
+
+.user .user-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+
+}
+
+.user .user-title {
+    padding-left: 10px;
+}
+
+.user .user-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+
+.user .user-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.user .user-username {
+    padding-left: 20px;
+    font-weight: 500;
+}
+
+.user .user-form {
+    padding-bottom: 5px;
+}

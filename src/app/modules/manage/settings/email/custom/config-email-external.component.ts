@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfigEmail } from 'src/app/modules/shared/models/config';
@@ -6,6 +6,7 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
 
@@ -25,9 +26,9 @@ interface Model extends ConfigEmail {
   templateUrl: './config-email-external.component.html',
   styleUrls: ['./config-email-external.component.scss']
 })
-export class ConfigEmailExternalComponent implements OnInit {
+export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
 
-
+  allSub = new SSubscription();
 
 
   isThemeDark = false;
@@ -72,15 +73,19 @@ export class ConfigEmailExternalComponent implements OnInit {
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
 
   }
   ngOnInit(): void {
 
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
 
 
@@ -100,13 +105,15 @@ export class ConfigEmailExternalComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this._model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this._model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
     return fmg;
   }
 

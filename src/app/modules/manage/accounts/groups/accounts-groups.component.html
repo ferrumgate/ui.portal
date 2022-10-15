@@ -1,0 +1,73 @@
+<div class="accounts-groups-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="accounts-groups accounts-groups-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                <span matBadge="{{groups.length}}" matBadgeOverlap="false">{{'Groups'|translate}}</span>
+            </div>
+            <div class="row" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"GroupsSearchHint"|translate}}</mat-hint>
+                </mat-form-field>
+                <div fxLayoutAlign="center center">
+                    <button mat-raised-button color="primary" class="add" (click)="addNewGroup()">
+                        <mat-icon>add</mat-icon>
+                        {{"Add"|translate}}
+                    </button>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="accounts-groups accounts-groups-content">
+        <div fxLayout="row wrap">
+            <p class="row accounts-groups-item" fxLayout="row" *ngFor="let group of groups">
+
+                <app-group test-id="accounts-groups-group" [group]="group" (deleteGroup)="deleteGroup($event)"
+                    (saveGroup)="saveGroup($event)" (openGroupUsers)="group.isUsersOpened=!group.isUsersOpened">
+                </app-group>
+                <span class="accounts-groups-users" *ngIf="group.isUsersOpened">
+                    <mat-card>
+                        <mat-card-actions>
+                            <mat-label>{{'Users'|translate}}</mat-label>
+                            <mat-form-field fxFill>
+                                <input matInput placeholder="{{'Search'|translate}}" [formControl]="group.userSearch" />
+                            </mat-form-field>
+                        </mat-card-actions>
+                        <mat-card-content class="group-user-item">
+                            <mat-list>
+
+                                <mat-list-item test-id="accounts-groups-users-item"
+                                    *ngFor="let user of group.searchedUsers">
+
+                                    <div class="accounts-groups-user-item" fxFill fxLayout="row"
+                                        fxLayoutAlign="start center">
+                                        <p>
+                                            {{user.username}}
+                                        </p>
+                                        <p fxFlex fxLayoutAlign="end center">
+                                            <button test-id="group-delete-button" mat-icon-button color="primary"
+                                                matTooltip="{{'Delete'|translate}}"
+                                                (click)="deleteUserFromGroup(user,group)">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </p>
+
+                                    </div>
+                                    <mat-divider></mat-divider>
+
+
+                                </mat-list-item>
+
+
+
+                            </mat-list>
+                        </mat-card-content>
+                    </mat-card>
+                </span>
+            </p>
+        </div>
+
+
+    </div>
+</div>

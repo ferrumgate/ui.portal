@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
@@ -6,6 +6,7 @@ import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 
@@ -23,7 +24,8 @@ interface Model extends BaseModel {
   templateUrl: './config-captcha.component.html',
   styleUrls: ['./config-captcha.component.scss']
 })
-export class ConfigCaptchaComponent implements OnInit {
+export class ConfigCaptchaComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   helpLink = '';
 
 
@@ -48,15 +50,18 @@ export class ConfigCaptchaComponent implements OnInit {
   captchaFormGroup: FormGroup = this.createFormGroup(this.model);
 
   captchaError: { server: string, client: string } = { server: '', client: '' };
+
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
 
@@ -76,6 +81,9 @@ export class ConfigCaptchaComponent implements OnInit {
     })
 
   }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
   ngAfterViewInit(): void {
 
   }
@@ -90,13 +98,15 @@ export class ConfigCaptchaComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this._model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this._model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.captchaModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.captchaModelChanged();
+      })
     return fmg;
   }
   resetCaptchaErrors() {

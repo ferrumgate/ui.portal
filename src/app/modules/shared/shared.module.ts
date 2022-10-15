@@ -21,6 +21,8 @@ import { AuthLdapComponent } from './auth/auth-ldap/auth-ldap.component';
 import { AuthSamlComponent } from './auth/auth-saml/auth-saml.component';
 import { AuthOauthComponent } from './auth/auth-oauth/auth-oauth.component';
 import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
+import { UserComponent } from './user/user.component';
+import { GroupComponent } from "./group/group.component";
 
 
 
@@ -49,7 +51,9 @@ import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
         AuthOauthComponent,
         AuthLdapComponent,
         AuthLocalComponent,
-        AuthSamlComponent
+        AuthSamlComponent,
+        GroupComponent,
+        UserComponent
 
 
     ],
@@ -86,7 +90,9 @@ import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
         AuthLdapComponent,
         AuthSamlComponent,
         AuthOauthComponent,
-        AuthLocalComponent
+        AuthLocalComponent,
+        GroupComponent,
+        UserComponent
     ],
     providers: [
         {

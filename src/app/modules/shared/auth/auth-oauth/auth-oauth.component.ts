@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
@@ -8,6 +8,7 @@ import { ConfirmService } from 'src/app/modules/shared/services/confirm.service'
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { BaseOAuth } from '../../models/auth';
+import { SSubscription } from '../../services/SSubscribtion';
 
 
 interface BaseModel extends BaseOAuth {
@@ -24,8 +25,8 @@ interface Model extends BaseModel {
   templateUrl: './auth-oauth.component.html',
   styleUrls: ['./auth-oauth.component.scss']
 })
-export class AuthOauthComponent implements OnInit {
-
+export class AuthOauthComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   helpLink = '';
 
 
@@ -86,9 +87,10 @@ export class AuthOauthComponent implements OnInit {
     };
     this.formGroup = this.createFormGroup(this.model);
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
-    })
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.authOauthHelp;
@@ -103,7 +105,9 @@ export class AuthOauthComponent implements OnInit {
   ngOnInit(): void {
 
   }
-
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
@@ -114,13 +118,15 @@ export class AuthOauthComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this._model as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this._model as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.modelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
     return fmg;
   }
   resetErrors() {

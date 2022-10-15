@@ -1,0 +1,81 @@
+.accounts-groups-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.accounts-groups-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 130px;
+
+}
+
+.accounts-groups .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.accounts-groups .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.accounts-groups .add {
+    margin-left: 15px;
+}
+
+
+
+
+
+.accounts-groups .accounts-groups-users {
+    padding: 10px;
+
+}
+
+.accounts-groups .accounts-groups-users {
+    min-width: 300px;
+
+}
+
+.accounts-groups .accounts-groups-users mat-card {
+    background-color: #d3d3d3;
+
+}
+
+.theme-dark .accounts-groups .accounts-groups-users mat-card {
+    background-color: #383535;
+
+}
+
+
+
+
+
+
+.accounts-groups-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 130px - 10px);
+    overflow: auto;
+}
+
+.accounts-groups .content-divider {
+    padding-bottom: 10px;
+}
+
+.accounts-groups .group-user-item {
+    max-height: 600px;
+    overflow: auto;
+    padding-bottom: 10px;
+
+}
+
+.accounts-groups .group-user-item mat-list-item {
+
+    font-size: 0.8rem;
+}

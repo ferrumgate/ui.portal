@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../../shared/models/network';
@@ -6,6 +6,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { InputService } from '../../shared/services/input.service';
 import { ConfigService } from '../services/config.service';
 import { UtilService } from '../services/util.service';
+import { SSubscription } from '../services/SSubscribtion';
 
 
 
@@ -14,8 +15,6 @@ export interface NetworkExtended extends Network {
   orig: Network;
   isChanged: boolean;
   isGatewayOpened: boolean;
-
-
 }
 
 @Component({
@@ -24,7 +23,8 @@ export interface NetworkExtended extends Network {
   styleUrls: ['./network.component.scss']
 })
 
-export class NetworkComponent implements OnInit {
+export class NetworkComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   helpLink = '';
   _network: Network = {
     id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: ''
@@ -62,6 +62,9 @@ export class NetworkComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
 
   openHelp() {
     if (this.helpLink) {
@@ -96,13 +99,15 @@ export class NetworkComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.network as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.network as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.networkModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.networkModelChanged();
+      })
     return fmg;
   }
 

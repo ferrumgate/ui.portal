@@ -46,12 +46,15 @@ export class ConfigService extends BaseService {
     authOauthHelp: "https://ferrumgate/doc/auth/oauth",
     authLdapHelp: "https://ferrumgate/doc/auth/ldap",
     authSamlHelp: "https://ferrumgate/doc/auth/saml",
-
+    accountGroupHelp: "https://ferrumgate/doc/account/group",
+    accountUserHelp: "https://ferrumgate/doc/account/user"
 
 
   }
   changeUser(userId: string) {
     this.userId = userId;
+    const theme = this.getTheme();
+    this.themeChanged.emit(theme);
   }
 
 
@@ -63,8 +66,8 @@ export class ConfigService extends BaseService {
       this.translationservice.setDefaultLang(language);
       this.translationservice.use(language);
     }
-    const theme = this.getTheme();
-    this.themeChanged.emit(theme);
+    //const theme = this.getTheme();
+    //this.themeChanged.emit(theme);
 
     //try to get config
 
@@ -109,6 +112,7 @@ export class ConfigService extends BaseService {
     return theme || 'white';
 
   }
+
 
   dynamicConfig: {
     captchaSiteKey: string,
@@ -160,7 +164,7 @@ export class ConfigService extends BaseService {
     return this.dynamicConfig.login.oAuthLinkedin
   }
   get isLoginEnabledSamlAuth0() {
-    return this.dynamicConfig.login.oAuthLinkedin
+    return this.dynamicConfig.login.samlAuth0;
   }
 
   get isAllReadyConfigured() {

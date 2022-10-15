@@ -1,0 +1,171 @@
+<div class="user">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'User'|translate}} {{user.username}}">
+                <mat-icon>person
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="user-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+
+
+                <form test-id="user-form" class="user-form" [formGroup]="formGroup">
+
+                    <!--   <p class="user-username">
+                        <mat-label>{{user.username}}</mat-label>
+                    </p> -->
+                    <mat-accordion class="user-details">
+                        <mat-expansion-panel [(expanded)]="user.isExpanded" (expandedChange)="expand($event)">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title test-id="user-username-title">
+                                    {{user.username}}
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <p>
+                                <mat-form-field fxFlex appearance="fill">
+                                    <mat-label>{{"Name"|translate}}</mat-label>
+                                    <input matInput test-id="user-name-input" placeholder="{{'Name'|translate}}"
+                                        formControlName="name" required>
+                                    <mat-error>{{formError.name|translate}}</mat-error>
+                                    <mat-hint>{{"UserNameSurnameHint"|translate}}</mat-hint>
+                                </mat-form-field>
+                            </p>
+                            <!--  <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Email"|translate}}</mat-label>
+                                        <input matInput test-id="user-username-input"
+                                            placeholder="{{'Email'|translate}}" formControlName="name">
+                                        <mat-error>{{formError.email|translate}}</mat-error>
+                                        <mat-hint>{{"UserEmailHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p >
+
+                                    <mat-checkbox test-id="user-checkbox-isEmailVerified" disabled="true"
+                                        [(ngModel)]="user.isEmailVerified" (ngModelChange)="modelChanged()"
+                                        [ngModelOptions]="{standalone:true}">
+                                        {{"EmailVerified"|translate}}</mat-checkbox>
+
+                                </p> -->
+                            <p>
+                                <mat-form-field class="user-search-item">
+                                    <mat-label>{{"Groups"|translate}}</mat-label>
+                                    <mat-select test-i="user-group-select" [formControl]="groupFormControl" multiple
+                                        onchange="userGroupChanged()">
+                                        <mat-option *ngFor="let group of groups" [value]="group">{{group.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                            <p>
+                                <mat-form-field class="user-search-item">
+                                    <mat-label>{{"Roles"|translate}}</mat-label>
+                                    <mat-select [formControl]="roleFormControl" multiple onchange="userGroupChanged()">
+                                        <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </p>
+                            <p fxFill fxLayout="row">
+                                <mat-label style="padding-right: 20px;">{{"Source"|translate}}
+                                </mat-label>
+
+                                <mat-icon test-id="user-source-icon" *ngIf="user.source.includes('local')"
+                                    matTooltip="{{user.source}}">
+                                    local_library
+                                </mat-icon>
+                                <mat-icon test-id="user-source-icon" *ngIf="user.source.includes('google')"
+                                    matTooltip="{{user.source}}" svgIcon="social-google"></mat-icon>
+                                <mat-icon test-id="user-source-icon" *ngIf="user.source.includes('auth0')"
+                                    matTooltip="{{user.source}}" svgIcon="social-auth0"></mat-icon>
+                                <mat-icon test-id="user-source-icon" *ngIf="user.source.includes('microsoft')"
+                                    matTooltip="{{user.source}}" svgIcon="social-microsoft"></mat-icon>
+                                <mat-icon test-id="user-source-icon" s *ngIf="user.source.includes('linkedin')"
+                                    matTooltip="{{user.source}}" svgIcon="social-linkedin"></mat-icon>
+                            </p>
+                            <p>
+
+                                <mat-checkbox test-id="user-checkbox-isVerified" disabled="true"
+                                    [checked]="user.isVerified" [(ngModel)]="user.isVerified"
+                                    (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                    {{"Verified"|translate}}</mat-checkbox>
+
+                            </p>
+
+                            <p>
+                                <mat-checkbox test-id="user-checkbox-isLocked" [checked]="user.isLocked"
+                                    [(ngModel)]="user.isLocked" (ngModelChange)="modelChanged()"
+                                    [ngModelOptions]="{standalone:true}">
+                                    {{"Locked"|translate}}</mat-checkbox>
+
+                            </p>
+                            <p>
+
+                                <mat-checkbox test-id="user-checkbox-is2FA" disabled="{{!user.orig.is2FA}}"
+                                    [checked]="user.is2FA" [(ngModel)]="user.is2FA" (ngModelChange)="modelChanged()"
+                                    [ngModelOptions]="{standalone:true}">
+                                    {{"2FA"|translate}}</mat-checkbox>
+
+                            </p>
+
+                            <p>
+                                <mat-form-field fxFlex appearance="fill">
+                                    <mat-label>{{"Labels"|translate}}</mat-label>
+                                    <mat-chip-list #chipList>
+                                        <mat-chip test-id="user-label-chip" *ngFor="let label of user.labels||[]"
+                                            (removed)="removeLabel(label)">
+                                            {{label}}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip>
+                                        <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="addLabel($event)">
+                                    </mat-chip-list>
+                                </mat-form-field>
+                            </p>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </form>
+
+
+
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="user-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="user-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="user.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="user-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="user-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

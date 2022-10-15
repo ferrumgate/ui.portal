@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Gateway, Network } from '../models/network';
@@ -9,6 +9,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
+import { SSubscription } from '../services/SSubscribtion';
 
 
 
@@ -25,7 +26,8 @@ export interface GatewayExtended extends Gateway {
   styleUrls: ['./gateway.component.scss']
 })
 
-export class GatewayComponent implements OnInit {
+export class GatewayComponent implements OnInit, OnDestroy {
+  allSub = new SSubscription();
   helpLink = '';
   _gateway: Gateway =
     {
@@ -86,10 +88,11 @@ export class GatewayComponent implements OnInit {
     private translateService: TranslationService,
   ) {
 
-    this.configService.themeChanged.subscribe(x => {
-      this.isThemeDark = x == 'dark';
+    this.allSub.addThis =
+      this.configService.themeChanged.subscribe(x => {
+        this.isThemeDark = x == 'dark';
 
-    })
+      })
     this.isThemeDark = this.configService.getTheme() == 'dark';
     //for testing;
     //this.gateway = this.prepareModel(this.gateway);
@@ -99,8 +102,9 @@ export class GatewayComponent implements OnInit {
   ngOnInit(): void {
 
     this.prepareAutoComplete();
-
-
+  }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
   }
   prepareAutoComplete() {
     this.filteredOptions = of(this.networks).pipe(
@@ -168,13 +172,15 @@ export class GatewayComponent implements OnInit {
     for (const iterator of keys) {
 
       const fm = fmg.controls[iterator] as FormControl;
-      fm.valueChanges.subscribe(x => {
-        (this.gateway as any)[iterator] = x;
-      })
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          (this.gateway as any)[iterator] = x;
+        })
     }
-    fmg.valueChanges.subscribe(x => {
-      this.gatewayModelChanged();
-    })
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.gatewayModelChanged();
+      })
     return fmg;
   }
   createFormError() {

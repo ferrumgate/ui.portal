@@ -1,0 +1,130 @@
+<div class="service">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Service'|translate}} {{service.name}}">
+                <mat-icon>link
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="service-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="service-form" [formGroup]="formGroup">
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Name"|translate}}</mat-label>
+                                <input matInput test-id="service-name-input" placeholder="{{'ServiceName'|translate}}"
+                                    formControlName="name" required>
+                                <mat-error>{{formError.name|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Host"|translate}}</mat-label>
+                                <input matInput test-id="service-host-input" placeholder="10.0.0.100"
+                                    formControlName="host" required>
+                                <mat-error>{{formError.host|translate}}</mat-error>
+                                <mat-hint>{{"ServiceHostHint"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"TcpPort"|translate}}</mat-label>
+                                <input type="number" min="1" max="65535" matInput test-id="service-tcp-input"
+                                    placeholder="8080" formControlName="tcp">
+                                <mat-error>{{formError.tcp|translate}}</mat-error>
+                                <mat-hint>{{"ServiceTcpPort"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"UdpPort"|translate}}</mat-label>
+                                <input type="number" min="1" max="65535" matInput test-id="service-udp-input"
+                                    placeholder="53" formControlName="udp">
+                                <mat-error>{{formError.udp|translate}}</mat-error>
+                                <mat-hint>{{"ServiceUdpPort"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Network"|translate}}</mat-label>
+                                <input type="text" test-id="service-network-input"
+                                    placeholder="{{'SelectANetwork'|translate}}" matInput formControlName="networkName"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
+                                    [displayWith]="displayFn">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                                <mat-error>{{formError.network|translate}}</mat-error>
+                                <mat-hint>{{"BindedNetwork"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Labels"|translate}}</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip test-id="service-label-chip" *ngFor="let label of service.labels||[]"
+                                        (removed)="removeLabel(label)">
+                                        {{label}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
+                                </mat-chip-list>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="service-checkbox-enabled" [(ngModel)]="service.isEnabled"
+                                [checked]="service.isEnabled" [ngModelOptions]="{standalone:true}"
+                                (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+                    </form>
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="service-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="service-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="service.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="service-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="service-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

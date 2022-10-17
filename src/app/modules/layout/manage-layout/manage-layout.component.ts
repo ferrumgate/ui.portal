@@ -71,7 +71,7 @@ export class ManageLayoutComponent {
         } */]
     },
     {
-      icon: 'swap_calls', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
+      icon: 'link', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
     },
     {
       icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies']) }

@@ -156,15 +156,8 @@ export class NetworkComponent implements OnInit, OnDestroy {
       this.network.isChanged = true;
     if (original.name != this.network.name)
       this.network.isChanged = true;
-    original.labels.forEach(x => {
-      if (!this.network.labels.find(y => y == x))
-        this.network.isChanged = true;
-
-    })
-    this.network.labels.forEach(x => {
-      if (!original.labels.find(y => y == x))
-        this.network.isChanged = true;
-    })
+    if (UtilService.checkChanged(original.labels, this.network.labels))
+      this.network.isChanged = true;
 
   }
 

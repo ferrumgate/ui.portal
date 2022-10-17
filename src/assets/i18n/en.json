@@ -200,5 +200,20 @@
     "NetworksSearchHint": "Search by name, labels, serviceNetwork, clientNetwork",
     "Details": "Details",
     "UserNameSurnameHint": "User name surname",
-    "UserEmailHint": "User extra email address if username is not email this will be used for sending email,not used for login"
+    "UserEmailHint": "User extra email address if username is not email this will be used for sending email,not used for login",
+    "Service": "Service",
+    "TcpPort": "Tcp port",
+    "UdpPort": "Udp port",
+    "ServiceHostHint": "Connect to this hostname or ip",
+    "ServiceTcpPort": "Connect to this tcp port",
+    "ServiceUdpPort": "Connect to this udp port",
+    "Services": "Services",
+    "ServicesSearchHint": "Search by name, labels, host, ports",
+    "ServiceName": "Service name",
+    "InvalidHost": "Host is invalid",
+    "TcpRequired": "Tcp required",
+    "UdpRequired": "Udp requred",
+    "InvalidPort": "Invalid port",
+    "RequiredTcpOrUdpPort": "Tcp or udp port required",
+    "NetworkRequired": "Network required"
 }

@@ -23,6 +23,7 @@ import { AuthOauthComponent } from './auth/auth-oauth/auth-oauth.component';
 import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
 import { UserComponent } from './user/user.component';
 import { GroupComponent } from "./group/group.component";
+import { ServiceComponent } from "./service/service.component";
 
 
 
@@ -53,7 +54,8 @@ import { GroupComponent } from "./group/group.component";
         AuthLocalComponent,
         AuthSamlComponent,
         GroupComponent,
-        UserComponent
+        UserComponent,
+        ServiceComponent
 
 
     ],
@@ -92,7 +94,8 @@ import { GroupComponent } from "./group/group.component";
         AuthOauthComponent,
         AuthLocalComponent,
         GroupComponent,
-        UserComponent
+        UserComponent,
+        ServiceComponent
     ],
     providers: [
         {

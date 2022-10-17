@@ -7,6 +7,7 @@ import { Group } from '../models/group';
 import { ConfigService } from '../services/config.service';
 import { SSubscription } from '../services/SSubscribtion';
 import { TranslationService } from '../services/translation.service';
+import { UtilService } from '../services/util.service';
 
 
 
@@ -166,15 +167,8 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     if (original.name != this.group.name)
       this.group.isChanged = true;
-    original.labels.forEach(x => {
-      if (!this.group.labels.find(y => y == x))
-        this.group.isChanged = true;
-
-    })
-    this.group.labels.forEach(x => {
-      if (!original.labels.find(y => y == x))
-        this.group.isChanged = true;
-    })
+    if (UtilService.checkChanged(original.labels, this.group.labels))
+      this.group.isChanged = true;
 
     if (original.isEnabled != this.group.isEnabled)
       this.group.isChanged = true;

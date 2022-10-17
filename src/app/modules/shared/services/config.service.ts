@@ -47,7 +47,9 @@ export class ConfigService extends BaseService {
     authLdapHelp: "https://ferrumgate/doc/auth/ldap",
     authSamlHelp: "https://ferrumgate/doc/auth/saml",
     accountGroupHelp: "https://ferrumgate/doc/account/group",
-    accountUserHelp: "https://ferrumgate/doc/account/user"
+    accountUserHelp: "https://ferrumgate/doc/account/user",
+    serviceHelp: "https://ferrumgate/doc/service",
+
 
 
   }

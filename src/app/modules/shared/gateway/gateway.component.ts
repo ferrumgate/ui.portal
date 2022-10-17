@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
 import { SSubscription } from '../services/SSubscribtion';
+import { UtilService } from '../services/util.service';
 
 
 
@@ -225,15 +226,8 @@ export class GatewayComponent implements OnInit, OnDestroy {
 
     if (original.name != this.gateway.name)
       this.gateway.isChanged = true;
-    original.labels.forEach(x => {
-      if (!this.gateway.labels.find(y => y == x))
-        this.gateway.isChanged = true;
-
-    })
-    this.gateway.labels.forEach(x => {
-      if (!original.labels.find(y => y == x))
-        this.gateway.isChanged = true;
-    })
+    if (UtilService.checkChanged(original.labels, this.gateway.labels))
+      this.gateway.isChanged = true;
     if (original.isEnabled != this.gateway.isEnabled)
       this.gateway.isChanged = true;
     if (original.networkId != this.gateway.networkId)

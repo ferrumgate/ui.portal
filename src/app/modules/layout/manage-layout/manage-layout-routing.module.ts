@@ -49,6 +49,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'services',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/services/services.module').then(m => m.ServicesModule)
+
+      },
+      {
         path: 'settings/common',
         canActivate: [RoleGuard],
         data: {

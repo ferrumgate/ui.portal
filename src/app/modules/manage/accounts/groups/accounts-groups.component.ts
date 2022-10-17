@@ -206,6 +206,7 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
 
     this.confirmService.showDelete().pipe(
       takeWhile(x => x),
+      switchMap(a => this.userService.get(user.id)),
       switchMap(y => {
         let index = user.groupIds.findIndex(x => x == group.id);
         if (index >= 0)

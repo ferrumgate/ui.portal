@@ -1,0 +1,85 @@
+.services-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.services-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 130px;
+
+}
+
+.services .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.services .services-networks-item {
+    padding-left: 10px;
+}
+
+.services .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.services .add {
+    margin-left: 15px;
+}
+
+
+
+
+
+.services .services-users {
+    padding: 10px;
+
+}
+
+.services .services-users {
+    min-width: 300px;
+
+}
+
+.services .services-users mat-card {
+    background-color: #d3d3d3;
+
+}
+
+.theme-dark .services .services-users mat-card {
+    background-color: #383535;
+
+}
+
+
+
+
+
+
+.services-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 130px - 10px);
+    overflow: auto;
+}
+
+.services .content-divider {
+    padding-bottom: 10px;
+}
+
+.services .group-user-item {
+    max-height: 600px;
+    overflow: auto;
+    padding-bottom: 10px;
+
+}
+
+.services .group-user-item mat-list-item {
+
+    font-size: 0.8rem;
+}

@@ -132,4 +132,35 @@ export class InputService {
         return { 'invalidCidr': true };
       }
   }
+  static ipValidator(control: any) {
+    if (control == null || control.value == null) {
+      return null;
+    } else
+      if (validator.isIP(control.value)) {
+        return null;
+      } else {
+        return { 'invalidIp': true };
+      }
+  }
+  static portValidator(control: any) {
+    if (control == null || control.value == null) {
+      return null;
+    } else
+      if (validator.isPort(control.value.toString())) {
+        return null;
+      } else {
+        return { 'invalidPort': true };
+      }
+  }
+  static ipOrdomainValidator(control: any) {
+    if (control == null || control.value == null) {
+      return null;
+    } else
+      if (validator.isIP(control.value) || validator.isFQDN(control.value)) {
+        return null;
+      } else {
+        return { 'invalidHost': true };
+      }
+  }
+
 }

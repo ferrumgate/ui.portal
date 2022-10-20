@@ -49,6 +49,9 @@ export class ConfigService extends BaseService {
     accountGroupHelp: "https://ferrumgate/doc/account/group",
     accountUserHelp: "https://ferrumgate/doc/account/user",
     serviceHelp: "https://ferrumgate/doc/service",
+    policyAuthzHelp: "https://ferrumgate/doc/policy/authorization",
+    policyAuthnHelp: "https://ferrumgate/doc/policy/authentication",
+
 
 
 

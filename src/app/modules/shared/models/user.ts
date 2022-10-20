@@ -10,6 +10,7 @@ export interface User {
 
 }
 
+
 export interface User2 {
     // object id for finding objects in lists or comparing if they are same object
     objId?: string;
@@ -33,3 +34,4 @@ export interface User2 {
     [key: string]: any;
 
 }
+

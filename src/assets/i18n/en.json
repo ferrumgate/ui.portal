@@ -215,5 +215,13 @@
     "UdpRequired": "Udp requred",
     "InvalidPort": "Invalid port",
     "RequiredTcpOrUdpPort": "Tcp or udp port required",
-    "NetworkRequired": "Network required"
+    "NetworkRequired": "Network required",
+    "Access": "Access",
+    "PolicyAuthzHint": "Accessing to services, depends on {first match first execute} otherwise drop request (means if matches any then OK else DROP)",
+    "ServiceRequired": "Service required",
+    "TargetService": "Target service",
+    "SelectAService": "Select a service",
+    "UsersOrGroups": "Users or groups",
+    "Authorization": "Authorization",
+    "PolicyAuthorizationSearchHint": "Search by network name,service name, rule name, username, group name"
 }

@@ -24,6 +24,7 @@ import { AuthLocalComponent } from './auth/auth-local/auth-local.component';
 import { UserComponent } from './user/user.component';
 import { GroupComponent } from "./group/group.component";
 import { ServiceComponent } from "./service/service.component";
+import { PolicyAuthzRuleComponent } from "./policy/policy-authz-rule/policy-authz-rule.component";
 
 
 
@@ -55,7 +56,8 @@ import { ServiceComponent } from "./service/service.component";
         AuthSamlComponent,
         GroupComponent,
         UserComponent,
-        ServiceComponent
+        ServiceComponent,
+        PolicyAuthzRuleComponent
 
 
     ],
@@ -95,7 +97,8 @@ import { ServiceComponent } from "./service/service.component";
         AuthLocalComponent,
         GroupComponent,
         UserComponent,
-        ServiceComponent
+        ServiceComponent,
+        PolicyAuthzRuleComponent
     ],
     providers: [
         {

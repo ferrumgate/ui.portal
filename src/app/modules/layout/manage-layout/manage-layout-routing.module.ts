@@ -67,6 +67,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'policies/authz',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/policies/authz/policy-authz.module').then(m => m.PolicyAuthzModule)
+
+      },
+      {
         path: 'settings/email',
         canActivate: [RoleGuard],
         data: {

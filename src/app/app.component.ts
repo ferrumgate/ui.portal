@@ -66,6 +66,11 @@ export class AppComponent implements OnInit {
       "recaptcha",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/recaptcha.svg")
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "services",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/services.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

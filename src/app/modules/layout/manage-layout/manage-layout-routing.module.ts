@@ -67,6 +67,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'policies/authn',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/policies/authn/policy-authn.module').then(m => m.PolicyAuthnModule)
+
+      },
+      {
         path: 'policies/authz',
         canActivate: [RoleGuard],
         data: {

@@ -5,6 +5,11 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title test-id="policy-authz-rule-title">
                         {{getExplanationSummary()}}
+                        <mat-action-row fxFlex fxLayoutAlign="end center">
+                            <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
+                            <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>
+
+                        </mat-action-row>
                     </mat-panel-title>
 
                 </mat-expansion-panel-header>

@@ -20,14 +20,14 @@ export class ThemeSelectorComponent implements OnInit {
     })
 
     this.isDarkTheme = this.configService.getTheme() == 'dark';
-    this.themeName = this.isDarkTheme ? 'White' : 'Dark';
+    this.themeName = this.isDarkTheme ? 'Dark' : 'White';
   }
 
   ngOnInit(): void {
   }
   changeTheme(event: MatSlideToggleChange) {
     this.isDarkTheme = !this.isDarkTheme;
-    this.themeName = this.isDarkTheme ? 'White' : 'Dark';
+    this.themeName = this.isDarkTheme ? 'Dark' : 'White';
     this.configService.saveTheme(this.isDarkTheme ? 'dark' : 'white');
   }
 

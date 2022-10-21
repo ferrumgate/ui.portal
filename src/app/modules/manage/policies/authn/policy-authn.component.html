@@ -1,0 +1,68 @@
+<div class="policy-authn-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="policy-authn policy-authn-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Authentication'|translate}}
+            </div>
+
+            <div class="row" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"PolicyAuthenticationSearchHint"|translate}}</mat-hint>
+                </mat-form-field>
+
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="policy-authn policy-authn-content">
+        <div fxLayout="row wrap">
+            <p class="row policy-authn-item">
+
+                {{"PolicyAuthnHint"|translate}}
+
+            </p>
+            <p class="row policy-authn-item" fxLayout="column" fxFill *ngFor="let pol of policies">
+
+                <mat-accordion test-id="policy-authn-policy">
+                    <mat-expansion-panel [expanded]="pol.isExpanded">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-icon>lan</mat-icon>
+                                <span matBadge="{{pol.rules.length}}"
+                                    matBadgeOverlap="false">{{pol.network.name}}</span>
+                            </mat-panel-title>
+                            <mat-action-row>
+                                <button style="padding-right:10px;padding-left: 10px;" mat-icon-button
+                                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                                    <mat-icon>help_outline</mat-icon>
+                                </button>
+
+
+
+                            </mat-action-row>
+                        </mat-expansion-panel-header>
+                        <div class="expansion-content" fxLayout="column">
+                            <div class="expansion-add" fxFlex fxLayoutAlign="end center">
+                                <button mat-raised-button color="primary" class="add" (click)="addNewRule(pol.network)">
+                                    <mat-icon>add</mat-icon>
+                                    {{"Add"|translate}}
+                                </button>
+                            </div>
+                            <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks" [users]="users"
+                                [groups]="groups" *ngFor="let rule of pol.rules" [rule]="rule"
+                                (deleteAuthnRule)="deleteAuthnRule($event)" (saveAuthnRule)="saveAuthnRule($event)">
+                            </app-policy-authn-rule>
+                        </div>
+
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+            </p>
+        </div>
+
+
+    </div>
+</div>

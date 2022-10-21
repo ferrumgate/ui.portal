@@ -217,11 +217,20 @@
     "RequiredTcpOrUdpPort": "Tcp or udp port required",
     "NetworkRequired": "Network required",
     "Access": "Access",
-    "PolicyAuthzHint": "Accessing to services, depends on {first match first execute} otherwise drop request (means if matches any then OK else DROP)",
+    "PolicyAuthzHint": "Accessing to services, depends on {first match first execute} otherwise BLOCK request (means if matches any then ALLOW else BLOCK)",
     "ServiceRequired": "Service required",
     "TargetService": "Target service",
     "SelectAService": "Select a service",
     "UsersOrGroups": "Users or groups",
     "Authorization": "Authorization",
-    "PolicyAuthorizationSearchHint": "Search by network name,service name, rule name, username, group name"
+    "PolicyAuthorizationSearchHint": "Search by network name,service name, rule name, username, group name",
+    "PolicyAuthenticationSearchHint": "Search by network name,rule name, username, group name, ip, location",
+    "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise BLOCK request (means if matches any rule then execute action (allow,block) else BLOCK is default policy)",
+    "Allow": "Allow",
+    "Block": "Block",
+    "Ip": "Ip",
+    "Ips": "Ips",
+    "IpOrNewtorkHint": "Ip or network cidr",
+    "IpsOrNewtork": "Ips or Network",
+    "NewIpOrNetwork": "New ip or network"
 }

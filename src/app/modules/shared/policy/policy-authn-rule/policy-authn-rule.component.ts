@@ -4,13 +4,16 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
-import { AuthenticationRule } from '../../models/authnPolicy';
+import validator from 'validator';
+import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
+import { cloneAuthenticatonProfile, IpProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
 import { User2 } from '../../models/user';
 import { ConfigService } from '../../services/config.service';
+import { InputService } from '../../services/input.service';
 import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
@@ -18,42 +21,37 @@ import { UtilService } from '../../services/util.service';
 
 
 
-export interface AuthorizationRuleExtended extends AuthorizationRule {
-  orig: AuthorizationRule;
+export interface AuthenticationRuleExtended extends AuthenticationRule {
+  orig: AuthenticationRule;
   isChanged: boolean;
-  serviceName: string;
   networkName: string;
   userOrGroups: { id: string, name: string }[];
   isExpanded: boolean;
 }
 
 @Component({
-  selector: 'app-policy-authz-rule',
-  templateUrl: './policy-authz-rule.component.html',
-  styleUrls: ['./policy-authz-rule.component.scss']
+  selector: 'app-policy-authn-rule',
+  templateUrl: './policy-authn-rule.component.html',
+  styleUrls: ['./policy-authn-rule.component.scss']
 })
-export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
+export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
   helpLink = '';
 
-  _model: AuthorizationRuleExtended =
+  _model: AuthenticationRuleExtended =
     {
-      id: '', isChanged: false, name: '', networkId: '', profile: { is2FA: false, isPAM: false }, serviceId: '', userOrgroupIds: [],
+      id: '', isChanged: false, name: '', networkId: '', profile: {
+        is2FA: false,
+
+      }, userOrgroupIds: [], action: 'allow',
       orig: {
-        id: '', name: '', networkId: '', profile: { is2FA: false, isPAM: false }, serviceId: '', userOrgroupIds: [], isEnabled: true
+        id: '', name: '', networkId: '', profile: { is2FA: false, }, userOrgroupIds: [], isEnabled: true, action: 'allow'
       },
-      serviceName: '', userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
+      userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };
 
-  _services: Service[] = [];
-  @Input()
-  set services(val: Service[]) {
-    this._services = val;
-    this.prepareAutoCompletes();
-  }
 
-  get services() { return this._services };
 
   _users: User2[] = [];
   @Input()
@@ -71,24 +69,24 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
   get groups() { return this._groups };
 
-  get rule(): AuthorizationRuleExtended {
+  get rule(): AuthenticationRuleExtended {
     return this._model;
+  }
+  get titleClass() {
+    return this.rule.action != 'allow' ? 'block' : ''
   }
 
   @Input()
   networks: Network[] = [];
 
   @Input()
-  set rule(val: AuthorizationRule) {
+  set rule(val: AuthenticationRule) {
     this._model = {
       ...val,
       isChanged: false,
       orig: val,
-      profile: {
-        ...val.profile
-      },
+      profile: cloneAuthenticatonProfile(val.profile),
       userOrgroupIds: Array.from(val.userOrgroupIds || []),
-      serviceName: this.services.find(x => x.id == val.serviceId)?.name || '',
       userOrGroups: this.findUsersOrGroups(val.userOrgroupIds),
       networkName: this.networks.find(x => x.id == val.networkId)?.name || '',
       isExpanded: val.isExpanded
@@ -102,15 +100,15 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
 
   @Output()
-  saveAuthzRule: EventEmitter<AuthorizationRule> = new EventEmitter();
+  saveAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
   @Output()
-  deleteAuthzRule: EventEmitter<AuthorizationRule> = new EventEmitter();
+  deleteAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
 
 
 
 
   formGroup: FormGroup = this.createFormGroup(this._model);
-  formError: { name: string, service: string } = { name: '', service: '' }
+  formError: { name: string, } = { name: '' }
   filteredServices: Observable<Service[]> = of();
   filteredGroups: Group[] = [];
   filteredUsers: User2[] = [];
@@ -130,7 +128,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.helpLink = this.configService.links.policyAuthzHelp;
+    this.helpLink = this.configService.links.policyAuthnHelp;
 
   }
 
@@ -163,20 +161,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
   prepareAutoCompletes() {
 
-    this.filteredServices = of(this.services).pipe(
-      map(data => {
 
-        let abc = data.filter(x => x.networkId == this.rule.networkId)
-        return abc;
-      }),
-      map(data => {
-
-        data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        })
-        return data;
-      })
-    )
 
     this.filteredUsers = this.users.sort(this.simpleUsernameSort)
 
@@ -198,25 +183,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
 
   }
-  serviceChanged(event: any) {
 
-    if (event?.option?.value) {
-      this.rule.serviceId = event.option.value.id;
-      this.formGroup.controls.serviceId.setValue(this.rule.serviceId);
-      if (this.rule.serviceId)
-        this.rule.serviceName = event.option.value.name;
-      else
-        this.rule.serviceName = ''
-      this.modelChanged();
-
-    } else {
-      this.rule.serviceId = '';
-      this.rule.serviceName = '';
-      this.formGroup.controls.serviceId.setValue('');
-      this.modelChanged();
-    }
-
-  }
 
 
   displayServiceFn(net: Service | string) {
@@ -272,10 +239,10 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
 
 
-  createFormGroup(rule: AuthorizationRule) {
+  createFormGroup(rule: AuthenticationRule) {
     const fmg = new FormGroup({
       name: new FormControl(rule.name, [Validators.required]),
-      serviceId: new FormControl(rule.serviceId, [Validators.required])
+
 
     });
 
@@ -303,18 +270,24 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   checkIfModelChanged() {
     this.rule.isChanged = false;
-    const original = this._model.orig as AuthorizationRule;
+    const original = this._model.orig as AuthenticationRule;
 
     if (original.name != this.rule.name)
       this.rule.isChanged = true;
-    if (original.profile.is2FA != this.rule.profile.is2FA)
-      this.rule.isChanged = true;
-    if (original.serviceId != this.rule.serviceId)
-      this.rule.isChanged = true;
+
+
     if (UtilService.checkChanged(original.userOrgroupIds, this.rule.userOrgroupIds))
       this.rule.isChanged = true;
     if (original.isEnabled != this.rule.isEnabled)
       this.rule.isChanged = true;
+    if (original.action != this.rule.action)
+      this.rule.isChanged = true;
+
+    if (original.profile.is2FA != this.rule.profile.is2FA)
+      this.rule.isChanged = true;
+    if (UtilService.checkChanged(original.profile.ips?.map(x => x.ip), this.rule.profile.ips?.map(x => x.ip)))
+      this.rule.isChanged = true;
+
 
   }
 
@@ -332,14 +305,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     }
 
 
-    const serviceError = this.formGroup.controls.serviceId.errors;
-
-    if (serviceError) {
-      if (serviceError['required'])
-        error.service = 'ServiceRequired';
-      else
-        error.service = 'ServiceRequired';
-    }
 
 
     this.formError = error;
@@ -349,39 +314,37 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   clear() {
     this._model.isChanged = false;
-    const original = this._model.orig as AuthorizationRule;
+    const original = this._model.orig as AuthenticationRule;
 
     this.rule = {
       ...original,
-      profile: {
-        ...original.profile
-      }
+      profile: cloneAuthenticatonProfile(original.profile)
     }
 
     this.checkIfModelChanged();
   }
-  createBaseModel(): AuthorizationRule {
+  createBaseModel(): AuthenticationRule {
     return {
       id: this._model.id,
       objId: this._model.objId,
       name: this._model.name,
       networkId: this._model.networkId,
-      serviceId: this._model.serviceId,
       userOrgroupIds: Array.from(this._model.userOrgroupIds),
-      profile: { ...this._model.profile },
-      isEnabled: this._model.isEnabled
+      profile: cloneAuthenticatonProfile(this._model.profile),
+      isEnabled: this._model.isEnabled,
+      action: this._model.action
     }
   }
 
 
   saveOrUpdate() {
-    this.saveAuthzRule.emit(this.createBaseModel());
+    this.saveAuthnRule.emit(this.createBaseModel());
   }
 
 
 
   delete() {
-    this.deleteAuthzRule.emit(this.createBaseModel());
+    this.deleteAuthnRule.emit(this.createBaseModel());
   }
 
   getExplanationUser() {
@@ -390,10 +353,52 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     else return `all`
   }
 
+  getExplanationIps() {
+    if (this.rule.profile.ips?.length)
+      return `${this.rule.profile.ips.map(x => x.ip).join(', ')}`;
+    else return `all ips`
+  }
+
 
   getExplanationSummary() {
-    return `${this.rule.name}, ${this.rule.isEnabled ? 'enabled' : 'not enabled'}, ${this.rule.serviceName}, ${this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60)}... ${this.rule.profile.is2FA ? ', 2FA' : ''}`
+    return `${this.rule.name}, ${this.rule.isEnabled ? 'enabled' : 'not enabled'}, ${this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60)}... ${this.rule.profile.is2FA ? ', 2FA' : ''}, ${this.rule.profile.ips?.map(x => x.ip).join(',').substring(0, 30)}, ${this.rule.action}`
   }
+
+  ruleActionChanged($event: any) {
+    this.rule.action = this.rule.action === 'allow' ? 'block' : 'allow';
+    this.modelChanged();
+  }
+
+
+
+  addIpOrCidr(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      const isExits = this.rule.profile.ips?.find(x => x.ip == value);
+      if (!isExits) {
+        if (!this.rule.profile.ips)
+          this.rule.profile.ips = [];
+        if (validator.isIP(value) || validator.isIPRange(value))
+          this.rule.profile.ips.push({ ip: value });
+      }
+    }
+
+    // Clear the input value
+    if (validator.isIP(value) || validator.isIPRange(value))
+      event.chipInput!.clear();
+    if (this.formGroup.valid)
+      this.checkIfModelChanged();
+  }
+
+  removeIpOrCidr(label: IpProfile): void {
+    this.rule.profile.ips = this.rule.profile.ips?.filter(x => x.ip != label.ip);
+    if (this.formGroup.valid)
+      this.checkIfModelChanged();
+
+  }
+
 
 
 

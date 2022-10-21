@@ -25,6 +25,7 @@ import { UserComponent } from './user/user.component';
 import { GroupComponent } from "./group/group.component";
 import { ServiceComponent } from "./service/service.component";
 import { PolicyAuthzRuleComponent } from "./policy/policy-authz-rule/policy-authz-rule.component";
+import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-authn-rule.component";
 
 
 
@@ -57,7 +58,8 @@ import { PolicyAuthzRuleComponent } from "./policy/policy-authz-rule/policy-auth
         GroupComponent,
         UserComponent,
         ServiceComponent,
-        PolicyAuthzRuleComponent
+        PolicyAuthzRuleComponent,
+        PolicyAuthnRuleComponent
 
 
     ],
@@ -98,7 +100,8 @@ import { PolicyAuthzRuleComponent } from "./policy/policy-authz-rule/policy-auth
         GroupComponent,
         UserComponent,
         ServiceComponent,
-        PolicyAuthzRuleComponent
+        PolicyAuthzRuleComponent,
+        PolicyAuthnRuleComponent
     ],
     providers: [
         {

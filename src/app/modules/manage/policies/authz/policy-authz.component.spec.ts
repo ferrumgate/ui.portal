@@ -8,12 +8,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { map, of } from 'rxjs';
 import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
+import { AuthorizationPolicy } from 'src/app/modules/shared/models/authzPolicy';
 import { Group } from 'src/app/modules/shared/models/group';
+import { Network } from 'src/app/modules/shared/models/network';
+import { Service } from 'src/app/modules/shared/models/service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 
@@ -56,43 +60,66 @@ describe('ServicesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('data binding', fakeAsync(async () => {
+  it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
     let requestCounter = 0;
-    const networks: Network[] = [
-      {
-        id: '312', name: 'ops3', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
 
-        clientNetwork: '1.2.3.4/24'
-      }
 
-    ];
+    let group: Group = {
+      id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
+    }
+    const groups = [group];
 
-    const services: Service[] = [
-      {
-        id: UtilService.randomNumberString(), name: 'mysql-dev', host: '10.0.0.2', assignedIp: '',
-        isEnabled: true, networkId: networks[0].id, protocol: 'raw', tcp: 80, udp: 90
-      },
-      {
-        id: UtilService.randomNumberString(), name: 'mysql2-dev2', host: '10.0.0.2', assignedIp: '',
-        isEnabled: true, networkId: networks[0].id, protocol: 'raw', tcp: 80, udp: 90
-      }
-    ]
+    let network: Network = {
+      id: 'network1', name: 'networkname'
+    } as Network;
+
+
+    let network2: Network = {
+      id: 'network12', name: 'networkname2'
+    } as Network;
+
+    const networks = [network, network2];
+
+    let service: Service = {
+      id: 'sv1', name: 'mysql-dev', labels: ['test'], isEnabled: true,
+      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: ''
+    }
+
+    const services = [service];
+    const rule1 = {
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    }
+    const rule2 = {
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    }
+    const rule3 = {
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    }
+    let policy: AuthorizationPolicy = {
+      id: 'aladfa', insertDate: new Date().toISOString(), updateDate: new Date().toISOString(),
+      rules: [rule1, rule2, rule3]
+    }
 
     spyOn(httpClient, 'get').and.returnValues(
       of({ items: networks }),
-      of({ items: services })
+      of({ items: services }),
+      of({ items: groups }),
+      of({ items: [] }),
+      of(policy)
     )
     //load data 
     component.getAllData().subscribe();
     tick(1000);
     fixture.detectChanges();
 
-    const serviceElements = findEls(fixture, 'services-service');
-    expect(serviceElements.length).toBe(2);
+    const policies = findEls(fixture, 'policy-authz-policy');
+    expect(policies.length).toEqual(2);
+    const serviceElements = findEls(fixture, 'policy-authz-rule');
+    expect(serviceElements.length).toBe(3);
 
 
 
 
-  })); */
+  }));
 });

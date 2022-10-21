@@ -25,7 +25,7 @@
             </p>
             <p class="row policy-authz-item" fxLayout="column" fxFill *ngFor="let pol of policies">
 
-                <mat-accordion test-id="policy-authz-accordion">
+                <mat-accordion test-id="policy-authz-policy">
                     <mat-expansion-panel [expanded]="pol.isExpanded">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -50,9 +50,10 @@
                                     {{"Add"|translate}}
                                 </button>
                             </div>
-                            <app-policy-authz-rule [networks]="networks" [services]="services" [users]="users"
-                                [groups]="groups" *ngFor="let rule of pol.rules" [rule]="rule"
-                                (deleteAuthzRule)="deleteAuthzRule($event)" (saveAuthzRule)="saveAuthzRule($event)">
+                            <app-policy-authz-rule test-id="policy-authz-rule" [networks]="networks"
+                                [services]="services" [users]="users" [groups]="groups" *ngFor="let rule of pol.rules"
+                                [rule]="rule" (deleteAuthzRule)="deleteAuthzRule($event)"
+                                (saveAuthzRule)="saveAuthzRule($event)">
                             </app-policy-authz-rule>
                         </div>
 

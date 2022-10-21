@@ -3,13 +3,13 @@
         <mat-accordion test-id="policy-authz-rule-accordion">
             <mat-expansion-panel [expanded]="rule.isExpanded">
                 <mat-expansion-panel-header>
-                    <mat-panel-title>
+                    <mat-panel-title test-id="policy-authz-rule-title">
                         {{getExplanationSummary()}}
                     </mat-panel-title>
 
                 </mat-expansion-panel-header>
                 <mat-divider></mat-divider>
-                <span class="explanation" fxLayout="row wrap">
+                <span test-id="policy-authz-rule-explanation" class="explanation" fxLayout="row wrap">
                     <p class="explanation-bold">
                         {{rule.name}} {{rule.isEnabled?'':'(is not enabled)'}}
                     </p>
@@ -51,7 +51,7 @@
                         <p class="policy-authz-rule-column">
                             <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Service"|translate}}</mat-label>
-                                <input type="text" test-id="gateway-input-network"
+                                <input type="text" test-id="policy-authz-rule-service-input"
                                     placeholder="{{'SelectAService'|translate}}" matInput [ngModel]="rule.serviceName"
                                     [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto1" required>
                                 <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="serviceChanged($event)"

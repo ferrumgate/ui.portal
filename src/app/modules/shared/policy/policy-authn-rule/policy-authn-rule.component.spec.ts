@@ -1,11 +1,17 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { MatTabGroupHarness } from '@angular/material/tabs/testing'
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTabGroup } from '@angular/material/tabs';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
+
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { GroupComponent } from '../../group/group.component';
-import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from '../../helper.spec';
+import { dispatchFakeEvent, expectValue, findEl, findEls, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
+import { AuthenticationPolicy, AuthenticationRule } from '../../models/authnPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
@@ -21,9 +27,10 @@ import { SharedModule } from '../../shared.module';
 
 import { PolicyAuthnRuleComponent } from './policy-authn-rule.component';
 
-describe('PolicyAuthzRuleComponent', () => {
+describe('PolicyAuthnRuleComponent', () => {
   let component: PolicyAuthnRuleComponent;
   let fixture: ComponentFixture<PolicyAuthnRuleComponent>;
+  let loader: HarnessLoader;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,6 +55,7 @@ describe('PolicyAuthzRuleComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PolicyAuthnRuleComponent);
+    loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -55,7 +63,7 @@ describe('PolicyAuthzRuleComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  /* it('data binding', fakeAsync(async () => {
+  it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
     let group: Group = {
       id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
@@ -73,49 +81,68 @@ describe('PolicyAuthzRuleComponent', () => {
 
     const networks = [network, network2];
 
-    let service: Service = {
-      id: 'sv1', name: 'mysql-dev', labels: ['test'], isEnabled: true,
-      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: ''
-    }
 
-    const services = [service];
-    const rule = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    const rule: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: { is2FA: true, ips: [{ ip: '1.2.3.4' }] },
+      userOrgroupIds: [group.id], isExpanded: true,
+      action: 'allow'
+
     }
 
     component.users = [];
     component.groups = groups;
     component.networks = networks;
-    component.services = services;
+
     component.rule = rule
 
     tick(1000);
     fixture.detectChanges();
-    const testAccordionId = 'policy-authz-rule-accordion';
+    const testAccordionId = 'policy-authn-rule-accordion';
     findEl(fixture, testAccordionId);
 
-    const testTitleId = 'policy-authz-rule-title';
+    const testTitleId = 'policy-authn-rule-title';
     findEl(fixture, testTitleId);
 
     expect(component.formGroup.valid).toBeTrue();
 
-    const testNameId = 'policy-authz-rule-name-input';
+    const testNameId = 'policy-authn-rule-name-input';
     expectValue(fixture, testNameId, rule.name);
 
-    const testServiceId = 'policy-authz-rule-service-input';
-    expectValue(fixture, testServiceId, rule.serviceName);
+    const testExplanation = 'policy-authn-rule-explanation';
+    findEl(fixture, testExplanation);
 
-    const testUserOrGroupChips = 'policy-authz-rule-label-chip';
+    const testUserOrGroupChips = 'policy-authn-rule-label-chip';
     const chips = findEls(fixture, testUserOrGroupChips);
     expect(chips.length).toEqual(1);
 
-    const test2FAId = 'policy-authz-rule-checkbox-2fa';
+    const test2FAId = 'policy-authn-rule-checkbox-2fa';
     findEl(fixture, test2FAId);
 
-    const testEnabledId = 'policy-authz-rule-checkbox-enabled';
+    const testEnabledId = 'policy-authn-rule-checkbox-enabled';
     findEl(fixture, testEnabledId);
 
-    const testOkButtonId = 'policy-authz-rule-ok-button';
+    const testActionId = 'policy-auth-rule-toogle-action';
+    findEl(fixture, testActionId);
+
+    const testIpsTabId = 'policy-authn-tab-ips';
+    //tab does not work
+    //const tabs = await loader.getHarness(MatTabGroupHarness);
+    //(await tabs.getTabs())[1].select();
+    //const tabs = queryAllByCss(fixture, '.mat-tab-label');
+
+
+    //dispatchFakeEvent(tabs[1].nativeElement, 'click');
+    //tick(5000);
+    //fixture.detectChanges();
+    //debugger;
+    const testIpsId = 'policy-authn-rule-ip-chip';
+    //const ipChips = findEls(fixture, testIpsId);
+    //expect(ipChips.length).toEqual(1);
+
+
+    const testOkButtonId = 'policy-authn-rule-ok-button';
 
     setFieldValue(fixture, testNameId, '')
     dispatchFakeEvent(findEl(fixture, testNameId).nativeElement, 'blur');
@@ -136,6 +163,6 @@ describe('PolicyAuthzRuleComponent', () => {
     expect(component.rule.isChanged).toBeTrue;
 
 
-  })); */
+  }));
 });
 

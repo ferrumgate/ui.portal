@@ -1,7 +1,8 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
 import validator from 'validator';
@@ -38,6 +39,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
   helpLink = '';
+
 
   _model: AuthenticationRuleExtended =
     {

@@ -1,6 +1,6 @@
 import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { map, of } from 'rxjs';
 import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
+import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
 import { AuthorizationPolicy } from 'src/app/modules/shared/models/authzPolicy';
 import { Group } from 'src/app/modules/shared/models/group';
 import { Network } from 'src/app/modules/shared/models/network';
@@ -60,7 +61,7 @@ describe('PolicyAuthnComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('data binding', fakeAsync(async () => {
+  it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
     let requestCounter = 0;
 
@@ -81,29 +82,33 @@ describe('PolicyAuthnComponent', () => {
 
     const networks = [network, network2];
 
-    let service: Service = {
-      id: 'sv1', name: 'mysql-dev', labels: ['test'], isEnabled: true,
-      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: ''
-    }
 
-    const services = [service];
-    const rule1 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+
+
+    const rule1: AuthenticationRule = {
+      id: 'somid1', isEnabled: true, name: 'mysql', action: 'allow',
+      networkId: network.id, profile: { is2FA: true, },
+      userOrgroupIds: [group.id], isExpanded: true,
     }
-    const rule2 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    const rule2: AuthenticationRule = {
+      id: 'somid2', isEnabled: true, name: 'prod', action: 'deny',
+      networkId: network.id, profile: { is2FA: true, },
+      userOrgroupIds: [group.id], isExpanded: true,
     }
-    const rule3 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+    const rule3: AuthenticationRule = {
+      id: 'somid3', isEnabled: true, name: 'mysql prod', action: 'allow',
+      networkId: network2.id, profile: { is2FA: true, },
+      userOrgroupIds: [group.id], isExpanded: true
     }
-    let policy: AuthorizationPolicy = {
+    let policy: AuthenticationPolicy = {
       id: 'aladfa', insertDate: new Date().toISOString(), updateDate: new Date().toISOString(),
+
       rules: [rule1, rule2, rule3]
     }
 
     spyOn(httpClient, 'get').and.returnValues(
       of({ items: networks }),
-      of({ items: services }),
+
       of({ items: groups }),
       of({ items: [] }),
       of(policy)
@@ -113,13 +118,21 @@ describe('PolicyAuthnComponent', () => {
     tick(1000);
     fixture.detectChanges();
 
-    const policies = findEls(fixture, 'policy-authz-policy');
+    const policies = findEls(fixture, 'policy-authn-policy');
     expect(policies.length).toEqual(2);
-    const serviceElements = findEls(fixture, 'policy-authz-rule');
+    const serviceElements = findEls(fixture, 'policy-authn-rule');
     expect(serviceElements.length).toBe(3);
 
+    component.searchKey = 'mysql';
+    component.search();
+    tick(1000);
+    fixture.detectChanges();
+    const serviceElements2 = findEls(fixture, 'policy-authn-rule');
+    expect(serviceElements2.length).toBe(2);
+    flush();
 
 
 
-  })); */
+
+  }));
 });

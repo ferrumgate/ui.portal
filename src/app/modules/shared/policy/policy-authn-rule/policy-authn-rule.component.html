@@ -61,7 +61,7 @@
                 </span>
                 <mat-divider></mat-divider>
                 <form test-id="policy-authn-rule-form" [formGroup]="formGroup">
-                    <mat-tab-group>
+                    <mat-tab-group #tabGroup="matTabGroup">
                         <mat-tab label="{{'Common'|translate}}">
 
                             <div fxFlex fxLayout="column">
@@ -126,14 +126,15 @@
                                     <mat-divider></mat-divider>
                                 </p>
                                 <p>
-                                    <mat-slide-toggle class="policy-authn-rule-checkbox"
-                                        [checked]="rule.action==='allow'" (toggleChange)="ruleActionChanged($event)">
+                                    <mat-slide-toggle test-id="policy-auth-rule-toogle-action"
+                                        class="policy-authn-rule-checkbox" [checked]="rule.action==='allow'"
+                                        (toggleChange)="ruleActionChanged($event)">
                                         {{rule.action=='allow'?'Allow':'Deny'|translate}}</mat-slide-toggle>
 
                                 </p>
                             </div>
                         </mat-tab>
-                        <mat-tab label="{{'Ips'|translate}}">
+                        <mat-tab test-id="policy-authn-tab-ips" label="{{'Ips'|translate}}">
 
                             <div fxFlex fxLayout="column">
 

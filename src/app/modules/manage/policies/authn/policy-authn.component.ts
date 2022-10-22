@@ -6,7 +6,7 @@ import { ConfigService } from '../../../shared/services/config.service';
 import { SSubscription } from '../../../shared/services/SSubscribtion';
 
 
-import { debounceTime, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeWhile, throwError } from 'rxjs';
 import { Group } from 'src/app/modules/shared/models/group';
 import { User2 } from 'src/app/modules/shared/models/user';
 import { NetworkService } from 'src/app/modules/shared/services/network.service';
@@ -25,7 +25,9 @@ import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared
 
 
 
-
+interface Policy {
+  network: Network, rules: AuthenticationRule[], isExpanded: boolean
+}
 
 @Component({
   selector: 'app-policy-authn',
@@ -44,10 +46,11 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     users: Map<string, User2>,
     groups: Map<string, Group>,
     networks: Map<string, Network>
-    services: Map<string, Service>
-  } = {} as any;
+  } = {
 
-  policies: { network: Network, rules: AuthenticationRule[], isExpanded: boolean }[] = [{
+  } as any;
+
+  policies: Policy[] = [{
     network: { id: '' } as any, rules: [], isExpanded: false
   }]
   policyAuthn: AuthenticationPolicy = { rules: [] } as any;
@@ -89,7 +92,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //test data
 
-    this.groups.push({ id: 'group1', name: 'North1', isEnabled: true, labels: [] })
+    /* this.groups.push({ id: 'group1', name: 'North1', isEnabled: true, labels: [] })
     this.groups.push({ id: 'group2', name: 'North2', isEnabled: true, labels: [] })
     this.groups.push({ id: 'group3', name: 'North3', isEnabled: true, labels: [] })
 
@@ -155,19 +158,19 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     this.policies.push({
       network: network, isExpanded: true,
       rules: [
-        { id: 'rule1', name: 'rule1', action: 'allow', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
+        { id: 'rule1', objId: UtilService.randomNumberString(), name: 'rule1', action: 'allow', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
 
-        { id: 'rule2', name: 'rule2', action: 'block', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
       ]
     })
 
     this.policies.push({
       network: network, isExpanded: false,
       rules: [
-        { id: 'rule2', name: 'rule2', action: 'block', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
       ]
-    })
-    //this.getAllData().subscribe();
+    }) */
+    this.getAllData().subscribe();
   }
 
   ngOnDestroy() {
@@ -229,8 +232,6 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         if (x.name.toLowerCase().includes(search))
           return true;
         if (this.performance.networks.get(x.networkId)?.name.toLowerCase().includes(search))
-          return true;
-        if (this.performance.services.get(x.serviceId)?.name.toLowerCase().includes(search))
           return true;
         for (const userId of x.userOrgroupIds)
           if (this.performance.users.get(userId)?.username.toLowerCase().includes(search))
@@ -320,6 +321,43 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
 
     });
+  }
+
+  dragDrop(event: any) {
+    const previous = event.previousIndex;
+    const currentIndex = event.currentIndex;
+    const pol = event.container.data as Policy;
+
+    if (previous != currentIndex) {
+      const prev = pol.rules[previous];
+      const cur = pol.rules[currentIndex];
+      if (!cur.id || !prev.id) {
+        this.notificationService.error(this.translateService.translate('PleaseSaveFirst'));
+        return;
+      }
+
+      const backup = JSON.stringify(pol.rules);
+      //find indexes in general list
+      const previousGeneral = this.policyAuthn.rules.findIndex(x => x.objId == prev.objId);
+      const prevGen = this.policyAuthn.rules[previousGeneral];
+      const currentGeneral = this.policyAuthn.rules.findIndex(x => x.objId == cur.objId);
+      pol.rules.splice(previous, 1);
+      pol.rules.splice(currentIndex, 0, prev);
+      this.policyAuthnService.reorderRule(prev, previousGeneral, currentGeneral).
+        pipe(catchError(err => {
+          pol.rules = JSON.parse(backup);
+          return throwError(() => err);
+        })).subscribe(x => {
+
+          this.policyAuthn.rules.splice(previousGeneral, 1);
+          this.policyAuthn.rules.splice(currentGeneral, 0, prevGen);
+        })
+    }
+  }
+
+  isDragDisabled(pol: Policy) {
+    if (this.searchKey) return true;
+    return pol.rules.find(x => !x.id) ? true : false;
   }
 
 

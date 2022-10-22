@@ -39,8 +39,6 @@
                                     <mat-icon>help_outline</mat-icon>
                                 </button>
 
-
-
                             </mat-action-row>
                         </mat-expansion-panel-header>
                         <div class="expansion-content" fxLayout="column">
@@ -50,10 +48,22 @@
                                     {{"Add"|translate}}
                                 </button>
                             </div>
-                            <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks" [users]="users"
-                                [groups]="groups" *ngFor="let rule of pol.rules" [rule]="rule"
-                                (deleteAuthnRule)="deleteAuthnRule($event)" (saveAuthnRule)="saveAuthnRule($event)">
-                            </app-policy-authn-rule>
+
+                            <div cdkDropList class="drag-list" [cdkDropListData]="pol"
+                                (cdkDropListDropped)="dragDrop($event)">
+                                <div class="drag-box" *ngFor="let rule of pol.rules" cdkDrag
+                                    [cdkDragDisabled]="isDragDisabled(pol)">
+                                    <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks"
+                                        [users]="users" [groups]="groups" [rule]="rule"
+                                        [dragDisabled]="isDragDisabled(pol)" (deleteAuthnRule)="deleteAuthnRule($event)"
+                                        (saveAuthnRule)="saveAuthnRule($event)">
+                                    </app-policy-authn-rule>
+                                </div>
+                            </div>
+                            <div cdkDropList class="rule-list">
+
+
+                            </div>
                         </div>
 
 

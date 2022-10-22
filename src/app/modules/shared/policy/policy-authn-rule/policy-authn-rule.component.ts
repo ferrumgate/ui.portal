@@ -50,8 +50,8 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       },
       userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };
-
-
+  @Input()
+  dragDisabled = false;
 
   _users: User2[] = [];
   @Input()
@@ -73,7 +73,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return this._model;
   }
   get titleClass() {
-    return this.rule.action != 'allow' ? 'block' : ''
+    return this.rule.action != 'allow' ? 'deny' : ''
   }
 
   @Input()
@@ -361,11 +361,23 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
   getExplanationSummary() {
-    return `${this.rule.name}, ${this.rule.isEnabled ? 'enabled' : 'not enabled'}, ${this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60)}... ${this.rule.profile.is2FA ? ', 2FA' : ''}, ${this.rule.profile.ips?.map(x => x.ip).join(',').substring(0, 30)}, ${this.rule.action}`
+    let ips = this.rule.profile.ips?.map(x => x.ip).join(',').substring(0, 30) || '';
+    if (ips)
+      ips = `{${ips}},`
+    let users = this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60);
+    if (users) {
+      users = `{${users}...},`
+    }
+    return `{${this.rule.name}}, 
+    {${this.rule.isEnabled ? 'enabled' : 'not enabled'}}, 
+    ${users} 
+    ${this.rule.profile.is2FA ? ' {2FA},' : ''} 
+    ${ips} 
+    {${this.rule.action}}`
   }
 
   ruleActionChanged($event: any) {
-    this.rule.action = this.rule.action === 'allow' ? 'block' : 'allow';
+    this.rule.action = this.rule.action === 'allow' ? 'deny' : 'allow';
     this.modelChanged();
   }
 

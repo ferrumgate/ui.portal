@@ -4,14 +4,26 @@
             <mat-expansion-panel [expanded]="rule.isExpanded">
                 <mat-expansion-panel-header [ngClass]="titleClass">
                     <mat-panel-title test-id="policy-authn-rule-title">
-                        {{getExplanationSummary()}}
+                        <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">
+
+                            <mat-icon class="reorder" cdkDragHandle
+                                matTooltip="{{dragDisabled?'Disabled':''|translate}}">
+                                open_with
+                            </mat-icon>
+
+
+
+                        </mat-action-row>
+                        <div fxLayoutAlign="start center" style="padding-left: 10px;">
+                            {{getExplanationSummary()}}
+                        </div>
                         <mat-action-row fxFlex fxLayoutAlign="end center" class="policy-authn-rule-header-actions">
                             <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
                             <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>
                             <mat-icon *ngIf="rule.action=='allow'" matTooltip="{{'Allow'|translate}}">
                                 check_circle_outline
                             </mat-icon>
-                            <mat-icon color="warn" *ngIf="rule.action!='allow'" matTooltip="{{'Block'|translate}}">
+                            <mat-icon color="warn" *ngIf="rule.action!='allow'" matTooltip="{{'Deny'|translate}}">
                                 block</mat-icon>
                         </mat-action-row>
                     </mat-panel-title>
@@ -116,7 +128,7 @@
                                 <p>
                                     <mat-slide-toggle class="policy-authn-rule-checkbox"
                                         [checked]="rule.action==='allow'" (toggleChange)="ruleActionChanged($event)">
-                                        {{rule.action=='allow'?'Allow':'Block'|translate}}</mat-slide-toggle>
+                                        {{rule.action=='allow'?'Allow':'Deny'|translate}}</mat-slide-toggle>
 
                                 </p>
                             </div>

@@ -10,7 +10,7 @@ export interface AuthenticationRule {
     userOrgroupIds: string[];
     profile: AuthenticationProfile;
     isEnabled: boolean;
-    action: 'allow' | 'block';
+    action: 'allow' | 'deny';
     [key: string]: any;
 
 }

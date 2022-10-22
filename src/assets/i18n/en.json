@@ -227,10 +227,12 @@
     "PolicyAuthenticationSearchHint": "Search by network name,rule name, username, group name, ip, location",
     "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise BLOCK request (means if matches any rule then execute action (allow,block) else BLOCK is default policy)",
     "Allow": "Allow",
-    "Block": "Block",
+    "Deny": "Deny",
     "Ip": "Ip",
     "Ips": "Ips",
     "IpOrNewtorkHint": "Ip or network cidr",
     "IpsOrNewtork": "Ips or Network",
-    "NewIpOrNetwork": "New ip or network"
+    "NewIpOrNetwork": "New ip or network",
+    "Reorder": "Reorder",
+    "PleaseSaveFirst": "Please save first"
 }

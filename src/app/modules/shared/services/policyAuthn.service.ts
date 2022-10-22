@@ -88,6 +88,17 @@ export class PolicyAuthnService extends BaseService {
       }))
   }
 
+  reorderRule(aRule: AuthenticationRule, prev: number, curr: number) {
+    const reorder = {
+      previous: prev, current: curr
+    }
+    return this.preExecute(reorder).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._policyAuthnRuleUrl, 'pos', `${aRule.id}`);
+        return this.httpService.put<AuthenticationRule>(url, y, this.jsonHeader)
+      }))
+  }
+
 
 
 }

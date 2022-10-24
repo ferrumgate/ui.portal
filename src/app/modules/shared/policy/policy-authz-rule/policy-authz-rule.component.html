@@ -1,0 +1,155 @@
+<div [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="policy-authz-rule">
+        <mat-accordion test-id="policy-authz-rule-accordion">
+            <mat-expansion-panel [expanded]="rule.isExpanded">
+                <mat-expansion-panel-header>
+                    <mat-panel-title test-id="policy-authz-rule-title">
+                        {{getExplanationSummary()}}
+                        <mat-action-row fxFlex fxLayoutAlign="end center">
+                            <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
+                            <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>
+
+                        </mat-action-row>
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <mat-divider></mat-divider>
+                <span test-id="policy-authz-rule-explanation" class="explanation" fxLayout="row wrap">
+                    <p class="explanation-bold">
+                        {{rule.name}} {{rule.isEnabled?'':'(is not enabled)'}}
+                    </p>
+                    <p class="explanation-item">
+                        means
+                    </p>
+                    <p class="explanation-item">
+                        from network <span class="explanation-bold">{{rule.networkName}},</span>
+                    </p>
+                    <p class="explanation-item">
+                        to service <span class="explanation-bold">{{rule.serviceName}},</span>
+                    </p>
+                    <p class="explanation-item">
+                        <span *ngIf="rule.userOrGroups.length">if user or group is <span
+                                class="explanation-bold">{{getExplanationUser()}}</span></span>
+                        <span *ngIf="!rule.userOrGroups.length">all users and groups</span>
+
+                    </p>
+                    <p class="explanation-item" *ngIf="rule.profile.is2FA">
+                        and accessed with <span class="explanation-bold">2FA,</span>
+                    </p>
+                    <p class="explanation-item">
+                        <span class="explanation-bold">allowed</span>
+                    </p>
+
+                </span>
+                <mat-divider></mat-divider>
+                <form test-id="policy-authz-rule-form" [formGroup]="formGroup">
+                    <div fxFlex fxLayout="column">
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Name"|translate}}</mat-label>
+                                <input matInput test-id="policy-authz-rule-name-input"
+                                    placeholder="{{'Name'|translate}}" formControlName="name" required>
+                                <mat-error>{{formError.name|translate}}</mat-error>
+                            </mat-form-field>
+
+                        </p>
+                        <p class="policy-authz-rule-column">
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Service"|translate}}</mat-label>
+                                <input type="text" test-id="policy-authz-rule-service-input"
+                                    placeholder="{{'SelectAService'|translate}}" matInput [ngModel]="rule.serviceName"
+                                    [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto1" required>
+                                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="serviceChanged($event)"
+                                    [displayWith]="displayServiceFn">
+                                    <mat-option *ngFor="let option of filteredServices | async" [value]="option">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error>{{formError.service|translate}}</mat-error>
+                                <mat-hint>{{"TargetService"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p class="policy-authz-rule-column policy-authz-rule-item">
+
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"UsersOrGroups"|translate}}</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip test-id="policy-authz-rule-label-chip"
+                                        *ngFor="let ug of rule.userOrGroups||[]" (removed)="removeUserOrGroup(ug)">
+                                        {{ug.name}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto2"
+                                        [formControl]="userorGroupControl">
+                                </mat-chip-list>
+                                <mat-autocomplete #auto2="matAutocomplete"
+                                    (optionSelected)="userOrGroupSelected($event)" [displayWith]="displayUserOrGroupFn">
+                                    <mat-optgroup *ngIf="filteredGroups.length" label="{{'Groups'|translate}}">
+                                        <mat-option *ngFor="let option of filteredGroups" [value]="option">
+                                            {{option.name}}
+                                        </mat-option>
+                                    </mat-optgroup>
+                                    <mat-optgroup *ngIf="filteredUsers.length" label="{{'Users'|translate}}">
+                                        <mat-option *ngFor="let option of filteredUsers" [value]="option">
+                                            {{option.username}}
+                                        </mat-option>
+                                    </mat-optgroup>
+
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="policy-authz-rule-checkbox-2fa" class="policy-authz-rule-checkbox"
+                                [(ngModel)]="rule.profile.is2FA" (ngModelChange)="modelChanged()"
+                                [ngModelOptions]="{standalone:true}">
+                                {{"2FA"|translate}}</mat-checkbox>
+                        </p>
+
+                        <p>
+                            <mat-checkbox test-id="policy-authz-rule-checkbox-enabled"
+                                class="policy-authz-rule-checkbox" [(ngModel)]="rule.isEnabled"
+                                (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+
+
+
+                    </div>
+
+
+                </form>
+
+
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="policy-authz-rule-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="policy-authz-rule-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="rule.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="policy-authz-rule-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="policy-authz-rule-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+</div>

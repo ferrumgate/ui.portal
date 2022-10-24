@@ -71,10 +71,19 @@ export class ManageLayoutComponent {
         } */]
     },
     {
-      icon: 'link', isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
+      icon: 'services', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
     },
     {
-      icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies']) }
+      icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), navigate: () => { },
+      subItems: [
+        {
+          icon: 'how_to_reg', isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authentication'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authn']) }
+        },
+        {
+          icon: 'services', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Authorization'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authz']) }
+
+        },
+      ]
     },
     {
       icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },

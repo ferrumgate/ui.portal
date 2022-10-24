@@ -42,13 +42,13 @@ describe('ThemeSelectorComponent', () => {
     expect(fixture.nativeElement.querySelector('mat-slide-toggle')).toBeTruthy();
 
     expect(fixture.nativeElement.querySelector('mat-slide-toggle').classList.contains('mat-checked')).toBeFalse();
-    expect(fixture.nativeElement.querySelector('mat-slide-toggle').textContent.trim()).toBe('Dark');
+    expect(fixture.nativeElement.querySelector('mat-slide-toggle').textContent.trim()).toBe('White');
   });
   it('click', () => {
 
     fixture.debugElement.query(By.css('mat-slide-toggle')).triggerEventHandler('change', {});
     fixture.detectChanges();
     console.log(fixture.nativeElement.querySelector('mat-slide-toggle').textContent.trim());
-    expect(fixture.nativeElement.querySelector('mat-slide-toggle').textContent.trim()).toBe('White');
+    expect(fixture.nativeElement.querySelector('mat-slide-toggle').textContent.trim()).toBe('Dark');
   });
 });

@@ -1,0 +1,132 @@
+.policy-authn-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.policy-authn-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 130px;
+
+}
+
+.policy-authn .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.policy-authn .policy-authn-networks-item {
+    padding-left: 10px;
+}
+
+.policy-authn .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.policy-authn .add {
+    margin-left: 15px;
+}
+
+
+
+
+
+.policy-authn .policy-authn-users {
+    padding: 10px;
+
+}
+
+.policy-authn .policy-authn-users {
+    min-width: 300px;
+
+}
+
+.policy-authn .policy-authn-users mat-card {
+    background-color: #d3d3d3;
+
+}
+
+.theme-dark .policy-authn .policy-authn-users mat-card {
+    background-color: #383535;
+
+}
+
+.policy-authn .expansion-add {
+    padding-bottom: 10px;
+}
+
+
+.policy-authn app-policy-authn-rule {
+    padding-bottom: 10px;
+}
+
+
+.policy-authn .rule-list {
+    padding-bottom: 10px;
+}
+
+
+
+
+.policy-authn-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 130px - 10px);
+    overflow: auto;
+}
+
+.policy-authn .content-divider {
+    padding-bottom: 10px;
+}
+
+.policy-authn .group-user-item {
+    max-height: 600px;
+    overflow: auto;
+    padding-bottom: 10px;
+
+}
+
+.policy-authn .group-user-item mat-list-item {
+
+    font-size: 0.8rem;
+}
+
+.policy-authn .drag-list {
+
+    //border: solid 1px #ccc;
+
+
+}
+
+.policy-authn .drag-box {
+    margin-bottom: 10px;
+}
+
+.policy-authn .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.policy-authn .cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.policy-authn .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.policy-authn .example-box:last-child {
+    border: none;
+}
+
+.policy-authn .drag-list.cdk-drop-list-dragging .drag-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

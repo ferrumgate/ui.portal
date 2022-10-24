@@ -68,15 +68,15 @@
                             </mat-form-field>
                         </p>
 
-
+                        <p>
+                            <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabled"
+                                (ngModelChange)="gatewayModelChanged()" [ngModelOptions]="{standalone:true}">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
 
                     </form>
 
-                    <p>
-                        <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabled"
-                            (ngModelChange)="gatewayModelChanged()">
-                            {{"Enabled"|translate}}</mat-checkbox>
-                    </p>
+
 
 
                 </div>

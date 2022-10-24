@@ -1,0 +1,79 @@
+.policy-authz-rule {
+    min-width: 300px;
+}
+
+.policy-authz-rule .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.policy-authz-rule .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.policy-authz-rule .row-pad {
+    margin-left: 15px;
+}
+
+.policy-authz-rule .policy-authz-rule-form {
+    padding-top: 5px;
+}
+
+.policy-authz-rule .policy-authz-rule-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+
+}
+
+.policy-authz-rule .explanation {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.policy-authz-rule .explanation-item {
+    padding-left: 5px;
+}
+
+.policy-authz-rule .explanation-bold {
+    font-weight: 500;
+}
+
+
+.policy-authz-rule .policy-authz-rule-title {
+    padding-left: 10px;
+}
+
+
+.policy-authz-rule .policy-authz-rule-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+
+
+.policy-authz-rule .policy-authz-rule-item {
+    min-width: 500px;
+}
+
+
+.policy-authz-rule .policy-authz-rule-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.policy-authz-rule form {
+    background-color: #d3d3d3;
+
+}
+
+.theme-dark .policy-authz-rule form {
+    background-color: #383535;
+
+}
+
+.policy-authz-rule .policy-authz-rule-checkbox {
+    padding-left: 10px;
+}

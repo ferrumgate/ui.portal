@@ -38,7 +38,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 errors.pipe(
                     tap(val => console.log(`retrying request`)),
                     delayWhen((err: any, index: number) => {
-                        return (err.status >= 501 && index <= 1) ? timer(1000) : throwError(err);
+                        return (err.status >= 500 && index <= 1) ? timer(1000) : throwError(() => err);
                     }
                     ))),
             catchError((resp: any) => {
@@ -53,24 +53,25 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     if (resp.status === 401) {
                         if (window.location.href.indexOf('/register') >= 0
                             || window.location.href.indexOf('/login') >= 0
-                            || window.location.href.indexOf('/forgot-password-confirm') >= 0) {
+                            || window.location.href.indexOf('/forgot-password-confirm') >= 0
+                            || window.location.href.indexOf('/user/confirm2fa') >= 0) {
 
                         } else {
                             // auto logout if 401 response returned from api
 
                             notificationService.error(translationService.translate('ErrNotAuthenticated'));
-                            if (window.location.href.indexOf('/login') === -1 && window.location.href.indexOf('/user/confirm2fa') == -1) { // reload if not login page
+                            /* if (window.location.href.indexOf('/login') === -1 && window.location.href.indexOf('/user/confirm2fa') == -1) { // reload if not login page
 
 
-                            } else {
-                                authenticationService.logout();
-                            }
+                            } else { */
+                            authenticationService.logout();
+                            // }
 
                         }
 
 
                     }
-                return throwError(resp);
+                return throwError(() => resp);
             }),
             finalize(() => {
                 if (!isExclude)

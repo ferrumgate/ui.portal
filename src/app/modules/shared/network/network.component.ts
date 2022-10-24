@@ -27,7 +27,7 @@ export class NetworkComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
   _network: Network = {
-    id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: ''
+    id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: '', isEnabled: true
   };
   get network() { return this._network; }
 
@@ -157,6 +157,8 @@ export class NetworkComponent implements OnInit, OnDestroy {
     if (original.name != this.network.name)
       this.network.isChanged = true;
     if (UtilService.checkChanged(original.labels, this.network.labels))
+      this.network.isChanged = true;
+    if (original.isEnabled != this.network.isEnabled)
       this.network.isChanged = true;
 
   }

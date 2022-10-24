@@ -1,0 +1,203 @@
+<div [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="policy-authn-rule">
+        <mat-accordion test-id="policy-authn-rule-accordion">
+            <mat-expansion-panel [expanded]="rule.isExpanded">
+                <mat-expansion-panel-header [ngClass]="titleClass">
+                    <mat-panel-title test-id="policy-authn-rule-title">
+                        <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">
+
+                            <mat-icon class="reorder" cdkDragHandle
+                                matTooltip="{{dragDisabled?'Disabled':''|translate}}">
+                                open_with
+                            </mat-icon>
+
+
+
+                        </mat-action-row>
+                        <div fxLayoutAlign="start center" style="padding-left: 10px;">
+                            {{getExplanationSummary()}}
+                        </div>
+                        <mat-action-row fxFlex fxLayoutAlign="end center" class="policy-authn-rule-header-actions">
+                            <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
+                            <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>
+                            <mat-icon *ngIf="rule.action=='allow'" matTooltip="{{'Allow'|translate}}">
+                                check_circle_outline
+                            </mat-icon>
+                            <mat-icon color="warn" *ngIf="rule.action!='allow'" matTooltip="{{'Deny'|translate}}">
+                                block</mat-icon>
+                        </mat-action-row>
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <mat-divider></mat-divider>
+                <span test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+                    <p class="explanation-bold">
+                        {{rule.name}} {{rule.isEnabled?'':'(is not enabled)'}}
+                    </p>
+                    <p class="explanation-item">
+                        means
+                    </p>
+                    <p class="explanation-item">
+                        to access network <span class="explanation-bold">{{rule.networkName}},</span>
+                    </p>
+                    <p class="explanation-item">
+                        <span *ngIf="rule.userOrGroups.length">if user or group is <span
+                                class="explanation-bold">{{getExplanationUser()}}</span></span>
+                        <span *ngIf="!rule.userOrGroups.length">all users and groups</span>
+
+                    </p>
+                    <p class="explanation-item" *ngIf="rule.profile.is2FA">
+                        and accessed with <span class="explanation-bold">2FA,</span>
+                    </p>
+                    <p class="explanation-item" *ngIf="rule.profile.ips?.length">
+                        and accessed from <span class="explanation-bold">{{getExplanationIps()}},</span>
+                    </p>
+                    <p class="explanation-item">
+                        will be
+                        <span class="explanation-bold" *ngIf="rule.action==='allow'">allowed</span>
+                        <span class="explanation-bold" *ngIf="rule.action!=='allow'">blocked</span>
+                    </p>
+
+                </span>
+                <mat-divider></mat-divider>
+                <form test-id="policy-authn-rule-form" [formGroup]="formGroup">
+                    <mat-tab-group #tabGroup="matTabGroup">
+                        <mat-tab label="{{'Common'|translate}}">
+
+                            <div fxFlex fxLayout="column">
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="policy-authn-rule-name-input"
+                                            placeholder="{{'Name'|translate}}" formControlName="name" required>
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                    </mat-form-field>
+
+                                </p>
+                                <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"UsersOrGroups"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="policy-authn-rule-label-chip"
+                                                *ngFor="let ug of rule.userOrGroups||[]"
+                                                (removed)="removeUserOrGroup(ug)">
+                                                {{ug.name}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto2"
+                                                [formControl]="userorGroupControl">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #auto2="matAutocomplete"
+                                            (optionSelected)="userOrGroupSelected($event)"
+                                            [displayWith]="displayUserOrGroupFn">
+                                            <mat-optgroup *ngIf="filteredGroups.length" label="{{'Groups'|translate}}">
+                                                <mat-option *ngFor="let option of filteredGroups" [value]="option">
+                                                    {{option.name}}
+                                                </mat-option>
+                                            </mat-optgroup>
+                                            <mat-optgroup *ngIf="filteredUsers.length" label="{{'Users'|translate}}">
+                                                <mat-option *ngFor="let option of filteredUsers" [value]="option">
+                                                    {{option.username}}
+                                                </mat-option>
+                                            </mat-optgroup>
+
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-checkbox test-id="policy-authn-rule-checkbox-2fa"
+                                        class="policy-authn-rule-checkbox" [(ngModel)]="rule.profile.is2FA"
+                                        (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                        {{"2FA"|translate}}</mat-checkbox>
+                                </p>
+
+                                <p>
+                                    <mat-checkbox test-id="policy-authn-rule-checkbox-enabled"
+                                        class="policy-authn-rule-checkbox" [(ngModel)]="rule.isEnabled"
+                                        (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                        {{"Enabled"|translate}}</mat-checkbox>
+                                </p>
+                                <p>
+                                    <mat-divider></mat-divider>
+                                </p>
+                                <p>
+                                    <mat-slide-toggle test-id="policy-auth-rule-toogle-action"
+                                        class="policy-authn-rule-checkbox" [checked]="rule.action==='allow'"
+                                        (toggleChange)="ruleActionChanged($event)">
+                                        {{rule.action=='allow'?'Allow':'Deny'|translate}}</mat-slide-toggle>
+
+                                </p>
+                            </div>
+                        </mat-tab>
+                        <mat-tab test-id="policy-authn-tab-ips" label="{{'Ips'|translate}}">
+
+                            <div fxFlex fxLayout="column">
+
+                                <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"IpsOrNewtork"|translate}}</mat-label>
+                                        <mat-chip-list #chipListIp>
+                                            <mat-chip test-id="policy-authn-rule-ip-chip"
+                                                *ngFor="let ip of rule.profile?.ips || []"
+                                                (removed)="removeIpOrCidr(ip)">
+                                                {{ip.ip}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewIpOrNetwork' |translate}}"
+                                                [matChipInputFor]="chipListIp"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addIpOrCidr($event)">
+                                        </mat-chip-list>
+                                        <mat-hint>{{"IpOrNewtorkHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+
+                            </div>
+                        </mat-tab>
+
+                    </mat-tab-group>
+
+
+
+
+                </form>
+
+
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="policy-authn-rule-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="policy-authn-rule-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="rule.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="policy-authn-rule-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="policy-authn-rule-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+</div>

@@ -50,7 +50,8 @@ export class NetworkService extends BaseService {
   saveOrupdate(net: Network) {
     const network: Network = {
       id: net.id, labels: net.labels, name: net.name,
-      clientNetwork: net.clientNetwork, serviceNetwork: net.serviceNetwork
+      clientNetwork: net.clientNetwork, serviceNetwork: net.serviceNetwork,
+      isEnabled: net.isEnabled
     }
 
     return this.preExecute(network).pipe(

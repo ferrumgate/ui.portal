@@ -25,6 +25,7 @@ export interface Network {
     labels: string[];
     clientNetwork: string;
     serviceNetwork: string;
+    isEnabled?: boolean;
     [key: string]: any;
 }
 

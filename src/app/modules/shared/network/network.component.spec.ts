@@ -76,9 +76,9 @@ describe('NetworkComponent', () => {
     const chips = findEls(fixture, 'network-label-chip')
     expect(chips.length).toBe(1);
     //these codes are not working as expected
-    //expectValue(fixture, 'gateway-input-network', network1.name);
+    //expectValue(fixture, 'network-input-network', network1.name);
 
-    //const { nativeElement } = queryByCss(fixture, '[test-id=gateway-checkbox-enabled] input');
+    //const { nativeElement } = queryByCss(fixture, '[test-id=network-checkbox-enabled] input');
     //expect(nativeElement.checked).toBe(true);
 
     expect(component.network.isChanged).toBe(false);

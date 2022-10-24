@@ -207,7 +207,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
 
     const net: Network = {
       objId: UtilService.randomNumberString(),
-      id: '', name: '', clientNetwork: '', serviceNetwork: '', labels: []
+      id: '', name: '', clientNetwork: '', serviceNetwork: '', labels: [], isEnabled: true
     }
     let item = this.prepareNetwork(net);
     this.networks.unshift(item);

@@ -27,16 +27,6 @@ export class GatewayService extends BaseService {
 
   }
 
-  getNotJoined() {
-    const searchParams = new URLSearchParams({});
-    return this.preExecute(searchParams).pipe(
-      switchMap(y => {
-        const url = this.joinUrl(this._gatewayUrl, y);
-        return this.httpService.get<{ items: Gateway[] }>(url);
-      })
-    )
-  }
-
 
   saveOrupdate(gateway: Gateway) {
     const gate: Gateway = {
@@ -77,13 +67,15 @@ export class GatewayService extends BaseService {
       }))
   }
 
-  get2(search?: string, ids?: string) {
+  get2(search?: string, ids?: string, notJoined?: string) {
 
     const searchParams = new URLSearchParams();
     if (search)
       searchParams.append('search', search);
     if (ids)
       searchParams.append('ids', ids);
+    if (notJoined)
+      searchParams.append('notJoined', notJoined);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._gatewayUrl, y);

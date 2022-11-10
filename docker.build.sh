@@ -8,3 +8,16 @@ docker build -t ui.portal .
 echo "ui.portal:$version builded"
 docker tag ui.portal registry.ferrumgate.local/ferrumgate/ui.portal:$version
 docker tag ui.portal registry.ferrumgate.local/ferrumgate/ui.portal:latest
+
+while true; do
+    read -p "do you want push to local registry y/n " yn
+    case $yn in
+    [Yy]*)
+        docker push registry.ferrumgate.local/ferrumgate/ui.portal:$version
+        docker push registry.ferrumgate.local/ferrumgate/ui.portal:latest
+        break
+        ;;
+    [Nn]*) exit ;;
+    *) echo "please answer yes or no." ;;
+    esac
+done

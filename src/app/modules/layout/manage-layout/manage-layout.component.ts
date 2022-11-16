@@ -106,7 +106,7 @@ export class ManageLayoutComponent {
       icon: 'receipt', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
       subItems: [
         {
-          icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
+          icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/audit']) }
         },
         {
           icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateway'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }

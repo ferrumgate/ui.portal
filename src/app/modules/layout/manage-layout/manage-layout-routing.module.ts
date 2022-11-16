@@ -111,6 +111,16 @@ const routes: Routes = [
         loadChildren: () => import('../../manage/settings/auth/config-auth.module').then(m => m.ConfigAuthModule)
 
       },
+      {
+        path: 'logs/audit',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/logs/audit/logs-audit.module').then(m => m.LogsAuditModule)
+
+      },
+
 
     ]
   }

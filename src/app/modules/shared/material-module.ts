@@ -44,6 +44,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 @NgModule({
     exports: [
@@ -92,7 +93,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         PortalModule,
         ScrollingModule,
         LayoutModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        NgxMatTimepickerModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule
     ]
 
 })

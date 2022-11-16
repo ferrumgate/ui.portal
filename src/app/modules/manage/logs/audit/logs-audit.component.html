@@ -1,0 +1,63 @@
+<div class="logs-audit-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="logs-audit logs-audit-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Audit'|translate}}
+            </div>
+            <div class="row" fxLayout="row">
+                <mat-form-field fxFlex class="logs-audit-date ">
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"AuditLogsSearchHint"|translate}}</mat-hint>
+                </mat-form-field>
+                <mat-form-field class="logs-audit-item">
+                    <input matInput [ngxMatDatetimePicker]="picker1" placeholder="StartDate"
+                        [formControl]="startDateControl">
+                    <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker1 [showSeconds]="true">
+                        <!-- Custom icon or text of Apply icon -->
+                        <ng-template>
+                            <!-- <mat-icon>star</mat-icon> -->
+                            <span>OK</span>
+                        </ng-template>
+                    </ngx-mat-datetime-picker>
+                </mat-form-field>
+
+                <mat-form-field class="logs-audit-item">
+                    <input matInput [ngxMatDatetimePicker]="picker2" placeholder="EndDate"
+                        [formControl]="endDateControl">
+                    <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #picker2 [showSeconds]="true">
+                        <!-- Custom icon or text of Apply icon -->
+                        <ng-template>
+                            <!-- <mat-icon>star</mat-icon> -->
+                            <span>OK</span>
+                        </ng-template>
+                    </ngx-mat-datetime-picker>
+                </mat-form-field>
+                <div fxLayoutAlign="center center">
+                    <button mat-raised-button color="primary" class="add" (click)="search()">
+                        <mat-icon>search</mat-icon>
+                        {{"Search"|translate}}
+                    </button>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="logs-audit logs-audit-content">
+
+        <div class="logs-audit-paginator row" fxLayout="row" fxLayoutAlign="end center">
+
+            <mat-paginator [length]="totalLogs" [pageSize]="pageSize" [pageSizeOptions]="[1,5, 10, 25, 100]"
+                aria-label="Select page" (page)="pageChanged($event)" size>
+            </mat-paginator>
+
+        </div>
+        <div class="logs-audit-table row" fxfill>
+            <app-logs-audit-table [dataSource]="dataSource" (onShowDetail)="showDetail($event)">
+
+            </app-logs-audit-table>
+        </div>
+
+    </div>
+</div>

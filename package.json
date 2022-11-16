@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-material-components/datetime-picker": "^7.0.1",
     "@angular/animations": "~13.3.0",
     "@angular/cdk": "^13.3.4",
     "@angular/common": "~13.3.0",
@@ -27,6 +28,7 @@
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "angularx-qrcode": "^13.0.15",
+    "moment": "^2.29.4",
     "ng-recaptcha": "^9.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

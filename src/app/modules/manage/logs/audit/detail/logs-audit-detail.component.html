@@ -1,0 +1,24 @@
+<div fxFlex fxLayout="column" class="logs-audit-detail">
+
+    <mat-card-title>
+        <h2 class="logs-audit-detail-title" test-id="logs-audit-detail-title" mat-dialog-title>
+            <p>{{"Details"|translate}}</p>
+        </h2>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="logs-audit-detail-content">
+            <mat-list test-id="logs-audit-detail-list">
+                <mat-list-item test-id="logs-audit-detail-list-item" *ngFor="let item of rows">{{item}} </mat-list-item>
+            </mat-list>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <mat-dialog-actions class="logs-audit-detail-button" fxFlex fxLayoutAlign="end center">
+            <button test-id="logs-audit-detail-button-no" mat-button (click)="onDismiss()">
+                <mat-icon color="accent">close</mat-icon>
+                {{"Close"|translate}}
+            </button>
+        </mat-dialog-actions>
+    </mat-card-footer>
+
+</div>

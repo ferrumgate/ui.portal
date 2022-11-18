@@ -225,7 +225,7 @@
     "Authorization": "Authorization",
     "PolicyAuthorizationSearchHint": "Search by network name,service name, rule name, username, group name",
     "PolicyAuthenticationSearchHint": "Search by network name,rule name, username, group name, ip, location",
-    "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise DENY request (means if matches any rule then execute action (allow,block) else DENY is default policy)",
+    "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise DENY request (means if matches any rule then execute action (allow,deny) else DENY is default policy)",
     "Allow": "Allow",
     "Deny": "Deny",
     "Ip": "Ip",
@@ -242,4 +242,7 @@
     "InsertDate": "Insert date",
     "Message": "Message",
     "Detail": "Detail",
+    "ClientIp": "Client ip",
+    "ActivityLogsSearchHint": "Search by anything",
+    "Activity": "Activity"
 }

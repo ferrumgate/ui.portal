@@ -120,6 +120,15 @@ const routes: Routes = [
         loadChildren: () => import('../../manage/logs/audit/logs-audit.module').then(m => m.LogsAuditModule)
 
       },
+      {
+        path: 'insights/activity',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/insights/activity/insights-activity.module').then(m => m.InsightsActivityModule)
+
+      },
 
 
     ]

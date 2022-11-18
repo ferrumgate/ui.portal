@@ -53,6 +53,14 @@ export class ManageLayoutComponent {
       icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
+      icon: 'panorama', isClicked: false, isExpanded: false, name: this.translateService.translate('Insights'), navigate: () => { },
+      subItems: [
+        {
+          icon: 'scatter_plot', isClicked: false, isExpanded: false, name: this.translateService.translate('Activity'), subItems: [], navigate: () => { this.router.navigate(['/manage/insights/activity']) }
+        }
+      ]
+    },
+    {
       icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
     },
     {
@@ -108,9 +116,9 @@ export class ManageLayoutComponent {
         {
           icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/audit']) }
         },
-        {
+        /* {
           icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateway'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
-        }
+        } */
       ], navigate: () => { }
     }
   ]

@@ -21,8 +21,10 @@ import { NetworkService } from '../../../shared/services/network.service';
 import { ServiceService } from '../../../shared/services/service.service';
 import { AuditLog } from 'src/app/modules/shared/models/auditLog';
 import { AuditService } from 'src/app/modules/shared/services/audit.service';
-import { LogAuditDetailDialogModel, LogsAuditDetailComponent } from './detail/logs-audit-detail.component';
 import { MatDialog } from '@angular/material/dialog';
+import { InsightsActivityDetailComponent, LogActivityDetailDialogModel } from './detail/insights-activity-detail.component';
+import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
+import { ActivityService } from 'src/app/modules/shared/services/activity.service';
 
 
 
@@ -32,16 +34,16 @@ import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
-  selector: 'app-logs-audit',
-  templateUrl: './logs-audit.component.html',
-  styleUrls: ['./logs-audit.component.scss']
+  selector: 'app-insights-activity',
+  templateUrl: './insights-activity.component.html',
+  styleUrls: ['./insights-activity.component.scss']
 })
-export class LogsAuditComponent implements OnInit, OnDestroy {
+export class InsightsActivityComponent implements OnInit, OnDestroy {
   private allSubs = new SSubscription();
   searchForm = new FormControl();
 
 
-  dataSource: AuditLog[] = [];
+  dataSource: ActivityLog[] = [];
   pageSize = 10;
   page = 0;
   totalLogs = 0;
@@ -58,7 +60,7 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private confirmService: ConfirmService,
     private configService: ConfigService,
-    private auditService: AuditService,
+    private activityService: ActivityService,
     private dialog: MatDialog
 
   ) {
@@ -100,22 +102,27 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-    /*  const sampleData: AuditLog[] = [
-       { insertDate: new Date().toISOString(), ip: '1.2.3.4', message: 'user delete', messageSummary: 'ferrum', severity: 'warn', tags: '12.3', userId: '1234', username: 'abc', messageDetail: 'opsafafa\naadfa' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.5', message: 'user delete', messageSummary: 'ferrum2', severity: 'warn', tags: '12.34', userId: '12344', username: 'abc', messageDetail: 'opsafafa3' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.6', message: 'user delete', messageSummary: 'ferrum3', severity: 'warn', tags: '12.35', userId: '12345', username: 'abc', messageDetail: 'opsafafa4' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.7', message: 'user delete', messageSummary: 'ferrum4', severity: 'warn', tags: '12.36', userId: '12346', username: 'abc', messageDetail: 'opsafafa5' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.8', message: 'user delete', messageSummary: 'ferrum5', severity: 'warn', tags: '12.37', userId: '12347', username: 'abc', messageDetail: 'opsafafa, ada ,aafdasdf a,asdfasdfa ' },
+    /*  const sampleData: ActivityLog[] = [
+       {
+         insertDate: new Date().toISOString(),
+         ip: '1.2.3.4',
+         requestId: 'e1nxwp9mk4z92bz4gc9uvvay564onekix9aljtwiw30dlu9hk99tzav6zetpevkn',
+         authSource: 'local',
+         status: 0,
+         type: 'login try',
+         statusMessage: 'success',
+         sessionId: '8ivi30xnefo9j5blsjymvjdsyqlmhl9izhi040tj525rshrtalv8qm1qpskv8y1x',
+         username: 'o5x6izkewj20'
+ 
+       },
+ 
  
      ];
  
      //test data
      this.dataSource = sampleData.map((value, index) => {
-       value.position = (this.page * this.pageSize) + index + 1;
-       value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
-       value.messageDetailShort = '...';
-       value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
-       return value;
+       return this.prepareLog(value, index);
+ 
      }) */
 
 
@@ -128,11 +135,14 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
 
 
   }
-  prepareLog(value: AuditLog, index: number) {
+  prepareLog(value: ActivityLog, index: number) {
+    // these values are also in InsightsActivityDetailComponent class in insights-activity-detail.component.ts
     value.position = (this.page * this.pageSize) + index + 1;
     value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
-    value.messageDetailShort = '...';
-    value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
+    value.sessionIdSub = value.sessionId ? (value.sessionId.substring(0, 6) + '...') : undefined;
+    value.requestIdSub = value.requestId ? (value.requestId.substring(0, 6) + '...') : undefined;
+    value.tunnelIdSub = value.tunnelId ? (value.tunnelId.substring(0, 6) + '...') : undefined;
+
     return value;
   }
 
@@ -141,7 +151,7 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
 
   search() {
 
-    return this.auditService.get(this.startDate.toISOString(), this.endDate.toISOString(), this.page, this.pageSize, this.searchKey, undefined, undefined).pipe(
+    return this.activityService.get(this.startDate.toISOString(), this.endDate.toISOString(), this.page, this.pageSize, this.searchKey,).pipe(
       map(y => {
         this.totalLogs = y.total;
 
@@ -158,10 +168,10 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
     this.search();
 
   }
-  showDetail(element: AuditLog) {
-    const dialogData = new LogAuditDetailDialogModel(element.messageDetail.split(','));
+  showDetail(element: ActivityLog) {
+    const dialogData = new LogActivityDetailDialogModel(element);
 
-    const dialogRef = this.dialog.open(LogsAuditDetailComponent, {
+    const dialogRef = this.dialog.open(InsightsActivityDetailComponent, {
 
       width: '400',
       height: '600',

@@ -1,3 +1,7 @@
+/**
+ * @summary
+ * @remark this code comes from rest.portal
+ */
 export interface AuditLog {
     userId: string;
     username: string;

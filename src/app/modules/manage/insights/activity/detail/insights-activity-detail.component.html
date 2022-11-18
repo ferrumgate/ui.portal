@@ -1,0 +1,49 @@
+<div fxFlex fxLayout="column" class="insights-activity-detail">
+
+    <mat-card-title>
+        <h2 class="insights-activity-detail-title" test-id="insights-activity-detail-title" mat-dialog-title>
+            <p>{{"Details"|translate}}</p>
+        </h2>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="insights-activity-detail-content" fxFill>
+
+            <table mat-table fxFill [dataSource]="dataSource" class="mat-elevation-z8">
+
+                <!--- Note that these columns can be defined in any order.
+                                  The actual rendered columns are set as a property on the row definition" -->
+
+
+                <ng-container matColumnDef="key">
+                    <th mat-header-cell *matHeaderCellDef> {{"Key"|translate}} </th>
+                    <td mat-cell *matCellDef="let element" test-id="insights-activity-detail-table-row-pos">
+                        {{element.key}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef> {{"Value"|translate}} </th>
+                    <td mat-cell *matCellDef="let element" class="insights-activity-detail-table-value"
+                        test-id="insights-activity-detail-table-row-date">
+                        {{element.value}}
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" test-id="insights-activity-detail-table-header">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    test-id="insights-activity-detail-table-row"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <mat-dialog-actions class="insights-activity-detail-button" fxFlex fxLayoutAlign="end center">
+            <button test-id="insights-activity-detail-button-no" mat-button (click)="onDismiss()">
+                <mat-icon color="accent">close</mat-icon>
+                {{"Close"|translate}}
+            </button>
+        </mat-dialog-actions>
+    </mat-card-footer>
+
+</div>

@@ -1,0 +1,144 @@
+<div class="insights-activity-table row" fxfill>
+    <table mat-table fxFill [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+
+
+        <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> {{"No"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-pos"> {{element.position}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="insertDate">
+            <th mat-header-cell *matHeaderCellDef> {{"InsertDate"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-date"> {{element.insertDateStr}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>{{"Type"|translate}}</th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-type"> {{element.type}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="source">
+            <th mat-header-cell *matHeaderCellDef>{{"Source"|translate}}</th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-source"> {{element.authSource}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="requestId">
+            <th mat-header-cell *matHeaderCellDef>{{"Request"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button></th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-requestId"
+                matTooltip="{{element.requestId}}"> {{element.requestIdSub}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ip">
+            <th mat-header-cell *matHeaderCellDef>{{"ClientIp"|translate}}</th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-ip"> {{element.ip}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef>{{"User"|translate}}</th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-username"> {{element.username}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="sessionId">
+            <th mat-header-cell *matHeaderCellDef>{{"Session"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button></th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-sessionId"
+                matTooltip="{{element.sessionId}}"> {{element.sessionIdSub}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="serviceName">
+            <th mat-header-cell *matHeaderCellDef> {{"Service"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-serviceName">
+                {{element.serviceName}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gatewayName">
+            <th mat-header-cell *matHeaderCellDef> {{"Gateway"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-gatewayName">
+                {{element.gatewayName}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="networkName">
+            <th mat-header-cell *matHeaderCellDef> {{"Network"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-networkName">
+                {{element.networkName}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>
+
+                {{"Status"|translate}} <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button> </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-status">
+                <mat-label>
+                    {{element.status}}
+                    <mat-icon *ngIf="element.status!=200">warning</mat-icon>
+
+                </mat-label>
+
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="statusMessage">
+            <th mat-header-cell *matHeaderCellDef> {{"Message"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button> </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-statusMessage">
+                {{element.statusMessage}}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="authnRule">
+            <th mat-header-cell *matHeaderCellDef> {{"Authn Rule"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button> </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-authnRule">
+                {{element.authnRuleName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="authzRule">
+            <th mat-header-cell *matHeaderCellDef> {{"Authz Rule"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button> </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-authzRule">
+                {{element.authzRuleName}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="detail">
+            <th mat-header-cell *matHeaderCellDef> {{"Detail"|translate}} </th>
+            <td mat-cell *matCellDef="let element" test-id="insights-activity-table-row-detail">
+                <button mat-icon-button (click)="showDetail(element)">
+                    <mat-icon>arrow_right</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" test-id="insights-activity-table-header"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" test-id="insights-activity-table-row"></tr>
+    </table>
+</div>

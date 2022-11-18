@@ -20,6 +20,7 @@ import { Network } from '../../../../shared/models/network';
 import { NetworkService } from '../../../../shared/services/network.service';
 import { ServiceService } from '../../../../shared/services/service.service';
 import { AuditLog } from 'src/app/modules/shared/models/auditLog';
+import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
 
 
 
@@ -29,22 +30,26 @@ import { AuditLog } from 'src/app/modules/shared/models/auditLog';
 
 
 @Component({
-  selector: 'app-logs-audit-table',
-  templateUrl: './logs-audit-table.component.html',
-  styleUrls: ['./logs-audit-table.component.scss']
+  selector: 'app-insights-activity-table',
+  templateUrl: './insights-activity-table.component.html',
+  styleUrls: ['./insights-activity-table.component.scss']
 })
-export class LogsAuditTableComponent implements OnInit, OnDestroy {
+export class InsightsActivityTableComponent implements OnInit, OnDestroy {
 
   private allSubs = new SSubscription();
   searchForm = new FormControl();
-
-  displayedColumns: string[] = ['position', 'insertDate', 'ip', 'username', 'message', 'messageSummary', 'messageDetail'];
   helpLink = '';
+  displayedColumns: string[] = ['position', 'insertDate', 'type',
+    'source', 'requestId', 'ip', 'username', 'sessionId', 'serviceName',
+    'gatewayName', 'networkName', 'status', 'statusMessage',
+    'authnRule', 'authzRule',
+    'detail'];
+
   pageSize = 10;
   page = 0;
   totalLogs = 0;
   @Input()
-  dataSource: AuditLog[] = [];
+  dataSource: ActivityLog[] = [];
 
 
   @Output() onShowDetail = new EventEmitter();
@@ -65,8 +70,8 @@ export class LogsAuditTableComponent implements OnInit, OnDestroy {
       })
 
     this.isThemeDark = this.configService.getTheme() == 'dark';
-    this.helpLink = this.configService.links.logAuditHelp;
 
+    this.helpLink = this.configService.links.insightActivityHelp;
   }
   ngOnInit(): void {
 

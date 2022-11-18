@@ -17,7 +17,7 @@
         </ng-container>
 
         <ng-container matColumnDef="ip">
-            <th mat-header-cell *matHeaderCellDef>{{"Ip"|translate}}</th>
+            <th mat-header-cell *matHeaderCellDef>{{"ClientIp"|translate}}</th>
             <td mat-cell *matCellDef="let element" test-id="logs-audit-table-row-ip"> {{element.ip}} </td>
         </ng-container>
 
@@ -41,7 +41,10 @@
         </ng-container>
 
         <ng-container matColumnDef="messageDetail">
-            <th mat-header-cell *matHeaderCellDef> {{"Detail"|translate}} </th>
+            <th mat-header-cell *matHeaderCellDef> {{"Detail"|translate}}<button mat-icon-button
+                    matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button> </th>
             <td mat-cell *matCellDef="let element" test-id="logs-audit-table-row-detail">
                 <button mat-icon-button (click)="showDetail(element)">
                     <mat-icon>arrow_right</mat-icon>

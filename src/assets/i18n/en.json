@@ -244,5 +244,7 @@
     "Detail": "Detail",
     "ClientIp": "Client ip",
     "ActivityLogsSearchHint": "Search by anything",
-    "Activity": "Activity"
+    "Activity": "Activity",
+    "AssignedIp": "Assigned ip",
+    "AssignedIpHint": "Service ip that you can ping"
 }

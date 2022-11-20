@@ -91,11 +91,20 @@
                             </mat-form-field>
                         </p>
                         <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"AssignedIp"|translate}}</mat-label>
+                                <input matInput test-id="service-assingedip-input" [(ngModel)]="service.assignedIp"
+                                    [ngModelOptions]="{standalone:true}" readonly="true">
+                                <mat-hint>{{"AssignedIpHint"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
+                        <p>
                             <mat-checkbox test-id="service-checkbox-enabled" [(ngModel)]="service.isEnabled"
                                 [checked]="service.isEnabled" [ngModelOptions]="{standalone:true}"
                                 (ngModelChange)="modelChanged()">
                                 {{"Enabled"|translate}}</mat-checkbox>
                         </p>
+
                     </form>
 
 

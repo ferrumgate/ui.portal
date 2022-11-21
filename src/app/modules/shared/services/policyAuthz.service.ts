@@ -60,7 +60,7 @@ export class PolicyAuthzService extends BaseService {
       isEnabled: arule.isEnabled,
       name: arule.name,
       networkId: arule.networkId,
-      profile: { is2FA: arule.profile.is2FA, isPAM: arule.profile.isPAM },
+      profile: { is2FA: arule.profile.is2FA, },
       serviceId: arule.serviceId,
       userOrgroupIds: Array.from(arule.userOrgroupIds || []),
 

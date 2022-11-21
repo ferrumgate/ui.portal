@@ -88,13 +88,13 @@ describe('PolicyAuthzComponent', () => {
 
     const services = [service];
     const rule1 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
     const rule2 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
     const rule3 = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
     let policy: AuthorizationPolicy = {
       id: 'aladfa', insertDate: new Date().toISOString(), updateDate: new Date().toISOString(),

@@ -19,7 +19,7 @@ export interface ActivityLog {
 
     sessionId?: string;
     is2FA?: boolean;
-    isPAM?: boolean;
+
     trackId?: number;
     assignedIp?: string;
     tunnelId?: string;

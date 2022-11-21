@@ -39,9 +39,9 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   _model: AuthorizationRuleExtended =
     {
-      id: '', isChanged: false, name: '', networkId: '', profile: { is2FA: false, isPAM: false }, serviceId: '', userOrgroupIds: [],
+      id: '', isChanged: false, name: '', networkId: '', profile: { is2FA: false }, serviceId: '', userOrgroupIds: [],
       orig: {
-        id: '', name: '', networkId: '', profile: { is2FA: false, isPAM: false }, serviceId: '', userOrgroupIds: [], isEnabled: true
+        id: '', name: '', networkId: '', profile: { is2FA: false, }, serviceId: '', userOrgroupIds: [], isEnabled: true
       },
       serviceName: '', userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };

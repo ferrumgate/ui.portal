@@ -80,7 +80,7 @@ describe('PolicyAuthzRuleComponent', () => {
 
     const services = [service];
     const rule = {
-      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true, isPAM: false }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
+      id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network.id, serviceId: service.id, profile: { is2FA: true }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
 
     component.users = [];

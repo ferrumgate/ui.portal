@@ -10,6 +10,7 @@ export interface Gateway {
     labels: string[];
     networkId?: string;
     isEnabled?: boolean;
+
     [key: string]: any;
 }
 
@@ -26,6 +27,7 @@ export interface Network {
     clientNetwork: string;
     serviceNetwork: string;
     isEnabled?: boolean;
+    sshHost?: string;
     [key: string]: any;
 }
 

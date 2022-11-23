@@ -28,9 +28,10 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     password: this.randomPassword,
     passwordAgain: this.randomPassword,
     domain: 'ferrumgate.local',
-    url: 'https://your.publicurl.com',
+    url: this.configService.getUrl(),
     clientNetwork: '100.64.0.0/16',
-    serviceNetwork: '172.28.28.0/24'
+    serviceNetwork: '172.28.28.0/24',
+    sshHost: `${this.configService.getHostname()}:9999`
   };
 
   //change default user 
@@ -49,7 +50,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   // network settings
   networkFormGroup = this.createFormGroupNetwork(this.model);
 
-  networkError = { clientNetwork: '', serviceNetwork: '' };
+  networkError = { clientNetwork: '', serviceNetwork: '', sshHost: '' };
   isLinear = true;
 
   isThemeDark = false;
@@ -118,6 +119,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     const fmg = new FormGroup({
       clientNetwork: new FormControl(model.clientNetwork, [Validators.required, InputService.ipCidrValidator]),
       serviceNetwork: new FormControl(model.serviceNetwork, [Validators.required, InputService.ipCidrValidator]),
+      sshHost: new FormControl(model.sshHost, [Validators.required, InputService.hostValidator]),
     });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -281,7 +283,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   resetNetworkErrors() {
     this.checkAllError = '';
     return {
-      clientNetwork: '', serviceNetwork: ''
+      clientNetwork: '', serviceNetwork: '', sshHost: ''
     }
   }
   checkNetworkModelChanged() {
@@ -308,6 +310,14 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         this.networkError.serviceNetwork = 'ServiceNetworkRequired';
       else
         this.networkError.serviceNetwork = 'ServiceNetworkInvalid';
+    }
+
+    const sshHostError = this.networkFormGroup.controls['sshHost'].errors;
+    if (sshHostError) {
+      if (sshHostError['required'])
+        this.networkError.sshHost = 'SshHostRequired';
+      else
+        this.networkError.sshHost = 'SshHostInvalid';
     }
   }
   checkAllError = '';

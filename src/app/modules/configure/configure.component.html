@@ -115,6 +115,17 @@
 
                             </mat-form-field>
                         </p>
+                        <p fxFill class="configure-common-explanation ">
+                            <mat-form-field appearance="fill" class="configure-common-width">
+                                <mat-label>{{"SshHost"|translate}}</mat-label>
+                                <input matInput test-id="configure-sshhost-input"
+                                    placeholder="tunnel.ferrumgate.com:9999" formControlName="sshHost" required>
+                                <mat-hint>{{"SshHostDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{networkError.sshHost|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
 
                         <div fxFill fxLayout="row" fxLayoutAlign="end">
                             <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
@@ -165,6 +176,12 @@
                             <mat-label>
                                 <span class="configure-summary-name">{{"ServiceNetwork"|translate}}:</span>
                                 <span class="configure-summary-value">{{model.serviceNetwork}}</span>
+                            </mat-label>
+                        </div>
+                        <div class="configure-list-item">
+                            <mat-label>
+                                <span class="configure-summary-name">{{"SshHost"|translate}}:</span>
+                                <span class="configure-summary-value">{{model.sshHost}}</span>
                             </mat-label>
                         </div>
                     </div>

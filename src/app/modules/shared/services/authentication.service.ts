@@ -29,6 +29,8 @@ export class AuthenticationService extends BaseService {
   static StorageSessionKey = 'ferrumgate_session';
   // we need to store tunnel session key for later usage
   static StorageTunnelSessionKey = 'ferrumgate_tunnel_session_key';
+  static StorageExchangeSessionKey = 'ferrumgate_exchange_session_key';
+
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
@@ -157,8 +159,9 @@ export class AuthenticationService extends BaseService {
   }
 
   getAccessToken(key: string) {
-    const tunnelSessionKey = this.getTunnelSessionKey();
-    return this.httpService.post(this._getAccessToken, { key: key, tunnelKey: tunnelSessionKey }, this.jsonHeader)
+    const tunnelSessionKey = this.getSessionTunnelKey();
+    const exchangeSessionKey = this.getSessionExchangeKey();
+    return this.httpService.post(this._getAccessToken, { key: key, tunnelKey: tunnelSessionKey, exchangeKey: exchangeSessionKey }, this.jsonHeader)
       .pipe(map((resp: any) => {
 
         this._currentSession = {
@@ -170,6 +173,7 @@ export class AuthenticationService extends BaseService {
 
         //this.saveSession();
         sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
+        sessionStorage.removeItem(AuthenticationService.StorageExchangeSessionKey);
         return this._currentSession;
       }))
   }
@@ -360,7 +364,7 @@ export class AuthenticationService extends BaseService {
    * @summary get tunnel session key, after that remove it from storage
    * @returns 
    */
-  getTunnelSessionKey() {
+  getSessionTunnelKey() {
     const val = sessionStorage.getItem(AuthenticationService.StorageTunnelSessionKey);
     return val;
 
@@ -370,12 +374,36 @@ export class AuthenticationService extends BaseService {
    * @summary save tunnel session key, if val is empty then remove it from storage
    * @param val 
    */
-  setTunnelSessionKey(val: string) {
+  setSessionTunnelKey(val: string) {
     if (val)
       sessionStorage.setItem(AuthenticationService.StorageTunnelSessionKey, val);
     else sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
 
   }
+
+
+  /**
+   * @summary get tunnel session key, after that remove it from storage
+   * @returns 
+   */
+  getSessionExchangeKey() {
+    const val = sessionStorage.getItem(AuthenticationService.StorageExchangeSessionKey);
+    return val;
+
+  }
+
+  /**
+   * @summary save tunnel session key, if val is empty then remove it from storage
+   * @param val 
+   */
+  setSessionExchangeKey(val: string) {
+    if (val)
+      sessionStorage.setItem(AuthenticationService.StorageExchangeSessionKey, val);
+    else sessionStorage.removeItem(AuthenticationService.StorageExchangeSessionKey);
+
+  }
+
+
 
 
 

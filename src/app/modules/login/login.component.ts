@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   isLogined = false;
 
   tunnelSessionKey = '';
+  exchangeKey = '';
 
   form: FormGroup = this.createFormGroup(this.model);
   hidePassword = true;
@@ -65,15 +66,25 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
       let isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
       this.tunnelSessionKey = params.tunnel;
+      this.exchangeKey = params.exchange;
       //if tunnel key exits save first
       if (this.tunnelSessionKey)
-        this.authService.setTunnelSessionKey(this.tunnelSessionKey);
-      else {
-        //check storage if exits
-        const tunnelSessionKey = this.authService.getTunnelSessionKey();
-        if (tunnelSessionKey)
-          this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
-      }
+        this.authService.setSessionTunnelKey(this.tunnelSessionKey);
+      else
+        if (this.exchangeKey)
+          this.authService.setSessionExchangeKey(this.exchangeKey);
+        else {
+          //check storage if exits
+          const tunnelSessionKey = this.authService.getSessionTunnelKey();
+          if (tunnelSessionKey)
+            this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+
+          const exchangeSessionKey = this.authService.getSessionExchangeKey();
+          if (exchangeSessionKey)
+            this.router.navigate(['/login'], { queryParams: { exchange: exchangeSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+
+
+        }
 
 
     })

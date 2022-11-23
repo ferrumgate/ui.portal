@@ -187,7 +187,7 @@ describe('ConfigureComponent', () => {
     expect(component.commonError.domain).toBe('DomainRequired');
 
     //set domain not valid
-    setFieldValue(fixture, 'configure-domain-input', 'ferrumgate');
+    setFieldValue(fixture, 'configure-domain-input', '???ferrumgate');
     dispatchFakeEvent(findEl(fixture, 'configure-domain-input').nativeElement, 'blur');
     fixture.detectChanges();
     tick(1000);
@@ -206,7 +206,7 @@ describe('ConfigureComponent', () => {
     fixture.detectChanges();
     expect(component.commonError.url).toBe('UrlRequired');
 
-    //set domain not valid
+    //set url not valid
     setFieldValue(fixture, 'configure-url-input', 'ferrumgate');
     dispatchFakeEvent(findEl(fixture, 'configure-url-input').nativeElement, 'blur');
     fixture.detectChanges();
@@ -264,6 +264,15 @@ describe('ConfigureComponent', () => {
     tick(1000);
     fixture.detectChanges();
     expect(component.networkError.serviceNetwork).toBe('ServiceNetworkInvalid');
+
+
+    //set sshost not valid
+    setFieldValue(fixture, 'configure-sshhost-input', '10.2');
+    dispatchFakeEvent(findEl(fixture, 'configure-sshhost-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    tick(1000);
+    fixture.detectChanges();
+    expect(component.networkError.sshHost).toBe('SshHostInvalid');
 
 
   }));

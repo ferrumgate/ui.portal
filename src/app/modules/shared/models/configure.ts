@@ -6,4 +6,5 @@ export interface Configure {
     url: string;
     clientNetwork: string;
     serviceNetwork: string;
+    sshHost: string;
 }

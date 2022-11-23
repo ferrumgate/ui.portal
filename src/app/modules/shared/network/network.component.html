@@ -64,9 +64,20 @@
                         <p>
                             <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"ServiceIpRange"|translate}}</mat-label>
-                                <input matInput test-id="configure-servicenetwork-input" placeholder="172.28.28.0/24"
+                                <input matInput test-id="network-servicenetwork-input" placeholder="172.28.28.0/24"
                                     formControlName="serviceNetwork" required>
                                 <mat-hint>{{"ServiceNetworkDefinition"|translate}}</mat-hint>
+
+                                <mat-error>{{formError.serviceNetwork|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"SshHost"|translate}}</mat-label>
+                                <input matInput test-id="network-sshhost-input" placeholder="tunnel.ferrumgate.com:9999"
+                                    formControlName="sshHost" required>
+                                <mat-hint>{{"SshHostDefinition"|translate}}</mat-hint>
 
                                 <mat-error>{{formError.serviceNetwork|translate}}</mat-error>
 

@@ -62,7 +62,8 @@ describe('NetworkComponent', () => {
     let network1: Network = {
       id: '22',
       name: 'testnetwork',
-      labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: '10.0.0.0/24'
+      labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: '10.0.0.0/24',
+      sshHost: 'localhost:9999'
     }
     component.network = network1;
     component.network.gatewaysCount = 1;
@@ -95,6 +96,32 @@ describe('NetworkComponent', () => {
     const button2 = findEl(fixture, 'network-ok-button', false);
     expect(button2).toBeTruthy();
 
+    //set back again
+    setFieldValue(fixture, 'network-name-input', 'testnetwork');
+    dispatchFakeEvent(findEl(fixture, 'network-name-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    tick(1000);
+    expect(component.network.name).toBe('testnetwork');
+    expect(component.network.isChanged).toBe(false);
+    const button3 = findEl(fixture, 'network-ok-button', false);
+    expect(button3).toBeFalsy();
+
+
+    // set ssh 
+    setFieldValue(fixture, 'network-sshhost-input', 'localhost:1234');
+    dispatchFakeEvent(findEl(fixture, 'network-sshhost-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    tick(1000);
+    expect(component.network.isChanged).toBe(true);
+    const button4 = findEl(fixture, 'network-ok-button', false);
+    expect(button4).toBeTruthy();
+
+    //set invalid sshs
+    setFieldValue(fixture, 'network-sshhost-input', 'http://localhost:1234');
+    dispatchFakeEvent(findEl(fixture, 'network-sshhost-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    tick(1000);
+    expect(component.formGroup.invalid).toBe(true);
 
 
 
@@ -108,7 +135,7 @@ describe('NetworkComponent', () => {
     let network1: Network = {
       id: '22',
       name: 'testnetwork',
-      labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: ''
+      labels: ['ops'], clientNetwork: '10.0.0.0/24', serviceNetwork: '', sshHost: 'localhost:9999'
     }
     component.network = network1;
     component.network.gatewaysCount = 1;

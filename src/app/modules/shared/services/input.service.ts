@@ -10,23 +10,7 @@ export class InputService {
   constructor() { }
 
 
-  /*   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
-      const config: any = {
-        'required': 'Required',
-        'unsolicitedMailAddress': 'Please enter a reliable e-mail address.',
-        'emailAddress': 'Invalid email address',
-        'invalidPhoneNumber': 'Invalid phone number',
-        'mismatchedPasswords': 'Passwords does not match. Please control and type again.',
-        'mismatchedEmails': 'Emails does not match. Please control and type again.',
-        'invalidPassword': 'Invalid password. Password must be at least 8 characters long ,contain a number and one capital letter.',
-        'minlength': `Minimum length ${validatorValue.requiredLength}`,
-        'invalidIp': 'Invalid Ip Address or Ip Range',
-        'invalidCaptcha': 'Check to prove you are not a bot',
-        'invalidDomain': 'Invalid domain',
-      };
-  
-      return config[validatorName];
-    } */
+
 
   static emailValidator(control: any) {
     // RFC 2822 compliant regex
@@ -104,7 +88,7 @@ export class InputService {
 
     if (control == null || control.value == null) {
       return null;
-    } else if (validator.isFQDN(control.value)) {
+    } else if (validator.isFQDN(control.value, { require_tld: false })) {
       return null;
     } else {
       return { 'invalidDomain': true };
@@ -115,7 +99,9 @@ export class InputService {
     if (control == null || control.value == null) {
       return null;
     } else
-      if ((control.value.startsWith('http://') || control.value.startsWith('https://')) && validator.isURL(control.value)) {
+
+
+      if ((control.value.startsWith('http://') || control.value.startsWith('https://')) && (validator.isURL(control.value) || control.value.includes('localhost'))) {
         return null;
       } else {
         return { 'invalidUrl': true };
@@ -156,11 +142,27 @@ export class InputService {
     if (control == null || control.value == null) {
       return null;
     } else
-      if (validator.isIP(control.value) || validator.isFQDN(control.value)) {
+      if (validator.isIP(control.value) || validator.isFQDN(control.value, { require_tld: false })) {
         return null;
       } else {
         return { 'invalidHost': true };
       }
+  }
+
+  static hostValidator(control: any) {
+
+    if (control == null || control.value == null) {
+      return null;
+    } else {
+      let parts = control.value?.toString().split(':');
+      let domain = parts[0];
+      let port = parts[1] || '9999';
+      if ((validator.isFQDN(domain, { require_tld: false }) || validator.isIP(domain)) && validator.isPort(port)) {
+        return null;
+      } else {
+        return { 'invalidHost': true };
+      }
+    }
   }
 
 }

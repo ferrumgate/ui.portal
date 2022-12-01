@@ -88,7 +88,7 @@ export class ManageLayoutComponent {
           icon: 'how_to_reg', isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authentication'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authn']) }
         },
         {
-          icon: 'services', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Authorization'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authz']) }
+          icon: 'verified_user', isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authorization'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authz']) }
 
         },
       ]

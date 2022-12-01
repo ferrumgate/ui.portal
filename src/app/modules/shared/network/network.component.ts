@@ -27,7 +27,7 @@ export class NetworkComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
   _network: Network = {
-    id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: '', isEnabled: true
+    id: '', name: '', gateways: [], labels: [], clientNetwork: '', serviceNetwork: '', isEnabled: true, sshHost: ''
   };
   get network() { return this._network; }
 
@@ -43,7 +43,7 @@ export class NetworkComponent implements OnInit, OnDestroy {
     this.formGroup = this.createFormGroup(this.network);
   };
 
-  formError = { name: '', clientNetwork: '', serviceNetwork: '' };
+  formError = { name: '', clientNetwork: '', serviceNetwork: '', sshHost: '' };
   formGroup = this.createFormGroup(this.network);
   @Input()
   gatewaysCount = 0;
@@ -94,6 +94,7 @@ export class NetworkComponent implements OnInit, OnDestroy {
       name: new FormControl(net.name, [Validators.required]),
       clientNetwork: new FormControl(net.clientNetwork, [Validators.required, InputService.ipCidrValidator]),
       serviceNetwork: new FormControl(net.serviceNetwork, [Validators.required, InputService.ipCidrValidator]),
+      sshHost: new FormControl(net.sshHost, [Validators.required, InputService.hostValidator]),
     });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -112,7 +113,7 @@ export class NetworkComponent implements OnInit, OnDestroy {
   }
 
   createFormError() {
-    return { name: '', clientNetwork: '', serviceNetwork: '' };
+    return { name: '', clientNetwork: '', serviceNetwork: '', sshHost: '' };
   }
 
   addOnBlur = true;
@@ -160,6 +161,8 @@ export class NetworkComponent implements OnInit, OnDestroy {
       this.network.isChanged = true;
     if (original.isEnabled != this.network.isEnabled)
       this.network.isChanged = true;
+    if (original.sshHost != this.network.sshHost)
+      this.network.isChanged = true;
 
   }
 
@@ -192,6 +195,13 @@ export class NetworkComponent implements OnInit, OnDestroy {
         error.serviceNetwork = 'ServiceNetworkRequired';
       else
         error.serviceNetwork = 'ServiceNetworkInvalid';
+    }
+    const sshHostError = this.formGroup.controls['sshHost'].errors;
+    if (sshHostError) {
+      if (sshHostError['required'])
+        error.sshHost = 'SshHostRequired';
+      else
+        error.sshHost = 'SshHostInvalid';
     }
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();

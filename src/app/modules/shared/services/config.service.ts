@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
@@ -84,10 +84,17 @@ export class ConfigService extends BaseService {
 
 
   getApiUrl(): string {
+    return this.getUrl() + '/api';
+  }
+
+  getHostname() {
+    return window.location.hostname;
+  }
+  getUrl() {
     return window.location.protocol
       + '//' + window.location.hostname
       // tslint:disable-next-line: triple-equals
-      + (window.location.port != '' ? (':' + window.location.port) : '') + '/api';
+      + (window.location.port != '' ? (':' + window.location.port) : '');
   }
 
 

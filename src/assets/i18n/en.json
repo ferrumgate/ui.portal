@@ -250,5 +250,21 @@
     "ActivityLogsSearchHint": "Search by anything",
     "Activity": "Activity",
     "AssignedIp": "Assigned ip",
-    "AssignedIpHint": "Service ip that you can ping"
+    "AssignedIpHint": "Service ip that you can ping",
+    "TotalNetworks": "Total networks",
+    "TotalNetworksCount": "Total networks count",
+    "TotalGateways": "Total gateways",
+    "TotalGatewaysCount": "Total gateways count",
+    "TotalGroupsCount": "Total groups count",
+    "TotalUsersCount": "Total users count",
+    "TotalServicesCount": "Total services count",
+    "TotalPolicyAuthnCount": "Total Authentication rules count",
+    "TotalPolicyAuthzCount": "Total Authorization rules count",
+    "TotalActiveSessionsCount": "Total active sessions count",
+    "TotalActiveTunnelsCount": "Total active tunnels count",
+    "Active": "Active",
+    "Last7Days": "Last 7 days",
+    "Success": "Success",
+    "Failed": "Failed",
+    "LoginTry": "Login try"
 }

@@ -33,4 +33,10 @@ export class UtilService {
         }
         return false;
     }
+
+    static dateFormatDD(date: Date | number) {
+        if (typeof date == 'number')
+            return new Date(date).getDate().toString();
+        return date.getDate().toString();
+    }
 }

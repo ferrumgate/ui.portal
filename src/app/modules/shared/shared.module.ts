@@ -26,6 +26,9 @@ import { GroupComponent } from "./group/group.component";
 import { ServiceComponent } from "./service/service.component";
 import { PolicyAuthzRuleComponent } from "./policy/policy-authz-rule/policy-authz-rule.component";
 import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-authn-rule.component";
+import { DashboardStatusComponent } from "./dashboard/status/dashboard-status.component";
+import { DashboardChartComponent } from "./dashboard/chart/dashboard-chart.component";
+import { NgApexchartsModule } from "ng-apexcharts";
 
 
 
@@ -41,6 +44,7 @@ import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-auth
         ReactiveFormsModule,
         HttpClientModule,
         RecaptchaV3Module,
+        NgApexchartsModule,
         ThemeSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
@@ -59,8 +63,9 @@ import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-auth
         UserComponent,
         ServiceComponent,
         PolicyAuthzRuleComponent,
-        PolicyAuthnRuleComponent
-
+        PolicyAuthnRuleComponent,
+        DashboardStatusComponent,
+        DashboardChartComponent
 
     ],
     imports: [
@@ -77,7 +82,8 @@ import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-auth
                 deps: [HttpClient]
             }
         }),
-        QRCodeModule
+        QRCodeModule,
+        NgApexchartsModule
 
 
 
@@ -101,7 +107,9 @@ import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-auth
         UserComponent,
         ServiceComponent,
         PolicyAuthzRuleComponent,
-        PolicyAuthnRuleComponent
+        PolicyAuthnRuleComponent,
+        DashboardStatusComponent,
+        DashboardChartComponent
     ],
     providers: [
         {

@@ -1,0 +1,27 @@
+<div class="dashboard-status">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title fxFlex class="dashboard-status-title">
+                <div fxFlex fxLayout="row">
+                    <mat-icon matListIcon test-id="dashboard-status-icon" *ngIf="!isSvg">{{icon}}</mat-icon>
+                    <mat-icon matListIcon *ngIf="isSvg" svgIcon="{{icon}}"></mat-icon>
+
+                    <span matBadge=" {{count}}" matBadgeOverlap="false"
+                        test-id="dashboard-status-title">{{title}}</span>
+
+                </div>
+            </mat-card-title>
+            <mat-action-row class="dashboard-status-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="dashboard-status-content" test-id="dashboard-status-detail">{{detail|translate}}</div>
+        </mat-card-content>
+    </mat-card>
+</div>

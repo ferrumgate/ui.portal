@@ -53,6 +53,11 @@ export class ConfigService extends BaseService {
     policyAuthnHelp: "https://ferrumgate/doc/policy/authentication",
     insightActivityHelp: "https://ferrumgate/doc/insight/activity",
     logAuditHelp: "https://ferrumgate/doc/log/audit",
+    sessionHelp: "https://ferrumgate/doc/session",
+    tunnelHelp: "https://ferrumgate/doc/tunnel",
+    summaryAuthenticationHelp: 'https://ferrumgate/doc/summary/authentication',
+    summaryLoginTryHelp: 'https://ferrumgate/doc/summary/logintry'
+
 
 
 

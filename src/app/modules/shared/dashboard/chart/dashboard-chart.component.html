@@ -1,0 +1,25 @@
+<div class="dashboard-chart">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title fxFlex class="dashboard-chart-title">
+                <div fxFlex fxLayout="row">
+                    <mat-icon matListIcon test-id="dashboard-chart-icon">{{icon}}</mat-icon>
+                    <span test-id="dashboard-chart-title">{{title}}</span>
+                </div>
+            </mat-card-title>
+            <mat-action-row class="dashboard-chart-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="dashboard-chart-content" test-id="dashboard-chart-detail">
+                <ng-content></ng-content>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

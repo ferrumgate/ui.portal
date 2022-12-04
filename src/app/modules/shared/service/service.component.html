@@ -85,7 +85,8 @@
                                     </mat-chip>
                                     <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)"
+                                        readonly="{{service.isSystem}}">
                                 </mat-chip-list>
                             </mat-form-field>
                         </p>
@@ -100,8 +101,8 @@
                         <p>
                             <mat-checkbox test-id="service-checkbox-enabled" [(ngModel)]="service.isEnabled"
                                 [checked]="service.isEnabled" [ngModelOptions]="{standalone:true}"
-                                (ngModelChange)="modelChanged()">
-                                {{"Enabled"|translate}}</mat-checkbox>
+                                (ngModelChange)="modelChanged()" disabled="{{service.isSystem}}">
+                                {{"Enabled"|translate}} </mat-checkbox>
                         </p>
 
                     </form>
@@ -112,7 +113,8 @@
                 <div>
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
-                        <mat-action-row class="service-actions" fxFlex fxLayoutAlign="start center">
+                        <mat-action-row *ngIf="!service.isSystem" class="service-actions" fxFlex
+                            fxLayoutAlign="start center">
                             <button test-id="service-delete-button" mat-icon-button color="primary"
                                 matTooltip="{{'Delete'|translate}}" (click)="delete()">
                                 <mat-icon>delete</mat-icon>

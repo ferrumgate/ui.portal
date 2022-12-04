@@ -10,4 +10,5 @@ export interface Service {
     networkId: string;
     isEnabled: boolean;
     assignedIp: string;
+    isSystem?: boolean;
 }

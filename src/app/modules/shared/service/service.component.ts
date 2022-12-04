@@ -176,6 +176,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
       networkName: new FormControl(service.networkName, [Validators.required])
 
     });
+    if (service.isSystem)
+      fmg.disable();
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {

@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ServicesRoutingModule } from './services-routing.module';
+import { MDashboardRoutingModule } from './mdashboard-routing.module';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ServicesComponent } from './services.component';
+import { MDashboardComponent } from './mdashboard.component';
 
 
 
 @NgModule({
   declarations: [
-    ServicesComponent
+    MDashboardComponent
   ],
   imports: [
     CommonModule,
-    ServicesRoutingModule,
+    MDashboardRoutingModule,
     SharedModule
   ]
 })
-export class ServicesModule { }
+export class MDashboardModule { }

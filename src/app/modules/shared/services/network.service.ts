@@ -51,7 +51,7 @@ export class NetworkService extends BaseService {
     const network: Network = {
       id: net.id, labels: net.labels, name: net.name,
       clientNetwork: net.clientNetwork, serviceNetwork: net.serviceNetwork,
-      isEnabled: net.isEnabled
+      isEnabled: net.isEnabled, sshHost: net.sshHost
     }
 
     return this.preExecute(network).pipe(

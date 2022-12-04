@@ -2,8 +2,7 @@
     <mat-card>
         <mat-card-header>
             <mat-card-title matTooltip="{{'Service'|translate}} {{service.name}}">
-                <mat-icon>link
-                </mat-icon>
+                <mat-icon matListIcon svgIcon="services"></mat-icon>
             </mat-card-title>
             <mat-action-row class="service-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
                 <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"

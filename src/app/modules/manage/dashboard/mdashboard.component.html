@@ -1,0 +1,143 @@
+<div class="mdashboard-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="mdashboard mdashboard-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row mdashboard-title">
+                <span>{{'Dashboard'|translate}}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="mdashboard mdashboard-content">
+        <mat-card class="mdashboard-group">
+            <mat-card-title class="mdashboard-group-title">
+                {{"Settings"|translate}}
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap">
+
+                    <app-dashboard-status test-id="mdashboard-status-totalnetwork"
+                        class="mdashboard-item mdashboard-status" toolTip="" detail="TotalNetworksCount"
+                        title="{{'Networks'|translate}}" icon="lan" count="{{config.networkCount}}"
+                        helpLink="{{help.network}}">
+                    </app-dashboard-status>
+
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip=""
+                        detail="TotalGatewaysCount" title="{{'Gateways'|translate}}" icon="computer"
+                        count="{{config.gatewayCount}}" helpLink="{{help.gateway}}">
+                    </app-dashboard-status>
+
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip="" detail="TotalUsersCount"
+                        title="{{'Users'|translate}}" icon="person" count="{{config.userCount}}"
+                        helpLink="{{help.user}}">
+                    </app-dashboard-status>
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip="" detail="TotalGroupsCount"
+                        title="{{'Groups'|translate}}" icon="group" count="{{config.groupCount}}"
+                        helpLink="{{help.group}}">
+                    </app-dashboard-status>
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip=""
+                        detail="TotalServicesCount" title="{{'Services'|translate}}" icon="services" isSVG="true"
+                        count="{{config.serviceCount}}" helpLink="{{help.service}}">
+                    </app-dashboard-status>
+
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip=""
+                        detail="TotalPolicyAuthnCount" title="{{'Authentication'|translate}}" icon="how_to_reg"
+                        count="{{config.authnCount}}" helpLink="{{help.policyAuthn}}">
+                    </app-dashboard-status>
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip=""
+                        detail="TotalPolicyAuthzCount" title="{{'Authorization'|translate}}" icon="verified_user"
+                        count="{{config.authzCount}}" helpLink="{{help.policyAuthz}}">
+                    </app-dashboard-status>
+                </div>
+            </mat-card-content>
+
+        </mat-card>
+
+        <mat-card class="mdashboard-group">
+            <mat-card-title class="mdashboard-group-title">
+                {{"Active"|translate}}
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap">
+
+                    <app-dashboard-status test-id="mdashboard-status-sessionscount"
+                        class="mdashboard-item mdashboard-status" toolTip="" detail="TotalActiveSessionsCount"
+                        title="Sessions" icon="trip_origin" count="{{active.sessionCount}}" helpLink="{{help.session}}">
+                    </app-dashboard-status>
+                    <app-dashboard-status class="mdashboard-item mdashboard-status" toolTip=""
+                        detail="TotalActiveTunnelsCount" title="Tunnels" icon="vpn_key" count="{{active.tunnelCount}}"
+                        helpLink="{{help.tunnel}}">
+                    </app-dashboard-status>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="mdashboard-group">
+            <mat-card-title class="mdashboard-group-title">
+                {{"Last7Days"|translate}}
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap">
+
+                    <app-dashboard-chart test-id="mdashboard-chart-logintry" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.loginTry}}">
+                        <apx-chart #loginTryChart [dataLabels]="loginTryData.dataLabels" [series]="loginTryData.series"
+                            [chart]="loginTryData.chart" [xaxis]="loginTryData.xaxis" [title]="loginTryData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-2fa" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.t2faCheck}}">
+                        <apx-chart #created2FAChart [dataLabels]="t2faCheckData.dataLabels"
+                            [series]="t2faCheckData.series" [chart]="t2faCheckData.chart" [xaxis]="t2faCheckData.xaxis"
+                            [title]="t2faCheckData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-createdtunnel"
+                        class="mdashboard-item mdashboard-chart" toolTip="" detail="" title="" icon="bar_chart"
+                        helpLink="{{help.createdTunnel}}">
+                        <apx-chart #createdTunnelChart [dataLabels]="createTunnelData.dataLabels"
+                            [series]="createTunnelData.series" [chart]="createTunnelData.chart"
+                            [xaxis]="createTunnelData.xaxis" [title]="createTunnelData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-userloginsuccess"
+                        class="mdashboard-item mdashboard-chart" toolTip="" detail="" title="" icon="bar_chart"
+                        helpLink="{{help.userLoginSucess}}">
+                        <apx-chart #userLoginSuccessChart [dataLabels]="userLoginSuccess.dataLabels"
+                            [series]="userLoginSuccess.series" [chart]="userLoginSuccess.chart"
+                            [xaxis]="userLoginSuccess.xaxis" [title]="userLoginSuccess.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-userloginfailed"
+                        class="mdashboard-item mdashboard-chart" toolTip="" detail="" title="" icon="bar_chart"
+                        helpLink="{{help.userLoginFailed}}">
+                        <apx-chart #userLoginFailedChart [dataLabels]="userLoginFailed.dataLabels"
+                            [series]="userLoginFailed.series" [chart]="userLoginFailed.chart"
+                            [xaxis]="userLoginFailed.xaxis" [title]="userLoginFailed.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+
+
+
+
+
+    </div>
+</div>

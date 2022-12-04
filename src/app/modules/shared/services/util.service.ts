@@ -33,4 +33,12 @@ export class UtilService {
         }
         return false;
     }
+
+    static dateFormatDD(date: Date | number) {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        let tmp = new Date(date);
+
+        return tmp.getDate().toString() + ` ${days[tmp.getDay()]}`;
+
+    }
 }

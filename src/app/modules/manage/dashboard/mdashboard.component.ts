@@ -45,7 +45,11 @@ export class MDashboardComponent implements OnInit, OnDestroy {
     policyAuthz: '',
     session: '',
     tunnel: '',
-    loginTry: ''
+    loginTry: '',
+    createdTunnel: '',
+    t2faCheck: '',
+    userLoginSucess: '',
+    userLoginFailed: ''
 
   }
 
@@ -96,7 +100,119 @@ export class MDashboardComponent implements OnInit, OnDestroy {
       },
       xaxis: {
 
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
+        categories: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+      },
+      dataLabels: {
+        style: {
+          colors: [this.chartDataLabelColor()]
+        }
+      }
+    } as ChartOptions;
+
+
+  createTunnelData: ChartOptions =
+    {
+      title: { text: this.translateService.translate("CreatedTunnel") },
+      series: [
+        {
+          color: this.COLOR_SUCCESS,
+          name: "ssh",
+          data: [10, 41, 35, 51, 49, 62, 69, 91]
+        }
+      ],
+      chart: {
+        foreColor: this.chartForeColor(),
+        height: 350,
+        type: 'bar'
+      },
+      xaxis: {
+
+        categories: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+      },
+      dataLabels: {
+        style: {
+          colors: [this.chartDataLabelColor()]
+        }
+      }
+    } as ChartOptions;
+
+
+  t2faCheckData: ChartOptions =
+    {
+      title: { text: this.translateService.translate("2FACheck") },
+      series: [
+        {
+          color: this.COLOR_SUCCESS,
+          name: "Success",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+        },
+        {
+          color: this.COLOR_FAILED,
+          name: "Failed",
+          data: [15, 45, 5, 1, 49, 62, 69, 91, 48]
+        }
+      ],
+      chart: {
+        foreColor: this.chartForeColor(),
+        height: 350,
+        type: 'bar'
+      },
+      xaxis: {
+
+        categories: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+      },
+      dataLabels: {
+        style: {
+          colors: [this.chartDataLabelColor()]
+        }
+      }
+    } as ChartOptions;
+
+
+  userLoginSuccess: ChartOptions =
+    {
+      title: { text: this.translateService.translate("TopUserLoginSuccess") },
+      series: [
+        {
+          color: this.COLOR_SUCCESS,
+          name: "Success",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+        }
+      ],
+      chart: {
+        foreColor: this.chartForeColor(),
+        height: 350,
+        type: 'bar'
+      },
+      xaxis: {
+
+        categories: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+      },
+      dataLabels: {
+        style: {
+          colors: [this.chartDataLabelColor()]
+        }
+      }
+    } as ChartOptions;
+
+  userLoginFailed: ChartOptions =
+    {
+      title: { text: this.translateService.translate("TopUserLoginFailed") },
+      series: [
+        {
+          color: this.COLOR_FAILED,
+          name: "Failed",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+        }
+      ],
+      chart: {
+        foreColor: this.chartForeColor(),
+        height: 350,
+        type: 'bar'
+      },
+      xaxis: {
+
+        categories: ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
       },
       dataLabels: {
         style: {
@@ -128,6 +244,8 @@ export class MDashboardComponent implements OnInit, OnDestroy {
     this.help.tunnel = this.configService.links.tunnelHelp;
     this.help.service = this.configService.links.serviceHelp;
     this.help.loginTry = this.configService.links.summaryLoginTryHelp;
+    this.help.createdTunnel = this.configService.links.summaryCreatedTunnelHelp;
+    this.help.t2faCheck = this.configService.links.summary2FACheckHelp;
     this.allSubs.addThis =
       this.allSubs.addThis = this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
@@ -174,14 +292,30 @@ export class MDashboardComponent implements OnInit, OnDestroy {
       }),
       switchMap(x => this.summaryService.getLoginTry()),
       map(x => {
-        this.prepareTryLogin(x);
+        this.prepareLoginTry(x);
+      }),
+      switchMap(x => this.summaryService.get2FACheck()),
+      map(x => {
+        this.prepare2FACheck(x);
+      }),
+      switchMap(x => this.summaryService.getCreatedTunnel()),
+      map(x => {
+        this.prepareCreatedTunnel(x);
+      }),
+      switchMap(x => this.summaryService.getUserLoginSuccess()),
+      map(x => {
+        this.prepareUserLoginSuccess(x);
+      }),
+      switchMap(x => this.summaryService.getUserLoginFailed()),
+      map(x => {
+        this.prepareUserLoginFailed(x);
       })
 
     )
 
   }
 
-  prepareTryLogin(sum: SummaryAgg) {
+  prepareLoginTry(sum: SummaryAgg) {
     try {
       const dates = sum.aggs.map(x => x.key);
 
@@ -217,6 +351,158 @@ export class MDashboardComponent implements OnInit, OnDestroy {
       } as ChartOptions;
 
       this.loginTryData = data;
+    } catch (ignore) {
+      //ignored exception
+    }
+  }
+
+
+  prepare2FACheck(sum: SummaryAgg) {
+    try {
+      const dates = sum.aggs.map(x => x.key);
+
+      const data: ChartOptions = {
+        title: { text: this.translateService.translate("2FACheck") },
+        series: [
+          {
+            color: this.COLOR_SUCCESS,
+            name: this.translateService.translate("Success"),
+            data: sum.aggs.map(x => x.sub?.find(x => x.key == '200')?.value).map(x => x ? x : 0)
+          },
+          {
+            color: this.COLOR_FAILED,
+            name: this.translateService.translate("Failed"),
+            data: sum.aggs.map(x => x.sub?.find(x => x.key != '200')?.value).map(x => x ? x : 0)
+          }
+        ],
+        chart: {
+          foreColor: this.chartForeColor(),
+          height: 350,
+          type: 'bar'
+        },
+        xaxis: {
+
+          categories: dates.map(x => UtilService.dateFormatDD(Number(x)))
+        },
+        dataLabels: {
+          style: {
+            colors: [this.chartDataLabelColor()],
+
+          },
+        }
+      } as ChartOptions;
+
+      this.t2faCheckData = data;
+    } catch (ignore) {
+      //ignored exception
+    }
+  }
+
+
+  prepareCreatedTunnel(sum: SummaryAgg) {
+    try {
+      const dates = sum.aggs.map(x => x.key);
+
+      const data: ChartOptions = {
+        title: { text: this.translateService.translate("CreatedTunnel") },
+        series: [
+          {
+            color: this.COLOR_SUCCESS,
+            name: "ssh",
+            data: sum.aggs.map(x => x.sub?.find(x => x.key == 'ssh')?.value).map(x => x ? x : 0)
+          }
+        ],
+        chart: {
+          foreColor: this.chartForeColor(),
+          height: 350,
+          type: 'bar'
+        },
+        xaxis: {
+
+          categories: dates.map(x => UtilService.dateFormatDD(Number(x)))
+        },
+        dataLabels: {
+          style: {
+            colors: [this.chartDataLabelColor()],
+
+          },
+        }
+      } as ChartOptions;
+
+      this.createTunnelData = data;
+    } catch (ignore) {
+      //ignored exception
+    }
+  }
+
+
+  prepareUserLoginSuccess(sum: SummaryAgg) {
+    try {
+      const users = sum.aggs.map(x => x.key);
+
+      const data: ChartOptions = {
+        title: { text: this.translateService.translate("TopUserLoginSuccess") },
+        series: [
+          {
+            color: this.COLOR_SUCCESS,
+            name: "userLoginSuccess",
+            data: sum.aggs.map(x => x.value)
+          }
+        ],
+        chart: {
+          foreColor: this.chartForeColor(),
+          height: 350,
+          type: 'bar'
+        },
+        xaxis: {
+
+          categories: users
+        },
+        dataLabels: {
+          style: {
+            colors: [this.chartDataLabelColor()],
+
+          },
+        }
+      } as ChartOptions;
+
+      this.userLoginSuccess = data;
+    } catch (ignore) {
+      //ignored exception
+    }
+  }
+
+  prepareUserLoginFailed(sum: SummaryAgg) {
+    try {
+      const users = sum.aggs.map(x => x.key);
+
+      const data: ChartOptions = {
+        title: { text: this.translateService.translate("TopUserLoginFailed") },
+        series: [
+          {
+            color: this.COLOR_FAILED,
+            name: "userLoginFailed",
+            data: sum.aggs.map(x => x.value)
+          }
+        ],
+        chart: {
+          foreColor: this.chartForeColor(),
+          height: 350,
+          type: 'bar'
+        },
+        xaxis: {
+
+          categories: users
+        },
+        dataLabels: {
+          style: {
+            colors: [this.chartDataLabelColor()],
+
+          },
+        }
+      } as ChartOptions;
+
+      this.userLoginFailed = data;
     } catch (ignore) {
       //ignored exception
     }

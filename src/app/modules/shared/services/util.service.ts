@@ -35,8 +35,10 @@ export class UtilService {
     }
 
     static dateFormatDD(date: Date | number) {
-        if (typeof date == 'number')
-            return new Date(date).getDate().toString();
-        return date.getDate().toString();
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        let tmp = new Date(date);
+
+        return tmp.getDate().toString() + ` ${days[tmp.getDay()]}`;
+
     }
 }

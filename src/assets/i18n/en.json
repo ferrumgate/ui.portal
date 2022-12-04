@@ -266,5 +266,9 @@
     "Last7Days": "Last 7 days",
     "Success": "Success",
     "Failed": "Failed",
-    "LoginTry": "Login try"
+    "LoginTry": "Login try",
+    "CreatedTunnel": "Created tunnel",
+    "2FACheck": "2FA check",
+    "TopUserLoginSuccess": "Top users login success",
+    "TopUserLoginFailed": "Top users login failed"
 }

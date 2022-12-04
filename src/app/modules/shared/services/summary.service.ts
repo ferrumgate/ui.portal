@@ -24,6 +24,10 @@ export class SummaryService extends BaseService {
   private _summaryConfigUrl = this.configService.getApiUrl() + '/summary/config';
   private _summaryActiveUrl = this.configService.getApiUrl() + '/summary/active';
   private _summaryLoginTryUrl = this.configService.getApiUrl() + '/summary/logintry';
+  private _summaryCreatedTunnelUrl = this.configService.getApiUrl() + '/summary/createtunnel';
+  private _summary2FACheckUrl = this.configService.getApiUrl() + '/summary/2facheck';
+  private _summaryUserLoginSuccess = this.configService.getApiUrl() + '/summary/userloginsuccess';
+  private _summaryUserLoginFailed = this.configService.getApiUrl() + '/summary/userloginfailed';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('summary', captchaService)
 
@@ -60,6 +64,63 @@ export class SummaryService extends BaseService {
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summaryLoginTryUrl, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+  getCreatedTunnel(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summaryCreatedTunnelUrl, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+
+  get2FACheck(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summary2FACheckUrl, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+  getUserLoginSuccess(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summaryUserLoginSuccess, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+  getUserLoginFailed(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summaryUserLoginFailed, y);
         return this.httpService.get<SummaryAgg>(url);
       })
     )

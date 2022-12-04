@@ -56,7 +56,11 @@ export class ConfigService extends BaseService {
     sessionHelp: "https://ferrumgate/doc/session",
     tunnelHelp: "https://ferrumgate/doc/tunnel",
     summaryAuthenticationHelp: 'https://ferrumgate/doc/summary/authentication',
-    summaryLoginTryHelp: 'https://ferrumgate/doc/summary/logintry'
+    summaryLoginTryHelp: 'https://ferrumgate/doc/summary/logintry',
+    summaryCreatedTunnelHelp: 'https://ferrumgate/doc/summary/createdtunnel',
+    summary2FACheckHelp: 'https://ferrumgate/doc/summary/2facheck',
+    summaryUserLoginSuccessHelp: 'https://ferrumgate/doc/summary/userloginsuccess',
+    summaryUserLoginFailedelp: 'https://ferrumgate/doc/summary/userloginfailed',
 
 
 

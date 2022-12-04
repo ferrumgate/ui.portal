@@ -88,6 +88,44 @@
                     </app-dashboard-chart>
 
 
+                    <app-dashboard-chart test-id="mdashboard-chart-logintry" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.t2faCheck}}">
+                        <apx-chart #created2FAChart [dataLabels]="t2faCheckData.dataLabels"
+                            [series]="t2faCheckData.series" [chart]="t2faCheckData.chart" [xaxis]="t2faCheckData.xaxis"
+                            [title]="t2faCheckData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-logintry" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.createdTunnel}}">
+                        <apx-chart #createdTunnelChart [dataLabels]="createTunnelData.dataLabels"
+                            [series]="createTunnelData.series" [chart]="createTunnelData.chart"
+                            [xaxis]="createTunnelData.xaxis" [title]="createTunnelData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-logintry" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.userLoginSucess}}">
+                        <apx-chart #userLoginSuccessChart [dataLabels]="userLoginSuccess.dataLabels"
+                            [series]="userLoginSuccess.series" [chart]="userLoginSuccess.chart"
+                            [xaxis]="userLoginSuccess.xaxis" [title]="userLoginSuccess.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+                    <app-dashboard-chart test-id="mdashboard-chart-logintry" class="mdashboard-item mdashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.userLoginFailed}}">
+                        <apx-chart #userLoginFailedChart [dataLabels]="userLoginFailed.dataLabels"
+                            [series]="userLoginFailed.series" [chart]="userLoginFailed.chart"
+                            [xaxis]="userLoginFailed.xaxis" [title]="userLoginFailed.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+
                 </div>
             </mat-card-content>
         </mat-card>

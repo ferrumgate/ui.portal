@@ -83,6 +83,30 @@ describe('MDashboardComponent', () => {
         aggs: [
 
         ]
+      }),
+      of({
+        total: 30,
+        aggs: [
+
+        ]
+      }),
+      of({
+        total: 30,
+        aggs: [
+
+        ]
+      }),
+      of({
+        total: 30,
+        aggs: [
+
+        ]
+      }),
+      of({
+        total: 30,
+        aggs: [
+
+        ]
       })
     )
 

@@ -30,12 +30,20 @@ export class SummaryService extends BaseService {
   private _summaryUserLoginFailedUrl = this.configService.getApiUrl() + '/summary/userloginfailed';
   private _summaryUserLoginTryUrl = this.configService.getApiUrl() + '/summary/user/logintry';
   private _summaryUserLoginTryHoursUrl = this.configService.getApiUrl() + '/summary/user/logintryhours';
+  private timeZone = '00:00';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('summary', captchaService)
-
+    const diff = new Date().getTimezoneOffset();
+    this.timeZone = this.toHoursAndMinutes(diff);
   }
 
+  toHoursAndMinutes(totalMinutes: number) {
+    const isMinus = totalMinutes < 0;
+    const hours = Math.floor(Math.abs(totalMinutes) / 60);
+    const minutes = Math.abs(totalMinutes) % 60;
 
+    return `${isMinus ? '+' : '-'}${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
+  }
 
   getConfig() {
     const searchParams = new URLSearchParams();
@@ -63,6 +71,7 @@ export class SummaryService extends BaseService {
       searchParams.append("startDate", startDate);
     if (endDate)
       searchParams.append("endDate", endDate);
+    searchParams.append("timeZone", this.timeZone);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summaryLoginTryUrl, y);
@@ -77,6 +86,7 @@ export class SummaryService extends BaseService {
       searchParams.append("startDate", startDate);
     if (endDate)
       searchParams.append("endDate", endDate);
+    searchParams.append("timeZone", this.timeZone);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summaryCreatedTunnelUrl, y);
@@ -92,6 +102,7 @@ export class SummaryService extends BaseService {
       searchParams.append("startDate", startDate);
     if (endDate)
       searchParams.append("endDate", endDate);
+    searchParams.append("timeZone", this.timeZone);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summary2FACheckUrl, y);
@@ -134,6 +145,7 @@ export class SummaryService extends BaseService {
       searchParams.append("startDate", startDate);
     if (endDate)
       searchParams.append("endDate", endDate);
+    searchParams.append("timeZone", this.timeZone);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summaryUserLoginTryUrl, y);
@@ -148,6 +160,7 @@ export class SummaryService extends BaseService {
       searchParams.append("startDate", startDate);
     if (endDate)
       searchParams.append("endDate", endDate);
+    searchParams.append("timeZone", this.timeZone);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._summaryUserLoginTryHoursUrl, y);

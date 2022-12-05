@@ -41,4 +41,20 @@ export class UtilService {
         return tmp.getDate().toString() + ` ${days[tmp.getDay()]}`;
 
     }
+    static dateFormatToLocale(date: Date | number) {
+        function zeroFill(val: number) {
+            if (val < 10) return '0' + val;
+            return val;
+        }
+        const tmp = new Date(date);
+        const year = tmp.getFullYear();
+        const month = zeroFill(tmp.getMonth() + 1);
+        const day = zeroFill(tmp.getDate());
+
+        const hour = zeroFill(tmp.getHours());
+        const minute = zeroFill(tmp.getMinutes());
+        const second = zeroFill(tmp.getSeconds());
+        return `${year}-${month}-${day} ${hour}:${minute}:${second}`
+
+    }
 }

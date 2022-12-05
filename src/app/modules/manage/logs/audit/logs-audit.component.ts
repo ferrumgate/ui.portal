@@ -130,7 +130,7 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
   }
   prepareLog(value: AuditLog, index: number) {
     value.position = (this.page * this.pageSize) + index + 1;
-    value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
+    value.insertDateStr = UtilService.dateFormatToLocale(new Date(value.insertDate));
     value.messageDetailShort = '...';
     value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
     return value;

@@ -270,5 +270,7 @@
     "CreatedTunnel": "Created tunnel",
     "2FACheck": "2FA check",
     "TopUserLoginSuccess": "Top users login success",
-    "TopUserLoginFailed": "Top users login failed"
+    "TopUserLoginFailed": "Top users login failed",
+    "UserLoginTry": "Login try",
+    "UserLoginTryHours": "Login try hours"
 }

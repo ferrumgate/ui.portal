@@ -18,7 +18,7 @@ const routes: Routes = [
         data: {
           roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id]
         },
-        loadChildren: () => import('../../register/register.module').then(m => m.RegisterModule)
+        loadChildren: () => import('../../default/dashboard/ddashboard.module').then(m => m.DDashboardModule)
 
       }
 

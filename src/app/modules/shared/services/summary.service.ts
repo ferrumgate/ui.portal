@@ -26,8 +26,10 @@ export class SummaryService extends BaseService {
   private _summaryLoginTryUrl = this.configService.getApiUrl() + '/summary/logintry';
   private _summaryCreatedTunnelUrl = this.configService.getApiUrl() + '/summary/createtunnel';
   private _summary2FACheckUrl = this.configService.getApiUrl() + '/summary/2facheck';
-  private _summaryUserLoginSuccess = this.configService.getApiUrl() + '/summary/userloginsuccess';
-  private _summaryUserLoginFailed = this.configService.getApiUrl() + '/summary/userloginfailed';
+  private _summaryUserLoginSuccessUrl = this.configService.getApiUrl() + '/summary/userloginsuccess';
+  private _summaryUserLoginFailedUrl = this.configService.getApiUrl() + '/summary/userloginfailed';
+  private _summaryUserLoginTryUrl = this.configService.getApiUrl() + '/summary/user/logintry';
+  private _summaryUserLoginTryHoursUrl = this.configService.getApiUrl() + '/summary/user/logintryhours';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('summary', captchaService)
 
@@ -106,7 +108,7 @@ export class SummaryService extends BaseService {
       searchParams.append("endDate", endDate);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this._summaryUserLoginSuccess, y);
+        const url = this.joinUrl(this._summaryUserLoginSuccessUrl, y);
         return this.httpService.get<SummaryAgg>(url);
       })
     )
@@ -120,7 +122,35 @@ export class SummaryService extends BaseService {
       searchParams.append("endDate", endDate);
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this._summaryUserLoginFailed, y);
+        const url = this.joinUrl(this._summaryUserLoginFailedUrl, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+  getUserLoginTry(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summaryUserLoginTryUrl, y);
+        return this.httpService.get<SummaryAgg>(url);
+      })
+    )
+  }
+
+  getUserLoginTryHours(startDate?: string, endDate?: string) {
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append("startDate", startDate);
+    if (endDate)
+      searchParams.append("endDate", endDate);
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._summaryUserLoginTryHoursUrl, y);
         return this.httpService.get<SummaryAgg>(url);
       })
     )

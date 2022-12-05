@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -13,7 +13,7 @@ import { UserService } from 'src/app/modules/shared/services/user.service';
 import { TranslationService } from '../../shared/services/translation.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { ConfirmService } from '../../shared/services/confirm.service';
-import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
+import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, delay } from 'rxjs';
 import { UtilService } from '../../shared/services/util.service';
 import { Service } from '../../shared/models/service';
 import { Network } from '../../shared/models/network';
@@ -29,7 +29,7 @@ import { ChartComponent } from 'ng-apexcharts';
   templateUrl: './mdashboard.component.html',
   styleUrls: ['./mdashboard.component.scss']
 })
-export class MDashboardComponent implements OnInit, OnDestroy {
+export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   private allSubs = new SSubscription();
 
   isThemeDark = false;
@@ -255,8 +255,9 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-
     this.getAllData().subscribe();
+  }
+  ngAfterViewInit(): void {
 
   }
 
@@ -282,6 +283,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
   getAllData() {
     return of('').pipe(
+      delay(1000),
       switchMap(x => this.summaryService.getConfig()),
       map(x => {
         this.config = x
@@ -352,6 +354,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
       this.loginTryData = data;
     } catch (ignore) {
+      console.log(ignore);
       //ignored exception
     }
   }
@@ -394,6 +397,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
       this.t2faCheckData = data;
     } catch (ignore) {
+      console.log(ignore);
       //ignored exception
     }
   }
@@ -431,6 +435,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
       this.createTunnelData = data;
     } catch (ignore) {
+      console.log(ignore);
       //ignored exception
     }
   }
@@ -468,6 +473,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
       this.userLoginSuccess = data;
     } catch (ignore) {
+      console.log(ignore);
       //ignored exception
     }
   }
@@ -504,6 +510,7 @@ export class MDashboardComponent implements OnInit, OnDestroy {
 
       this.userLoginFailed = data;
     } catch (ignore) {
+      console.log(ignore);
       //ignored exception
     }
   }

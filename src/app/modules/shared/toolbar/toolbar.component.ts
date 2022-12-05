@@ -62,11 +62,11 @@ export class ToolbarComponent implements OnInit {
     if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name)) {
       this.view.isAdmin = true;
       this.view.map = { low: 'User', high: 'Admin' };
-    }
-    if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleReporter.name)) {
-      this.view.isReporter = true;
-      this.view.map = { low: 'User', high: 'Reporter' };
-    }
+    } else
+      if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleReporter.name)) {
+        this.view.isReporter = true;
+        this.view.map = { low: 'User', high: 'Reporter' };
+      }
 
   }
 

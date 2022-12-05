@@ -124,6 +124,7 @@ export class ConfigService extends BaseService {
   // theme functions
 
   themeChanged: EventEmitter<string> = new EventEmitter();
+
   saveTheme(theme: string) {
 
     localStorage.setItem(`theme_for_user_${this.userId}`, theme);
@@ -133,6 +134,18 @@ export class ConfigService extends BaseService {
   getTheme() {
     const theme = localStorage.getItem(`theme_for_user_${this.userId}`);
     return theme || 'white';
+
+  }
+  viewChanged: EventEmitter<string> = new EventEmitter();
+  saveView(view: string) {
+
+    sessionStorage.setItem(`view_for_user_${this.userId}`, view);
+
+    this.viewChanged.emit(view);
+  }
+  getView() {
+    const view = sessionStorage.getItem(`view_for_user_${this.userId}`);
+    return view || 'Low';
 
   }
 

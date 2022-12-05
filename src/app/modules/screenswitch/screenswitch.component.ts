@@ -36,16 +36,14 @@ export class ScreenSwitchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name))
-      this.isManaged = true;
 
-  }
-
-  navigateTo(target: string) {
-    if (target == 'manage')
+    if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name)) {
       this.router.navigate(['/manage/dashboard'])
-    else
+    } else {
+      this.configService.saveView('low');
       this.router.navigate(['/dashboard'])
+    }
   }
+
 
 }

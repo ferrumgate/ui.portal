@@ -1,0 +1,94 @@
+<div class="changepass">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'ChangePassword'|translate}}">
+                <mat-icon>lock
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="changepass-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="changepass-form" [formGroup]="formGroup">
+
+                        <p>
+                            <mat-form-field class="changepass-form-field" fxFlex>
+                                <input name="oldpassword" [type]="hideOldPass?'password':'text'"
+                                    test-id="changepass-oldpass-input" matInput
+                                    placeholder="{{'OldPassword'|translate}}" formControlName="oldPass">
+                                <mat-icon matSuffix (click)="hideOldPass = !hideOldPass">{{hideOldPass ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+                                <mat-error test-id="changepass-password-error" class="changepass-error"> {{
+                                    formError.oldPass
+                                    |translate}}</mat-error>
+                            </mat-form-field>
+
+
+                        </p>
+                        <p>
+                            <mat-form-field class="changepass-form-field" fxFlex>
+                                <input name="newpassword" [type]="hidenewPass?'password':'text'"
+                                    test-id="changepass-newpass-input" matInput
+                                    placeholder="{{'NewPassword'|translate}}" formControlName="newPass">
+                                <mat-icon matSuffix (click)="hidenewPass = !hidenewPass">{{hidenewPass
+                                    ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+
+                                <mat-error test-id="changepass-password-again-error" class="changepass-error">
+                                    {{formError.newPass | translate }}</mat-error>
+
+                            </mat-form-field>
+
+                        </p>
+                        <p>
+                            <mat-form-field class="changepass-form-field" fxFlex>
+                                <input name="newpasswordagain" [type]="hidenewPass?'password':'text'"
+                                    test-id="changepass-newpass-again-input" matInput
+                                    placeholder="{{'NewPasswordAgain'|translate}}" formControlName="newPassAgain">
+                                <mat-icon matSuffix (click)="hidenewPass = !hidenewPass">{{hidenewPass
+                                    ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+
+                                <mat-error test-id="changepass-password-again-error" class="changepass-error">
+                                    {{formError.newPassAgain | translate }}</mat-error>
+
+                            </mat-form-field>
+
+                        </p>
+
+                    </form>
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="changepass-actions" fxFlex fxLayoutAlign="start center">
+                            <span *ngIf="model.isChanged && formGroup.valid" fxFlex fxLayoutAlign="end center">
+                                <button test-id="changepass-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="changepass-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -11,6 +11,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 import { MatSidenav } from '@angular/material/sidenav';
 
+export interface NavMenuItemExtendedAuthSource extends NavMenuItem {
+  authSourcePattern: string;
+  subItems: NavMenuItemExtendedAuthSource[];
+
+}
+
 @Component({
   selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
@@ -48,23 +54,46 @@ export class DefaultLayoutComponent {
   menuClicked(event: any) {
     this.nav.toggle();
   }
-  menus: NavMenuItem[] = [
+  menus: NavMenuItemExtendedAuthSource[] = [
     {
-      icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/user/dashboard']) }
+      icon: 'dashboard', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/user/dashboard']) }
     },
 
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
+      icon: 'settings', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {
-          icon: 'phonelink_setup', isClicked: false, isExpanded: false, name: this.translateService.translate('2FA'), subItems: [],
+          icon: 'phonelink_setup', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('2FA'), subItems: [],
           navigate: () => {
             this.router.navigate(['/user/settings/2fa'])
+          }
+        },
+        {
+          icon: 'lock', authSourcePattern: 'local-local', isClicked: false, isExpanded: false, name: this.translateService.translate('Password'), subItems: [],
+          navigate: () => {
+            this.router.navigate(['/user/settings/password'])
           }
         }
 
       ]
     }
   ]
+
+  selectedMenus: NavMenuItem[] = [];
+
+
+  ngOnInit(): void {
+    const authSource = this.authService.currentSession?.currentUser?.source;
+    if (authSource) {
+
+      this.selectedMenus = this.menus.filter(x => x.authSourcePattern == '*' || authSource.includes(x.authSourcePattern)).map(x => {
+        const list = x.subItems.filter(y => y.authSourcePattern == '*' || authSource.includes(y.authSourcePattern))
+        x.subItems = list;
+        return x;
+      })
+    }
+
+  }
+
 
 }

@@ -15,21 +15,19 @@ import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { Network } from '../../shared/models/network';
-import { Service } from '../../shared/models/service';
-import { UtilService } from '../../shared/services/util.service';
 
 
 
-import { DDashboardComponent } from './dashboard.component';
 
-describe('DDashboardComponent', () => {
-  let component: DDashboardComponent;
-  let fixture: ComponentFixture<DDashboardComponent>;
+import { DSetting2FAComponent } from './dsetting-2fa.component';
+
+describe('DSetting2FAComponent', () => {
+  let component: DSetting2FAComponent;
+  let fixture: ComponentFixture<DSetting2FAComponent>;
   let httpClient: HttpClient;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DDashboardComponent],
+      declarations: [DSetting2FAComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
@@ -50,7 +48,7 @@ describe('DDashboardComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DDashboardComponent);
+    fixture = TestBed.createComponent(DSetting2FAComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     httpClient = TestBed.inject(HttpClient);
@@ -60,73 +58,34 @@ describe('DDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('data binding', fakeAsync(async () => {
+  it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
 
     spyOn(httpClient, 'get').and.returnValues(
       of({
-        networkCount: 1,
-        gatewayCount: 2,
-        userCount: 3,
-        groupCount: 4,
-        serviceCount: 5,
-        authnCount: 6,
-        authzCount: 7
+        is2FA: true, t2FAKey: 'ababab', key: 'blb'
       }),
       of({
-        sessionCount: 20,
-        tunnelCount: 21
+        t2FAKey: 'abaddbab', key: 'sfasf'
       }),
-      of({
-        total: 30,
-        aggs: [
-
-        ]
-      }),
-      of({
-        total: 30,
-        aggs: [
-
-        ]
-      }),
-      of({
-        total: 30,
-        aggs: [
-
-        ]
-      }),
-      of({
-        total: 30,
-        aggs: [
-
-        ]
-      }),
-      of({
-        total: 30,
-        aggs: [
-
-        ]
-      })
     )
 
     //load data 
-    component.getAllData().subscribe();
+    component.getData().subscribe();
     tick(1000);
     fixture.detectChanges();
+    expect(component.t2fa.t2FAKey).toBe('ababab');
+    const qrcode = findEls(fixture, 'dsetting-2fa-qrcode');
+    expect(qrcode.length).toBe(1);
 
-    const totalNetworkEl = findEls(fixture, 'mdashboard-status-totalnetwork');
-    expect(totalNetworkEl.length).toBe(1);
-
-    const totalSessionsEl = findEls(fixture, 'mdashboard-status-sessionscount');
-    expect(totalSessionsEl.length).toBe(1);
-
-
-    const loginTryEl = findEls(fixture, 'mdashboard-chart-logintry');
-    expect(loginTryEl.length).toBe(1);
+    component.refreshT2FA({});
+    tick(1000);
+    fixture.detectChanges();
+    expect(component.t2faRefresh.t2FAKey).toBe('abaddbab');
 
 
 
 
-  })); */
+  }));
 });

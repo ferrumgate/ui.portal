@@ -30,6 +30,7 @@ import { DashboardStatusComponent } from "./dashboard/status/dashboard-status.co
 import { DashboardChartComponent } from "./dashboard/chart/dashboard-chart.component";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ViewSelectorComponent } from "./viewselector/viewselector.component";
+import { T2FAComponent } from "./t2fa/t2fa.component";
 
 
 
@@ -67,7 +68,8 @@ import { ViewSelectorComponent } from "./viewselector/viewselector.component";
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
         DashboardStatusComponent,
-        DashboardChartComponent
+        DashboardChartComponent,
+        T2FAComponent
 
     ],
     imports: [
@@ -112,7 +114,8 @@ import { ViewSelectorComponent } from "./viewselector/viewselector.component";
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
         DashboardStatusComponent,
-        DashboardChartComponent
+        DashboardChartComponent,
+        T2FAComponent
     ],
     providers: [
         {

@@ -41,7 +41,7 @@ export class ScreenSwitchComponent implements OnInit {
       this.router.navigate(['/manage/dashboard'])
     } else {
       this.configService.saveView('low');
-      this.router.navigate(['/dashboard'])
+      this.router.navigate(['/user/dashboard'])
     }
   }
 

@@ -50,19 +50,20 @@ export class DefaultLayoutComponent {
   }
   menus: NavMenuItem[] = [
     {
-      icon: 'dashboard', isClicked: false, isExpanded: false, name: 'Dashboard', subItems: [], navigate: () => { this.router.navigate(['/dashboard']) }
+      icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/user/dashboard']) }
     },
 
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: 'Settings',
+      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
-        },
-        {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'phonelink_setup', isClicked: false, isExpanded: false, name: this.translateService.translate('2FA'), subItems: [],
+          navigate: () => {
+            this.router.navigate(['/user/settings/2fa'])
+          }
         }
-      ], navigate: () => { this.router.navigate(['/dashboard']) }
+
+      ]
     }
   ]
 

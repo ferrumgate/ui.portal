@@ -1,0 +1,68 @@
+.dsetting-2fa-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.dsetting-2fa-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 80px;
+    padding-top: 25px;
+
+}
+
+.dsetting-2fa .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.dsetting-2fa .dsetting-2fa-item {
+    padding-left: 25px;
+    padding-bottom: 25px;
+}
+
+.dsetting-2fa .dsetting-2fa-title {
+
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.dsetting-2fa .dsetting-2fa-group {
+    margin: 15px;
+    background: transparent;
+
+
+}
+
+.dsetting-2fa .dsetting-2fa-group-title {
+    font-size: 1.2rem;
+
+
+}
+
+
+
+
+
+
+
+
+
+.dsetting-2fa-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 30px - 10px);
+    overflow: auto;
+}
+
+.dsetting-2fa .content-divider {
+    padding-bottom: 10px;
+}
+
+.dsetting-2fa .dsetting-2fa-status {
+    min-width: 250px;
+}

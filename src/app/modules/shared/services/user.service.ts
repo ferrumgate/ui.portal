@@ -30,6 +30,8 @@ interface UpdateRequest {
 export class UserService extends BaseService {
 
   private _userUrl = this.configService.getApiUrl() + '/user';
+  private _userCurrent2FAUrl = this.configService.getApiUrl() + '/user/current/2fa';
+  private _userCurrent2FARefreshUrl = this.configService.getApiUrl() + '/user/current/2fa/rekey';
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
@@ -120,6 +122,42 @@ export class UserService extends BaseService {
       })
     )
   }
+
+
+
+  getCurrentUser2FA() {
+    const searchParams = new URLSearchParams();
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._userCurrent2FAUrl, y);
+        return this.httpService.get<{ is2FA: boolean, key: string, t2FAKey: string }>(url);
+      })
+    )
+  }
+
+  getCurrentUserRefresh2FA() {
+    const searchParams = new URLSearchParams();
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._userCurrent2FARefreshUrl, y);
+        return this.httpService.get<{ key: string, t2FAKey: string }>(url);
+      })
+    )
+  }
+
+  updateCurrentUser2FA(req: { is2FA: boolean, key?: string, token?: string }) {
+
+    let request = {
+      is2FA: req.is2FA, key: req.key, token: req.token
+    }
+    return this.preExecute(request).pipe(
+      switchMap(y => {
+        return this.httpService.put(this._userCurrent2FAUrl, y, this.jsonHeader)
+
+      }))
+  }
+
+
 
 
 

@@ -1,0 +1,22 @@
+<div class="dsetting-2fa-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="dsetting-2fa dsetting-2fa-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row dsetting-2fa-title">
+                <span>{{'2FA'|translate}}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="dsetting-2fa dsetting-2fa-content">
+
+
+        <div class="dsetting-2fa-item" fxLayout="row wrap">
+            <app-t2fa test-id="dsetting-2fa-qrcode" [t2faRefresh]="t2faRefresh" [t2fa]="t2fa"
+                (refreshT2FA)="refreshT2FA($event)" (saveT2FA)="saveT2FA($event)">
+
+            </app-t2fa>
+
+        </div>
+    </div>
+</div>

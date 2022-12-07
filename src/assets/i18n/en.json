@@ -272,5 +272,10 @@
     "TopUserLoginSuccess": "Top users login success",
     "TopUserLoginFailed": "Top users login failed",
     "UserLoginTry": "Login try",
-    "UserLoginTryHours": "Login try hours"
+    "UserLoginTryHours": "Login try hours",
+    "UseYourPhoneToActivate": "Use your phone to activate",
+    "2FATokenHint": "Enter verify token",
+    "VerifyToken": "Verify token",
+    "VerifyTokenRequired": "Verify token required",
+    "SuccessfullyRefreshed": "Successfully refreshed"
 }

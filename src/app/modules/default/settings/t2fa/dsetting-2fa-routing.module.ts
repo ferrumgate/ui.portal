@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DDashboardComponent } from './ddashboard.component';
+import { DSetting2FAComponent } from './dsetting-2fa.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: DDashboardComponent
+    component: DSetting2FAComponent
   }
 ];
 
@@ -15,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DDashboardRoutingModule { }
+export class DSetting2FARoutingModule { }

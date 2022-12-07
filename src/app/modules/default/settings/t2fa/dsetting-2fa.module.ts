@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DDashboardRoutingModule } from './ddashboard-routing.module';
+
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { DDashboardComponent } from './ddashboard.component';
+import { DSetting2FAComponent } from './dsetting-2fa.component';
+import { DSetting2FARoutingModule } from './dsetting-2fa-routing.module';
 
 
 
 @NgModule({
   declarations: [
-    DDashboardComponent
+    DSetting2FAComponent
   ],
   imports: [
     CommonModule,
-    DDashboardRoutingModule,
+    DSetting2FARoutingModule,
     SharedModule
   ]
 })
-export class DDashboardModule { }
+export class DSetting2FAModule { }

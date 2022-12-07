@@ -1,0 +1,81 @@
+<div class="t2fa">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'2FA'|translate}}">
+                <mat-icon>phonelink_setup
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="t2fa-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="t2fa-form" [formGroup]="formGroup">
+                        <p>
+                            <mat-checkbox test-id="t2fa-checkbox-enabled" [(ngModel)]="t2fa.is2FA"
+                                [checked]="t2fa.is2FA" [ngModelOptions]="{standalone:true}"
+                                (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+
+                        <div *ngIf="t2fa.is2FA" class="qrcodeImage" fxLayout="row" fxLayoutAlign="center">
+                            <qrcode test-id="t2fa-qrcode" [qrdata]="qrCode" [allowEmptyString]="true"
+                                [ariaLabel]="'QR Code image with the following content...'"
+                                [cssClass]="'qrCodeImagecenter'" [colorDark]="'#000000ff'" [colorLight]="'#ffffffff'"
+                                [elementType]="'canvas'" [errorCorrectionLevel]="'M'" [imageHeight]="75"
+                                [imageWidth]="75" [margin]="4" [scale]="1" [width]="300"
+                                title="{{'UseYourPhoneToActivate'|translate}}">
+                            </qrcode>
+                        </div>
+                        <p *ngIf="t2fa.is2FA" fxLayout="row" fxLayoutAlign="center">
+                            <button mat-icon-button matTooltip="{{'Refresh'|translate}}" (click)="refresh2FASecret()">
+                                <mat-icon>refresh</mat-icon>
+                            </button>
+                        </p>
+
+                        <p *ngIf="isActivated">
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"VerifyToken"|translate}}</mat-label>
+                                <input matInput test-id="t2fa-2facode-input" placeholder="0123456"
+                                    formControlName="token" required>
+                                <mat-error>{{formError.token|translate}}</mat-error>
+                                <mat-hint>{{"2FATokenHint"|translate}}</mat-hint>
+
+                            </mat-form-field>
+                        </p>
+
+                    </form>
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="t2fa-actions" fxFlex fxLayoutAlign="start center">
+                            <span *ngIf="t2fa.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="t2fa-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="t2fa-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

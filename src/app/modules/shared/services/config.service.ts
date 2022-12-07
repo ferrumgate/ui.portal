@@ -63,6 +63,7 @@ export class ConfigService extends BaseService {
     summaryUserLoginSuccessHelp: 'https://ferrumgate/doc/summary/userloginsuccess',
     summaryUserLoginFailedelp: 'https://ferrumgate/doc/summary/userloginfailed',
     summaryUserLoginTryHoursHelp: 'https://ferrumgate/doc/summary/userlogintryhours',
+    t2faHelp: 'https://ferrumgate/doc/setting/2fa',
 
 
 

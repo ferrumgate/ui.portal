@@ -49,7 +49,7 @@ export class ToolbarComponent implements OnInit {
     this.allSubs.addThis =
       this.configService.viewChanged.subscribe(x => {
         if (x == 'low')
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/user/dashboard']);
         else if (x == 'high')
           this.router.navigate(['/manage/dashboard'])
 
@@ -82,8 +82,8 @@ export class ToolbarComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-  userSettings() {
-    this.router.navigate(['/user/settings']);
-  }
-
+  /*  userSettings() {
+     this.router.navigate(['/user/settings']);
+   }
+  */
 }

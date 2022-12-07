@@ -13,12 +13,21 @@ const routes: Routes = [
     canActivate: [AuthenticationGuard],
     children: [
       {
-        path: 'dashboard',
+        path: 'user/dashboard',
         canActivate: [RoleGuard],
         data: {
           roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id]
         },
         loadChildren: () => import('../../default/dashboard/ddashboard.module').then(m => m.DDashboardModule)
+
+      },
+      {
+        path: 'user/settings/2fa',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id]
+        },
+        loadChildren: () => import('../../default/settings/t2fa/dsetting-2fa.module').then(m => m.DSetting2FAModule)
 
       }
 

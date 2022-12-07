@@ -308,5 +308,12 @@
     "NewPassword": "New password",
     "NewPasswordAgain": "New password again",
     "ChangePassword": "Change password",
-    "Downloads": "Downloads"
+    "Downloads": "Downloads",
+    "OS": "OS",
+    "OSDetail": "OS detail",
+    "Package": "Package",
+    "Download": "Download",
+    "Win7AndAbove": "Windows 7 and above",
+    "DebianBasedSystems": "Debian based systems",
+    "OtherLinuxSystems": "Other linux systems"
 }

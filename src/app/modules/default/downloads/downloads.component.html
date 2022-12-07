@@ -1,0 +1,110 @@
+<div class="downloads-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="downloads downloads-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row downloads-title">
+                <span>{{'Downloads'|translate}}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="downloads downloads-content">
+
+
+        <div class="downloads-item" fxLayout="column wrap">
+            <div class="download-item download-item-header" fxFlex fxLayout="row">
+                <p class="download-item-icon">
+                    <mat-label>OS</mat-label>
+                </p>
+                <p class="download-item-definition">
+                    OS Detail
+                </p>
+                <p class="download-item-package">
+                    Package
+                </p>
+                <p class="download-item-link">
+                    Download
+                </p>
+                <p class="download-item-help">
+                    Help
+                </p>
+                <p fxFlex></p>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="download-item download-item-row" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                <p class="download-item-icon">
+                    <mat-icon svgIcon="windows"></mat-icon>
+                </p>
+                <p class="download-item-definition">
+                    windows 7 and above
+                </p>
+                <p class="download-item-package">
+                    msi
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button (click)="openReleasePage()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp('windows')">
+                        <mat-icon>help_outline</mat-icon>
+                    </button>
+                </p>
+
+                <p fxFlex></p>
+            </div>
+            <mat-divider></mat-divider>
+
+            <div class="download-item download-item-row" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                <p class="download-item-icon">
+                    <mat-icon svgIcon="debian"></mat-icon>
+                </p>
+                <p class="download-item-definition">
+                    debian based systems
+                </p>
+                <p class="download-item-package">
+                    deb
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button (click)="openReleasePage()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp('debian')">
+                        <mat-icon>help_outline</mat-icon>
+                    </button>
+                </p>
+
+                <p fxFlex></p>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="download-item download-item-row" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                <p class="download-item-icon">
+                    <mat-icon svgIcon="linux"></mat-icon>
+                </p>
+                <p class="download-item-definition">
+                    other linux sytems
+                </p>
+                <p class="download-item-package">
+                    zip
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button (click)="openReleasePage()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp('linux')">
+                        <mat-icon>help_outline</mat-icon>
+                    </button>
+                </p>
+
+                <p fxFlex></p>
+            </div>
+            <mat-divider></mat-divider>
+
+        </div>
+    </div>
+</div>

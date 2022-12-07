@@ -41,6 +41,15 @@ const routes: Routes = [
         },
         loadChildren: () => import('../../default/settings/password/dsetting-password.module').then(m => m.DSettingPasswordModule)
 
+      },
+      {
+        path: 'user/downloads',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id],
+        },
+        loadChildren: () => import('../../default/downloads/downloads.module').then(m => m.DownloadsModule)
+
       }
 
 

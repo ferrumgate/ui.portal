@@ -64,7 +64,10 @@ export class ConfigService extends BaseService {
     summaryUserLoginFailedelp: 'https://ferrumgate/doc/summary/userloginfailed',
     summaryUserLoginTryHoursHelp: 'https://ferrumgate/doc/summary/userlogintryhours',
     t2faHelp: 'https://ferrumgate/doc/setting/2fa',
-    passwordHelp: "https://ferrumgate/doc/password"
+    passwordHelp: "https://ferrumgate/doc/password",
+    installClientWindowsHelp: "https://ferrumgate/doc/install/client/windows",
+    installClientDebianHelp: "https://ferrumgate/doc/install/client/debian",
+    installClientLinuxsHelp: "https://ferrumgate/doc/install/client/linux",
 
 
 

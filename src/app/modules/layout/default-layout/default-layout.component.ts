@@ -60,6 +60,10 @@ export class DefaultLayoutComponent {
     },
 
     {
+      icon: 'cloud_download', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Downloads'), subItems: [], navigate: () => { this.router.navigate(['/user/downloads']) }
+    },
+
+    {
       icon: 'settings', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {

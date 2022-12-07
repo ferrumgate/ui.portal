@@ -1,0 +1,102 @@
+.downloads-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.downloads-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 80px;
+    padding-top: 25px;
+
+}
+
+.downloads .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.downloads .downloads-item {
+
+    padding-left: 25px;
+    padding-bottom: 25px;
+}
+
+.downloads .download-item-header {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.downloads .download-item-row {
+
+    padding-top: 25px
+}
+
+.downloads .download-item-icon {
+
+    min-width: 50px;
+
+}
+
+.downloads .download-item-link {
+
+    min-width: 100px;
+
+}
+
+.downloads .download-item-help {
+
+    min-width: 50px;
+
+}
+
+.downloads .download-item-package {
+
+    min-width: 100px;
+
+}
+
+.downloads .download-item-definition {
+
+    min-width: 200px;
+
+}
+
+.downloads .download-item-definition {
+    padding-left: 25px;
+
+}
+
+.downloads .downloads-title {
+
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.downloads .downloads-group {
+    margin: 15px;
+    background: transparent;
+}
+
+.downloads .downloads-group-title {
+    font-size: 1.2rem;
+}
+
+.downloads-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 30px - 10px);
+    overflow: auto;
+}
+
+.downloads .content-divider {
+    padding-bottom: 10px;
+}
+
+.downloads .downloads-status {
+    min-width: 250px;
+}

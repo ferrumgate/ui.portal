@@ -63,6 +63,19 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/auth0.svg")
     );
     this.matIconRegistry.addSvgIcon(
+      "linux",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/linux.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "windows",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/windows.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "debian",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/debian.svg")
+    );
+
+    this.matIconRegistry.addSvgIcon(
       "recaptcha",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/recaptcha.svg")
     );

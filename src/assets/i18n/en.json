@@ -307,5 +307,6 @@
     "OldPassword": "Old password",
     "NewPassword": "New password",
     "NewPasswordAgain": "New password again",
-    "ChangePassword": "Change password"
+    "ChangePassword": "Change password",
+    "Downloads": "Downloads"
 }

@@ -17,9 +17,8 @@ export interface AuthorizationRule {
 
 
 export interface AuthorizationPolicy {
-    id: string
+
     rules: AuthorizationRule[];
-    insertDate: string;
-    updateDate: string;
+
 
 }

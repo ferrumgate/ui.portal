@@ -11,4 +11,5 @@ export interface Service {
     isEnabled: boolean;
     assignedIp: string;
     isSystem?: boolean;
+    count: number;
 }

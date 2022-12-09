@@ -37,7 +37,8 @@ export class ServiceService extends BaseService {
       name: service.name,
       isEnabled: service.isEnabled,
       host: service.host, networkId: service.networkId, protocol: service.protocol,
-      tcp: service.tcp, udp: service.udp, assignedIp: ''
+      tcp: service.tcp, udp: service.udp, assignedIp: '',
+      count: service.count
     }
 
     return this.preExecute(srv).pipe(

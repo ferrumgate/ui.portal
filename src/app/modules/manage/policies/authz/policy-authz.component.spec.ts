@@ -83,7 +83,8 @@ describe('PolicyAuthzComponent', () => {
 
     let service: Service = {
       id: 'sv1', name: 'mysql-dev', labels: ['test'], isEnabled: true,
-      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: ''
+      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: '',
+      count: 1
     }
 
     const services = [service];
@@ -97,7 +98,6 @@ describe('PolicyAuthzComponent', () => {
       id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
     let policy: AuthorizationPolicy = {
-      id: 'aladfa', insertDate: new Date().toISOString(), updateDate: new Date().toISOString(),
       rules: [rule1, rule2, rule3]
     }
 

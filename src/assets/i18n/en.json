@@ -40,6 +40,8 @@
     "ErrNetworkNotFound": "Network not found",
     "ErrNotInLdapGroups": "Not in ldap groups",
     "ErrKeyLengthSmall": "Key length is small",
+    "ErrInputNullOrUndefined": "Input is null",
+    "ErrLimitedModeIsWorking": "Limited mode is working",
     "Test": "Ferrum",
     "Title": "FerrumGate Management",
     "White": "White",

@@ -28,6 +28,7 @@ export class ToolbarComponent implements OnInit {
     isReporter: false,
     map: { low: 'User', high: 'Admin' }
   }
+  username = 'unknown';
 
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
@@ -67,6 +68,10 @@ export class ToolbarComponent implements OnInit {
         this.view.isReporter = true;
         this.view.map = { low: 'User', high: 'Reporter' };
       }
+
+    if (this.authService.currentSession?.currentUser) {
+      this.username = this.authService.currentSession?.currentUser.name || this.authService.currentSession?.currentUser.username || 'unknown';
+    }
 
   }
 

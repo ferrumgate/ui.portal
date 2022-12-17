@@ -7,6 +7,7 @@ export interface User {
     username: string;
     groupIds: string[]
     roles: Role[];
+    source: string;
 
 }
 

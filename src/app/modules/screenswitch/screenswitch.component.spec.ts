@@ -46,42 +46,9 @@ describe('ScreenSwitchComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('only use button must be active', () => {
-    expect(component).toBeTruthy();
-    spyOnProperty(authServiceSpy, 'currentSession', 'get').and.returnValue(
-      {
-        currentUser: {
-          roles: [{ name: 'User' }]
-        }
-      } as any)
-    const manageEl = findEl(fixture, 'screenswitch-manage', false);
-    expect(manageEl).toBeFalsy();
-    const useEl = findEl(fixture, 'screenswitch-use', false);
-    expect(useEl).toBeTruthy();
-
-  });
-
-  it('manage and use button must be active', () => {
-
-    spyOnProperty(authServiceSpy, 'currentSession', 'get').and.returnValue(
-      {
-        currentUser: {
-          roles: [{ name: 'Admin' }]
-        }
-      } as any)
-    let fixture = TestBed.createComponent(ScreenSwitchComponent);
-    let component = fixture.componentInstance;
-    fixture.detectChanges();
 
 
 
-    expect(component).toBeTruthy();
-    const manageEl = findEl(fixture, 'screenswitch-manage', false);
-    expect(manageEl).toBeTruthy();
-    const useEl = findEl(fixture, 'screenswitch-use', false);
-    expect(useEl).toBeTruthy();
-
-  });
 
 
 

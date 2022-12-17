@@ -36,10 +36,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
   _model: ServiceExtended =
     {
       id: '', name: '', labels: [], isChanged: false,
-      isEnabled: true, assignedIp: '', host: '', networkId: '', networkName: '',
+      isEnabled: true, assignedIp: '', host: '', networkId: '', networkName: '', count: 1,
       protocol: '',
       orig: {
-        id: '', name: '', labels: [], isEnabled: true, assignedIp: '', host: '', networkId: '', protocol: '',
+        id: '', name: '', labels: [], isEnabled: true, assignedIp: '', host: '', networkId: '', protocol: '', count: 1
       }
     };
 
@@ -176,6 +176,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
       networkName: new FormControl(service.networkName, [Validators.required])
 
     });
+    if (service.isSystem)
+      fmg.disable();
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -333,6 +335,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
       protocol: 'raw',
       tcp: this._model.tcp,
       udp: this._model.udp,
+      count: this._model.count
 
 
     }

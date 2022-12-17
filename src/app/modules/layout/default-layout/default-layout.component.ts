@@ -11,6 +11,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 import { MatSidenav } from '@angular/material/sidenav';
 
+export interface NavMenuItemExtendedAuthSource extends NavMenuItem {
+  authSourcePattern: string;
+  subItems: NavMenuItemExtendedAuthSource[];
+
+}
+
 @Component({
   selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
@@ -48,34 +54,50 @@ export class DefaultLayoutComponent {
   menuClicked(event: any) {
     this.nav.toggle();
   }
-  menus: NavMenuItem[] = [
+  menus: NavMenuItemExtendedAuthSource[] = [
     {
-      icon: 'dashboard', isClicked: false, isExpanded: false, name: 'Dashboard', subItems: [], navigate: () => { this.router.navigate(['/dashboard']) }
-    },
-    {
-      icon: 'lan', isClicked: false, isExpanded: false, name: 'Networks', navigate: () => { },
-      subItems: [
-        {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Gateways', subItems: [], navigate: () => { this.router.navigate(['/network/dashboard']) }
-        }
-      ]
-    },
-    {
-      icon: 'lan', isClicked: false, isExpanded: false, name: 'Gateways', subItems: [], navigate: () => { this.router.navigate(['/network']) }
+      icon: 'dashboard', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/user/dashboard']) }
     },
 
+    {
+      icon: 'cloud_download', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Downloads'), subItems: [], navigate: () => { this.router.navigate(['/user/downloads']) }
+    },
 
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: 'Settings',
+      icon: 'settings', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something', subItems: [], navigate: () => { }
+          icon: 'phonelink_setup', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('2FA'), subItems: [],
+          navigate: () => {
+            this.router.navigate(['/user/settings/2fa'])
+          }
         },
         {
-          icon: 'folder', isClicked: false, isExpanded: false, name: 'Something2', subItems: [], navigate: () => { }
+          icon: 'lock', authSourcePattern: 'local-local', isClicked: false, isExpanded: false, name: this.translateService.translate('Password'), subItems: [],
+          navigate: () => {
+            this.router.navigate(['/user/settings/password'])
+          }
         }
-      ], navigate: () => { this.router.navigate(['/dashboard']) }
+
+      ]
     }
   ]
+
+  selectedMenus: NavMenuItem[] = [];
+
+
+  ngOnInit(): void {
+    const authSource = this.authService.currentSession?.currentUser?.source;
+    if (authSource) {
+
+      this.selectedMenus = this.menus.filter(x => x.authSourcePattern == '*' || authSource.includes(x.authSourcePattern)).map(x => {
+        const list = x.subItems.filter(y => y.authSourcePattern == '*' || authSource.includes(y.authSourcePattern))
+        x.subItems = list;
+        return x;
+      })
+    }
+
+  }
+
 
 }

@@ -28,9 +28,5 @@ export function cloneAuthenticationRule(val: AuthenticationRule): Authentication
 
 
 export interface AuthenticationPolicy {
-    id: string
     rules: AuthenticationRule[];
-    insertDate: string;
-    updateDate: string
-
 }

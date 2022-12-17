@@ -24,8 +24,6 @@
                 <form test-id="confirm2fa-form2fa" [formGroup]="form2FA" (ngSubmit)="submit2FA()">
 
 
-
-
                     <mat-form-field class="confirm2fa-form-field">
                         <input autocomplete="off" [type]="hideToken?'password':'text'" test-id="confirm2fa-2fa-input"
                             matInput placeholder="{{'Token'|translate}}" formControlName="token">
@@ -50,11 +48,11 @@
                     </div>
 
                     <div class="confirm2fa-qrcodeImage-text" fxLayout="row wrap" fxLayoutAlign="center center">
-                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/google-2fa-authenticator"
+                        <span> <a mat-flat-button href="https://www.ferrumgate.com/docs/configuration/accounts/#2fa"
                                 target="_self">Google Authenticatior</a></span>
-                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/twilli-2fa-authenticator"
+                        <span> <a mat-flat-button href="https://www.ferrumgate.com/docs/configuration/accounts/#2fa"
                                 target="_self">Twillio Authy</a></span>
-                        <span> <a mat-flat-button href="https://ferrumgate.com/blog/microsoft-2fa-authenticator"
+                        <span> <a mat-flat-button href="https://www.ferrumgate.com/docs/configuration/accounts/#2fa"
                                 target="_self">Microsoft Authenticator</a></span>
                     </div>
                 </form>

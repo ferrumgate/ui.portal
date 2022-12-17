@@ -128,7 +128,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     const service: Service = {
       objId: UtilService.randomNumberString(),
       id: '', name: '', labels: [], isEnabled: true,
-      host: '', assignedIp: '', networkId: '', protocol: 'raw'
+      host: '', assignedIp: '', networkId: '', protocol: 'raw', count: 1
     }
     this.services.unshift(service);
   }

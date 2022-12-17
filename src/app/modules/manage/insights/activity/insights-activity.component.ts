@@ -138,7 +138,7 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
   prepareLog(value: ActivityLog, index: number) {
     // these values are also in InsightsActivityDetailComponent class in insights-activity-detail.component.ts
     value.position = (this.page * this.pageSize) + index + 1;
-    value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
+    value.insertDateStr = UtilService.dateFormatToLocale(new Date(value.insertDate))
     value.sessionIdSub = value.sessionId ? (value.sessionId.substring(0, 6) + '...') : undefined;
     value.requestIdSub = value.requestId ? (value.requestId.substring(0, 6) + '...') : undefined;
     value.tunnelIdSub = value.tunnelId ? (value.tunnelId.substring(0, 6) + '...') : undefined;

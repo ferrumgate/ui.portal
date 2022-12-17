@@ -1,0 +1,50 @@
+<div class="ddashboard-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="ddashboard ddashboard-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row ddashboard-title">
+                <span>{{'Dashboard'|translate}}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="ddashboard ddashboard-content">
+
+        <mat-card class="ddashboard-group">
+            <mat-card-title class="ddashboard-group-title">
+                {{"Last7Days"|translate}}
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap">
+
+                    <app-dashboard-chart test-id="ddashboard-chart-logintry" class="ddashboard-item ddashboard-chart"
+                        toolTip="" detail="" title="" icon="bar_chart" helpLink="{{help.userLoginTry}}">
+                        <apx-chart #userLoginTryChart [dataLabels]="userLoginTryData.dataLabels"
+                            [series]="userLoginTryData.series" [chart]="userLoginTryData.chart"
+                            [xaxis]="userLoginTryData.xaxis" [title]="userLoginTryData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+                    <app-dashboard-chart test-id="ddashboard-chart-logintryhours"
+                        class="ddashboard-item ddashboard-chart" toolTip="" detail="" title="" icon="bar_chart"
+                        helpLink="{{help.userLoginTryHours}}">
+                        <apx-chart #userLoginTryHoursChart [dataLabels]="userLoginTryHoursData.dataLabels" wi
+                            [series]="userLoginTryHoursData.series" [chart]="userLoginTryHoursData.chart"
+                            [xaxis]="userLoginTryHoursData.xaxis" [title]="userLoginTryHoursData.title||{}">
+                        </apx-chart>
+                    </app-dashboard-chart>
+
+
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+
+
+
+
+
+    </div>
+</div>

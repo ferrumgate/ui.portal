@@ -1,0 +1,5 @@
+<mat-slide-toggle [checked]="selection=='high'" (change)="changeView($event)">
+
+    {{ (selection=='high'?selectionMap.high:selectionMap.low)|translate}}
+
+</mat-slide-toggle>

@@ -101,7 +101,7 @@ describe('PolicyAuthnComponent', () => {
       userOrgroupIds: [group.id], isExpanded: true
     }
     let policy: AuthenticationPolicy = {
-      id: 'aladfa', insertDate: new Date().toISOString(), updateDate: new Date().toISOString(),
+
 
       rules: [rule1, rule2, rule3]
     }

@@ -6,4 +6,5 @@ export interface NavMenuItem {
     isClicked: boolean;
     isExpanded: boolean;
     subItems: NavMenuItem[];
+
 }

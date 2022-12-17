@@ -322,7 +322,7 @@ export class AuthenticationService extends BaseService {
     }
     else {
 
-      return from(this.router.navigate(['/dashboard']));
+      return from(this.router.navigate(['/user/dashboard']));
     }
 
 

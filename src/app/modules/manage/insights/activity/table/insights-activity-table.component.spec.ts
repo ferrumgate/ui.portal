@@ -20,9 +20,6 @@ import { InsightsActivityTableComponent } from './insights-activity-table.compon
 
 
 
-
-
-
 describe('InsightsActivitiyTableComponent', () => {
   let component: InsightsActivityTableComponent;
   let fixture: ComponentFixture<InsightsActivityTableComponent>;

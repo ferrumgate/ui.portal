@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,13 @@ import { CaptchaService } from 'src/app/modules/shared/services/captcha.service'
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 import { MatSidenav } from '@angular/material/sidenav';
+import { RBACDefault } from '../../shared/models/rbac';
+
+
+export interface NavMenuItemRoleBased extends NavMenuItem {
+  roleIds: string[];
+  subItems: NavMenuItemRoleBased[];
+}
 
 @Component({
   selector: 'app-manage-layout',
@@ -17,7 +24,7 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./manage-layout.component.scss'],
 
 })
-export class ManageLayoutComponent {
+export class ManageLayoutComponent implements OnInit {
 
 
   isMobile = false;
@@ -42,35 +49,36 @@ export class ManageLayoutComponent {
 
   }
 
+
   isExpanded = false;
   @ViewChild('snav')
   nav!: MatSidenav;
   menuClicked(event: any) {
     this.nav.toggle();
   }
-  menus: NavMenuItem[] = [
+  menus: NavMenuItemRoleBased[] = [
     {
-      icon: 'dashboard', isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
+      icon: 'dashboard', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Dashboard'), subItems: [], navigate: () => { this.router.navigate(['/manage/dashboard']) }
     },
     {
-      icon: 'panorama', isClicked: false, isExpanded: false, name: this.translateService.translate('Insights'), navigate: () => { },
+      icon: 'panorama', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Insights'), navigate: () => { },
       subItems: [
         {
-          icon: 'scatter_plot', isClicked: false, isExpanded: false, name: this.translateService.translate('Activity'), subItems: [], navigate: () => { this.router.navigate(['/manage/insights/activity']) }
+          icon: 'scatter_plot', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Activity'), subItems: [], navigate: () => { this.router.navigate(['/manage/insights/activity']) }
         }
       ]
     },
     {
-      icon: 'lan', isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
+      icon: 'lan', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
     },
     {
-      icon: 'supervisor_account', isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
+      icon: 'supervisor_account', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
       subItems: [
         {
-          icon: 'person', isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/users']) }
+          icon: 'person', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Users'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/users']) }
         },
         {
-          icon: 'group', isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/groups']) }
+          icon: 'group', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/groups']) }
 
         },
         /* {
@@ -79,48 +87,65 @@ export class ManageLayoutComponent {
         } */]
     },
     {
-      icon: 'services', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
+      icon: 'services', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }
     },
     {
-      icon: 'fact_check', isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), navigate: () => { },
+      icon: 'fact_check', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Policies'), navigate: () => { },
       subItems: [
         {
-          icon: 'how_to_reg', isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authentication'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authn']) }
+          icon: 'how_to_reg', roleIds: [RBACDefault.roleAdmin.id], isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authentication'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authn']) }
         },
         {
-          icon: 'verified_user', isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authorization'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authz']) }
+          icon: 'verified_user', roleIds: [RBACDefault.roleAdmin.id], isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('Authorization'), subItems: [], navigate: () => { this.router.navigate(['/manage/policies/authz']) }
 
         },
       ]
     },
     {
-      icon: 'settings', isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
+      icon: 'settings', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Settings'), navigate: () => { },
       subItems: [
         {
-          icon: 'settings_applications', isClicked: false, isExpanded: false, name: this.translateService.translate('Common'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/common']) }
+          icon: 'settings_applications', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Common'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/common']) }
         },
         {
-          icon: 'recaptcha', isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Captcha'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/captcha']) }
+          icon: 'recaptcha', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Captcha'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/captcha']) }
         },
         {
-          icon: 'email', isClicked: false, isExpanded: false, name: this.translateService.translate('Email'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/email']) }
+          icon: 'email', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Email'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/email']) }
         },
         {
-          icon: 'vpn_key', isClicked: false, isExpanded: false, name: this.translateService.translate('Auth'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/auth']) }
+          icon: 'vpn_key', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Auth'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/auth']) }
         }
       ],
     },
     {
-      icon: 'receipt', isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
+      icon: 'receipt', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Logs'),
       subItems: [
         {
-          icon: 'screen_search_desktop', isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/audit']) }
+          icon: 'screen_search_desktop', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Audit'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/audit']) }
         },
-        /* {
-          icon: 'computer', isClicked: false, isExpanded: false, name: this.translateService.translate('Gateway'), subItems: [], navigate: () => { this.router.navigate(['/manage/logs/gateway']) }
-        } */
+
       ], navigate: () => { }
     }
   ]
+
+  selectedMenus: NavMenuItem[] = [];
+  ngOnInit(): void {
+
+    //
+    if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name)) {
+      this.selectedMenus = this.menus.filter(x => x.roleIds.includes(RBACDefault.roleAdmin.id)).map(x => {
+        x.subItems = x.subItems.filter(y => y.roleIds.includes(RBACDefault.roleAdmin.id))
+        return x;
+      })
+    } else
+      if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleReporter.name)) {
+        this.selectedMenus = this.menus.filter(x => x.roleIds.includes(RBACDefault.roleReporter.id)).map(x => {
+          x.subItems = x.subItems.filter(y => y.roleIds.includes(RBACDefault.roleReporter.id))
+          return x;
+        })
+      }
+  }
+
 
 }

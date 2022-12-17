@@ -29,6 +29,9 @@ import { PolicyAuthnRuleComponent } from "./policy/policy-authn-rule/policy-auth
 import { DashboardStatusComponent } from "./dashboard/status/dashboard-status.component";
 import { DashboardChartComponent } from "./dashboard/chart/dashboard-chart.component";
 import { NgApexchartsModule } from "ng-apexcharts";
+import { ViewSelectorComponent } from "./viewselector/viewselector.component";
+import { T2FAComponent } from "./t2fa/t2fa.component";
+import { ChangePassComponent } from "./changepass/changepass.component";
 
 
 
@@ -46,6 +49,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         RecaptchaV3Module,
         NgApexchartsModule,
         ThemeSelectorComponent,
+        ViewSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
         LoadingComponent,
@@ -65,7 +69,9 @@ import { NgApexchartsModule } from "ng-apexcharts";
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
         DashboardStatusComponent,
-        DashboardChartComponent
+        DashboardChartComponent,
+        T2FAComponent,
+        ChangePassComponent
 
     ],
     imports: [
@@ -91,6 +97,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
     ],
     declarations: [
         ThemeSelectorComponent,
+        ViewSelectorComponent,
         FooterComponent,
         LanguageSelectorComponent,
         LoadingComponent,
@@ -109,7 +116,9 @@ import { NgApexchartsModule } from "ng-apexcharts";
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
         DashboardStatusComponent,
-        DashboardChartComponent
+        DashboardChartComponent,
+        T2FAComponent,
+        ChangePassComponent
     ],
     providers: [
         {

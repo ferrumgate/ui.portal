@@ -16,7 +16,7 @@ const routes: Routes = [
         path: 'dashboard',
         canActivate: [RoleGuard],
         data: {
-          roleIds: [RBACDefault.roleAdmin.id]
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
         },
         loadChildren: () => import('../../manage/dashboard/mdashboard.module').then(m => m.MDashboardModule)
 
@@ -115,7 +115,7 @@ const routes: Routes = [
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {
-          roleIds: [RBACDefault.roleAdmin.id]
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
         },
         loadChildren: () => import('../../manage/logs/audit/logs-audit.module').then(m => m.LogsAuditModule)
 
@@ -124,7 +124,7 @@ const routes: Routes = [
         path: 'insights/activity',
         canActivate: [RoleGuard],
         data: {
-          roleIds: [RBACDefault.roleAdmin.id]
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
         },
         loadChildren: () => import('../../manage/insights/activity/insights-activity.module').then(m => m.InsightsActivityModule)
 

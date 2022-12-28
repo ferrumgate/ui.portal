@@ -302,7 +302,10 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         const item = this.policies.find(x => x.network.id == $event.networkId);
         if (item) {
           const index = item.rules.findIndex(x => x.objId == $event.objId);
+          const el = item.rules[index];
           item.rules.splice(index, 1);
+          const bigIndex = this.policyAuthn.rules.findIndex(x => x.id == el.id);
+          this.policyAuthn.rules.splice(bigIndex, 1);
         }
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
@@ -323,6 +326,11 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
           ...a,
           objId: oldObj.objId,
           isExpanded: true
+        }
+        const bigIndex = this.policyAuthn.rules.findIndex(x => x.id == a.id);
+        if (bigIndex < 0) {
+          let i = this.policyAuthn.rules.findIndex(x => x.networkId == $event.networkId);
+          this.policyAuthn.rules.splice(i, 0, { ...a, objId: oldObj.objId });
         }
       }
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));

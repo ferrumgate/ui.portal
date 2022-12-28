@@ -42,6 +42,7 @@
     "ErrKeyLengthSmall": "Key length is small",
     "ErrInputNullOrUndefined": "Input is null",
     "ErrLimitedModeIsWorking": "Limited mode is working",
+    "ErrConflictData": "Data conflicted, please refresh your window",
     "Test": "Ferrum",
     "Title": "FerrumGate Management",
     "White": "White",

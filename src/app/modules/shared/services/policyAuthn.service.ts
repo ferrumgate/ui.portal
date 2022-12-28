@@ -88,9 +88,9 @@ export class PolicyAuthnService extends BaseService {
       }))
   }
 
-  reorderRule(aRule: AuthenticationRule, prev: number, curr: number) {
+  reorderRule(aRule: AuthenticationRule, prev: number, pivot: string, curr: number) {
     const reorder = {
-      previous: prev, current: curr
+      previous: prev, current: curr, pivot: pivot
     }
     return this.preExecute(reorder).pipe(
       switchMap(y => {

@@ -4,7 +4,19 @@
             <mat-expansion-panel [expanded]="rule.isExpanded">
                 <mat-expansion-panel-header>
                     <mat-panel-title test-id="policy-authz-rule-title">
-                        {{getExplanationSummary()}}
+                        <mat-action-row fxLayoutAlign="start center" class="policy-authz-rule-header-actions">
+
+                            <mat-icon class="reorder" cdkDragHandle
+                                matTooltip="{{dragDisabled?'Disabled':''|translate}}">
+                                open_with
+                            </mat-icon>
+
+
+
+                        </mat-action-row>
+                        <div fxLayoutAlign="start center" style="padding-left: 10px;">
+                            {{getExplanationSummary()}}
+                        </div>
                         <mat-action-row fxFlex fxLayoutAlign="end center">
                             <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
                             <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>

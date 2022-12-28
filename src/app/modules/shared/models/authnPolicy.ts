@@ -29,4 +29,5 @@ export function cloneAuthenticationRule(val: AuthenticationRule): Authentication
 
 export interface AuthenticationPolicy {
     rules: AuthenticationRule[];
+    rulesOrder: string[];
 }

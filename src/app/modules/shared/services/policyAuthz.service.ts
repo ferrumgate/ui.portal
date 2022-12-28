@@ -88,5 +88,17 @@ export class PolicyAuthzService extends BaseService {
   }
 
 
+  reorderRule(aRule: AuthorizationRule, prev: number, pivot: string, curr: number) {
+    const reorder = {
+      previous: prev, current: curr, pivot: pivot
+    }
+    return this.preExecute(reorder).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._policyAuthzRuleUrl, 'pos', `${aRule.id}`);
+        return this.httpService.put<AuthorizationRule>(url, y, this.jsonHeader)
+      }))
+  }
+
+
 
 }

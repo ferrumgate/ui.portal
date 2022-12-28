@@ -216,6 +216,13 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   }
   fillPolicy(search: string) {
     this.policies = [];
+    const fastmap = new Map();
+    this.policyAuthn.rulesOrder.forEach((x, index) => {
+      fastmap.set(x, index);
+    });
+    this.policyAuthn.rules.sort((a, b) => {
+      return (fastmap.get(a.id) || 0) - (fastmap.get(b.id) || 0);
+    })
     this.policyAuthn.rules.forEach(x => {
       if (!x.objId)
         x.objId = UtilService.randomNumberString()
@@ -343,7 +350,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
       const currentGeneral = this.policyAuthn.rules.findIndex(x => x.objId == cur.objId);
       pol.rules.splice(previous, 1);
       pol.rules.splice(currentIndex, 0, prev);
-      this.policyAuthnService.reorderRule(prev, previousGeneral, currentGeneral).
+      this.policyAuthnService.reorderRule(prev, previousGeneral, cur.id, currentGeneral).
         pipe(catchError(err => {
           pol.rules = JSON.parse(backup);
           return throwError(() => err);

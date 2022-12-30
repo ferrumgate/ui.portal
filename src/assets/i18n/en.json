@@ -43,6 +43,7 @@
     "ErrInputNullOrUndefined": "Input is null",
     "ErrLimitedModeIsWorking": "Limited mode is working",
     "ErrConflictData": "Data conflicted, please refresh your window",
+    "ErrSystemIsNotReady": "System is not ready yet, please wait",
     "Test": "Ferrum",
     "Title": "FerrumGate Management",
     "White": "White",

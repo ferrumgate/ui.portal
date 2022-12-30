@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-npm run buildprod
+#npm run buildprod
 version=$(cat package.json | grep version | cut -d: -f2 | tr -d , | tr -d \" | tr -d " ")
 
 docker build -t ui.portal .

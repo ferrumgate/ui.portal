@@ -319,7 +319,6 @@ export class ConfigService extends BaseService {
 
   saveAuthLocal(local: AuthLocal) {
     const parameter: AuthLocal = {
-      id: local.id,
       baseType: local.baseType,
       name: local.name,
       type: local.type,
@@ -330,10 +329,7 @@ export class ConfigService extends BaseService {
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {
-        if (x.id)
-          return this.http.put<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
-        else
-          return this.http.post<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
+        return this.http.put<AuthLocal>(this.getApiUrl() + `/config/auth/local`, x, this.jsonHeader);
       })
     )
   }

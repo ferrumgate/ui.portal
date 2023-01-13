@@ -32,7 +32,7 @@ export class ConfigAuthComponent implements OnInit {
   model: AuthSettings = {
     common: {},
     local: {
-      id: '', type: 'local', baseType: 'local',
+      type: 'local', baseType: 'local',
       name: 'local', tags: [], isEnabled: true
     }
   }

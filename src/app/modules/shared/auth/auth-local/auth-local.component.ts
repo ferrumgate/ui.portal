@@ -21,11 +21,11 @@ export class AuthLocalComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
   _model: AuthLocalExtended = {
-    id: '', baseType: 'local', isChanged: false, name: 'Local',
+    baseType: 'local', isChanged: false, name: 'Local',
     type: 'local', isForgotPassword: false, isRegister: false, tags: [],
     isEnabled: true,
     orig: {
-      id: '', baseType: 'local', name: '',
+      baseType: 'local', name: '',
       type: 'local', isForgotPassword: false, isRegister: false, tags: [],
       isEnabled: true
     }

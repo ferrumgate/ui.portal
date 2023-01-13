@@ -231,7 +231,8 @@ export class NetworksComponent implements OnInit, OnDestroy {
       this.prepareNotJoinedGateways();
       this.prepareNetworks();
       this.networks[index].isGatewayOpened = current.isGatewayOpened;
-      this.gatewaysNotJoined[0].name = new Date().toISOString();
+      if (this.gatewaysNotJoined.length)
+        this.gatewaysNotJoined[0].name = new Date().toISOString();
       this.networks = [].concat(this.networks as any);
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
 

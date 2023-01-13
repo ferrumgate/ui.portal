@@ -299,7 +299,7 @@
     "LoginTry": "Login try",
     "CreatedTunnel": "Created tunnel",
     "2FACheck": "2FA check",
-    "TopUserLoginSuccess": "Top users login success",
+    "TopUserLoginAllowed": "Top users login allowed",
     "TopUserLoginFailed": "Top users login failed",
     "UserLoginTry": "Login try",
     "UserLoginTryHours": "Login try hours",
@@ -319,5 +319,6 @@
     "Download": "Download",
     "Win7AndAbove": "Windows 7 and above",
     "DebianBasedSystems": "Debian based systems",
-    "OtherLinuxSystems": "Other linux systems"
+    "OtherLinuxSystems": "Other linux systems",
+    "VerifyCodeRequired": "Verify code required"
 }

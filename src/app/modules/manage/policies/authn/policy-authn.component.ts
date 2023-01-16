@@ -216,6 +216,13 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   }
   fillPolicy(search: string) {
     this.policies = [];
+    const fastmap = new Map();
+    this.policyAuthn.rulesOrder.forEach((x, index) => {
+      fastmap.set(x, index);
+    });
+    this.policyAuthn.rules.sort((a, b) => {
+      return (fastmap.get(a.id) || 0) - (fastmap.get(b.id) || 0);
+    })
     this.policyAuthn.rules.forEach(x => {
       if (!x.objId)
         x.objId = UtilService.randomNumberString()
@@ -295,7 +302,10 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         const item = this.policies.find(x => x.network.id == $event.networkId);
         if (item) {
           const index = item.rules.findIndex(x => x.objId == $event.objId);
+          const el = item.rules[index];
           item.rules.splice(index, 1);
+          const bigIndex = this.policyAuthn.rules.findIndex(x => x.id == el.id);
+          this.policyAuthn.rules.splice(bigIndex, 1);
         }
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
@@ -316,6 +326,11 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
           ...a,
           objId: oldObj.objId,
           isExpanded: true
+        }
+        const bigIndex = this.policyAuthn.rules.findIndex(x => x.id == a.id);
+        if (bigIndex < 0) {
+          let i = this.policyAuthn.rules.findIndex(x => x.networkId == $event.networkId);
+          this.policyAuthn.rules.splice(i, 0, { ...a, objId: oldObj.objId });
         }
       }
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
@@ -343,7 +358,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
       const currentGeneral = this.policyAuthn.rules.findIndex(x => x.objId == cur.objId);
       pol.rules.splice(previous, 1);
       pol.rules.splice(currentIndex, 0, prev);
-      this.policyAuthnService.reorderRule(prev, previousGeneral, currentGeneral).
+      this.policyAuthnService.reorderRule(prev, previousGeneral, cur.id, currentGeneral).
         pipe(catchError(err => {
           pol.rules = JSON.parse(backup);
           return throwError(() => err);

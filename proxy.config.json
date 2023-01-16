@@ -1,7 +1,7 @@
 {
     "/api": {
-        "target": "http://localhost:8181",
-        "target2": "http://192.168.88.51:80",
+        "target2": "http://localhost:8181",
+        "target": "http://192.168.88.51:80",
         "secure": false
     }
 }

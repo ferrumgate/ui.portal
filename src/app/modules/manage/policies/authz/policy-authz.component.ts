@@ -11,7 +11,7 @@ import { SSubscription } from '../../../../../app/modules/shared/services/SSubsc
 import { TranslationService } from '../../../shared/services/translation.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { ConfirmService } from '../../../shared/services/confirm.service';
-import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
+import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, catchError, throwError } from 'rxjs';
 import { Service } from '../../../../../app/modules/shared/models/service';
 import { Network } from '../../../../../app/modules/shared/models/network';
 import { AuthorizationPolicy, AuthorizationRule } from '../../../../../app/modules/shared/models/authzPolicy';
@@ -26,6 +26,7 @@ import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { fadeInItems } from '@angular/material/menu';
 
 
+interface Policy { network: Network, rules: AuthorizationRule[], isExpanded: boolean }
 
 
 
@@ -50,7 +51,7 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
     services: Map<string, Service>
   } = {} as any;
 
-  policies: { network: Network, rules: AuthorizationRule[], isExpanded: boolean }[] = [{
+  policies: Policy[] = [{
     network: { id: '' } as any, rules: [], isExpanded: false
   }]
   policyAuthz: AuthorizationPolicy = { rules: [] } as any;
@@ -232,10 +233,18 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
   }
   fillPolicy(search: string) {
     this.policies = [];
+    const fastmap = new Map();
+    this.policyAuthz.rulesOrder.forEach((x, index) => {
+      fastmap.set(x, index);
+    });
+    this.policyAuthz.rules.sort((a, b) => {
+      return (fastmap.get(a.id) || 0) - (fastmap.get(b.id) || 0);
+    })
     this.policyAuthz.rules.forEach(x => {
       if (!x.objId)
         x.objId = UtilService.randomNumberString()
     })
+
     if (!search) {
       this.networks.forEach(net => {
         const item = {
@@ -313,7 +322,11 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
         const item = this.policies.find(x => x.network.id == $event.networkId);
         if (item) {
           const index = item.rules.findIndex(x => x.objId == $event.objId);
+          const el = item.rules[index];
           item.rules.splice(index, 1);
+          const bigIndex = this.policyAuthz.rules.findIndex(x => x.id == el.id);
+          this.policyAuthz.rules.splice(bigIndex, 1);
+
         }
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
@@ -335,10 +348,51 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
           objId: oldObj.objId,
           isExpanded: true
         }
+        const bigIndex = this.policyAuthz.rules.findIndex(x => x.id == a.id);
+        if (bigIndex < 0) {
+          let i = this.policyAuthz.rules.findIndex(x => x.networkId == $event.networkId);
+          this.policyAuthz.rules.splice(i, 0, { ...a, objId: oldObj.objId });
+        }
       }
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
 
     });
+  }
+
+  dragDrop(event: any) {
+    const previous = event.previousIndex;
+    const currentIndex = event.currentIndex;
+    const pol = event.container.data as Policy;
+    if (previous != currentIndex) {
+      const prev = pol.rules[previous];
+      const cur = pol.rules[currentIndex];
+      if (!cur.id || !prev.id) {
+        this.notificationService.error(this.translateService.translate('PleaseSaveFirst'));
+        return;
+      }
+
+      const backup = JSON.stringify(pol.rules);
+      //find indexes in general list
+      const previousGeneral = this.policyAuthz.rules.findIndex(x => x.objId == prev.objId);
+      const prevGen = this.policyAuthz.rules[previousGeneral];
+      const currentGeneral = this.policyAuthz.rules.findIndex(x => x.objId == cur.objId);
+      pol.rules.splice(previous, 1);
+      pol.rules.splice(currentIndex, 0, prev);
+      this.policyAuthzService.reorderRule(prev, previousGeneral, cur.id, currentGeneral).
+        pipe(catchError(err => {
+          pol.rules = JSON.parse(backup);
+          return throwError(() => err);
+        })).subscribe(x => {
+
+          this.policyAuthz.rules.splice(previousGeneral, 1);
+          this.policyAuthz.rules.splice(currentGeneral, 0, prevGen);
+        })
+    }
+  }
+
+  isDragDisabled(pol: Policy) {
+    if (this.searchKey) return true;
+    return pol.rules.find(x => !x.id) ? true : false;
   }
 
 

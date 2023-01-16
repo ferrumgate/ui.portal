@@ -5,7 +5,7 @@ import { UrlHandlingStrategy } from '@angular/router';
 import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthenticationPolicy, AuthenticationRule } from '../models/authnPolicy';
-import { cloneAuthenticatonProfile } from '../models/authnProfile';
+import { cloneAuthenticationProfile } from '../models/authnProfile';
 import { Configure } from '../models/configure';
 import { Group } from '../models/group';
 import { BaseService } from './base.service';
@@ -61,11 +61,12 @@ export class PolicyAuthnService extends BaseService {
       isEnabled: arule.isEnabled,
       name: arule.name,
       networkId: arule.networkId,
-      profile: cloneAuthenticatonProfile(arule.profile),
+      profile: cloneAuthenticationProfile(arule.profile),
       userOrgroupIds: Array.from(arule.userOrgroupIds || []),
       action: arule.action
 
     }
+    debugger;
 
     return this.preExecute(rule).pipe(
       switchMap(y => {
@@ -88,9 +89,9 @@ export class PolicyAuthnService extends BaseService {
       }))
   }
 
-  reorderRule(aRule: AuthenticationRule, prev: number, curr: number) {
+  reorderRule(aRule: AuthenticationRule, prev: number, pivot: string, curr: number) {
     const reorder = {
-      previous: prev, current: curr
+      previous: prev, current: curr, pivot: pivot
     }
     return this.preExecute(reorder).pipe(
       switchMap(y => {

@@ -1,4 +1,4 @@
-import { AuthenticationProfile, cloneAuthenticatonProfile } from "./authnProfile";
+import { AuthenticationProfile, cloneAuthenticationProfile } from "./authnProfile";
 
 
 
@@ -21,7 +21,7 @@ export function cloneAuthenticationRule(val: AuthenticationRule): Authentication
         name: val.name,
         networkId: val.networkId,
         userOrgroupIds: val.userOrgroupIds ? Array.from(val.userOrgroupIds) : [],
-        profile: cloneAuthenticatonProfile(val.profile),
+        profile: cloneAuthenticationProfile(val.profile),
         isEnabled: val.isEnabled
     }
 }
@@ -29,4 +29,5 @@ export function cloneAuthenticationRule(val: AuthenticationRule): Authentication
 
 export interface AuthenticationPolicy {
     rules: AuthenticationRule[];
+    rulesOrder: string[];
 }

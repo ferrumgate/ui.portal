@@ -171,7 +171,7 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   userLoginSuccess: ChartOptions =
     {
-      title: { text: this.translateService.translate("TopUserLoginSuccess") },
+      title: { text: this.translateService.translate("TopUserLoginAllowed") },
       series: [
         {
           color: this.COLOR_SUCCESS,
@@ -446,7 +446,7 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       const users = sum.aggs.map(x => x.key);
 
       const data: ChartOptions = {
-        title: { text: this.translateService.translate("TopUserLoginSuccess") },
+        title: { text: this.translateService.translate("TopUserLoginAllowed") },
         series: [
           {
             color: this.COLOR_SUCCESS,

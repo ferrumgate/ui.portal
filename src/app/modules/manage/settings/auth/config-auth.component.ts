@@ -32,7 +32,7 @@ export class ConfigAuthComponent implements OnInit {
   model: AuthSettings = {
     common: {},
     local: {
-      id: '', type: 'local', baseType: 'local',
+      type: 'local', baseType: 'local',
       name: 'local', tags: [], isEnabled: true
     }
   }
@@ -46,7 +46,7 @@ export class ConfigAuthComponent implements OnInit {
       switchMap(y => this.getAuthSamlProvides()),
     ).subscribe(x => {
       this.model.oauth?.providers.forEach(x => x.objId = UtilService.randomNumberString());
-      debugger;
+
       this.model.ldap?.providers.forEach(x => x.objId = UtilService.randomNumberString());
       this.model.saml?.providers.forEach(x => x.objId = UtilService.randomNumberString());
 

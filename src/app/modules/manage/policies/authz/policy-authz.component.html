@@ -50,11 +50,21 @@
                                     {{"Add"|translate}}
                                 </button>
                             </div>
-                            <app-policy-authz-rule test-id="policy-authz-rule" [networks]="networks"
-                                [services]="services" [users]="users" [groups]="groups" *ngFor="let rule of pol.rules"
-                                [rule]="rule" (deleteAuthzRule)="deleteAuthzRule($event)"
-                                (saveAuthzRule)="saveAuthzRule($event)">
-                            </app-policy-authz-rule>
+                            <div cdkDropList class="drag-list" [cdkDropListData]="pol"
+                                (cdkDropListDropped)="dragDrop($event)">
+                                <div class="drag-box" *ngFor="let rule of pol.rules" cdkDrag
+                                    [cdkDragDisabled]="isDragDisabled(pol)">
+                                    <app-policy-authz-rule test-id="policy-authz-rule" [networks]="networks"
+                                        [services]="services" [users]="users" [groups]="groups" [rule]="rule"
+                                        (deleteAuthzRule)="deleteAuthzRule($event)"
+                                        (saveAuthzRule)="saveAuthzRule($event)">
+                                    </app-policy-authz-rule>
+                                </div>
+                            </div>
+                            <div cdkDropList class="rule-list">
+
+
+                            </div>
                         </div>
 
 

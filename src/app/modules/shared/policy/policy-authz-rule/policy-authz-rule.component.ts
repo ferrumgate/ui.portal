@@ -46,6 +46,9 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       serviceName: '', userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };
 
+  @Input()
+  dragDisabled = false;
+
   _services: Service[] = [];
   @Input()
   set services(val: Service[]) {

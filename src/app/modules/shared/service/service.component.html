@@ -86,7 +86,7 @@
                                     <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                         [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)"
-                                        readonly="{{service.isSystem==true}}">
+                                        [readOnly]="service.isSystem">
                                 </mat-chip-list>
                             </mat-form-field>
                         </p>

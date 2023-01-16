@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
 import validator from 'validator';
 import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticatonProfile, IpProfile } from '../../models/authnProfile';
+import { cloneAuthenticationProfile, IpProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
@@ -87,14 +87,14 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       ...val,
       isChanged: false,
       orig: val,
-      profile: cloneAuthenticatonProfile(val.profile),
+      profile: cloneAuthenticationProfile(val.profile),
       userOrgroupIds: Array.from(val.userOrgroupIds || []),
       userOrGroups: this.findUsersOrGroups(val.userOrgroupIds),
       networkName: this.networks.find(x => x.id == val.networkId)?.name || '',
       isExpanded: val.isExpanded
 
     }
-
+    debugger;
     this.prepareAutoCompletes();
     this.formGroup = this.createFormGroup(this._model);
 
@@ -320,7 +320,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     this.rule = {
       ...original,
-      profile: cloneAuthenticatonProfile(original.profile)
+      profile: cloneAuthenticationProfile(original.profile)
     }
 
     this.checkIfModelChanged();
@@ -332,7 +332,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       name: this._model.name,
       networkId: this._model.networkId,
       userOrgroupIds: Array.from(this._model.userOrgroupIds),
-      profile: cloneAuthenticatonProfile(this._model.profile),
+      profile: cloneAuthenticationProfile(this._model.profile),
       isEnabled: this._model.isEnabled,
       action: this._model.action
     }

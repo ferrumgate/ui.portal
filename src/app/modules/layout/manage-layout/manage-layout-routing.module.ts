@@ -112,6 +112,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/es',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/es/config-es.module').then(m => m.ConfigESModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

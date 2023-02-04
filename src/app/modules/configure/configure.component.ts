@@ -27,7 +27,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     email: 'your@emailaddress.com',
     password: this.randomPassword,
     passwordAgain: this.randomPassword,
-    domain: 'ferrumgate.local',
+    domain: 'ferrumgate.zero',
     url: this.configService.getUrl(),
     clientNetwork: '100.64.0.0/16',
     serviceNetwork: '172.28.28.0/24',

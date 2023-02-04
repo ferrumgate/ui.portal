@@ -115,6 +115,9 @@ export class ManageLayoutComponent implements OnInit {
         },
         {
           icon: 'vpn_key', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Auth'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/auth']) }
+        },
+        {
+          icon: 'elasticsearch', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('ES'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/es']) }
         }
       ],
     },

@@ -4,7 +4,7 @@ import { catchError, map, mergeMap, of, switchMap, tap, windowToggle } from 'rxj
 import { environment } from 'src/environments/environment';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
-import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
+import { ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 
@@ -40,6 +40,7 @@ export class ConfigService extends BaseService {
     about: "https://ferrumgate.com/#support",
     commonHelp: "https://ferrumgate.com/docs/configuration/settings/common",
     captchaHelp: "https://ferrumgate.com/docs/configuration/settings/captcha",
+    esHelp: "https://ferrumgate.com/docs/configuration/settings/elasticsearch",
     emailHelp: "https://ferrumgate.com/docs/configuration/settings/email",
     gatewayHelp: "https://ferrumgate.com/docs/configuration/network#gateway",
     networkHelp: "https://ferrumgate.com/docs/configuration/network",
@@ -468,6 +469,38 @@ export class ConfigService extends BaseService {
         const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', oauth.id, x);
         return this.http.delete<{}>(url);
       }))
+  }
+
+
+
+  getES() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/es', x);
+        return this.http.get<ConfigES>(url);
+      }))
+  }
+
+  saveES(config: ConfigES) {
+    const parameter: ConfigES = {
+      host: config.host, user: config.user, pass: config.pass, deleteOldRecordsMaxDays: config.deleteOldRecordsMaxDays
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigES>(this.getApiUrl() + `/config/es`, x, this.jsonHeader);
+      })
+    )
+  }
+  checkES(config: ConfigES) {
+    const parameter: ConfigES = {
+      host: config.host, user: config.user, pass: config.pass, deleteOldRecordsMaxDays: config.deleteOldRecordsMaxDays
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.post<{ error?: string }>(this.getApiUrl() + `/config/es/check`, x, this.jsonHeader);
+      })
+    )
   }
 
 

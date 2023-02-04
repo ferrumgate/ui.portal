@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
-import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
+import { ConfigES } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -10,46 +10,49 @@ import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 
-interface BaseModel extends ConfigCaptcha {
+interface BaseModel extends ConfigES {
   isChanged: boolean
 }
 interface Model extends BaseModel {
 
 
-  orig: ConfigCaptcha
+  orig: ConfigES
 }
 
 @Component({
-  selector: 'app-config-captcha',
-  templateUrl: './config-captcha.component.html',
-  styleUrls: ['./config-captcha.component.scss']
+  selector: 'app-config-es',
+  templateUrl: './config-es.component.html',
+  styleUrls: ['./config-es.component.scss']
 })
-export class ConfigCaptchaComponent implements OnInit, OnDestroy {
+export class ConfigESComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
 
 
   isThemeDark = false;
-  private _model: Model = { server: '', client: '', isChanged: false, orig: { server: '', client: '' } };
+  private _model: Model = { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0, isChanged: false, orig: { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0 } };
   public get model() {
     return this._model;
 
   }
   public set model(val: BaseModel) {
     this._model = {
-      server: val.server,
-      client: val.client,
+      host: val.host,
+      user: val.user,
+      pass: val.pass,
+      deleteOldRecordsMaxDays: val.deleteOldRecordsMaxDays,
       isChanged: false,
       orig: val
     }
-    this.captchaFormGroup = this.createFormGroup(this._model);
+
+    this.esFormGroup = this.createFormGroup(this._model);
   }
 
 
-  //captcha settings
-  captchaFormGroup: FormGroup = this.createFormGroup(this.model);
+  //es settings
+  esFormGroup: FormGroup = this.createFormGroup(this.model);
 
-  captchaError: { server: string, client: string } = { server: '', client: '' };
+  esError: { host: string, user: string, pass: string, deleteOldRecordsMaxDays: string } = { host: '', user: '', pass: '', deleteOldRecordsMaxDays: '' };
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -66,7 +69,7 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
 
 
 
-    this.helpLink = this.configService.links.captchaHelp;
+    this.helpLink = this.configService.links.esHelp;
 
   }
 
@@ -76,7 +79,7 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.configService.getCaptcha().pipe().subscribe(x => {
+    this.configService.getES().pipe().subscribe(x => {
       this.model = { ...x, isChanged: false };
     })
 
@@ -91,8 +94,11 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
-        server: new FormControl(model.server, []),
-        client: new FormControl(model.client, []),
+        host: new FormControl(model.host, []),
+        user: new FormControl(model.user, []),
+        pass: new FormControl(model.pass, []),
+        deleteOldRecordsMaxDays: new FormControl(model.deleteOldRecordsMaxDays, []),
+
       });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -105,41 +111,47 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
     }
     this.allSub.addThis =
       fmg.valueChanges.subscribe(x => {
-        this.captchaModelChanged();
+        this.esModelChanged();
       })
     return fmg;
   }
-  resetCaptchaErrors() {
+  resetESErrors() {
 
     return {
-      server: '', client: ''
+      host: '', user: '', pass: '', deleteOldRecordsMaxDays: ''
     }
   }
 
-  captchaModelChanged() {
-    this.checkCaptchaFormError();
-    if (this.captchaFormGroup.valid)
+  esModelChanged() {
+    this.checkESFormError();
+    if (this.esFormGroup.valid)
       this.checkIfModelChanged();
     else this._model.isChanged = false;
 
   }
 
-  checkCaptchaFormError() {
+  checkESFormError() {
     //check errors 
-    this.captchaError = this.resetCaptchaErrors();
+    this.esError = this.resetESErrors();
 
 
 
   }
 
   checkIfModelChanged() {
+
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
-    if (original.server != model.server)
+    if (original.host != model.host)
       model.isChanged = true;
-    if (original.client != model.client)
+    if (original.user != model.user)
       model.isChanged = true;
+    if (original.pass != model.pass)
+      model.isChanged = true;
+    if (original.deleteOldRecordsMaxDays != model.deleteOldRecordsMaxDays)
+      model.isChanged = true;
+
 
   }
 
@@ -148,17 +160,19 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
 
 
   clear() {
-    this.model.server = (this.model as Model).orig.server;
-    this.model.client = (this.model as Model).orig.client;
+    this.model.host = (this.model as Model).orig.host;
+    this.model.user = (this.model as Model).orig.user;
+    this.model.pass = (this.model as Model).orig.pass;
+    this.model.deleteOldRecordsMaxDays = (this.model as Model).orig.deleteOldRecordsMaxDays;
     this.model.isChanged = false;
-    this.captchaFormGroup = this.createFormGroup(this.model)
+    this.esFormGroup = this.createFormGroup(this.model);
   }
 
 
   saveOrUpdate() {
     this.confirmService.showSave().pipe(
       takeWhile(x => x),
-      switchMap(y => this.configService.saveCaptcha(this.model))
+      switchMap(y => this.configService.saveES(this.model))
     ).subscribe(y => {
       (this.model as Model).orig = y;
       this.model.isChanged = false;
@@ -167,7 +181,7 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
   }
 
   canDelete() {
-    if (this.captchaFormGroup.valid && !this.model.isChanged && (this.model.client || this.model.server))
+    if (this.esFormGroup.valid && !this.model.isChanged && (this.model.host || this.model.user || this.model.pass))
       return true;
     return false;
   }
@@ -175,15 +189,37 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
   delete() {
     this.confirmService.showDelete().pipe(
       takeWhile(x => x),
-      switchMap(y => this.configService.saveCaptcha({ server: '', client: '' }))
+      switchMap(y => this.configService.saveES({ host: '', user: '', pass: '', deleteOldRecordsMaxDays: this.model.deleteOldRecordsMaxDays }))
     ).subscribe(y => {
-      this.model.client = y.client;
-      this.model.server = y.server;
+      this.model.host = y.host;
+      this.model.user = y.user;
+      this.model.pass = y.pass;
+      this.model.deleteOldRecordsMaxDays = y.deleteOldRecordsMaxDays;
       (this.model as Model).orig = y;
       this.model.isChanged = false;
-      this.captchaFormGroup = this.createFormGroup(this.model)
-      this.captchaFormGroup.markAsUntouched();
+
+      this.esFormGroup = this.createFormGroup(this.model);
+      this.esFormGroup.markAsUntouched();
       this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
+    })
+  }
+
+  canCheck() {
+    if (this.model.isChanged && this.model.host) {
+      return true;
+    }
+    return false;
+  }
+  checkES() {
+    this.configService.checkES({
+
+      host: this.model.host, user: this.model.user, pass: this.model.pass
+    }).subscribe(y => {
+      if (y.error)
+        this.notificationService.error(y.error);
+      else
+        this.notificationService.success(this.translateService.translate('SuccessfullyWorking'));
+
     })
   }
 

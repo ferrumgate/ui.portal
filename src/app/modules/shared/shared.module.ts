@@ -33,6 +33,7 @@ import { ViewSelectorComponent } from "./viewselector/viewselector.component";
 import { T2FAComponent } from "./t2fa/t2fa.component";
 import { ChangePassComponent } from "./changepass/changepass.component";
 import { ClipboardModule } from "@angular/cdk/clipboard";
+import { FileUploadComponent } from "./fileupload/fileupload.component";
 
 
 
@@ -73,7 +74,8 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
         DashboardStatusComponent,
         DashboardChartComponent,
         T2FAComponent,
-        ChangePassComponent
+        ChangePassComponent,
+        FileUploadComponent
 
     ],
     imports: [
@@ -120,7 +122,8 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
         DashboardStatusComponent,
         DashboardChartComponent,
         T2FAComponent,
-        ChangePassComponent
+        ChangePassComponent,
+        FileUploadComponent
     ],
     providers: [
         {

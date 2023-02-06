@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
@@ -9,9 +9,11 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
+import { HttpEventType } from '@angular/common/http';
 
-export interface Model {
-
+export interface UploadModel {
+  key: string
 }
 
 @Component({
@@ -25,24 +27,27 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
 
 
   isThemeDark = false;
-  private _model: Model = {};
+  private _model: UploadModel = { key: '' };
   public get model() {
     return this._model;
 
   }
-  public set model(val: Model) {
+  url = '/api/config/import';
+
+  public set model(val: UploadModel) {
     this._model = {
       ...val
     }
 
-    this.backupFormGroup = this.createFormGroup(this._model);
+    this.uploadFormGroup = this.createFormGroup(this._model);
   }
+  @ViewChild(FileUploadComponent) fileupload!: FileUploadComponent;
 
 
   //es settings
-  backupFormGroup: FormGroup = this.createFormGroup(this.model);
+  uploadFormGroup: FormGroup = this.createFormGroup(this.model);
 
-  backupError: {} = {};
+  uploadError: { key: string } = { key: '' };
 
   constructor(private router: Router, private clipboard: Clipboard,
     private translateService: TranslationService,
@@ -82,6 +87,7 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
+        key: new FormControl(model.key, [Validators.required]),
       });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -94,26 +100,27 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     }
     this.allSub.addThis =
       fmg.valueChanges.subscribe(x => {
-
+        this.checkIfModelChanged();
       })
     return fmg;
   }
-  resetBackupErrors() {
+  resetUploadErrors() {
 
     return {
-
+      key: ''
     }
   }
 
 
-  checkBackupFormError() {
+  checkUploadFormError() {
     //check errors 
-    this.backupError = this.resetBackupErrors();
+    this.uploadError = this.resetUploadErrors();
   }
 
   checkIfModelChanged() {
 
-    let model = this.model as Model;
+    let model = this.model as UploadModel;
+
   }
 
 
@@ -122,12 +129,13 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
 
   clear() {
 
-    this.backupFormGroup = this.createFormGroup(this.model);
+    this.uploadFormGroup = this.createFormGroup(this.model);
   }
 
-
   exportKey = '';
+  importActivated = false;
   export() {
+    this.importActivated = false;
     this.configService.export().subscribe(y => {
 
       this.notificationService.success(this.translateService.translate('Downloading'));
@@ -139,5 +147,37 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     this.clipboard.copy(this.exportKey);
     this.notificationService.success(this.translateService.translate('Copied'));
   }
+
+  preRestore() {
+    this.fileupload?.reset();
+    this.model = { key: '' };
+    this.exportKey = '';
+    this.importActivated = true;
+
+
+  }
+  uploadProgress = 0;
+  restore(file: File) {
+
+    if (!this.uploadFormGroup.valid) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append('config', file);
+    this.configService.restore(this.model.key, formData).subscribe(event => {
+
+      if (event.type == HttpEventType.UploadProgress) {
+        if (event.total)
+          this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+      } else
+        if (event.type == HttpEventType.Response)
+          this.notificationService.success(this.translateService.translate('ConfigRestoredSuccessfuly'))
+    })
+
+
+
+  }
+
+
 
 }

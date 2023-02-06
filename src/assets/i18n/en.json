@@ -333,5 +333,9 @@
     "Downloading": "Downloading",
     "EncryptKey": "Encrypt Key",
     "YouWillNeedThisKeyForImportingFile": "You will need this key for importing file",
-    "Copied": "Copied"
+    "Copied": "Copied",
+    "NoFileUploadedYet": "No file uploaded yet",
+    "KeyForUploadingFile": "Key for uploading file",
+    "KeyNeedsForUploadingFile": "Key needs for uploading file",
+    "ConfigRestoredSuccessfuly": "Config restored successfuly"
 }

@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { dispatchFakeEvent, expectValue, findEl, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { click, dispatchFakeEvent, expectValue, findEl, getValue, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -23,6 +23,7 @@ describe('ConfigBackupComponent', () => {
   let fixture: ComponentFixture<ConfigBackupComponent>;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get', 'put']);
   let confirmService: ConfirmService;
+  let configService: ConfigService;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigBackupComponent],
@@ -50,6 +51,7 @@ describe('ConfigBackupComponent', () => {
 
   beforeEach(() => {
     confirmService = TestBed.inject(ConfirmService);
+    configService = TestBed.inject(ConfigService);
     fixture = TestBed.createComponent(ConfigBackupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -59,43 +61,50 @@ describe('ConfigBackupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*  it('bind model', fakeAsync(async () => {
-     expect(component).toBeTruthy();
-     component.model = {
-       host: 'hostx',
-       user: 'user',
-       pass: 'pass',
-       deleteOldRecordsMaxDays: 9,
-       isChanged: false
-     }
-     tick(1000);
-     fixture.detectChanges();
-     expectValue(fixture, 'config-es-host-input', 'hostx');
-     expectValue(fixture, 'config-es-user-input', 'user');
- 
-     setFieldValue(fixture, 'config-es-pass-input', 'newpass');
-     dispatchFakeEvent(findEl(fixture, 'config-es-pass-input').nativeElement, 'blur');
- 
-     tick(1000);
-     expect(component.model.isChanged).toBeTrue();
-     fixture.detectChanges();
- 
-     httpClientSpy.put.and.returnValue(of(
-       {
-         host: 'eshost',
-         user: 'esuser'
-       }));
-     spyOn(confirmService, 'showSave').and.returnValue(of(true));
-     component.saveOrUpdate();
-     tick(1000);
-     fixture.detectChanges();
- 
-     expect(component.model.isChanged).toBeFalse();
- 
-     flush();
- 
- 
-   })); */
+  it('bind model', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+    tick(1000);
+    fixture.detectChanges();
+    spyOn(configService, 'export').and.returnValue(of({ key: 'abc' }));
+
+    tick(1000);
+    fixture.detectChanges();
+    //clieck export button
+    click(fixture, 'config-backup-export-button');
+    tick(1000);
+    fixture.detectChanges();
+    //get export key value
+    const val = getValue(fixture, 'backup-export-key-input')
+    expect(val).toEqual('abc');
+
+    //check import key input exists
+    const importEl = findEl(fixture, 'backup-import-key-input', false)
+    expect(importEl).toBeFalsy();
+
+    //click import button
+    click(fixture, 'config-backup-import-button');
+    tick(1000);
+    fixture.detectChanges();
+
+    // check export key input
+    const exportEl = findEl(fixture, 'backup-export-key-input', false)
+    expect(exportEl).toBeFalsy();
+
+    //set value
+    setFieldValue(fixture, 'backup-import-key-input', 'akey');
+    dispatchFakeEvent(findEl(fixture, 'backup-import-key-input').nativeElement, 'blur');
+    tick(1000);
+    fixture.detectChanges();
+
+    const fileupload = findEl(fixture, 'backup-import-fileupload', false);
+    expect(fileupload).toBeTruthy();
+
+
+    flush();
+
+
+  }));
 });
 
 

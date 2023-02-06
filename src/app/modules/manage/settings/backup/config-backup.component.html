@@ -24,12 +24,12 @@
         <mat-card-content>
             <div fxFill>
 
-                <button mat-stroked-button (click)="export()">
+                <button test-id="config-backup-export-button" mat-stroked-button (click)="export()">
                     <mat-icon>arrow_downward</mat-icon>
                     {{'Export'|translate}}</button>
 
                 <div fxFlex></div>
-                <button mat-stroked-button>
+                <button test-id="config-backup-import-button" mat-stroked-button (click)="preRestore()">
                     <mat-icon>arrow_upward</mat-icon>
                     {{'Import'|translate}}</button>
 
@@ -39,7 +39,7 @@
 
                 <form fxFlex>
                     <mat-form-field fxFlex>
-                        <mat-label class="title">{{'EncryptKey'|translate}}</mat-label>
+                        <mat-label class="">{{'EncryptKey'|translate}}</mat-label>
                         <input type="text" test-id="backup-export-key-input" matInput readonly [value]="exportKey">
                         <mat-icon matSuffix (click)="copyExportKey()" matTooltip="Copy"
                             style="cursor: pointer;">file_copy</mat-icon>
@@ -48,6 +48,27 @@
                 </form>
 
             </div>
+            <div *ngIf="importActivated" fxLayout="column" class="row">
+
+
+                <form fxFill [formGroup]="uploadFormGroup">
+                    <mat-form-field fxFlex>
+                        <mat-label class="">{{'EncryptKey'|translate}}</mat-label>
+                        <input type="title" test-id="backup-import-key-input" formControlName="key" matInput>
+                        <mat-hint>{{"KeyForUploadingFile"|translate}}</mat-hint>
+                        <mat-error>{{"KeyNeedsForUploadingFile"|translate}}</mat-error>
+                    </mat-form-field>
+
+
+                </form>
+                <div fxFill class="row">
+                    <app-fileupload test-id="backup-import-fileupload" *ngIf="uploadFormGroup.valid"
+                        [uploadProgress]="uploadProgress" name="config" (onFileSelectedEvent)="restore($event)"
+                        #fileupload></app-fileupload>
+                </div>
+
+            </div>
+
         </mat-card-content>
     </mat-card>
 </div>

@@ -530,6 +530,16 @@ export class ConfigService extends BaseService {
       })
     )
   }
+  restore(key: string, formData: FormData) {
+    return this.preExecute({}).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/import/', key);
+        return this.http.post(url, formData, {
+          reportProgress: true, observe: 'events'
+        })
+      })
+    )
+  }
 
 
 }

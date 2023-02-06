@@ -1,0 +1,36 @@
+.config-backup-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+
+}
+
+.config-backup mat-card {
+    min-width: 400px;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.config-backup-explanation {
+    padding-top: 20px;
+}
+
+.config-backup .row {
+    padding-top: 25px;
+    //padding-left: 25px;
+    //padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-backup .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-backup .config-backup-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

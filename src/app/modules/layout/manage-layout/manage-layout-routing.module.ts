@@ -121,6 +121,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/backup',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/backup/config-backup.module').then(m => m.ConfigBackupModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

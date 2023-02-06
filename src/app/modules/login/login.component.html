@@ -35,7 +35,8 @@
                         <mat-form-field class="login-form-field">
                             <input [type]="hidePassword?'password':'text'" test-id="login-password-input" matInput
                                 placeholder="{{'Password'|translate}}" formControlName="password">
-                            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                            <mat-icon matSuffix style="cursor: pointer;"
+                                (click)="hidePassword = !hidePassword">{{hidePassword ?
                                 'visibility_off' : 'visibility'}}</mat-icon>
                             <mat-error test-id="login-password-error" class="login-error"> {{ error.password
                                 |translate}}</mat-error>

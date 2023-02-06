@@ -118,6 +118,9 @@ export class ManageLayoutComponent implements OnInit {
         },
         {
           icon: 'elasticsearch', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('ES'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/es']) }
+        },
+        {
+          icon: 'cloud_download', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Backup'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/backup']) }
         }
       ],
     },

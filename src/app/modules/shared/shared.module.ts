@@ -32,6 +32,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { ViewSelectorComponent } from "./viewselector/viewselector.component";
 import { T2FAComponent } from "./t2fa/t2fa.component";
 import { ChangePassComponent } from "./changepass/changepass.component";
+import { ClipboardModule } from "@angular/cdk/clipboard";
 
 
 
@@ -47,6 +48,7 @@ import { ChangePassComponent } from "./changepass/changepass.component";
         ReactiveFormsModule,
         HttpClientModule,
         RecaptchaV3Module,
+        ClipboardModule,
         NgApexchartsModule,
         ThemeSelectorComponent,
         ViewSelectorComponent,

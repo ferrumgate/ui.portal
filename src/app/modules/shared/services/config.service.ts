@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
+import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
@@ -41,6 +41,7 @@ export class ConfigService extends BaseService {
     commonHelp: "https://ferrumgate.com/docs/configuration/settings/common",
     captchaHelp: "https://ferrumgate.com/docs/configuration/settings/captcha",
     esHelp: "https://ferrumgate.com/docs/configuration/settings/elasticsearch",
+    backupHelp: "https://ferrumgate.com/docs/configuration/settings/backup",
     emailHelp: "https://ferrumgate.com/docs/configuration/settings/email",
     gatewayHelp: "https://ferrumgate.com/docs/configuration/network#gateway",
     networkHelp: "https://ferrumgate.com/docs/configuration/network",
@@ -70,6 +71,7 @@ export class ConfigService extends BaseService {
     installClientWindowsHelp: "https://ferrumgate.com/docs/clients",
     installClientDebianHelp: "https://ferrumgate.com/docs/clients",
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
+
 
 
 
@@ -499,6 +501,32 @@ export class ConfigService extends BaseService {
     return this.preExecute(parameter).pipe(
       switchMap(x => {
         return this.http.post<{ error?: string }>(this.getApiUrl() + `/config/es/check`, x, this.jsonHeader);
+      })
+    )
+  }
+
+  export() {
+    const urlSearchParams = new URLSearchParams();
+    let key: string = '';
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/export/key', x);
+        return this.http.get<{ key: string }>(url)
+      }),
+      switchMap(y => {
+        key = y.key;
+        const url = this.joinUrl(this.getApiUrl(), '/config/export', y.key);
+        return this.http.get(url, { responseType: 'blob' })
+      }),
+      switchMap(data => {
+        let blob = new Blob([data], { type: 'application/txt' });
+
+        var downloadURL = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = "ferrumgate.conf";
+        link.click();
+        return of({ key: key });
       })
     )
   }

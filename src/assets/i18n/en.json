@@ -326,5 +326,12 @@
     "ESPassHint": "Elasticsearch password",
     "ESDeleteOldRecordsMaxDayHint": "Elasticsearch will handle only max days logs, delete old records",
     "LogMaxDays": "Log Max Days",
-    "SuccessfullyWorking": "Successfully working"
+    "SuccessfullyWorking": "Successfully working",
+    "Backup": "Backup",
+    "Export": "Export",
+    "Import": "Import",
+    "Downloading": "Downloading",
+    "EncryptKey": "Encrypt Key",
+    "YouWillNeedThisKeyForImportingFile": "You will need this key for importing file",
+    "Copied": "Copied"
 }

@@ -3,3 +3,7 @@ export interface Register {
     password?: string;
     passwordAgain?: string;
 }
+export interface RegisterInvite {
+    password?: string;
+    passwordAgain?: string;
+}

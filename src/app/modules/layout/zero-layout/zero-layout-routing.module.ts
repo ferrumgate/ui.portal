@@ -22,6 +22,11 @@ const routes: Routes = [
 
       },
       {
+        path: 'register/invite',
+        loadChildren: () => import('../../registerinvite/registerinvite.module').then(m => m.RegisterInviteModule)
+
+      },
+      {
         path: 'login/callback',
         loadChildren: () => import('../../logincallback/logincallback.module').then(m => m.LoginCallbackModule),
       },

@@ -33,6 +33,7 @@ export class AuthenticationService extends BaseService {
 
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
+  private _authRegisterInvite = this.configService.getApiUrl() + '/register/invite'
   private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
   private _getAccessToken = this.configService.getApiUrl() + '/auth/accesstoken';
@@ -209,6 +210,12 @@ export class AuthenticationService extends BaseService {
     let data = { username: email, password: password };
     return this.preExecute(data).pipe(
       switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegister, y, this.jsonHeader))
+    );
+  }
+  registerInvite(key: string, password: string) {
+    let data = { key: key, password: password };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegisterInvite, y, this.jsonHeader))
     );
   }
 

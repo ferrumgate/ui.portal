@@ -4,7 +4,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, switchMap } from 'rxjs';
-import { Register } from 'src/app/modules/shared/models/register';
+import { Register, RegisterInvite } from 'src/app/modules/shared/models/register';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
@@ -14,23 +14,23 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-registerinvite',
+  templateUrl: './registerinvite.component.html',
+  styleUrls: ['./registerinvite.component.scss']
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterInviteComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   isThemeDark = false;
   device: any;
-  model: Register = {};
+  model: RegisterInvite = {};
   isRegistered = false;
   hidePasswordAgain = true;
   hidePassword = true;
-
+  key: string = '';
   form: FormGroup = this.createFormGroup(this.model);
 
 
-  error: { email: string, password: string, passwordAgain: string, save: string };
+  error: { password: string, passwordAgain: string, save: string };
 
 
   @Output() submitEM = new EventEmitter();
@@ -51,7 +51,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
+    this.route.queryParams.subscribe(params => {
+      this.key = params.key;
+    })
   }
 
 
@@ -64,7 +66,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   createFormGroup(model: Register) {
     const fmg = new FormGroup(
       {
-        email: new FormControl(model.email, [Validators.required, InputService.emailValidator]),
+
         password: new FormControl(model.password, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
         passwordAgain: new FormControl(model.passwordAgain, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
       },
@@ -90,19 +92,19 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   resetErrrors() {
     return {
-      email: '', password: '', passwordAgain: '', save: ''
+      password: '', passwordAgain: '', save: ''
     };
   }
 
   submit() {
 
-    if (!this.form?.valid || !this.model.email || !this.model.password) {
+    if (!this.form?.valid || !this.key || !this.model.password) {
       this.error.save = this.translateService.translate('FormIsInvalid');
       return;
     }
 
 
-    this.authService.register(this.model.email, this.model.password).subscribe(x => {
+    this.authService.registerInvite(this.key, this.model.password).subscribe(x => {
 
       this.isRegistered = true;
       this.error = this.resetErrrors();
@@ -113,16 +115,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   checkFormError() {
     //check errors 
     this.error = this.resetErrrors();
-    const emailError = this.form.controls['email'].errors;
-    if (emailError) {
-
-      if (emailError['required'])
-        this.error.email = 'EmailRequired';
-      else
-        this.error.email = 'EmailInvalid';
-
-
-    }
 
     const passwordError = this.form.controls['password'].errors;
     if (passwordError) {
@@ -163,19 +155,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     this.checkFormError();
   }
-  counter = 0;
-  test($event: any) {
-    this.counter++;
-    switch (this.counter % 3) {
-      case 0: this.notificationService.success('success'); break;
-      case 1: this.notificationService.error('error'); break;
-      case 2: this.notificationService.info('info'); break;
 
-    }
-
-  }
   login() {
     this.router.navigate(['/login']);
   }
+
+
 
 }

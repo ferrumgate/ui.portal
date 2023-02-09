@@ -1,0 +1,103 @@
+<div class="register-invite" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="register-invite-container">
+        <mat-card class="register-invite-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    Ferrum Gate
+                </div>
+
+
+                <div class="register-invite-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="!isRegistered" fxLayout="column" fxLayoutAlign="center center"
+            class="register-invite-mat-card">
+            <mat-card-title class="register-invite-title">{{"Join"|translate}}</mat-card-title>
+            <mat-card-content>
+                <form test-id="register-invite-form" [formGroup]="form" (ngSubmit)="submit()">
+
+
+                    <p>
+                        <mat-form-field class="register-invite-form-field">
+                            <input [type]="hidePassword?'password':'text'" test-id="register-invite-password-input"
+                                matInput placeholder="{{'Password'|translate}}" formControlName="password">
+                            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+                            <mat-error test-id="register-invite-password-error" class="register-invite-error"> {{
+                                error.password
+                                |translate}}</mat-error>
+                        </mat-form-field>
+
+
+                    </p>
+                    <p>
+                        <mat-form-field class="register-invite-form-field">
+                            <input [type]="hidePasswordAgain?'password':'text'"
+                                test-id="register-invite-password-again-input" matInput
+                                placeholder="{{'PasswordAgain'|translate}}" formControlName="passwordAgain">
+                            <mat-icon matSuffix (click)="hidePasswordAgain = !hidePasswordAgain">{{hidePasswordAgain ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+
+                            <mat-error test-id="register-invite-password-again-error" class="register-invite-error">
+                                {{error.passwordAgain | translate }}</mat-error>
+
+                        </mat-form-field>
+
+                    </p>
+
+                    <div>
+                        <!-- <mat-hint class="mat-error register-invite-error" matTooltip="{{error}}"> {{ error }}</mat-hint> -->
+                        <mat-error class="register-invite-error" matTooltip="{{error.save|translate}}"> {{
+                            error.save|translate
+                            }}</mat-error>
+                    </div>
+
+
+                    <div class="button" fxLayout="row" fxLayoutAlign="center">
+                        <button test-id="register-invite-submit-button" type="submit" mat-raised-button
+                            [disabled]="!form.valid">{{"Join"|translate}}</button>
+                    </div>
+
+
+                    <div class="register-invite-register-invite" fxLayout="row" fxLayoutAlign="end">
+                        <span><a mat-flat-button href="/login" target="_self">{{"SignIn"|translate}}?</a></span>
+                    </div>
+
+
+
+
+
+
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card *ngIf="isRegistered" test-id="register-invite-register-inviteed-view" fxLayout="column"
+            fxLayoutAlign="center center" class="register-invite-mat-card">
+            <mat-card-title></mat-card-title>
+            <mat-card-content>
+
+                <div fxLayout="row" fxLayoutAlign="center">
+                    <p color="warn" class="register-invite-register-inviteed"> {{ "SuccessfullyJoined"|translate}}
+                    </p>
+                </div>
+                <div class="button login-signin register-invite-signin" fxLayout="row" fxLayoutAlign="end">
+                    <button test-id="login-submit-button" (click)="login()" mat-raised-button
+                        [disabled]="!form.valid">{{"SignIn"|translate}}</button>
+                </div>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <!--    <div class="button" fxLayout="row" fxLayoutAlign="center">
+        <button mat-raised-button (click)="test($event)">Test</button>
+    </div> -->
+
+</div>

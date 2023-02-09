@@ -347,5 +347,7 @@
     "EmailIsInvalid": "Email is not valid",
     "SuccessfullyInvited": "Successfully invited",
     "Results": "Results",
-    "Invited": "Invited"
+    "Invited": "Invited",
+    "Join": "Join",
+    "SuccessfullyJoined": "Successfully joined"
 }

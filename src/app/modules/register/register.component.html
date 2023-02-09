@@ -94,6 +94,12 @@
                     <p color="warn" class="register-registered"> {{ "SuccessfullyRegistered"|translate}}</p>
                 </div>
 
+                <div class="button login-signin register-signin" fxLayout="row" fxLayoutAlign="end">
+                    <button test-id="login-submit-button" (click)="login()" mat-raised-button
+                        [disabled]="!form.valid">{{"SignIn"|translate}}</button>
+                </div>
+
+
 
             </mat-card-content>
         </mat-card>

@@ -1,0 +1,61 @@
+.accounts-invite-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+
+}
+
+.accounts-invite mat-card {
+    min-width: 400px;
+    width: 500px;
+    margin-left: 20px;
+}
+
+.accounts-invite-explanation {
+    padding-top: 20px;
+}
+
+.accounts-invite .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.accounts-invite .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.accounts-invite .emails {
+    min-height: 300px;
+}
+
+.accounts-invite .results-title {
+    font-size: 1rem;
+
+}
+
+.accounts-invite .results-result {
+    padding-top: 5px;
+}
+
+.accounts-invite .results-email {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.accounts-invite .results-msg {
+    padding-left: 25px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+.accounts-invite .accounts-invite-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

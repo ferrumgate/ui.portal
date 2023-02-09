@@ -51,6 +51,7 @@ export class ConfigService extends BaseService {
     authSamlHelp: "https://ferrumgate.com/docs/configuration/settings/auth",
     accountGroupHelp: "https://ferrumgate.com/docs/configuration/accounts#groups",
     accountUserHelp: "https://ferrumgate.com/docs/configuration/accounts#users",
+    accountInviteHelp: "https://ferrumgate.com/docs/configuration/accounts#invite",
     serviceHelp: "https://ferrumgate.com/docs/configuration/service",
     policyAuthzHelp: "https://ferrumgate.com/docs/configuration/policy",
     policyAuthnHelp: "https://ferrumgate.com/docs/configuration/policy",

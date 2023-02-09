@@ -81,10 +81,11 @@ export class ManageLayoutComponent implements OnInit {
           icon: 'group', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Groups'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/groups']) }
 
         },
-        /* {
-          icon: 'grain', isClicked: false, isExpanded: false, name: this.translateService.translate('ApiKeys'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/apikeys']) }
+        {
+          icon: 'insert_link', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Invite'), subItems: [], navigate: () => { this.router.navigate(['/manage/accounts/invite']) }
 
-        } */]
+        }
+      ]
     },
     {
       icon: 'services', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }

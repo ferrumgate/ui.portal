@@ -49,6 +49,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'accounts/invite',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/accounts/invite/accounts-invite.module').then(m => m.AccountsInviteModule)
+
+      },
+      {
         path: 'services',
         canActivate: [RoleGuard],
         data: {

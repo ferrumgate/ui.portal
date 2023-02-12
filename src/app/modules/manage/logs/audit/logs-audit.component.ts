@@ -100,23 +100,23 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-    /*  const sampleData: AuditLog[] = [
-       { insertDate: new Date().toISOString(), ip: '1.2.3.4', message: 'user delete', messageSummary: 'ferrum', severity: 'warn', tags: '12.3', userId: '1234', username: 'abc', messageDetail: 'opsafafa\naadfa' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.5', message: 'user delete', messageSummary: 'ferrum2', severity: 'warn', tags: '12.34', userId: '12344', username: 'abc', messageDetail: 'opsafafa3' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.6', message: 'user delete', messageSummary: 'ferrum3', severity: 'warn', tags: '12.35', userId: '12345', username: 'abc', messageDetail: 'opsafafa4' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.7', message: 'user delete', messageSummary: 'ferrum4', severity: 'warn', tags: '12.36', userId: '12346', username: 'abc', messageDetail: 'opsafafa5' },
-       { insertDate: new Date().toISOString(), ip: '1.2.3.8', message: 'user delete', messageSummary: 'ferrum5', severity: 'warn', tags: '12.37', userId: '12347', username: 'abc', messageDetail: 'opsafafa, ada ,aafdasdf a,asdfasdfa ' },
- 
-     ];
- 
-     //test data
-     this.dataSource = sampleData.map((value, index) => {
-       value.position = (this.page * this.pageSize) + index + 1;
-       value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
-       value.messageDetailShort = '...';
-       value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
-       return value;
-     }) */
+    /* const sampleData: AuditLog[] = [
+      { insertDate: new Date().toISOString(), ip: '1.2.3.4', message: 'user delete', messageSummary: 'ferrum', severity: 'warn', tags: '12.3', userId: '1234', username: 'abc', messageDetail: 'opsafafa\naadfa' },
+      { insertDate: new Date().toISOString(), ip: '1.2.3.5', message: 'user delete', messageSummary: 'ferrum2', severity: 'warn', tags: '12.34', userId: '12344', username: 'abc', messageDetail: 'opsafafa3' },
+      { insertDate: new Date().toISOString(), ip: '1.2.3.6', message: 'user delete', messageSummary: 'ferrum3', severity: 'warn', tags: '12.35', userId: '12345', username: 'abc', messageDetail: 'opsafafa4' },
+      { insertDate: new Date().toISOString(), ip: '1.2.3.7', message: 'user delete', messageSummary: 'ferrum4', severity: 'warn', tags: '12.36', userId: '12346', username: 'abc', messageDetail: 'opsafafa5' },
+      { insertDate: new Date().toISOString(), ip: '1.2.3.8', message: 'user delete', messageSummary: 'ferrum5', severity: 'warn', tags: '12.37', userId: '12347', username: 'abc', messageDetail: 'opsafafa, ada ,aafdasdf a,asdfasdfa,asdfasf, asdfas afasf, asdfasdfsafas asdf,,sdfasf a,,asdfasdfasfa,asdf adfa a,sadf asdf,asdf asdf,,,asdfasf ,,,asdfasdfasdfasdfas,asdfasfdafasf,asdfasfas ' },
+
+    ];
+
+    //test data
+    this.dataSource = sampleData.map((value, index) => {
+      value.position = (this.page * this.pageSize) + index + 1;
+      value.insertDateStr = new Date(value.insertDate).toLocaleDateString() + ' ' + new Date(value.insertDate).toLocaleTimeString()
+      value.messageDetailShort = '...';
+      value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
+      return value;
+    }) */
 
 
     this.search()

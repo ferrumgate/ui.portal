@@ -34,7 +34,7 @@ export class AuthenticationService extends BaseService {
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _authRegisterInvite = this.configService.getApiUrl() + '/register/invite'
-  private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
+  private _confirmUser = this.configService.getApiUrl() + '/user/confirmemail';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
   private _getAccessToken = this.configService.getApiUrl() + '/auth/accesstoken';
   private _getRefreshToken = this.configService.getApiUrl() + '/auth/refreshtoken';

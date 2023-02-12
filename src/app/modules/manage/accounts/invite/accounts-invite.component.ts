@@ -174,13 +174,14 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
       }
     }
     this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
       switchMap(y => {
         return this.userService.invite({ emails: emails });
       })
     ).subscribe(y => {
       this.viewInvite = false;
       this.results = y.results;
-      this.notificationService.info(this.translateService.translate("SuccessfullyInvited"))
+      this.notificationService.success(this.translateService.translate("SuccessfullyInvited"))
     })
 
 

@@ -116,8 +116,8 @@ export class LogsAuditComponent implements OnInit, OnDestroy {
       value.messageDetailShort = '...';
       value.messageDetailPrepared = value.messageDetail.replace(',', ' ');
       return value;
-    }) */
-
+    })
+ */
 
     this.search()
   }

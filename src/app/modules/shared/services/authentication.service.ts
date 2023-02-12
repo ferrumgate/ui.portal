@@ -61,7 +61,7 @@ export class AuthenticationService extends BaseService {
     private idle: Idle, private keepalive: Keepalive) {
     super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
-    const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
+    const refreshTokenMS = environment.production ? 4 * 60 * 1000 : 30 * 1000;
 
     this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
       const now = new Date();

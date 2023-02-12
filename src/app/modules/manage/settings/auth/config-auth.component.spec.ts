@@ -46,7 +46,9 @@ describe('ConfigAuthComponent', () => {
     expect(component).toBeTruthy();
     const model: AuthSettings = {
       common: {},
-      local: { id: 'someid', baseType: 'local', name: 'Local', type: 'local', isForgotPassword: true, isRegister: true, isEnabled: true },
+      local: {
+        baseType: 'local', name: 'Local', type: 'local', isForgotPassword: true, isRegister: true, isEnabled: true
+      },
       oauth: {
         providers: [
           { id: 'someid2', baseType: 'oauth', name: 'Google', type: 'google', clientId: 'someid', clientSecret: 'somesecret', isEnabled: true },

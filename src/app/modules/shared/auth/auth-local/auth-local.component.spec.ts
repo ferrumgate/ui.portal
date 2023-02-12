@@ -45,7 +45,7 @@ describe('AuthLocalComponent', () => {
   it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
     const model: AuthLocal = {
-      id: 'someid', baseType: 'local', name: 'Local', type: 'local', isForgotPassword: true, isRegister: true, isEnabled: true
+      baseType: 'local', name: 'Local', type: 'local', isForgotPassword: true, isRegister: true, isEnabled: true
     }
     component.model = {
       ...model

@@ -151,6 +151,7 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
     this.model.server = (this.model as Model).orig.server;
     this.model.client = (this.model as Model).orig.client;
     this.model.isChanged = false;
+    this.captchaFormGroup = this.createFormGroup(this.model)
   }
 
 
@@ -180,6 +181,7 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
       this.model.server = y.server;
       (this.model as Model).orig = y;
       this.model.isChanged = false;
+      this.captchaFormGroup = this.createFormGroup(this.model)
       this.captchaFormGroup.markAsUntouched();
       this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
     })

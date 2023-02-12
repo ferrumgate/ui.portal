@@ -98,7 +98,8 @@ describe('PolicyAuthzComponent', () => {
       id: 'somid', isEnabled: true, name: 'mysql prod', networkId: network2.id, serviceId: service.id, profile: { is2FA: true, }, userOrgroupIds: [group.id], isExpanded: true, serviceName: ''
     }
     let policy: AuthorizationPolicy = {
-      rules: [rule1, rule2, rule3]
+      rules: [rule1, rule2, rule3],
+      rulesOrder: [rule1.id, rule2.id, rule3.id]
     }
 
     spyOn(httpClient, 'get').and.returnValues(

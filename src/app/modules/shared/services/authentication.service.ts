@@ -33,7 +33,8 @@ export class AuthenticationService extends BaseService {
 
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
-  private _confirmUser = this.configService.getApiUrl() + '/user/emailconfirm';
+  private _authRegisterInvite = this.configService.getApiUrl() + '/register/invite'
+  private _confirmUser = this.configService.getApiUrl() + '/user/confirmemail';
   private _confirm2FA = this.configService.getApiUrl() + '/auth/2fa';
   private _getAccessToken = this.configService.getApiUrl() + '/auth/accesstoken';
   private _getRefreshToken = this.configService.getApiUrl() + '/auth/refreshtoken';
@@ -60,7 +61,7 @@ export class AuthenticationService extends BaseService {
     private idle: Idle, private keepalive: Keepalive) {
     super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
-    const refreshTokenMS = environment.production ? 5 * 60 * 1000 : 30 * 1000;
+    const refreshTokenMS = environment.production ? 4 * 60 * 1000 : 30 * 1000;
 
     this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
       const now = new Date();
@@ -209,6 +210,12 @@ export class AuthenticationService extends BaseService {
     let data = { username: email, password: password };
     return this.preExecute(data).pipe(
       switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegister, y, this.jsonHeader))
+    );
+  }
+  registerInvite(key: string, password: string) {
+    let data = { key: key, password: password };
+    return this.preExecute(data).pipe(
+      switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegisterInvite, y, this.jsonHeader))
     );
   }
 

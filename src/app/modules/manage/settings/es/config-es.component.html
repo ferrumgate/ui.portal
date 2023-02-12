@@ -1,0 +1,113 @@
+<div class="config-es">
+    <div class="config-es-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Elastic Search'}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Elastic Search"}}'>
+                <mat-icon svgIcon="elasticsearch"></mat-icon>
+
+            </mat-card-title>
+            <mat-action-row class="config-es-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="config-es-form" [formGroup]="esFormGroup">
+                        <p fxFill class="config-es-exp">
+                            <mat-form-field appearance="fill" fxFill class="config-es-width">
+                                <mat-label>{{"Host"|translate}}</mat-label>
+                                <input matInput test-id="config-es-host-input" placeholder="https://192.168.10.100:9200"
+                                    formControlName="host">
+                                <mat-hint>{{"ESHostHint"|translate}}
+                                </mat-hint>
+                                <mat-error>
+                                    {{esError.host|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="config-es-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="config-es-width">
+                                <mat-label>{{"Username"|translate}}</mat-label>
+                                <input matInput test-id="config-es-user-input" placeholder="elastic"
+                                    formControlName="user">
+                                <mat-hint>{{"ESUserHint"|translate}}</mat-hint>
+
+                                <mat-error>{{esError.user|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="config-es-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="config-es-width">
+                                <mat-label>{{"Password"|translate}}</mat-label>
+                                <input matInput test-id="config-es-pass-input" placeholder="123456"
+                                    formControlName="pass">
+                                <mat-hint>{{"ESPassHint"|translate}}</mat-hint>
+
+                                <mat-error>{{esError.pass|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-divider></mat-divider>
+                        </p>
+                        <p fxFill class="config-es-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="config-es-width">
+                                <mat-label>{{"LogMaxDays"|translate}}</mat-label>
+                                <input type="number" matInput test-id="config-es-delete-old-days-input" placeholder="7"
+                                    formControlName="deleteOldRecordsMaxDays">
+                                <mat-hint>{{"ESDeleteOldRecordsMaxDayHint"|translate}}</mat-hint>
+
+                                <mat-error>{{esError.deleteOldRecordsMaxDays|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="config-es-config-es-actions" fxFlex fxLayoutAlign="start center">
+                            <button *ngIf="canDelete()" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button *ngIf="canCheck()" test-id="config-es-check-button" mat-icon-button color="primary"
+                                matTooltip="{{'Check'|translate}}" (click)="checkES()">
+                                <mat-icon>send</mat-icon>
+                            </button>
+
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="setttings-config-es-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

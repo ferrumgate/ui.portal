@@ -103,7 +103,8 @@ describe('PolicyAuthnComponent', () => {
     let policy: AuthenticationPolicy = {
 
 
-      rules: [rule1, rule2, rule3]
+      rules: [rule1, rule2, rule3],
+      rulesOrder: [rule1.id, rule2.id, rule3.id]
     }
 
     spyOn(httpClient, 'get').and.returnValues(

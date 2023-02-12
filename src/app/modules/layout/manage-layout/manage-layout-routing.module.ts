@@ -49,6 +49,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'accounts/invite',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/accounts/invite/accounts-invite.module').then(m => m.AccountsInviteModule)
+
+      },
+      {
         path: 'services',
         canActivate: [RoleGuard],
         data: {
@@ -109,6 +118,24 @@ const routes: Routes = [
           roleIds: [RBACDefault.roleAdmin.id]
         },
         loadChildren: () => import('../../manage/settings/auth/config-auth.module').then(m => m.ConfigAuthModule)
+
+      },
+      {
+        path: 'settings/es',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/es/config-es.module').then(m => m.ConfigESModule)
+
+      },
+      {
+        path: 'settings/backup',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/backup/config-backup.module').then(m => m.ConfigBackupModule)
 
       },
       {

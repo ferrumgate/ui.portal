@@ -20,8 +20,10 @@
 
 .logs-audit-detail-button {
 
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     padding-right: 10px;
+    padding-top: 10px;
+    margin-bottom: 0px;
 }
 
 .logs-audit-detail-title {
@@ -30,4 +32,8 @@
 
 .logs-audit-detail-message {
     padding-left: 10px;
+}
+
+.logs-audit-detail-footer {
+    margin-bottom: 5px;
 }

@@ -58,5 +58,12 @@ export class ConfirmService {
             this.translateService.translate("DoYouWantToDelete")
         )
     }
+    showAreYouSure() {
+
+        return this.show(
+            this.translateService.translate('Confirm'),
+            this.translateService.translate("AreYouSure")
+        )
+    }
 
 }

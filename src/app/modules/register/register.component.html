@@ -6,7 +6,7 @@
                 <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
                 <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
                 <div>
-                    Ferrum Gate
+                    FerrumGate
                 </div>
 
 
@@ -93,6 +93,12 @@
                 <div fxLayout="row" fxLayoutAlign="center">
                     <p color="warn" class="register-registered"> {{ "SuccessfullyRegistered"|translate}}</p>
                 </div>
+
+                <div class="button login-signin register-signin" fxLayout="row" fxLayoutAlign="end">
+                    <button test-id="login-submit-button" (click)="login()" mat-raised-button
+                        [disabled]="!form.valid">{{"SignIn"|translate}}</button>
+                </div>
+
 
 
             </mat-card-content>

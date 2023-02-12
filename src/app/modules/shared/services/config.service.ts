@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
+import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
-import { ConfigCaptcha, ConfigCommon, ConfigEmail } from '../models/config';
+import { ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 
@@ -40,6 +40,8 @@ export class ConfigService extends BaseService {
     about: "https://ferrumgate.com/#support",
     commonHelp: "https://ferrumgate.com/docs/configuration/settings/common",
     captchaHelp: "https://ferrumgate.com/docs/configuration/settings/captcha",
+    esHelp: "https://ferrumgate.com/docs/configuration/settings/elasticsearch",
+    backupHelp: "https://ferrumgate.com/docs/configuration/settings/backup",
     emailHelp: "https://ferrumgate.com/docs/configuration/settings/email",
     gatewayHelp: "https://ferrumgate.com/docs/configuration/network#gateway",
     networkHelp: "https://ferrumgate.com/docs/configuration/network",
@@ -49,6 +51,7 @@ export class ConfigService extends BaseService {
     authSamlHelp: "https://ferrumgate.com/docs/configuration/settings/auth",
     accountGroupHelp: "https://ferrumgate.com/docs/configuration/accounts#groups",
     accountUserHelp: "https://ferrumgate.com/docs/configuration/accounts#users",
+    accountInviteHelp: "https://ferrumgate.com/docs/configuration/accounts#invite",
     serviceHelp: "https://ferrumgate.com/docs/configuration/service",
     policyAuthzHelp: "https://ferrumgate.com/docs/configuration/policy",
     policyAuthnHelp: "https://ferrumgate.com/docs/configuration/policy",
@@ -69,6 +72,7 @@ export class ConfigService extends BaseService {
     installClientWindowsHelp: "https://ferrumgate.com/docs/clients",
     installClientDebianHelp: "https://ferrumgate.com/docs/clients",
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
+
 
 
 
@@ -468,6 +472,74 @@ export class ConfigService extends BaseService {
         const url = this.joinUrl(this.getApiUrl(), '/config/auth/saml/providers', oauth.id, x);
         return this.http.delete<{}>(url);
       }))
+  }
+
+
+
+  getES() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/es', x);
+        return this.http.get<ConfigES>(url);
+      }))
+  }
+
+  saveES(config: ConfigES) {
+    const parameter: ConfigES = {
+      host: config.host, user: config.user, pass: config.pass, deleteOldRecordsMaxDays: config.deleteOldRecordsMaxDays
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.put<ConfigES>(this.getApiUrl() + `/config/es`, x, this.jsonHeader);
+      })
+    )
+  }
+  checkES(config: ConfigES) {
+    const parameter: ConfigES = {
+      host: config.host, user: config.user, pass: config.pass, deleteOldRecordsMaxDays: config.deleteOldRecordsMaxDays
+    };
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        return this.http.post<{ error?: string }>(this.getApiUrl() + `/config/es/check`, x, this.jsonHeader);
+      })
+    )
+  }
+
+  export() {
+    const urlSearchParams = new URLSearchParams();
+    let key: string = '';
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/export/key', x);
+        return this.http.get<{ key: string }>(url)
+      }),
+      switchMap(y => {
+        key = y.key;
+        const url = this.joinUrl(this.getApiUrl(), '/config/export', y.key);
+        return this.http.get(url, { responseType: 'blob' })
+      }),
+      switchMap(data => {
+        let blob = new Blob([data], { type: 'application/txt' });
+
+        var downloadURL = window.URL.createObjectURL(data);
+        var link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = "ferrumgate.conf";
+        link.click();
+        return of({ key: key });
+      })
+    )
+  }
+  restore(key: string, formData: FormData) {
+    return this.preExecute({}).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/import/', key);
+        return this.http.post(url, formData, {
+          reportProgress: true, observe: 'events'
+        })
+      })
+    )
   }
 
 

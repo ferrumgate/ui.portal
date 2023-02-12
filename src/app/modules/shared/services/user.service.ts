@@ -33,6 +33,7 @@ export class UserService extends BaseService {
   private _userCurrent2FAUrl = this.configService.getApiUrl() + '/user/current/2fa';
   private _userCurrent2FARefreshUrl = this.configService.getApiUrl() + '/user/current/2fa/rekey';
   private _userCurrentPasswordUrl = this.configService.getApiUrl() + '/user/current/pass';
+  private _userInviteUrl = this.configService.getApiUrl() + '/user/invite';
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
@@ -169,6 +170,19 @@ export class UserService extends BaseService {
         return this.httpService.put(this._userCurrentPasswordUrl, y, this.jsonHeader)
 
       }))
+  }
+
+  invite(req: { emails: string[] }) {
+
+    let request = {
+      emails: req.emails
+    }
+    return this.preExecute(request).pipe(
+      switchMap(y => {
+        return this.httpService.post<{ results: { email: string, errMsg?: string }[] }>(this._userInviteUrl, y, this.jsonHeader)
+
+      }))
+
   }
 
 

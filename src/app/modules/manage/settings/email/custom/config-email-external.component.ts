@@ -189,7 +189,7 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
 
   }
   createBaseModel(): ConfigEmail {
-    return { fromname: this.model.user, type: this.model.type, user: this.model.user, pass: this.model.user };
+    return { fromname: this.model.user, type: this.model.type, user: this.model.user, pass: this.model.pass };
   }
 
   saveOrUpdate() {

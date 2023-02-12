@@ -84,6 +84,11 @@ export class AppComponent implements OnInit {
       "services",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/services.svg")
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "elasticsearch",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/elasticsearch.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

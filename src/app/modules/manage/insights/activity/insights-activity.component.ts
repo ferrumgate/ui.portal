@@ -104,16 +104,23 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     /*  const sampleData: ActivityLog[] = [
        {
-         insertDate: new Date().toISOString(),
-         ip: '1.2.3.4',
-         requestId: 'e1nxwp9mk4z92bz4gc9uvvay564onekix9aljtwiw30dlu9hk99tzav6zetpevkn',
-         authSource: 'local',
-         status: 0,
-         type: 'login try',
-         statusMessage: 'success',
-         sessionId: '8ivi30xnefo9j5blsjymvjdsyqlmhl9izhi040tj525rshrtalv8qm1qpskv8y1x',
-         username: 'o5x6izkewj20'
- 
+         "requestId": "i8oB3eCcFrMrEpK32DAKzOSDz5ck4eq4R69UGYkN3T3kpoDbkewNXHhC37z659Vx",
+         "type": "access token",
+         "username": "hamza@hamzakilic.com",
+         "userId": "97CwQ6gRHPaRHBWH",
+         "user2FA": false,
+         "authSource": "local",
+         "insertDate": "2023-02-12T13:46:34.661Z",
+         "ip": "192.168.88.10",
+         "status": 200,
+         "sessionId": "t87H20P0K2gfqnONAwI1Bxfzm1sLcEfgF3OoqDxtfxtZuez246FAdQggeCgA9zxC",
+         "requestPath": "/api/auth/accesstoken",
+         "assignedIp": 'null',
+         "tunnelId": 'null',
+         "tun": 'null',
+         "tunType": 'null',
+         "trackId": 0,
+         "gatewayId": 'null'
        },
  
  

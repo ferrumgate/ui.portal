@@ -1,0 +1,110 @@
+<div class="accounts-invite">
+    <div class="accounts-invite-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Invite'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Invite"|translate}}'>
+                <mat-icon>insert_link</mat-icon>
+
+            </mat-card-title>
+            <mat-action-row class="accounts-invite-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content *ngIf="viewInvite" test-id="accounts-invite-view-emails">
+            <div>
+                <div>
+                    <form test-id="accounts-invite-form" [formGroup]="inviteFormGroup">
+                        <p fxFill class="accounts-invite-exp">
+                            <mat-form-field appearance="fill" fxFill class="accounts-invite-width">
+                                <mat-label>{{"Emails"|translate}}</mat-label>
+                                <textarea class="emails" multiple="true" matInput test-id="accounts-invite-emails-input"
+                                    placeholder="teammate@ferrumgate.com, team@ferrumgate.com" formControlName="emails">
+                                    </textarea>
+                                <mat-hint>{{"InvitationEmailsHint"|translate}}
+                                </mat-hint>
+                                <mat-error>
+                                    {{inviteError.emails|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="accounts-invite-accounts-invite-actions" fxFlex
+                            fxLayoutAlign="start center">
+
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="setttings-accounts-invite-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-content *ngIf="!viewInvite" test-id="accounts-invite-view-results">
+            <div>
+                <mat-card-title class="results-title">{{"Results"|translate}}</mat-card-title>
+                <mat-list>
+
+                    <mat-list-item *ngFor="let result of results" test-id="accounts-invite-results-item">
+                        <div fxFill class="results-result">
+                            <span class="results-email" fxFlex="50">{{result.email}}</span>
+                            <span class="results-msg" fxFlex="50"
+                                matTooltip="{{result.errMsg||('Invited'|translate)}}">{{result.errMsg||('Invited'|translate)}}</span>
+                            <mat-divider></mat-divider>
+                        </div>
+
+                    </mat-list-item>
+
+                </mat-list>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="accounts-invite-accounts-invite-actions" fxFlex
+                            fxLayoutAlign="start center">
+
+                            <span fxFlex fxLayoutAlign="end center">
+                                <button test-id="accounts-invite-results-back" mat-icon-button color="warn"
+                                    matTooltip="{{'Back'|translate}}" (click)="back()">
+                                    <mat-icon>keyboard_arrow_left</mat-icon>
+                                </button>
+
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

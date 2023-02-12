@@ -2,7 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of, switchMap } from 'rxjs';
 import { Register } from 'src/app/modules/shared/models/register';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
@@ -36,6 +36,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   @Output() submitEM = new EventEmitter();
 
   constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
+    private router: Router,
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,
@@ -172,6 +173,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     }
 
+  }
+  login() {
+    this.router.navigate(['/login']);
   }
 
 }

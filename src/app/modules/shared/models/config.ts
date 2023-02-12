@@ -19,3 +19,11 @@ export interface ConfigEmail {
     pass: string,
     [key: string]: any;
 }
+
+export interface ConfigES {
+    host?: string;
+    user?: string;
+    pass?: string;
+    //delete old records, maximum days
+    deleteOldRecordsMaxDays?: number;
+}

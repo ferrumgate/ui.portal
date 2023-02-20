@@ -1,15 +1,15 @@
-.config-ip-intelligence-source-toolbar {
+.config-ip-intelligence-source {
 
     /* Make sure the toolbar will stay on top of the content as it scrolls past. */
     font-size: 0.9rem;
-    height: 60px;
+    padding: 10px;
 
 }
 
 .config-ip-intelligence-source mat-card {
     min-width: 400px;
     width: 400px;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .config-ip-intelligence-source-explanation {
@@ -27,7 +27,6 @@
     padding-bottom: 10px;
     font-size: 1.2rem;
 }
-
 
 .config-ip-intelligence-source .config-ip-intelligence-source-header-actions {
     padding: 0px;

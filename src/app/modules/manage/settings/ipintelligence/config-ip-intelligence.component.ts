@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of, switchMap, takeWhile } from 'rxjs';
 import { ConfigES } from 'src/app/modules/shared/models/config';
-import { IpIntelligenceBWItem } from 'src/app/modules/shared/models/ipIntelligence';
+import { IpIntelligenceBWItem, IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
@@ -43,6 +43,8 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     showViewSearch: true,
     showViewSaveResults: false
   }
+
+  sources: IpIntelligenceSource[] = [];
 
 
 
@@ -101,6 +103,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     } */
     this.searchBlackList({ ip: '', page: 0, pageSize: 10 })
     this.searchWhiteList({ ip: '', page: 0, pageSize: 10 })
+    this.searchSources();
 
   }
   ngOnDestroy(): void {
@@ -214,7 +217,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     this.blackList.showViewSaveResults = false;
     this.blackList.showViewSave = false;
     this.blackList.showViewSearch = true;
-    this.ipIntelligenceService.get('blacklist', search.page, search.pageSize, search.ip)
+    this.ipIntelligenceService.getBWList('blacklist', search.page, search.pageSize, search.ip)
       .subscribe(x => {
         this.blackList.searchData = x;
 
@@ -227,12 +230,71 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     this.whiteList.showViewSaveResults = false;
     this.whiteList.showViewSave = false;
     this.whiteList.showViewSearch = true;
-    this.ipIntelligenceService.get('whitelist', search.page, search.pageSize, search.ip)
+    this.ipIntelligenceService.getBWList('whitelist', search.page, search.pageSize, search.ip)
       .subscribe(x => {
         this.whiteList.searchData = x;
 
       })
 
+  }
+  getSource() {
+    if (!this.sources.length)
+      this.sources.push(this.createEmptySource());
+    return this.sources[0];
+  }
+
+  searchSources() {
+    this.ipIntelligenceService.getSource().subscribe(y => {
+      this.sources = y.items;
+    })
+  }
+
+  checkSource(ev: IpIntelligenceSource) {
+    this.confirmService.show(
+      this.translateService.translate('Confirm'),
+      this.translateService.translate("DoYouWantToCheck")
+    ).pipe(
+      takeWhile(x => x),
+      switchMap(y => this.ipIntelligenceService.checkSource(ev))
+    ).subscribe(y => {
+      if (!y.isError) {
+        this.notificationService.success(this.translateService.translate('SourceWorkedSuccessfully'))
+      }
+      else {
+        this.notificationService.error(this.translateService.translate('SomethingWentWrong'));
+        this.notificationService.error(this.translateService.translate(y.errorMessage));
+      }
+    })
+  }
+  saveSource(ev: IpIntelligenceSource) {
+    this.confirmService.showSave().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.ipIntelligenceService.saveOrupdateSource(ev))
+    ).subscribe(y => {
+      const index = this.sources.findIndex(x => x.objId == ev.objId)
+      if (index >= 0)
+        this.sources.splice(index, 1);
+      y.objId = y.objId;
+      this.sources.push(y);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
+    })
+  }
+  createEmptySource(): IpIntelligenceSource {
+    return {
+      objId: UtilService.randomNumberString(),
+      id: '', insertDate: '', name: '', type: '', updateDate: ''
+    }
+  }
+  deleteSource(ev: IpIntelligenceSource) {
+    this.confirmService.showDelete().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.ipIntelligenceService.deleteSource(ev))
+    ).subscribe(y => {
+      const index = this.sources.findIndex(x => x.objId == ev.objId)
+      if (index >= 0)
+        this.sources.splice(index, 1);
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
+    })
   }
 
 

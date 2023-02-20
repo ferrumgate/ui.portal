@@ -9,18 +9,20 @@
     </div>
 
     <mat-tab-group dynamicHeight>
+
         <mat-tab label="{{'BlackList'|translate}}">
-            <app-config-ip-intelligence-bwlist helpLink="helpLink" isBlackList="true"
+            <app-config-ip-intelligence-bwlist helpLink="{{helpLink}}" isBlackList="true"
                 (deleteItem)="deleteBlackList($event)" (saveItems)="saveBlackList($event)"
                 (search)="searchBlackList($event)" [model]="blackList">bwlist</app-config-ip-intelligence-bwlist>
         </mat-tab>
         <mat-tab label="{{'WhiteList'|translate}}">
-            <app-config-ip-intelligence-bwlist helpLink="helpLink" isBlackList="false"
+            <app-config-ip-intelligence-bwlist helpLink="{{helpLink}}" isBlackList="false"
                 (deleteItem)="deleteWhiteList($event)" (saveItems)="saveWhiteList($event)"
                 (search)="searchWhiteList($event)" [model]="whiteList">whitelist</app-config-ip-intelligence-bwlist>
         </mat-tab>
-        <mat-tab label="{{'Sources'|translate}}">
-            <app-config-ip-intelligence-source helpLink="helpLink"></app-config-ip-intelligence-source>
+        <mat-tab label="{{'Source'|translate}}">
+            <app-config-ip-intelligence-source helpLink="{{helpLink}}" [model]="getSource()" (save)="saveSource($event)"
+                (delete)="deleteSource($event)" (check)="checkSource($event)"></app-config-ip-intelligence-source>
         </mat-tab>
     </mat-tab-group>
 

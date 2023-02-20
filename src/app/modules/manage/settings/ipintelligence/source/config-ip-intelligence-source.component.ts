@@ -1,22 +1,31 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
-import { ConfigES } from 'src/app/modules/shared/models/config';
+import { ConfigEmail, ConfigES } from 'src/app/modules/shared/models/config';
+import { IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
+import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
 
-interface BaseModel extends ConfigES {
-  isChanged: boolean
+interface BaseModel extends IpIntelligenceSource {
+  apiKey?: string;
+
 }
 interface Model extends BaseModel {
 
+  isChanged: boolean
+  orig: IpIntelligenceSource
+}
 
-  orig: ConfigES
+interface SmtpModel extends Model {
+  host: string,
+  port: number,
+  isSecure: boolean
 }
 
 @Component({
@@ -26,40 +35,51 @@ interface Model extends BaseModel {
 })
 export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
+
+  @Input()
   helpLink = '';
+  @Output()
+  save = new EventEmitter();
+  @Output()
+  delete = new EventEmitter();
+  @Output()
+  check = new EventEmitter();
 
-
+  apiProviders = ['ipdata.co', 'ipapi.com', 'ipify.org'];
   isThemeDark = false;
-  private _model: Model = { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0, isChanged: false, orig: { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0 } };
+  private _model: Model = {
+    id: '', insertDate: '', updateDate: '', apiKey: '',
+    type: '', name: 'not set yet', isChanged: false,
+    orig: {
+      type: 'empty', name: 'not set yet', id: '',
+      insertDate: '', updateDate: '', apiKey: ''
+    }
+  };
+
   public get model() {
     return this._model;
 
   }
+  @Input()
   public set model(val: BaseModel) {
     this._model = {
-      host: val.host,
-      user: val.user,
-      pass: val.pass,
-      deleteOldRecordsMaxDays: val.deleteOldRecordsMaxDays,
+      ...val,
       isChanged: false,
       orig: val
     }
+    this.formGroup = this.createFormGroup(this.model);
 
-    this.esFormGroup = this.createFormGroup(this._model);
   }
+  error = { type: '', apiKey: '' };
+  formGroup = this.createFormGroup(this.model);
 
-
-  //es settings
-  esFormGroup: FormGroup = this.createFormGroup(this.model);
-
-  esError: { host: string, user: string, pass: string, deleteOldRecordsMaxDays: string } = { host: '', user: '', pass: '', deleteOldRecordsMaxDays: '' };
 
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
-    private notificationService: NotificationService) {
-
+    private notificationService: NotificationService,
+    private ipIntelligence: IpIntelligenceService) {
 
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
@@ -69,7 +89,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
 
 
 
-    this.helpLink = this.configService.links.esHelp;
+    this.helpLink = this.configService.links.emailHelp;
 
   }
 
@@ -79,26 +99,20 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.configService.getES().pipe().subscribe(x => {
-      this.model = { ...x, isChanged: false };
-    })
+
+
+  }
+  ngAfterViewInit(): void {
 
   }
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
-  ngAfterViewInit(): void {
-
-  }
 
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
-        host: new FormControl(model.host, []),
-        user: new FormControl(model.user, []),
-        pass: new FormControl(model.pass, []),
-        deleteOldRecordsMaxDays: new FormControl(model.deleteOldRecordsMaxDays, []),
-
+        apiKey: new FormControl(model.apiKey, [Validators.required]),
       });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -111,116 +125,84 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
     }
     this.allSub.addThis =
       fmg.valueChanges.subscribe(x => {
-        this.esModelChanged();
+        this.modelChanged();
       })
     return fmg;
   }
-  resetESErrors() {
+
+  resetFormErrors() {
 
     return {
-      host: '', user: '', pass: '', deleteOldRecordsMaxDays: ''
+      type: '', apiKey: ''
     }
   }
-
-  esModelChanged() {
-    this.checkESFormError();
-    if (this.esFormGroup.valid)
+  modelChanged() {
+    this.checkFormError();
+    if (this.formGroup.valid)
       this.checkIfModelChanged();
     else this._model.isChanged = false;
 
   }
-
-  checkESFormError() {
+  checkFormError() {
     //check errors 
-    this.esError = this.resetESErrors();
+    this.error = this.resetFormErrors();
 
+    const apiKeyError = this.formGroup.controls['apiKey'].errors;
 
+    if (apiKeyError) {
+      if (apiKeyError['required'])
+        this.error.type = 'ApiKeyRequired';
+      else
+        this.error.type = 'ApiKeyRequired';
+    }
 
   }
 
   checkIfModelChanged() {
-
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
-    if (original.host != model.host)
+    if (original.type != model.type)
       model.isChanged = true;
-    if (original.user != model.user)
+    if (original.apiKey != model.apiKey)
       model.isChanged = true;
-    if (original.pass != model.pass)
-      model.isChanged = true;
-    if (original.deleteOldRecordsMaxDays != model.deleteOldRecordsMaxDays)
-      model.isChanged = true;
-
 
   }
 
 
+  apiTypeChanged($event: any) {
 
-
-
-  clear() {
-    this.model.host = (this.model as Model).orig.host;
-    this.model.user = (this.model as Model).orig.user;
-    this.model.pass = (this.model as Model).orig.pass;
-    this.model.deleteOldRecordsMaxDays = (this.model as Model).orig.deleteOldRecordsMaxDays;
-    this.model.isChanged = false;
-    this.esFormGroup = this.createFormGroup(this.model);
+    this.model.type = $event.option.value;
   }
 
 
-  saveOrUpdate() {
-    this.confirmService.showSave().pipe(
-      takeWhile(x => x),
-      switchMap(y => this.configService.saveES(this.model))
-    ).subscribe(y => {
-      (this.model as Model).orig = y;
-      this.model.isChanged = false;
-      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
-    })
+  checkSource() {
+    console.log(this.model);
+    this.check.emit(this.model);
+  }
+
+  deleteSource() {
+    this.delete.emit(this.model);
+  }
+
+  saveSource() {
+    console.log(this.model);
+    this.save.emit(this.model);
   }
 
   canDelete() {
-    if (this.esFormGroup.valid && !this.model.isChanged && (this.model.host || this.model.user || this.model.pass))
+    if (this.formGroup.valid && !this.model.isChanged)
       return true;
     return false;
   }
-
-  delete() {
-    this.confirmService.showDelete().pipe(
-      takeWhile(x => x),
-      switchMap(y => this.configService.saveES({ host: '', user: '', pass: '', deleteOldRecordsMaxDays: this.model.deleteOldRecordsMaxDays }))
-    ).subscribe(y => {
-      this.model.host = y.host;
-      this.model.user = y.user;
-      this.model.pass = y.pass;
-      this.model.deleteOldRecordsMaxDays = y.deleteOldRecordsMaxDays;
-      (this.model as Model).orig = y;
-      this.model.isChanged = false;
-
-      this.esFormGroup = this.createFormGroup(this.model);
-      this.esFormGroup.markAsUntouched();
-      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
-    })
-  }
-
   canCheck() {
-    if (this.model.isChanged && this.model.host) {
-      return true;
-    }
-    return false;
+    return this.formGroup.valid;
   }
-  checkES() {
-    this.configService.checkES({
-
-      host: this.model.host, user: this.model.user, pass: this.model.pass
-    }).subscribe(y => {
-      if (y.error)
-        this.notificationService.error(y.error);
-      else
-        this.notificationService.success(this.translateService.translate('SuccessfullyWorking'));
-
-    })
+  clear() {
+    this.model = {
+      ...this._model,
+      apiKey: ''
+    }
   }
 
 }

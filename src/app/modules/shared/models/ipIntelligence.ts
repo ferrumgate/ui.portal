@@ -2,8 +2,12 @@ import { Country } from "./country";
 
 
 export interface IpIntelligenceSource {
+    id: string;
+    objId?: string;
     type: string;
     name: string;
+    insertDate: string;
+    updateDate: string;
     [key: string]: any;
 }
 export interface IpIntelligenceSources {

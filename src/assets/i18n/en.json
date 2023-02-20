@@ -359,5 +359,12 @@
     "IpOrCIDRIsInvalid": "Ip or cidr is invalid",
     "IpInvalid": "Ip is invalid",
     "Saved": "Saved",
-    "DescriptionPlaceHolder": "Something"
+    "DescriptionPlaceHolder": "Something",
+    "Source": "Source",
+    "DoYouWantToCheck": "Do you want to check",
+    "SourceWorkedSuccessfully": "Source worked successfully",
+    "SomethingWentWrong": "Something went wrong",
+    "ApiProvider": "Api provider",
+    "ApiKeyHint": "Access key for api",
+    "ApiKeyRequired": "Api key required"
 }

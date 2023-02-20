@@ -4,7 +4,7 @@ import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { Configure } from '../models/configure';
-import { IpIntelligenceBWItem } from '../models/ipIntelligence';
+import { IpIntelligenceBWItem, IpIntelligenceSource } from '../models/ipIntelligence';
 import { Network } from '../models/network';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
@@ -19,7 +19,10 @@ type BW = 'blacklist' | 'whitelist';
 })
 export class IpIntelligenceService extends BaseService {
 
+
   private _ipIntelligenceUrl = this.configService.getApiUrl() + '/ip/intelligence';
+  private _ipIntelligenceUrlSource = this.configService.getApiUrl() + '/ip/intelligence/source';
+  private _ipIntelligenceUrlSourceCheck = this.configService.getApiUrl() + '/ip/intelligence/source/check';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('ipIntelligence', captchaService)
 
@@ -55,7 +58,7 @@ export class IpIntelligenceService extends BaseService {
 
 
 
-  get(type: 'blacklist' | 'whitelist', page: number, pageSize: number, ip?: string, ids?: string[]) {
+  getBWList(type: 'blacklist' | 'whitelist', page: number, pageSize: number, ip?: string, ids?: string[]) {
 
     const searchParams = new URLSearchParams();
     if (ip)
@@ -71,6 +74,60 @@ export class IpIntelligenceService extends BaseService {
       })
     )
 
+  }
+
+
+  getSource() {
+    const searchParams = new URLSearchParams();
+
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._ipIntelligenceUrlSource, y);
+        return this.httpService.get<{ items: IpIntelligenceSource[] }>(url);
+      })
+    )
+  }
+
+  checkSource(item: IpIntelligenceSource) {
+    const source: IpIntelligenceSource =
+    {
+      id: item.id, type: item.type, name: item.name, apiKey: item.apiKey,
+      insertDate: new Date().toISOString(), updateDate: new Date().toISOString()
+    };
+
+
+    return this.preExecute(source).pipe(
+      switchMap(y => {
+        return this.httpService.post<{ isError: boolean, errorMessage: '' }>(this._ipIntelligenceUrlSourceCheck, y, this.jsonHeader)
+      }))
+  }
+
+
+  saveOrupdateSource(item: IpIntelligenceSource) {
+    const source: IpIntelligenceSource = {
+      id: item.id, type: item.type, name: item.type, insertDate: item.insertDate, updateDate: item.updateDate,
+      apiKey: item.apiKey
+    }
+
+    return this.preExecute(source).pipe(
+      switchMap(y => {
+        if (source.id)
+          return this.httpService.put<IpIntelligenceSource>(this._ipIntelligenceUrlSource, y, this.jsonHeader)
+        else return this.httpService.post<IpIntelligenceSource>(this._ipIntelligenceUrlSource, y, this.jsonHeader)
+      }))
+
+  }
+
+  deleteSource(item: IpIntelligenceSource) {
+
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._ipIntelligenceUrlSource, `${item.id}`, y);
+        return this.httpService.delete(url);
+
+      }))
   }
 
 

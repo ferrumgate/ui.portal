@@ -47,7 +47,7 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
   }
 
 
-  //es settings
+  //invite settings
   inviteFormGroup: FormGroup = this.createFormGroup(this.model);
 
   inviteError: { emails: string } = { emails: '' };

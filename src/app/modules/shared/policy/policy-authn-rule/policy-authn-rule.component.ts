@@ -94,7 +94,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       isExpanded: val.isExpanded
 
     }
-    debugger;
+
     this.prepareAutoCompletes();
     this.formGroup = this.createFormGroup(this._model);
 

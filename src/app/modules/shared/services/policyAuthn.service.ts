@@ -66,7 +66,7 @@ export class PolicyAuthnService extends BaseService {
       action: arule.action
 
     }
-    debugger;
+
 
     return this.preExecute(rule).pipe(
       switchMap(y => {

@@ -1,0 +1,44 @@
+.config-ip-intelligence {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.config-ip-intelligence-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+}
+
+.config-ip-intelligence mat-card {
+    min-width: 400px;
+    //width: 800px;
+    min-height: 400px;
+    //height: 800px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.config-ip-intelligence-explanation {
+    padding-top: 20px;
+}
+
+.config-ip-intelligence .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-ip-intelligence .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-ip-intelligence .config-ip-intelligence-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

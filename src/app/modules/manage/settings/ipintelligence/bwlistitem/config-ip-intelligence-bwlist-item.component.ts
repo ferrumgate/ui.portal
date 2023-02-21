@@ -38,9 +38,6 @@ export class ConfigIpIntelligenceBWListItemComponent implements OnInit, OnDestro
   @Input()
   model: IpIntelligenceBWItem = { id: '', val: '', insertDate: '', description: '' }
 
-  get insertDate() {
-    return UtilService.dateFormatToLocale(this.model.insertDate ? new Date(this.model.insertDate) : new Date());
-  }
 
 
 

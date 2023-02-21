@@ -35,7 +35,7 @@
                             <mat-hint>{{"ApiProvider"|translate}}</mat-hint>
                         </mat-form-field>
                     </p>
-                    <p *ngIf="model.type" fxFill class="config-ip-intelligence-source-explanation ">
+                    <p *ngIf="model.type" fxFill class="config-ip-intelligence-source-explanation">
                         <mat-form-field appearance="fill" fxFill class="config-ip-intelligence-source-width">
                             <mat-label>{{"ApiKey"|translate}}</mat-label>
                             <input matInput test-id="config-ip-intelligence-source-apikey-input"
@@ -51,12 +51,13 @@
             <div *ngIf="model.type">
                 <mat-divider></mat-divider>
                 <mat-toolbar style="height:40px">
-                    <mat-action-row class="config-email-smtp-actions" fxFlex fxLayoutAlign="start center">
-                        <button *ngIf="canDelete()" test-id="config-email-smtp-delete-button" mat-icon-button
-                            color="primary" matTooltip="{{'Delete'|translate}}" (click)="deleteSource()">
+                    <mat-action-row class="config-ip-intelligence-source-actions" fxFlex fxLayoutAlign="start center">
+                        <button *ngIf="canDelete()" test-id="config-ip-intelligence-source-delete-button"
+                            mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                            (click)="deleteSource()">
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="canCheck()" test-id="config-email-smtp-send-button" mat-icon-button
+                        <button *ngIf="canCheck()" test-id="config-ip-intelligence-source-send-button" mat-icon-button
                             color="primary" matTooltip="{{'Check'|translate}}" (click)="checkSource()">
                             <mat-icon>send</mat-icon>
                         </button>
@@ -66,8 +67,8 @@
                                 (click)="clear()">
                                 <mat-icon>close</mat-icon>
                             </button>
-                            <button test-id="setttings-config-email-smtp-ok-button" mat-icon-button color="warn"
-                                matTooltip="{{'SaveChanges'|translate}}" (click)="saveSource()">
+                            <button test-id="setttings-config-ip-intelligence-source-ok-button" mat-icon-button
+                                color="warn" matTooltip="{{'SaveChanges'|translate}}" (click)="saveSource()">
                                 <mat-icon>check</mat-icon>
                             </button>
                         </span>

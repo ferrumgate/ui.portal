@@ -1,7 +1,4 @@
 <div class="config-ip-intelligence-bwlist-item">
-
-
-
     <mat-accordion test-id="config-ip-intelligence-bwlist-item" class="row">
         <mat-expansion-panel [expanded]="isExpanded">
             <mat-expansion-panel-header>
@@ -15,9 +12,8 @@
                             block</mat-icon>
                     </div>
 
-                    <div fxFlexAlign="center" style="padding-left: 10px;">
-                        {{model.val}}
-                    </div>
+                    <div fxFlexAlign="center" style="padding-left: 10px;"
+                        test-id="config-ip-intelligence-bwlist-item-val-input">{{model.val}}</div>
                 </mat-panel-title>
 
             </mat-expansion-panel-header>
@@ -26,8 +22,8 @@
             <div fxFill class="config-ip-intelligence-bwlist-item-explanation ">
                 <div appearance="fill" fxFill class="config-ip-intelligence-bwlist-item-width">
                     <mat-label>{{"InsertDate"|translate}}</mat-label>
-                    <input matInput test-id="config-ip-intelligence-bwlist-item-user-input" placeholder="note"
-                        ngModel="{{insertDate}}" readonly>
+                    <input matInput test-id="config-ip-intelligence-bwlist-item-insertdate-input"
+                        [ngModel]="model.insertDate" [ngModelOptions]="{standalone:true}" type="text" readonly>
 
 
                 </div>
@@ -36,7 +32,7 @@
                 <div appearance="fill" fxFill class="config-ip-intelligence-bwlist-item-width">
                     <mat-label>{{"Description"|translate}}</mat-label>
                     <input matInput test-id="config-ip-intelligence-bwlist-item-description-input" placeholder="note"
-                        ngModel="{{model.description||''}}" readonly>
+                        [ngModel]="model.description" [ngModelOptions]="{standalone:true}" type="text" readonly>
                 </div>
             </div>
 

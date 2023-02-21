@@ -59,43 +59,34 @@ describe('ConfigIpIntelligenceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('bind model', fakeAsync(async () => {
+  it('bind model', fakeAsync(async () => {
     expect(component).toBeTruthy();
-    component.model = {
-      host: 'hostx',
-      user: 'user',
-      pass: 'pass',
-      deleteOldRecordsMaxDays: 9,
-      isChanged: false
-    }
+    httpClientSpy.get.and.returnValues(
+      of(
+        {
+          total: 0,
+          items: []
+        }),
+      of(
+        {
+          total: 0,
+          items: []
+        }),
+
+      of(
+        {
+          total: 0,
+          items: []
+        }),
+
+    );
     tick(1000);
     fixture.detectChanges();
-    expectValue(fixture, 'config-es-host-input', 'hostx');
-    expectValue(fixture, 'config-es-user-input', 'user');
-
-    setFieldValue(fixture, 'config-es-pass-input', 'newpass');
-    dispatchFakeEvent(findEl(fixture, 'config-es-pass-input').nativeElement, 'blur');
-
-    tick(1000);
-    expect(component.model.isChanged).toBeTrue();
-    fixture.detectChanges();
-
-    httpClientSpy.put.and.returnValue(of(
-      {
-        host: 'eshost',
-        user: 'esuser'
-      }));
-    spyOn(confirmService, 'showSave').and.returnValue(of(true));
-    component.saveOrUpdate();
-    tick(1000);
-    fixture.detectChanges();
-
-    expect(component.model.isChanged).toBeFalse();
 
     flush();
 
 
-  })); */
+  }));
 });
 
 

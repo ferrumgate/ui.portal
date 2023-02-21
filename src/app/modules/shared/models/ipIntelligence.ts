@@ -4,7 +4,7 @@ import { Country } from "./country";
 export interface IpIntelligenceSource {
     id: string;
     objId?: string;
-    type: string;
+    type: 'ipdata.co' | 'ipapi.com' | 'ipify.org' | string;
     name: string;
     insertDate: string;
     updateDate: string;

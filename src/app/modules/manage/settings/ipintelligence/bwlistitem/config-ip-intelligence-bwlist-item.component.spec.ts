@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { dispatchFakeEvent, expectValue, findEl, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { dispatchFakeEvent, expectText, expectValue, findEl, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -59,43 +59,26 @@ describe('ConfigIpIntelligenceBWListItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* it('bind model', fakeAsync(async () => {
+  it('bind model', fakeAsync(async () => {
     expect(component).toBeTruthy();
     component.model = {
-      host: 'hostx',
-      user: 'user',
-      pass: 'pass',
-      deleteOldRecordsMaxDays: 9,
-      isChanged: false
+      id: '123', val: '192.168.0.0/24', insertDate: '1-1-1', description: 'test'
     }
-    tick(1000);
-    fixture.detectChanges();
-    expectValue(fixture, 'config-es-host-input', 'hostx');
-    expectValue(fixture, 'config-es-user-input', 'user');
 
-    setFieldValue(fixture, 'config-es-pass-input', 'newpass');
-    dispatchFakeEvent(findEl(fixture, 'config-es-pass-input').nativeElement, 'blur');
-
-    tick(1000);
-    expect(component.model.isChanged).toBeTrue();
-    fixture.detectChanges();
-
-    httpClientSpy.put.and.returnValue(of(
-      {
-        host: 'eshost',
-        user: 'esuser'
-      }));
-    spyOn(confirmService, 'showSave').and.returnValue(of(true));
-    component.saveOrUpdate();
     tick(1000);
     fixture.detectChanges();
 
-    expect(component.model.isChanged).toBeFalse();
+
+
+    expectText(fixture, 'config-ip-intelligence-bwlist-item-val-input', '192.168.0.0/24');
+    //this test does not work because of ngmodel
+    //expectValue(fixture, 'config-ip-intelligence-bwlist-item-insertdate-input', '1-1-1');
+    //expectValue(fixture, 'config-ip-intelligence-bwlist-item-description-input', 'test');
 
     flush();
 
 
-  })); */
+  }))
 });
 
 

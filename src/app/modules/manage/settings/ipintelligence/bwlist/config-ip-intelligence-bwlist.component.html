@@ -29,7 +29,7 @@
         </div>
         <mat-divider></mat-divider>
 
-        <div class="content" *ngIf="model.showViewSearch">
+        <div class="content" *ngIf="model.showViewSearch" test-id="config-ip-intelligence-bwlist-viewsearch">
             <div class="paginator" fxLayoutAlign="end center">
                 <mat-paginator [length]="model.searchData.total" [pageSize]="pageSize"
                     [pageSizeOptions]="[1,5, 10, 25, 100]" aria-label="Select page" (page)="pageChanged($event)" size>
@@ -38,14 +38,15 @@
             <div class="items">
                 <div fxLayout="row wrap">
                     <div *ngFor="let bwItem of  model.searchData.items">
-                        <app-config-ip-intelligence-bwlist-item [isBlackList]="isBlackList" [model]="bwItem"
+                        <app-config-ip-intelligence-bwlist-item test-id="config-ip-intelligence-bwlist-item"
+                            [isBlackList]="isBlackList" [model]="bwItem"
                             (deleteItem)="delete($event)"></app-config-ip-intelligence-bwlist-item>
                     </div>
 
                 </div>
             </div>
         </div>
-        <div class="content" *ngIf="model.showViewSave">
+        <div class="content" *ngIf="model.showViewSave" test-id="config-ip-intelligence-bwlist-viewsave">
 
             <div>
                 <form test-id="config-ip-intelligence-bwlist-form" [formGroup]="saveFormGroup">
@@ -65,7 +66,7 @@
                     <p fxFill class="description">
                         <mat-form-field appearance="fill" fxFill>
                             <mat-label>{{"Description"|translate}}</mat-label>
-                            <input class="description" matInput test-id="config-ip-intelligence-bwlist-ips-input"
+                            <input class="description" matInput test-id="config-ip-intelligence-bwlist-desc-input"
                                 placeholder="{{'DescriptionPlaceHolder'|translate}}" formControlName="description" />
                         </mat-form-field>
                     </p>
@@ -95,12 +96,13 @@
             </div>
 
         </div>
-        <div class="content" *ngIf="model.showViewSaveResults">
+        <div class="content" *ngIf="model.showViewSaveResults" test-id="config-ip-intelligence-bwlist-viewresult">
             <div class="results-result">
                 <mat-card-title class="results-title">{{"Results"|translate}}</mat-card-title>
                 <mat-list>
 
-                    <mat-list-item *ngFor="let result of model.saveResults" test-id="ip-intelligence-save-results-item">
+                    <mat-list-item *ngFor="let result of model.saveResults"
+                        test-id="config-ip-intelligence-save-results-item">
                         <div fxFill class="results-result">
                             <span class="results-ip" fxFlex="50">{{result.item.val}}</span>
                             <span class="results-msg" fxFlex="50"

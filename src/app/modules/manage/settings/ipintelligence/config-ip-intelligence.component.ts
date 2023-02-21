@@ -219,6 +219,9 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     this.blackList.showViewSearch = true;
     this.ipIntelligenceService.getBWList('blacklist', search.page, search.pageSize, search.ip)
       .subscribe(x => {
+        x.items.forEach(y => {
+          y.insertDate = UtilService.dateFormatToLocale(y.insertDate ? new Date(y.insertDate) : new Date())
+        })
         this.blackList.searchData = x;
 
       })
@@ -232,6 +235,9 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     this.whiteList.showViewSearch = true;
     this.ipIntelligenceService.getBWList('whitelist', search.page, search.pageSize, search.ip)
       .subscribe(x => {
+        x.items.forEach(y => {
+          y.insertDate = UtilService.dateFormatToLocale(y.insertDate ? new Date(y.insertDate) : new Date())
+        })
         this.whiteList.searchData = x;
 
       })
@@ -275,6 +281,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
       if (index >= 0)
         this.sources.splice(index, 1);
       y.objId = y.objId;
+      y.insertDate = UtilService.dateFormatToLocale(y.insertDate ? new Date(y.insertDate) : new Date())
       this.sources.push(y);
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })

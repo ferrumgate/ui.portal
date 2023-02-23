@@ -21,6 +21,8 @@ import { TranslationService } from '../../../shared/services/translation.service
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { PolicyAuthnService } from 'src/app/modules/shared/services/policyAuthn.service';
 import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
+import { Country } from 'src/app/modules/shared/models/country';
+import { DataService } from 'src/app/modules/shared/services/data.service';
 
 
 
@@ -42,6 +44,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   users: User2[] = [];
   groups: Group[] = [];
+
   performance: {
     users: Map<string, User2>,
     groups: Map<string, Group>,
@@ -54,6 +57,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     network: { id: '' } as any, rules: [], isExpanded: false
   }]
   policyAuthn: AuthenticationPolicy = { rules: [] } as any;
+  countryList: Country[] = [];
   helpLink = '';
   isThemeDark = false;
   searchKey = '';
@@ -65,7 +69,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     private networkService: NetworkService,
     private userService: UserService,
     private groupService: GroupService,
-    private policyAuthnService: PolicyAuthnService
+    private policyAuthnService: PolicyAuthnService,
+    private dataService: DataService
 
   ) {
 
@@ -186,7 +191,11 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
 
 
   getAllData() {
-    return this.networkService.get2().pipe(
+    return this.dataService.getCountry().pipe(
+      map(y => {
+        this.countryList = y.items.sort((a, b) => a.name.localeCompare(b.name)) as any;
+      }),
+      switchMap(y => this.networkService.get2()),
       map(y => {
         this.networks = y.items as any;
         this.performance.networks = new Map();
@@ -209,8 +218,6 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         this.policyAuthn = z;
         this.fillPolicy('');
       })
-
-
     )
 
   }
@@ -225,7 +232,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     })
     this.policyAuthn.rules.forEach(x => {
       if (!x.objId)
-        x.objId = UtilService.randomNumberString()
+        x.objId = UtilService.randomNumberString();
     })
     if (!search) {
       this.networks.forEach(net => {
@@ -276,7 +283,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
 
     this.policies.find(x => x.network.id == net.id)?.rules.unshift({
       id: '', objId: UtilService.randomNumberString(), name: '', networkId: net.id, profile: {
-        is2FA: false
+        is2FA: false, ipIntelligence: { isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true }
       }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true, action: 'allow'
     })
   }

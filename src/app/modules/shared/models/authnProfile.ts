@@ -7,6 +7,22 @@ export function cloneIpProfile(p: IpProfile): IpProfile {
         ip: p.ip
     }
 }
+export interface IpIntelligenceProfile {
+    isWhiteList: boolean;
+    isBlackList: boolean;
+    isProxy: boolean;
+    isHosting: boolean;
+    isCrawler: boolean;
+}
+export function cloneIpIntelligenceProfile(p: IpIntelligenceProfile): IpIntelligenceProfile {
+    return {
+        isWhiteList: p.isWhiteList,
+        isBlackList: p.isBlackList,
+        isCrawler: p.isCrawler,
+        isHosting: p.isHosting,
+        isProxy: p.isProxy
+    }
+}
 
 export interface DayProfile {
     day: number;
@@ -20,12 +36,12 @@ export function cloneDayProfile(p: DayProfile): DayProfile {
     }
 }
 export interface LocationProfile {
-    loc: string;
+    country: string;
 }
 
 export function cloneLocationProfile(p: LocationProfile): LocationProfile {
     return {
-        loc: p.loc
+        country: p.country
     }
 }
 
@@ -161,6 +177,7 @@ export interface AuthenticationProfile {
     app?: AppVersion;
     is2FA?: boolean;
     ips?: IpProfile[];
+    ipIntelligence?: IpIntelligenceProfile;
     days?: DayProfile[];
     locations?: LocationProfile[];
     devices?: DeviceProfile[];
@@ -173,6 +190,7 @@ export function cloneAuthenticationProfile(pr: AuthenticationProfile): Authentic
         is2FA: pr.is2FA,
         app: pr.app ? { version: pr.app?.version } : undefined,
         ips: pr.ips ? Array.from(pr.ips.map(x => cloneIpProfile(x))) : undefined,
+        ipIntelligence: pr.ipIntelligence ? cloneIpIntelligenceProfile(pr.ipIntelligence) : undefined,
         days: pr.days ? Array.from(pr.days.map(x => cloneDayProfile(x))) : undefined,
         locations: pr.locations ? Array.from(pr.locations.map(x => cloneLocationProfile(x))) : undefined,
         devices: pr.devices ? Array.from(pr.devices.map(x => cloneDeviceProfile(x))) : undefined

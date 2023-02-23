@@ -2,13 +2,15 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatSelect } from '@angular/material/select';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import validator from 'validator';
 import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticationProfile, IpProfile } from '../../models/authnProfile';
+import { cloneAuthenticationProfile, IpIntelligenceProfile, IpProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
+import { Country } from '../../models/country';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
@@ -39,6 +41,8 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
   helpLink = '';
+
+  selectedTab = 0;
 
 
   _model: AuthenticationRuleExtended =
@@ -78,6 +82,30 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return this.rule.action != 'allow' ? 'deny' : ''
   }
 
+
+  countryMap = new Map();
+  //country list
+  /** list of country */
+  @Input()
+  public set countryList(val: Country[]) {
+
+    this.countryMap = new Map();
+    val.forEach(x => {
+      this.countryMap.set(x.isoCode, x);
+    })
+    this._countryListAll = val;
+    // set initial selection
+    this.countryMultiCtrl.setValue([]);
+
+    // load the initial country list
+    this.filteredCountryListMulti.next(this._countryListAll.slice());
+  }
+
+
+  public get countryList() {
+    return this._countryListAll;
+  }
+
   @Input()
   networks: Network[] = [];
 
@@ -95,7 +123,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     }
 
+
     this.prepareAutoCompletes();
+    this.prepareAutoCompleteCountry();
     this.formGroup = this.createFormGroup(this._model);
 
   }
@@ -107,8 +137,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   deleteAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
 
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string, } = { name: '' }
   filteredServices: Observable<Service[]> = of();
@@ -117,6 +145,36 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   userorGroupControl = new FormControl();
+
+
+
+
+  private _countryListAll: Country[] = [];
+
+  /** control for the selected country for multi-selection */
+  public countryMultiCtrl: FormControl = new FormControl([]);
+
+  /** control for the MatSelect filter keyword multi-selection */
+  public countryMultiFilterCtrl: FormControl = new FormControl('');
+
+  /** list of country filtered by search keyword */
+  public filteredCountryListMulti: ReplaySubject<Country[]> = new ReplaySubject<Country[]>(1);
+
+  /** local copy of filtered country to help set the toggle all checkbox state */
+  protected filteredCountryListCache: Country[] = [];
+  isCountryListIndeterminate = false;
+  isCountryListChecked = false;
+  @ViewChild('multiSelect', { static: true }) multiSelect!: MatSelect;
+  /** list of country filtered by search keyword */
+
+  protected _onDestroy = new Subject<void>();
+
+  get ipIntelligence(): IpIntelligenceProfile {
+    if (!this._model.profile.ipIntelligence)
+      this._model.profile.ipIntelligence = { isBlackList: false, isCrawler: false, isHosting: false, isProxy: false, isWhiteList: false };
+    return this._model.profile.ipIntelligence as IpIntelligenceProfile;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private configService: ConfigService,
@@ -128,6 +186,8 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         this.isThemeDark = x == 'dark';
 
       })
+
+
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.policyAuthnHelp;
@@ -138,10 +198,17 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this.prepareAutoCompletes();
 
 
+
+  }
+  ngAfterViewInit() {
+    this.setInitialValue();
   }
   ngOnDestroy(): void {
+    this._onDestroy.next();
+    this._onDestroy.complete();
     this.allSub.unsubscribe();
   }
+
 
   openHelp() {
     if (this.helpLink) {
@@ -185,6 +252,50 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
   }
+  prepareAutoCompleteCountry() {
+    // set initial selection
+    let selectedCountryList: Country[] = [];
+    for (const loc of this.rule.profile.locations || []) {
+      const country = this.countryMap.get(loc.country);
+      if (country)
+        selectedCountryList.push(UtilService.clone(country));
+    }
+
+    this.countryMultiCtrl.setValue(selectedCountryList);
+
+    // load the initial country list
+    this.filteredCountryListMulti.next(this._countryListAll.slice());
+
+    // listen for search field value changes
+    this.allSub.addThis =
+      this.countryMultiFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+
+          this.filterCountryListMulti();
+          this.setToggleAllCheckboxStateCountryList();
+        });
+
+    // listen for multi select field value changes
+    this.allSub.addThis =
+      this.countryMultiCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy)).subscribe(() => {
+
+          this.setToggleAllCheckboxStateCountryList();
+          this.prepareCountryList();
+        });
+  }
+
+  prepareCountryList() {
+    this._model.profile.locations = (this.countryMultiCtrl.value as Country[]).map(x => {
+      return {
+        country: x.isoCode
+      }
+    })
+    this.modelChanged();
+
+  }
+
 
 
 
@@ -288,6 +399,18 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (original.profile.is2FA != this.rule.profile.is2FA)
       this.rule.isChanged = true;
     if (UtilService.checkChanged(original.profile.ips?.map(x => x.ip), this.rule.profile.ips?.map(x => x.ip)))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isBlackList, this.rule.profile.ipIntelligence?.isBlackList))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isWhiteList, this.rule.profile.ipIntelligence?.isWhiteList))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isCrawler, this.rule.profile.ipIntelligence?.isCrawler))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isHosting, this.rule.profile.ipIntelligence?.isHosting))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isProxy, this.rule.profile.ipIntelligence?.isProxy))
+      this.rule.isChanged = true;
+    if (UtilService.checkChanged(original.profile.locations?.map(x => x.country), this.rule.profile.locations?.map(x => x.country)))
       this.rule.isChanged = true;
 
 
@@ -411,6 +534,66 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.checkIfModelChanged();
 
+  }
+
+
+
+  toggleSelectAllCountryList(selectAllValue: boolean) {
+    this.filteredCountryListMulti.pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(val => {
+        if (selectAllValue) {
+          this.countryMultiCtrl.patchValue(val);
+        } else {
+          this.countryMultiCtrl.patchValue([]);
+        }
+      });
+  }
+
+  /**
+  * Sets the initial value after the filteredCountrys are loaded initially
+  */
+  protected setInitialValue() {
+    this.filteredCountryListMulti
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        // setting the compareWith property to a comparison function
+        // triggers initializing the selection according to the initial value of
+        // the form control (i.e. _initializeSelection())
+        // this needs to be done after the filteredCountrys are loaded initially
+        // and after the mat-option elements are available
+        this.multiSelect.compareWith = (a: Country, b: Country) => a && b && a.name === b.name;
+      });
+  }
+
+  protected filterCountryListMulti() {
+    if (!this._countryListAll) {
+      return;
+    }
+    // get the search keyword
+    let search = this.countryMultiFilterCtrl.value;
+    if (!search) {
+      this.filteredCountryListCache = this._countryListAll.slice();
+      this.filteredCountryListMulti.next(this.filteredCountryListCache);
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the countrys
+    this.filteredCountryListCache = this._countryListAll.filter(country => country.name.toLowerCase().indexOf(search) > -1);
+    this.filteredCountryListMulti.next(this.filteredCountryListCache);
+  }
+
+  protected setToggleAllCheckboxStateCountryList() {
+    let filteredLength = 0;
+    if (this.countryMultiCtrl && this.countryMultiCtrl.value) {
+      this.filteredCountryListCache.forEach(el => {
+        if (this.countryMultiCtrl.value.indexOf(el) > -1) {
+          filteredLength++;
+        }
+      });
+      this.isCountryListIndeterminate = filteredLength > 0 && filteredLength < this.filteredCountryListCache.length;
+      this.isCountryListChecked = filteredLength > 0 && filteredLength === this.filteredCountryListCache.length;
+    }
   }
 
 

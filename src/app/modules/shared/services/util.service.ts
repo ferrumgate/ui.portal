@@ -33,6 +33,9 @@ export class UtilService {
         }
         return false;
     }
+    static checkUndefinedBoolean(source?: boolean, target?: boolean) {
+        return Boolean(source) == Boolean(target) ? false : true;
+    }
 
     static dateFormatDD(date: Date | number) {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

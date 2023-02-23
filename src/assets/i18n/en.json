@@ -366,5 +366,20 @@
     "SomethingWentWrong": "Something went wrong",
     "ApiProvider": "Api provider",
     "ApiKeyHint": "Access key for api",
-    "ApiKeyRequired": "Api key required"
+    "ApiKeyRequired": "Api key required",
+    "CustomWhiteList": "Custom white list",
+    "IsIpIntelligenceWhiteListEnabled": "Ip intelligence white list enabled",
+    "IsIpIntelligenceBlackListEnabled": "Ip intelligence black list enabled",
+    "IsProxyIp": "VPN, tor, web proxy enabled",
+    "IsHostingIp": "Hosting enabled",
+    "IsCrawlerIp": "Crawler enabled",
+    "FindCountry": "Find country",
+    "NoMatchingCountryFound": "No matching country found",
+    "IpCountryListHint": "If empty allow all, otherwise only matched countries allow",
+    "IpCountryListDefinition": "Allow country list",
+    "Country": "Country",
+    "AllowImmediately": "Allow immediately",
+    "AllowImmediatelyHint": "If any IP matches, allow immediately, don't go to 2 and 3",
+    "DenyImmediately": "Deny immediately",
+    "DenyImmediatelyHint": "If any IP matches, deny immediately, don't go to 3"
 }

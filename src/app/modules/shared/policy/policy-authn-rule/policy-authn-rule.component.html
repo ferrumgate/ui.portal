@@ -61,7 +61,7 @@
                 </span>
                 <mat-divider></mat-divider>
                 <form test-id="policy-authn-rule-form" [formGroup]="formGroup">
-                    <mat-tab-group #tabGroup="matTabGroup">
+                    <mat-tab-group #tabGroup [(selectedIndex)]="selectedTab">
                         <mat-tab label="{{'Common'|translate}}">
 
                             <div fxFlex fxLayout="column">
@@ -74,7 +74,7 @@
                                     </mat-form-field>
 
                                 </p>
-                                <p class="policy-authn-rule-column policy-authn-rule-item">
+                                <p class="policy-authn-rule-column">
 
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"UsersOrGroups"|translate}}</mat-label>
@@ -134,41 +134,121 @@
                                 </p>
                             </div>
                         </mat-tab>
-                        <mat-tab test-id="policy-authn-tab-ips" label="{{'Ips'|translate}}">
+                        <mat-tab label="{{'Ips'|translate}}">
 
-                            <div fxFlex fxLayout="column">
+                            <div test-id="policy-authn-tab-ips" fxFlex fxLayout="row wrap">
 
-                                <p class="policy-authn-rule-column policy-authn-rule-item">
+                                <div class="ips-group policy-authn-ips-direct-allow">
+                                    <div class="ips-header">
+                                        <mat-label matBadge="1"
+                                            matBadgeOverlap="false">{{'AllowImmediately'|translate|titlecase}}</mat-label>
+                                        <div></div>
+                                        <mat-hint
+                                            class="ips-header-hint">{{'AllowImmediatelyHint'|translate}}</mat-hint>
+                                    </div>
+                                    <p class="policy-authn-rule-column policy-authn-rule-item">
 
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"IpsOrNewtork"|translate}}</mat-label>
-                                        <mat-chip-list #chipListIp>
-                                            <mat-chip test-id="policy-authn-rule-ip-chip"
-                                                *ngFor="let ip of rule.profile?.ips || []"
-                                                (removed)="removeIpOrCidr(ip)">
-                                                {{ip.ip}}
-                                                <button matChipRemove>
-                                                    <mat-icon>cancel</mat-icon>
-                                                </button>
-                                            </mat-chip>
-                                            <input placeholder="{{'NewIpOrNetwork' |translate}}"
-                                                [matChipInputFor]="chipListIp"
-                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                [matChipInputAddOnBlur]="addOnBlur"
-                                                (matChipInputTokenEnd)="addIpOrCidr($event)">
-                                        </mat-chip-list>
-                                        <mat-hint>{{"IpOrNewtorkHint"|translate}}</mat-hint>
-                                    </mat-form-field>
-                                </p>
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"CustomWhiteList"|translate}}</mat-label>
+                                            <mat-chip-list #chipListIp>
+                                                <mat-chip test-id="policy-authn-rule-ip-chip"
+                                                    *ngFor="let ip of rule.profile?.ips || []"
+                                                    (removed)="removeIpOrCidr(ip)">
+                                                    {{ip.ip}}
+                                                    <button matChipRemove>
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+                                                </mat-chip>
+                                                <input placeholder="{{'NewIpOrNetwork' |translate}}"
+                                                    [matChipInputFor]="chipListIp"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="addIpOrCidr($event)">
+                                            </mat-chip-list>
+                                            <mat-hint>{{"IpOrNewtorkHint"|translate}}</mat-hint>
+                                        </mat-form-field>
+                                    </p>
+                                    <p>
+                                        <mat-checkbox test-id="policy-authn-rule-ip-iswhitelist-enabled"
+                                            [(ngModel)]="ipIntelligence.isWhiteList"
+                                            [ngModelOptions]="{standalone:true}" [checked]="ipIntelligence.isWhiteList"
+                                            (ngModelChange)="modelChanged()">
+                                            {{"IsIpIntelligenceWhiteListEnabled"|translate}}</mat-checkbox>
 
+                                    </p>
+
+                                </div>
+
+                                <div class="ips-group policy-authn-ips-direct-deny">
+                                    <div class="ips-header">
+                                        <mat-label matBadge="2"
+                                            matBadgeOverlap="false">{{'DenyImmediately'|translate|titlecase}}</mat-label>
+                                        <div></div>
+                                        <mat-hint class="ips-header-hint">{{'DenyImmediatelyHint'|translate}}</mat-hint>
+                                    </div>
+                                    <p class="direct-deny-item">
+                                        <mat-checkbox test-id="policy-authn-rule-ip-isblacklist-enabled"
+                                            [(ngModel)]="ipIntelligence.isBlackList"
+                                            [ngModelOptions]="{standalone:true}" [checked]="ipIntelligence.isBlackList"
+                                            (ngModelChange)="modelChanged()">
+                                            {{"IsIpIntelligenceBlackListEnabled"|translate}}</mat-checkbox>
+
+                                    </p>
+                                    <p class="direct-deny-item">
+                                        <mat-checkbox test-id="policy-authn-rule-ip-isproxy-enabled"
+                                            [(ngModel)]="ipIntelligence.isProxy" [ngModelOptions]="{standalone:true}"
+                                            [checked]="ipIntelligence.isProxy" (ngModelChange)="modelChanged()">
+                                            {{"IsProxyIp"|translate}}</mat-checkbox>
+
+                                    </p>
+                                    <p class="direct-deny-item">
+                                        <mat-checkbox test-id="policy-authn-rule-ip-ishosting-enabled"
+                                            [(ngModel)]="ipIntelligence.isHosting" [ngModelOptions]="{standalone:true}"
+                                            [checked]="ipIntelligence.isHosting" (ngModelChange)="modelChanged()">
+                                            {{"IsHostingIp"|translate}}</mat-checkbox>
+
+                                    </p>
+                                    <p class="direct-deny-item">
+                                        <mat-checkbox test-id="policy-authn-rule-ip-iscrawler-enabled"
+                                            [(ngModel)]="ipIntelligence.isCrawler" [ngModelOptions]="{standalone:true}"
+                                            [checked]="ipIntelligence.isCrawler" (ngModelChange)="modelChanged()">
+                                            {{"IsCrawlerIp"|translate}}</mat-checkbox>
+
+                                    </p>
+
+                                </div>
+
+                                <div class="ips-group policy-authn-ips-allow-country">
+                                    <div class="ips-header">
+                                        <mat-label matBadge="3"
+                                            matBadgeOverlap="false">{{'IpCountryListDefinition'|translate|titlecase}}</mat-label>
+                                        <div></div>
+                                        <mat-hint class="ips-header-hint">{{'IpCountryListHint'|translate}}</mat-hint>
+                                    </div>
+                                    <p class="direct-deny-item">
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"Country"|translate}}</mat-label>
+                                            <mat-select [formControl]="countryMultiCtrl" [multiple]="true" #multiSelect>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="countryMultiFilterCtrl"
+                                                        [showToggleAllCheckbox]="true"
+                                                        [toggleAllCheckboxIndeterminate]="isCountryListIndeterminate"
+                                                        [toggleAllCheckboxChecked]="isCountryListChecked"
+                                                        (toggleAll)="toggleSelectAllCountryList($event)"
+                                                        placeholderLabel="{{'FindCountry'|translate}}..."
+                                                        noEntriesFoundLabel="{{'NoMatchingCountryFound'|translate}}"></ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option test-id="policy-authn-rule-ip-country-options"
+                                                    *ngFor="let country of filteredCountryListMulti | async"
+                                                    [value]="country">{{country.name}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </p>
+                                </div>
                             </div>
                         </mat-tab>
 
                     </mat-tab-group>
-
-
-
-
                 </form>
 
 

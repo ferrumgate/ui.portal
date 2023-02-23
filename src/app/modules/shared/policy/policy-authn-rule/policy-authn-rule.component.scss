@@ -65,9 +65,7 @@
 
 
 
-.policy-authn-rule .policy-authn-rule-item {
-    min-width: 500px;
-}
+.policy-authn-rule .policy-authn-rule-item {}
 
 
 .policy-authn-rule .policy-authn-rule-header-actions {
@@ -92,4 +90,33 @@
 .policy-authn-rule .reorder {
     cursor: move;
     color: #ccc;
+}
+
+.policy-authn-rule .ips-header {
+    padding-top: 20px;
+    //padding-left: 10px;
+    padding-bottom: 20px;
+    padding-right: 10px;
+
+}
+
+.policy-authn-rule .ips-header-hint {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}
+
+.policy-authn-rule .ips-group {
+    border-width: 1px;
+    border-style: groove;
+    padding-top: 20px;
+    padding-left: 10px;
+    margin: 5px;
+    min-width: 400px;
+}
+
+.policy-authn-rule .direct-deny-item {
+
+    //padding-top: 10px;
+
 }

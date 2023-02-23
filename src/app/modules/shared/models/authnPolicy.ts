@@ -13,6 +13,7 @@ export interface AuthenticationRule {
     action: 'allow' | 'deny';
     [key: string]: any;
 
+
 }
 export function cloneAuthenticationRule(val: AuthenticationRule): AuthenticationRule {
     return {

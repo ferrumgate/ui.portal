@@ -1,6 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelect } from '@angular/material/select';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -8,12 +9,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import validator from 'validator';
 import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticationProfile, IpIntelligenceProfile, IpProfile } from '../../models/authnProfile';
+import { cloneAuthenticationProfile, cloneTimeProfile, IpIntelligenceProfile, IpProfile, TimeProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
 import { Country } from '../../models/country';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
+import { TimeZone } from '../../models/timezone';
 import { User2 } from '../../models/user';
 import { ConfigService } from '../../services/config.service';
 import { InputService } from '../../services/input.service';
@@ -38,6 +40,7 @@ export interface AuthenticationRuleExtended extends AuthenticationRule {
   styleUrls: ['./policy-authn-rule.component.scss']
 })
 export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
+
 
   allSub = new SSubscription();
   helpLink = '';
@@ -123,6 +126,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     }
 
+    this.calculatesTimeProfiles(this._model.profile.times);
 
     this.prepareAutoCompletes();
     this.prepareAutoCompleteCountry();
@@ -194,6 +198,19 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   }
 
+
+
+  _timezoneList: TimeZone[] = [];
+  @Input()
+  public set timezoneList(vals: TimeZone[]) {
+    this._timezoneList = vals;
+
+  }
+
+  public get timezoneList() {
+    return this._timezoneList;
+  }
+
   ngOnInit(): void {
     this.prepareAutoCompletes();
 
@@ -228,6 +245,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     users.sort(this.simpleUsernameSort);
     return groups.concat(users);
   }
+
   prepareAutoCompletes() {
 
 
@@ -248,8 +266,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
           this.filteredGroups = this.groups.sort(this.simpleNameSort);
         }
       })
-
-
 
   }
   prepareAutoCompleteCountry() {
@@ -286,6 +302,8 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         });
   }
 
+
+
   prepareCountryList() {
     this._model.profile.locations = (this.countryMultiCtrl.value as Country[]).map(x => {
       return {
@@ -295,8 +313,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this.modelChanged();
 
   }
-
-
 
 
   displayServiceFn(net: Service | string) {
@@ -413,6 +429,12 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (UtilService.checkChanged(original.profile.locations?.map(x => x.country), this.rule.profile.locations?.map(x => x.country)))
       this.rule.isChanged = true;
 
+    if (UtilService.checkChanged(
+      original.profile.times?.map(x => this.calculateTimeProfileName(x)),
+      this.rule.profile.times?.map(x => this.calculateTimeProfileName(x))))
+      this.rule.isChanged = true;
+
+
 
   }
 
@@ -479,9 +501,41 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
 
   getExplanationIps() {
+
+    const whitelist = []
     if (this.rule.profile.ips?.length)
-      return `${this.rule.profile.ips.map(x => x.ip).join(', ')}`;
-    else return `all ips`
+      whitelist.push(`ip is in ${this.rule.profile.ips.map(x => x.ip).join(', ')}`);
+    if (this.rule.profile.ipIntelligence?.isWhiteList)
+      whitelist.push('ip is in whitelist');
+    if (this.rule.profile.locations?.length)
+      whitelist.push(`ip from ${this.rule.profile.locations.slice(0, 3).map(x => x.country).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
+
+
+    const blacklist = [];
+    if (this.rule.profile.ipIntelligence?.isBlackList)
+      blacklist.push(`in blacklist`);
+    if (this.rule.profile.ipIntelligence?.isProxy)
+      blacklist.push(`from a proxy`);
+    if (this.rule.profile.ipIntelligence?.isCrawler)
+      blacklist.push(`from a crawler`);
+    if (this.rule.profile.ipIntelligence?.isHosting)
+      blacklist.push(`from a hosting`);
+
+    if (!whitelist.length && !blacklist.length)
+      return `all ips`;
+
+    let result = whitelist.join(' or ');
+    if (blacklist.length)
+      result += (whitelist.length ? ' or ' : '') + ` ip not ` + blacklist.join(' or ');
+
+    return result;
+  }
+
+  getExplanationTimes() {
+
+    if (this.rule.profile.times?.length)
+      return `time is in ${this.rule.profile.times.slice(0, 3).map(x => x.timezone).join(' or ') + `${this.rule.profile.times.length > 3 ? ' ...' : ''}`}`
+    return ``;
   }
 
 
@@ -509,7 +563,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
   addIpOrCidr(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    let value = (event.value || '').trim();
 
     // Add our fruit
     if (value) {
@@ -517,13 +571,19 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       if (!isExits) {
         if (!this.rule.profile.ips)
           this.rule.profile.ips = [];
-        if (validator.isIP(value) || validator.isIPRange(value))
+        if (validator.isIP(value)) {
+          if (validator.isIP(value, 4))
+            value += '/32';
+          else
+            value += '/128';
+        }
+        if (validator.isIPRange(value))
           this.rule.profile.ips.push({ ip: value });
       }
     }
 
     // Clear the input value
-    if (validator.isIP(value) || validator.isIPRange(value))
+    if (validator.isIPRange(value))
       event.chipInput!.clear();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -596,10 +656,92 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
   }
 
+  showAddTime = false;
+  showHideAddTime() {
+    this.showAddTime = !this.showAddTime;
+  }
 
+  minuteToHour(m: number) {
+    const hour = Math.ceil(m / 60);
+    const minute = m - hour * 60;
+    let hourStr = hour < 10 ? `0${hour}` : `${hour}`;
+    let minuteStr = minute < 10 ? `0${minute}` : `${minute}`;
+    return hourStr + ':' + minuteStr;
+  }
 
+  calculateTimeProfileName(pf: TimeProfile) {
+    const days = pf.days.sort((a, b) => a - b);
+    let day = '';
+    days.forEach(x => {
+      switch (x) {
+        case 0:
+          day += 'S ';
+          break;
+        case 1:
+          day += 'M ';
+          break;
+        case 2:
+          day += 'T ';
+          break;
+        case 3:
+          day += 'W ';
+          break;
+        case 4:
+          day += 'TH ';
+          break;
+        case 5:
+          day += 'F ';
+          break;
+        case 6:
+          day += 'SA ';
+          break;
+        default:
+          break;
+      }
+    })
+    let start = '00:00';
+    let end = '23:59';
+    if (pf.startTime)
+      start = this.minuteToHour(pf.startTime);
+    if (pf.endTime)
+      end = this.minuteToHour(pf.endTime);
+    const txt = `${pf.timezone} ${day} ${start} - ${end}`;
+    return txt;
+  }
+
+  calculatesTimeProfiles(times?: TimeProfile[]) {
+    if (!times)
+      return;
+    times.forEach(x => {
+      x.name = this.calculateTimeProfileName(x);
+      x.objId = UtilService.randomNumberString();
+    })
+  }
+
+  removeTimeProfile(objId: string) {
+    if (this.rule.profile.times) {
+      const index = this.rule.profile.times?.findIndex(x => x.objId == objId)
+      if (index > -1) {
+        this.rule.profile.times?.splice(index, 1);
+      }
+    }
+    this.modelChanged();
+  }
+
+  addTimeProfile(event: TimeProfile) {
+    const cloned = cloneTimeProfile(event);
+    if (!this.rule.profile.times)
+      this.rule.profile.times = [];
+    cloned.name = this.calculateTimeProfileName(cloned);
+    cloned.objId = UtilService.randomNumberString();
+    if (!this.rule.profile.times.find(x => x.name == cloned.name))
+      this.rule.profile.times.push(cloned);
+    this.modelChanged();
+  }
 
 
 
 
 }
+
+

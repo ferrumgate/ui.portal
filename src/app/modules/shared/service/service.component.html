@@ -60,7 +60,7 @@
                                 <mat-label>{{"Network"|translate}}</mat-label>
                                 <input type="text" test-id="service-network-input"
                                     placeholder="{{'SelectANetwork'|translate}}" matInput formControlName="networkName"
-                                    [matAutocomplete]="auto">
+                                    [matAutocomplete]="auto" (ngModelChange)="searchNetwork($event)">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
                                     [displayWith]="displayFn">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">

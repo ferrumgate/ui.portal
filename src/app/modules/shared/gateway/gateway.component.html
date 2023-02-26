@@ -57,7 +57,7 @@
                                 <input type="text" test-id="gateway-input-network"
                                     placeholder="{{'SelectANetwork'|translate}}" matInput
                                     [ngModel]="gateway.networkName" [ngModelOptions]="{standalone:true}"
-                                    [matAutocomplete]="auto">
+                                    [matAutocomplete]="auto" (ngModelChange)="searchNetwork($event)">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
                                     [displayWith]="displayFn">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">

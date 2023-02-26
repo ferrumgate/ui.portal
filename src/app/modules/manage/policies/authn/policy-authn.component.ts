@@ -23,6 +23,7 @@ import { PolicyAuthnService } from 'src/app/modules/shared/services/policyAuthn.
 import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
 import { Country } from 'src/app/modules/shared/models/country';
 import { DataService } from 'src/app/modules/shared/services/data.service';
+import { TimeZone } from 'src/app/modules/shared/models/timezone';
 
 
 
@@ -61,6 +62,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   helpLink = '';
   isThemeDark = false;
   searchKey = '';
+  timezoneList: TimeZone[] = [];
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -188,12 +190,30 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');
   }
-
+  offsetToHour(offset: number) {
+    const absOffset = Math.abs(offset);
+    const first = Math.ceil(absOffset / 60);
+    const second = absOffset - (first * 60);
+    let offsetHour = offset < 0 ? '+' : offset == 0 ? '' : '-';
+    offsetHour += first < 10 ? '0' + first : first;
+    offsetHour += ":";
+    offsetHour += second < 10 ? '0' + second : second;
+    return offsetHour;
+  }
 
   getAllData() {
     return this.dataService.getCountry().pipe(
       map(y => {
         this.countryList = y.items.sort((a, b) => a.name.localeCompare(b.name)) as any;
+      }),
+      switchMap(y => this.dataService.getTimeZone()),
+      map(y => {
+        this.timezoneList = y.items.sort((a, b) => a.name.localeCompare(b.name)) as any;
+
+        this.timezoneList.forEach(x => {
+          x.offsetHour = this.offsetToHour(x.offset);
+          x.nameEx = x.name + ' ' + x.offsetHour;
+        })
       }),
       switchMap(y => this.networkService.get2()),
       map(y => {

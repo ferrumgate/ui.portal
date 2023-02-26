@@ -306,6 +306,18 @@ export function click<T>(fixture: ComponentFixture<T>, testId: string): void {
 }
 
 /**
+ * Emulates a left click on the element with the given `test-id` attribute.
+ *
+ * @param fixture Component fixture
+ * @param testId Test id set by `test-id`
+ */
+export function clickByQuery<T>(fixture: ComponentFixture<T>, query: string): void {
+    const element = queryByCss(fixture, query);
+    const event = makeClickEvent(element.nativeElement);
+    element.triggerEventHandler('click', event);
+}
+
+/**
  * Finds a nested Component by its selector, e.g. `app-example`.
  * Throws an error if no element was found.
  * Use this only for shallow component testing.

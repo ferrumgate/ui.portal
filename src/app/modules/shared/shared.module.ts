@@ -34,6 +34,7 @@ import { T2FAComponent } from "./t2fa/t2fa.component";
 import { ChangePassComponent } from "./changepass/changepass.component";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { FileUploadComponent } from "./fileupload/fileupload.component";
+import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/policy-authn-rule-time-add/policy-authn-rule-time-add.component";
 
 
 
@@ -119,6 +120,7 @@ import { FileUploadComponent } from "./fileupload/fileupload.component";
         ServiceComponent,
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
+        PolicyAuthnRuleTimeAddComponent,
         DashboardStatusComponent,
         DashboardChartComponent,
         T2FAComponent,

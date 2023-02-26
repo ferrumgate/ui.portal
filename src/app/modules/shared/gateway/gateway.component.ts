@@ -108,16 +108,7 @@ export class GatewayComponent implements OnInit, OnDestroy {
     this.allSub.unsubscribe();
   }
   prepareAutoComplete() {
-    this.filteredOptions = of(this.networks).pipe(
-
-      map(data => {
-
-        data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        })
-        return data;
-      })
-    )
+    this.filteredOptions = this.filter('');
   }
 
   openHelp() {
@@ -284,15 +275,31 @@ export class GatewayComponent implements OnInit, OnDestroy {
   }
 
 
-  private filter(name: string): Network[] {
+  private filter(name: string) {
     const filterValue = name.toLowerCase();
-    const filteredItems = this.networks.filter(option => option.id == '' || option.name.toLowerCase().includes(filterValue));
-    return filteredItems;
+    let items = this.networks;
+    if (name)
+      items = items.filter(x => x.name.toLocaleLowerCase().includes(filterValue));
+    return of(items).pipe(
+      map(data => {
 
+        data.sort((a, b) => {
+          return a.name < b.name ? -1 : 1;
+        })
+        return data;
+      })
+    )
   }
   displayFn(net: Network | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || '';
+  }
+
+  searchNetwork(ev: any) {
+    if (typeof (ev) == 'string') {
+      this.filteredOptions = this.filter(ev);
+    }
+
   }
 
 

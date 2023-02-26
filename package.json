@@ -30,6 +30,7 @@
     "angularx-qrcode": "^13.0.15",
     "apexcharts": "^3.36.3",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
     "ng-apexcharts": "^1.7.4",
     "ng-recaptcha": "^9.0.0",
     "ngx-mat-select-search": "^5.0.0",

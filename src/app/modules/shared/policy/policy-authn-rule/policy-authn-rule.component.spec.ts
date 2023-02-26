@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { GroupComponent } from '../../group/group.component';
-import { dispatchFakeEvent, expectValue, findEl, findEls, getCheckValue, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
+import { click, dispatchFakeEvent, expectValue, findEl, findEls, getCheckValue, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
 import { AuthenticationPolicy, AuthenticationRule } from '../../models/authnPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
@@ -312,7 +312,7 @@ describe('PolicyAuthnRuleComponent', () => {
   }));
 
 
-  it('data binding second tab first country list', fakeAsync(async () => {
+  it('data binding country list', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
 
@@ -353,6 +353,79 @@ describe('PolicyAuthnRuleComponent', () => {
     //const selectedCountryList = findEls(fixture, 'policy-authn-rule-ip-country-options');
     //expect(selectedCountryList.length).toEqual(1);
     expect(component.countryMultiCtrl.value.length).toEqual(1);
+
+
+  }));
+
+
+
+  it('data binding time tab', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+
+    //component.tabs.selectedIndex = 1;
+    component.selectedTab = 2;
+
+    tick(1000);
+    fixture.detectChanges();
+    const rule2: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: {
+        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        ipIntelligence: {
+          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+        }, locations: [
+          { country: countries[1].isoCode }
+        ],
+        times: [
+          { days: [0, 1, 2], timezone: 'Africa', endTime: 1200, startTime: 10 }
+        ]
+      },
+      userOrgroupIds: [group.id], isExpanded: true,
+
+
+      action: 'allow'
+
+    }
+
+    component.users = [];
+    component.groups = groups;
+    component.networks = networks;
+    component.countryList = countries;
+    component.rule = rule2
+
+    tick(1000);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    //debugger;
+    const selectedTimeProfiles = findEls(fixture, 'policy-authn-rule-time-chip');
+    expect(selectedTimeProfiles.length).toEqual(1);
+
+    const addUI = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI).toBeFalsy();
+
+    // open add ui 
+    click(fixture, 'policy-authn-rule-time-add-button');
+    fixture.detectChanges();
+    const addUI2 = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI2).toBeTruthy();
+
+    // close add ui 
+    click(fixture, 'policy-authn-rule-time-add-button');
+    fixture.detectChanges();
+
+    const addUI3 = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI3).toBeFalsy();
+
+    //add new profile
+    component.addTimeProfile({ days: [0, 1], timezone: 'Africa' });
+    fixture.detectChanges();
+    const selectedTimeProfiles2 = findEls(fixture, 'policy-authn-rule-time-chip');
+    expect(selectedTimeProfiles2.length).toEqual(2);
+
+
 
 
   }));

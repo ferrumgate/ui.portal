@@ -1,7 +1,7 @@
 <div [ngClass]="isThemeDark?'theme-dark':''">
     <div class="policy-authn-rule">
         <mat-accordion test-id="policy-authn-rule-accordion">
-            <mat-expansion-panel [expanded]="rule.isExpanded">
+            <mat-expansion-panel [expanded]="rule.isExpanded||true">
                 <mat-expansion-panel-header [ngClass]="titleClass">
                     <mat-panel-title test-id="policy-authn-rule-title">
                         <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">
@@ -30,7 +30,8 @@
 
                 </mat-expansion-panel-header>
                 <mat-divider></mat-divider>
-                <span test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+                <div test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+
                     <p class="explanation-bold">
                         {{rule.name}} {{rule.isEnabled?'':'(is not enabled)'}}
                     </p>
@@ -46,25 +47,45 @@
                         <span *ngIf="!rule.userOrGroups.length">all users and groups</span>
 
                     </p>
-                    <p class="explanation-item" *ngIf="rule.profile.is2FA">
-                        and accessed with <span class="explanation-bold">2FA,</span>
+                    <p class="explanation-item" *ngIf="rule.profile.is2FA">and accessed with <span
+                            class="explanation-bold">2FA,</span>
                     </p>
-                    <p class="explanation-item" *ngIf="rule.profile.ips?.length">
-                        and accessed from <span class="explanation-bold">{{getExplanationIps()}},</span>
+                </div>
+                <div test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+
+                    <p class=""
+                        *ngIf="rule.profile.ips?.length|| rule.profile.locations?.length || rule.profile.times?.length">
+                        and
+                    </p>
+                    <p class="explanation-item"
+                        *ngIf="rule.profile.ips?.length|| rule.profile.locations?.length || rule.profile.times?.length">
+                        accessed from <span class="explanation-bold">{{getExplanationIps()}},</span>
+                    </p>
+
+                </div>
+                <div test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+
+                    <p class="" *ngIf="rule.profile.times?.length">
+                        and
+                    </p>
+                    <p class="explanation-item" *ngIf="rule.profile.times?.length">
+                        accessed <span class="explanation-bold">{{getExplanationTimes()}},</span>
+                    </p>
+                    <p>
+                        will
                     </p>
                     <p class="explanation-item">
-                        will be
+                        be
                         <span class="explanation-bold" *ngIf="rule.action==='allow'">allowed</span>
                         <span class="explanation-bold" *ngIf="rule.action!=='allow'">denied</span>
                     </p>
-
-                </span>
+                </div>
                 <mat-divider></mat-divider>
                 <form test-id="policy-authn-rule-form" [formGroup]="formGroup">
                     <mat-tab-group #tabGroup [(selectedIndex)]="selectedTab">
                         <mat-tab label="{{'Common'|translate}}">
 
-                            <div fxFlex fxLayout="column">
+                            <div fxFlex fxLayout="column" class="tabpanel">
                                 <p>
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Name"|translate}}</mat-label>
@@ -136,7 +157,7 @@
                         </mat-tab>
                         <mat-tab label="{{'Ips'|translate}}">
 
-                            <div test-id="policy-authn-tab-ips" fxFlex fxLayout="row wrap">
+                            <div test-id="policy-authn-tab-ips" fxFlex fxLayout="row wrap" class="tabpanel">
 
                                 <div class="ips-group policy-authn-ips-direct-allow">
                                     <div class="ips-header">
@@ -246,6 +267,48 @@
                                     </p>
                                 </div>
                             </div>
+                        </mat-tab>
+
+                        <mat-tab label="{{'Time'|translate}}">
+                            <div test-id="policy-authn-tab-times" fxFlex fxLayout="column" class="tabpanel">
+                                <p class="policy-authn-rule-column" fxFlex>
+
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Times"|translate}}</mat-label>
+                                        <mat-chip-list #chipList2>
+                                            <mat-chip test-id="policy-authn-rule-time-chip"
+                                                *ngFor="let ug of rule.profile.times"
+                                                (removed)="removeTimeProfile(ug.objId)">
+                                                {{ug.name}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <span>
+                                                <button mat-icon-button color="primary" class="add"
+                                                    test-id="policy-authn-rule-time-add-button"
+                                                    (click)="showHideAddTime()">
+                                                    <mat-icon *ngIf="!showAddTime">add</mat-icon>
+                                                    <mat-icon *ngIf="showAddTime">cancel</mat-icon>
+                                                </button>
+                                            </span>
+
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <span *ngIf="showAddTime" fxFlex fxLayout="column" class="add-time"
+                                        test-id="policy-authn-rule-time-add-ui">
+                                        <app-policy-authn-rule-time-add [timezoneList]="timezoneList"
+                                            (add)="addTimeProfile($event)"></app-policy-authn-rule-time-add>
+
+                                    </span>
+                                </p>
+                            </div>
+
+
+
+
                         </mat-tab>
 
                     </mat-tab-group>

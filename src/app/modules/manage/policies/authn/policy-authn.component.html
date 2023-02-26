@@ -26,7 +26,7 @@
             <p class="row policy-authn-item" fxLayout="column" fxFill *ngFor="let pol of policies">
 
                 <mat-accordion test-id="policy-authn-policy">
-                    <mat-expansion-panel [expanded]="pol.isExpanded">
+                    <mat-expansion-panel [expanded]="pol.isExpanded||true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <mat-icon>lan</mat-icon>
@@ -54,8 +54,9 @@
                                 <div class="drag-box" *ngFor="let rule of pol.rules" cdkDrag
                                     [cdkDragDisabled]="isDragDisabled(pol)">
                                     <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks"
-                                        [users]="users" [groups]="groups" [countryList]="countryList" [rule]="rule"
-                                        [dragDisabled]="isDragDisabled(pol)" (deleteAuthnRule)="deleteAuthnRule($event)"
+                                        [users]="users" [groups]="groups" [countryList]="countryList"
+                                        [timezoneList]="timezoneList" [rule]="rule" [dragDisabled]="isDragDisabled(pol)"
+                                        (deleteAuthnRule)="deleteAuthnRule($event)"
                                         (saveAuthnRule)="saveAuthnRule($event)">
                                     </app-policy-authn-rule>
                                 </div>

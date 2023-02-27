@@ -115,7 +115,7 @@ describe('PolicyAuthnRuleComponent', () => {
       networkId: network.id,
       profile: { is2FA: true, ips: [{ ip: '1.2.3.4' }] },
       userOrgroupIds: [group.id], isExpanded: true,
-      action: 'allow'
+
 
     }
 
@@ -152,8 +152,7 @@ describe('PolicyAuthnRuleComponent', () => {
     const testEnabledId = 'policy-authn-rule-checkbox-enabled';
     findEl(fixture, testEnabledId);
 
-    const testActionId = 'policy-auth-rule-toogle-action';
-    findEl(fixture, testActionId);
+
 
     const testIpsTabId = 'policy-authn-tab-ips';
 
@@ -203,7 +202,7 @@ describe('PolicyAuthnRuleComponent', () => {
 
       userOrgroupIds: [group.id], isExpanded: true,
 
-      action: 'allow'
+
 
     }
 
@@ -267,7 +266,7 @@ describe('PolicyAuthnRuleComponent', () => {
       userOrgroupIds: [group.id], isExpanded: true,
 
 
-      action: 'allow'
+
 
     }
 
@@ -335,7 +334,7 @@ describe('PolicyAuthnRuleComponent', () => {
       userOrgroupIds: [group.id], isExpanded: true,
 
 
-      action: 'allow'
+
 
     }
 
@@ -385,7 +384,7 @@ describe('PolicyAuthnRuleComponent', () => {
       userOrgroupIds: [group.id], isExpanded: true,
 
 
-      action: 'allow'
+
 
     }
 

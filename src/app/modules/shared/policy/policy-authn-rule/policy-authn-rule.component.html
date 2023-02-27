@@ -20,11 +20,6 @@
                         <mat-action-row fxFlex fxLayoutAlign="end center" class="policy-authn-rule-header-actions">
                             <mat-icon *ngIf="rule.isEnabled" matTooltip="{{'Enabled'|translate}}">work</mat-icon>
                             <mat-icon *ngIf="!rule.isEnabled" matTooltip="{{'Disabled'|translate}}">work_off</mat-icon>
-                            <mat-icon *ngIf="rule.action=='allow'" matTooltip="{{'Allow'|translate}}">
-                                check_circle_outline
-                            </mat-icon>
-                            <mat-icon color="warn" *ngIf="rule.action!='allow'" matTooltip="{{'Deny'|translate}}">
-                                block</mat-icon>
                         </mat-action-row>
                     </mat-panel-title>
 
@@ -51,14 +46,13 @@
                             class="explanation-bold">2FA,</span>
                     </p>
                 </div>
-                <div test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
+                <div *ngIf="rule.profile.ips?.length|| rule.profile.locations?.length || rule.profile.times?.length"
+                    test-id="policy-authn-rule-explanation" class="explanation" fxLayout="row wrap">
 
-                    <p class=""
-                        *ngIf="rule.profile.ips?.length|| rule.profile.locations?.length || rule.profile.times?.length">
+                    <p class="">
                         and
                     </p>
-                    <p class="explanation-item"
-                        *ngIf="rule.profile.ips?.length|| rule.profile.locations?.length || rule.profile.times?.length">
+                    <p class="explanation-item">
                         accessed from <span class="explanation-bold">{{getExplanationIps()}},</span>
                     </p>
 
@@ -71,13 +65,8 @@
                     <p class="explanation-item" *ngIf="rule.profile.times?.length">
                         accessed <span class="explanation-bold">{{getExplanationTimes()}},</span>
                     </p>
-                    <p>
-                        will
-                    </p>
-                    <p class="explanation-item">
-                        be
-                        <span class="explanation-bold" *ngIf="rule.action==='allow'">allowed</span>
-                        <span class="explanation-bold" *ngIf="rule.action!=='allow'">denied</span>
+                    <p class="explanation-item">will be
+                        <span class="explanation-bold">allowed</span>
                     </p>
                 </div>
                 <mat-divider></mat-divider>
@@ -146,13 +135,7 @@
                                 <p>
                                     <mat-divider></mat-divider>
                                 </p>
-                                <p>
-                                    <mat-slide-toggle test-id="policy-auth-rule-toogle-action"
-                                        class="policy-authn-rule-checkbox" [checked]="rule.action==='allow'"
-                                        (toggleChange)="ruleActionChanged($event)">
-                                        {{rule.action=='allow'?'Allow':'Deny'|translate}}</mat-slide-toggle>
 
-                                </p>
                             </div>
                         </mat-tab>
                         <mat-tab label="{{'Ips'|translate}}">

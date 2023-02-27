@@ -86,17 +86,17 @@ describe('PolicyAuthnComponent', () => {
 
 
     const rule1: AuthenticationRule = {
-      id: 'somid1', isEnabled: true, name: 'mysql', action: 'allow',
+      id: 'somid1', isEnabled: true, name: 'mysql',
       networkId: network.id, profile: { is2FA: true, },
       userOrgroupIds: [group.id], isExpanded: true,
     }
     const rule2: AuthenticationRule = {
-      id: 'somid2', isEnabled: true, name: 'prod', action: 'deny',
+      id: 'somid2', isEnabled: true, name: 'prod',
       networkId: network.id, profile: { is2FA: true, },
       userOrgroupIds: [group.id], isExpanded: true,
     }
     const rule3: AuthenticationRule = {
-      id: 'somid3', isEnabled: true, name: 'mysql prod', action: 'allow',
+      id: 'somid3', isEnabled: true, name: 'mysql prod',
       networkId: network2.id, profile: { is2FA: true, },
       userOrgroupIds: [group.id], isExpanded: true
     }

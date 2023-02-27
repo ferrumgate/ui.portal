@@ -165,16 +165,16 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     this.policies.push({
       network: network, isExpanded: true,
       rules: [
-        { id: 'rule1', objId: UtilService.randomNumberString(), name: 'rule1', action: 'allow', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
+        { id: 'rule1', objId: UtilService.randomNumberString(), name: 'rule1',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
 
-        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
       ]
     })
 
     this.policies.push({
       network: network, isExpanded: false,
       rules: [
-        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
       ]
     }) */
     this.getAllData().subscribe();
@@ -304,7 +304,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     this.policies.find(x => x.network.id == net.id)?.rules.unshift({
       id: '', objId: UtilService.randomNumberString(), name: '', networkId: net.id, profile: {
         is2FA: false, ipIntelligence: { isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true }
-      }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true, action: 'allow'
+      }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true,
     })
   }
 

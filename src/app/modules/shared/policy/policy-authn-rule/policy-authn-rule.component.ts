@@ -53,9 +53,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       id: '', isChanged: false, name: '', networkId: '', profile: {
         is2FA: false,
 
-      }, userOrgroupIds: [], action: 'allow',
+      }, userOrgroupIds: [],
       orig: {
-        id: '', name: '', networkId: '', profile: { is2FA: false, }, userOrgroupIds: [], isEnabled: true, action: 'allow'
+        id: '', name: '', networkId: '', profile: { is2FA: false, }, userOrgroupIds: [], isEnabled: true,
       },
       userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };
@@ -82,7 +82,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return this._model;
   }
   get titleClass() {
-    return this.rule.action != 'allow' ? 'deny' : ''
+    return 'allow';
   }
 
 
@@ -551,14 +551,10 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     {${this.rule.isEnabled ? 'enabled' : 'not enabled'}}, 
     ${users} 
     ${this.rule.profile.is2FA ? ' {2FA},' : ''} 
-    ${ips} 
-    {${this.rule.action}}`
+    ${ips}`
   }
 
-  ruleActionChanged($event: any) {
-    this.rule.action = this.rule.action === 'allow' ? 'deny' : 'allow';
-    this.modelChanged();
-  }
+
 
 
 

@@ -169,15 +169,15 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
      this.policies.push({
        network: network,
        rules: [
-         { id: 'rule1', name: 'rule1', action: 'allow', networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true },
-         { id: 'rule2', name: 'rule2', action: 'allow', networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true,  }, isEnabled: true }
+         { id: 'rule1', name: 'rule1',  networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true },
+         { id: 'rule2', name: 'rule2',  networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true,  }, isEnabled: true }
        ]
      })
  
      this.policies.push({
        network: network,
        rules: [
-         { id: 'rule2', name: 'rule2', action: 'allow', networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true,  }, isEnabled: true }
+         { id: 'rule2', name: 'rule2',  networkId: 'testNetworkId', serviceId: 's1', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true,  }, isEnabled: true }
        ]
      }) */
     this.getAllData().subscribe();

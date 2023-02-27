@@ -261,7 +261,7 @@
     "Authorization": "Authorization",
     "PolicyAuthorizationSearchHint": "Search by network name,service name, rule name, username, group name",
     "PolicyAuthenticationSearchHint": "Search by network name,rule name, username, group name, ip, location",
-    "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise DENY request (means if matches any rule then execute action (allow,deny) else DENY is default policy)",
+    "PolicyAuthnHint": "Accessing to networks, depends on {first match first execute} otherwise DENY request (means if matches any then ALLOW else DENY)",
     "Allow": "Allow",
     "Deny": "Deny",
     "Ip": "Ip",

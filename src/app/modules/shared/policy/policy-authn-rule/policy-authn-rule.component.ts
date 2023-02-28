@@ -272,7 +272,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     // set initial selection
     let selectedCountryList: Country[] = [];
     for (const loc of this.rule.profile.locations || []) {
-      const country = this.countryMap.get(loc.country);
+      const country = this.countryMap.get(loc.countryCode);
       if (country)
         selectedCountryList.push(UtilService.clone(country));
     }
@@ -307,7 +307,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   prepareCountryList() {
     this._model.profile.locations = (this.countryMultiCtrl.value as Country[]).map(x => {
       return {
-        country: x.isoCode
+        countryCode: x.isoCode
       }
     })
     this.modelChanged();
@@ -426,7 +426,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.rule.isChanged = true;
     if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isProxy, this.rule.profile.ipIntelligence?.isProxy))
       this.rule.isChanged = true;
-    if (UtilService.checkChanged(original.profile.locations?.map(x => x.country), this.rule.profile.locations?.map(x => x.country)))
+    if (UtilService.checkChanged(original.profile.locations?.map(x => x.countryCode), this.rule.profile.locations?.map(x => x.countryCode)))
       this.rule.isChanged = true;
 
     if (UtilService.checkChanged(
@@ -508,7 +508,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (this.rule.profile.ipIntelligence?.isWhiteList)
       whitelist.push('ip is in whitelist');
     if (this.rule.profile.locations?.length)
-      whitelist.push(`ip from ${this.rule.profile.locations.slice(0, 3).map(x => x.country).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
+      whitelist.push(`ip from ${this.rule.profile.locations.slice(0, 3).map(x => x.countryCode).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
 
 
     const blacklist = [];

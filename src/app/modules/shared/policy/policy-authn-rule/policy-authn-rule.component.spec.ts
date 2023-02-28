@@ -328,7 +328,7 @@ describe('PolicyAuthnRuleComponent', () => {
         ipIntelligence: {
           isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
         }, locations: [
-          { country: countries[1].isoCode }
+          { countryCode: countries[1].isoCode }
         ]
       },
       userOrgroupIds: [group.id], isExpanded: true,
@@ -375,7 +375,7 @@ describe('PolicyAuthnRuleComponent', () => {
         ipIntelligence: {
           isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
         }, locations: [
-          { country: countries[1].isoCode }
+          { countryCode: countries[1].isoCode }
         ],
         times: [
           { days: [0, 1, 2], timezone: 'Africa', endTime: 1200, startTime: 10 }

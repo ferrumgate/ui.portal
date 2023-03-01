@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatChipInputEvent, } from '@angular/material/chips';
 import { MatSelect } from '@angular/material/select';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -47,7 +47,7 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
 
   formGroup: FormGroup = this.createFormGroup(this.model);
-  formError: { timezone: string, startTime: string, endTime: string, days: string } = { timezone: '', startTime: '', endTime: '', days: '' }
+  formError: { timezone: string, startTime: string, endTime: string, days: string, startTimeLower: string } = { timezone: '', startTime: '', endTime: '', days: '', startTimeLower: '' }
 
   searchTimeZoneQuery = '';
   selectedTimeZoneQueryChanged: Subject<string> = new Subject<string>();
@@ -111,9 +111,9 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
   createFormGroup(zone: TimeProfileExtended) {
     const fmg = new FormGroup({
-      timezone: new FormControl(zone.timezoneEx, [Validators.required]),
+      timezone: new FormControl(zone.timezoneEx, [Validators.required,]),
       startTime: new FormControl(zone.startTimeStr, [Validators.required]),
-      endTime: new FormControl(zone.endTimeStr, [Validators.required]),
+      endTime: new FormControl(zone.endTimeStr, [Validators.required,]),
       daysCount: new FormControl(zone.daysCount, [Validators.min(1)]),
 
     });
@@ -133,8 +133,19 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
       })
     return fmg;
   }
+  //this is not working
+  //TODO
+  lowerValidator(ctrl: any) {
+    const startTime = this.parseTime(this.formGroup?.controls?.startTime?.value)
+    const endTime = this.parseTime(this.formGroup?.controls?.endTime?.value);
+
+    if ((startTime || 0) >= (endTime || 0)) {
+      return { 'lower': true }
+    } return null;
+  }
+
   createFormError() {
-    return { timezone: '', startTime: '', endTime: '', days: '' };
+    return { timezone: '', startTime: '', endTime: '', days: '', startTimeLower: '' };
   }
   parseTime(data?: string) {
     if (!data) return undefined;
@@ -158,6 +169,10 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
   }
 
+
+
+
+
   checkFormError() {
     //check errors 
     let error = this.createFormError();
@@ -175,7 +190,10 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
       if (startTimeError['required'])
         error.startTime = 'StartTimeRequired';
       else
-        error.startTime = 'StartTimeInvalid';
+        if (startTimeError['lower'])
+          error.startTime = 'StartTimeMustBeLower';
+        else
+          error.startTime = 'StartTimeInvalid';
     }
 
     const endTimeError = this.formGroup.controls.endTime.errors;
@@ -197,8 +215,9 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
 
     this.formError = error;
-    console.log(this.formError);
+
     (this.formGroup as FormGroup).markAllAsTouched();
+    this.checkStartTimeLower();
 
   }
 
@@ -256,7 +275,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
     this.modelChanged();
   }
   endTimeChanged(data: any) {
-
     this.formGroup.controls.endTime.setValue(data);
     this.model.endTimeStr = data;
     this.modelChanged();
@@ -276,14 +294,27 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
     this.modelChanged();
 
   }
+  checkStartTimeLower() {
+    if ((this.model.startTime || 0) >= (this.model.endTime || 1440)) {
+      this.formError.startTimeLower = 'StartTimeMustBeLower';
+      return true;
+    }
+    else {
+      this.formError.startTimeLower = '';
+      return false;
+    }
+  }
   addTimeProfile() {
     this.checkFormError();
+
 
     if (this.formGroup.invalid)
       return;
     //invalid data
     if (!this.model.timezone || !this.model.days.length || !this.model.startTime || !this.model.endTime)
       return;
+
+    if (this.checkStartTimeLower()) return;
 
     this.add.emit(this.model);
   }

@@ -62,7 +62,13 @@
                     <mat-error>{{formError.endTime|translate}}</mat-error>
                 </mat-form-field>
 
+
             </p>
+            <p>
+                <mat-error *ngIf="formError.startTimeLower" appearance="fill"
+                    class="time">{{'StartTimeMustBeLower'|translate}}</mat-error>
+            </p>
+
             <p>
                 <span fxFlex class="">
                     <button mat-raised-button color="primary" class="add" (click)="addTimeProfile()">

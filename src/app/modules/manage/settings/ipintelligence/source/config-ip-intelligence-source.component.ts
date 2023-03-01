@@ -177,7 +177,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
 
 
   checkSource() {
-    console.log(this.model);
+
     this.check.emit(this.model);
   }
 
@@ -186,7 +186,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   }
 
   saveSource() {
-    console.log(this.model);
+
     this.save.emit(this.model);
   }
 

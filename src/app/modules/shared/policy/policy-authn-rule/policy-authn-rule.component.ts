@@ -19,6 +19,7 @@ import { TimeZone } from '../../models/timezone';
 import { User2 } from '../../models/user';
 import { ConfigService } from '../../services/config.service';
 import { InputService } from '../../services/input.service';
+import { NotificationService } from '../../services/notification.service';
 import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
@@ -183,6 +184,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -725,6 +727,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
 
   addTimeProfile(event: TimeProfile) {
+
     const cloned = cloneTimeProfile(event);
     if (!this.rule.profile.times)
       this.rule.profile.times = [];

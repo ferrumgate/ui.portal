@@ -115,7 +115,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
   }
 
   deleteBlackList(ev: IpIntelligenceBWItem) {
-    console.log(ev);
+
     this.confirmService.showDelete().pipe(
       takeWhile(x => x),
       switchMap(y =>
@@ -130,7 +130,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
 
   }
   deleteWhiteList(ev: IpIntelligenceBWItem) {
-    console.log(ev);
+
     this.confirmService.showDelete().pipe(
       takeWhile(x => x),
       switchMap(y =>
@@ -144,7 +144,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
     })
   }
   saveBlackList(item: { ips: string[], description?: string }) {
-    console.log(item);
+
     this.blackList.showViewSave = true;
     this.blackList.showViewSearch = false;
     this.blackList.showViewSaveResults = false;
@@ -178,7 +178,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
 
   }
   saveWhiteList(item: { ips: string[], description?: string }) {
-    console.log(item);
+
     this.whiteList.showViewSave = true;
     this.whiteList.showViewSearch = false;
     this.whiteList.showViewSaveResults = false;
@@ -212,7 +212,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
 
   }
   searchBlackList(search: { ip: string, page: number, pageSize: number }) {
-    console.log(search);
+
 
     this.blackList.showViewSaveResults = false;
     this.blackList.showViewSave = false;
@@ -229,7 +229,7 @@ export class ConfigIpIntelligenceComponent implements OnInit, OnDestroy {
 
   }
   searchWhiteList(search: { ip: string, page: number, pageSize: number }) {
-    console.log(search);
+
     this.whiteList.showViewSaveResults = false;
     this.whiteList.showViewSave = false;
     this.whiteList.showViewSearch = true;

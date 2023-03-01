@@ -396,6 +396,7 @@
     "TimeZoneInvalid": "Time zone invalid",
     "StartTimeRequired": "Start time required",
     "StartTimeInvalid": "Start time required",
+    "StartTimeMustBeLower": "Start time must be lower",
     "EndTimeRequired": "End time required",
     "EndTimeInvalid": "End time required",
     "DaysRequired": "Days required",

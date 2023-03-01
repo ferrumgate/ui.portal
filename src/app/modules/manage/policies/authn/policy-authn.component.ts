@@ -192,7 +192,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   }
   offsetToHour(offset: number) {
     const absOffset = Math.abs(offset);
-    const first = Math.ceil(absOffset / 60);
+    const first = Math.floor(absOffset / 60);
     const second = absOffset - (first * 60);
     let offsetHour = offset < 0 ? '+' : offset == 0 ? '' : '-';
     offsetHour += first < 10 ? '0' + first : first;

@@ -658,7 +658,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
 
   minuteToHour(m: number) {
-    const hour = Math.ceil(m / 60);
+    const hour = Math.floor(m / 60);
     const minute = m - hour * 60;
     let hourStr = hour < 10 ? `0${hour}` : `${hour}`;
     let minuteStr = minute < 10 ? `0${minute}` : `${minute}`;

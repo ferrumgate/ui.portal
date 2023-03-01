@@ -1,7 +1,7 @@
 <div [ngClass]="isThemeDark?'theme-dark':''">
     <div class="policy-authn-rule">
         <mat-accordion test-id="policy-authn-rule-accordion">
-            <mat-expansion-panel [expanded]="rule.isExpanded||true">
+            <mat-expansion-panel [expanded]="rule.isExpanded">
                 <mat-expansion-panel-header [ngClass]="titleClass">
                     <mat-panel-title test-id="policy-authn-rule-title">
                         <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">

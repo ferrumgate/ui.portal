@@ -66,9 +66,7 @@ export class AuthenticationService extends BaseService {
     this.refreshTokenTimer = timer(15 * 1000, 15 * 1000).subscribe(x => {
       const now = new Date();
       if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS)) {
-        console.log('refreshtoken');
-        console.log(now.toISOString());
-        console.log(this.lastExecutionRefreshToken.toISOString())
+
         this.getRefreshToken().pipe(
           switchMap(x => {
             return this.getUserCurrent();

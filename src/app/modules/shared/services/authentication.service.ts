@@ -61,12 +61,14 @@ export class AuthenticationService extends BaseService {
     private idle: Idle, private keepalive: Keepalive) {
     super('authentication', captchaService)
     this._currentSession = this.getSavedSession();
-    const refreshTokenMS = environment.production ? 4 * 60 * 1000 : 30 * 1000;
+    const refreshTokenMS = environment.production ? 3 * 60 * 1000 : 30 * 1000;
 
-    this.refreshTokenTimer = timer(refreshTokenMS, refreshTokenMS).subscribe(x => {
+    this.refreshTokenTimer = timer(15 * 1000, 15 * 1000).subscribe(x => {
       const now = new Date();
-      if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS))
-
+      if (this.currentSession && this.currentSession?.refreshToken && (now.getTime() - this.lastExecutionRefreshToken.getTime() > refreshTokenMS)) {
+        console.log('refreshtoken');
+        console.log(now.toISOString());
+        console.log(this.lastExecutionRefreshToken.toISOString())
         this.getRefreshToken().pipe(
           switchMap(x => {
             return this.getUserCurrent();
@@ -77,6 +79,7 @@ export class AuthenticationService extends BaseService {
             return '';
           })
         ).subscribe();
+      }
     });
     this.initIdleWatching();
 

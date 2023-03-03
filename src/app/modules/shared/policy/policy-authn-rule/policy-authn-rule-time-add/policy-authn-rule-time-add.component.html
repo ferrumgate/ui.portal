@@ -1,0 +1,87 @@
+<div [ngClass]="isThemeDark?'theme-dark':''" class="policy-authn-rule-time-add">
+
+    <div fxFlex fxLayout="column" class="add-time">
+        <form [formGroup]="formGroup">
+            <p>
+                <mat-form-field fxFlex appearance="fill">
+                    <mat-label>{{"TimeZone"|translate}}</mat-label>
+                    <input type="text" test-id="policy-authn-rule-timeadd-timezone-input"
+                        placeholder="{{'SelectATimeZone'|translate}}" matInput [ngModel]="model.timezoneEx"
+                        [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto3" required
+                        (ngModelChange)="selectedTimeZoneChanged($event)">
+                    <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="timezoneChanged($event)"
+                        [displayWith]="displayTimeZoneFn">
+                        <mat-option *ngFor="let option of filteredTimeZones | async" [value]="option">
+                            {{option.nameEx}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>{{formError.timezone|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p>
+
+
+                <mat-button-toggle-group name="days" class="days" multiple fxLayout="row wrap">
+                    <mat-button-toggle test-id="policy-authn-rule-timeadd-sunday" matTooltip="{{'Sunday'|translate}}"
+                        class="day" color="primary" value="0" [checked]="model.days.includes(0)"
+                        (change)="dayChanged($event)">S</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Monday'|translate}}" class="day" value="1"
+                        [checked]="model.days.includes(1)" (change)="dayChanged($event)">M</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Tuesday'|translate}}" class="day" value="2"
+                        [checked]="model.days.includes(2)" (change)="dayChanged($event)">T</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Wednesday'|translate}}" class="day" value="3"
+                        [checked]="model.days.includes(3)" (change)="dayChanged($event)">W</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Thursday'|translate}}" class="day" value="4"
+                        [checked]="model.days.includes(4)" (change)="dayChanged($event)">TH</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Friday'|translate}}" class="day" value="5"
+                        [checked]="model.days.includes(5)" (change)="dayChanged($event)">F</mat-button-toggle>
+                    <mat-button-toggle matTooltip="{{'Saturday'|translate}}" class="day" value="6"
+                        [checked]="model.days.includes(6)" (change)="dayChanged($event)">SA</mat-button-toggle>
+                </mat-button-toggle-group>
+                <mat-error class="days">{{formError.days|translate}}</mat-error>
+
+            </p>
+            <p>
+                <mat-form-field appearance="fill" class="time time-field">
+                    <mat-label>{{'StartTimeOfDay'|translate}}</mat-label>
+
+                    <input type="time" test-id="policy-authn-rule-timeadd-start-input"
+                        placeholder="{{'SelectATime'|translate}}" matInput [ngModel]="model.startTimeStr"
+                        [ngModelOptions]="{standalone:true}" (ngModelChange)="startTimeChanged($event)" required>
+                    <mat-error>{{formError.startTime|translate}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="time time-field">
+
+                    <mat-label>{{'EndTimeOfDay'|translate}}</mat-label>
+
+                    <input type="time" test-id="policy-authn-rule-timeadd-end-input"
+                        placeholder="{{'SelectATime'|translate}}" matInput [ngModel]="model.endTimeStr"
+                        [ngModelOptions]="{standalone:true}" (ngModelChange)="endTimeChanged($event)" required>
+                    <mat-error>{{formError.endTime|translate}}</mat-error>
+                </mat-form-field>
+
+
+            </p>
+            <p>
+                <mat-error *ngIf="formError.startTimeLower" appearance="fill"
+                    class="time">{{'StartTimeMustBeLower'|translate}}</mat-error>
+            </p>
+
+            <p>
+                <span fxFlex class="">
+                    <button mat-raised-button color="primary" class="add" (click)="addTimeProfile()">
+                        <mat-icon>add</mat-icon>
+                        {{"Add"|translate}}
+                    </button>
+                </span>
+            </p>
+
+
+
+
+        </form>
+
+    </div>
+</div>

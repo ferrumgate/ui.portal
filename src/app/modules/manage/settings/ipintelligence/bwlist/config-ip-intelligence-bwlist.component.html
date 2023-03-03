@@ -1,0 +1,122 @@
+<div class="config-ip-intelligence-bwlist">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip={{tooltip}}>
+                <mat-icon color="{{isBlackList? 'warn':''}}" svgIcon="ip-address"></mat-icon>
+
+            </mat-card-title>
+            <div class="header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </div>
+        </mat-card-header>
+        <div class="row toolbar" fxLayout="row">
+            <mat-form-field fxFlex>
+                <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                <mat-hint>{{"BWListSearchHint"|translate}}</mat-hint>
+            </mat-form-field>
+            <div fxLayoutAlign="end center">
+                <button mat-raised-button color="primary" class="search" (click)="searchList()">
+                    <mat-icon>search</mat-icon>
+                    {{"Search"|translate}}
+                </button>
+                <button mat-raised-button color="primary" class="add" (click)="addNew()">
+                    <mat-icon>add</mat-icon>
+                    {{"Add"|translate}}
+                </button>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <div class="content" *ngIf="model.showViewSearch" test-id="config-ip-intelligence-bwlist-viewsearch">
+            <div class="paginator" fxLayoutAlign="end center">
+                <mat-paginator [length]="model.searchData.total" [pageSize]="pageSize"
+                    [pageSizeOptions]="[1,5, 10, 25, 100]" aria-label="Select page" (page)="pageChanged($event)" size>
+                </mat-paginator>
+            </div>
+            <div class="items">
+                <div fxLayout="row wrap">
+                    <div *ngFor="let bwItem of  model.searchData.items">
+                        <app-config-ip-intelligence-bwlist-item test-id="config-ip-intelligence-bwlist-item"
+                            [isBlackList]="isBlackList" [model]="bwItem"
+                            (deleteItem)="delete($event)"></app-config-ip-intelligence-bwlist-item>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="content" *ngIf="model.showViewSave" test-id="config-ip-intelligence-bwlist-viewsave">
+
+            <div>
+                <form test-id="config-ip-intelligence-bwlist-form" [formGroup]="saveFormGroup">
+                    <p fxFill class="networks">
+                        <mat-form-field appearance="fill" fxFill>
+                            <mat-label>{{"Networks"|translate}}</mat-label>
+                            <textarea class="ips" multiple="true" matInput
+                                test-id="config-ip-intelligence-bwlist-ips-input" placeholder="7.8.9.0/24, 10.11.0.0/16"
+                                formControlName="ips">
+                                    </textarea>
+                            <mat-hint>{{"BWListNetworksHint"|translate}}
+                            </mat-hint>
+                            <mat-error>
+                                {{saveError.ips|translate}}</mat-error>
+                        </mat-form-field>
+                    </p>
+                    <p fxFill class="description">
+                        <mat-form-field appearance="fill" fxFill>
+                            <mat-label>{{"Description"|translate}}</mat-label>
+                            <input class="description" matInput test-id="config-ip-intelligence-bwlist-desc-input"
+                                placeholder="{{'DescriptionPlaceHolder'|translate}}" formControlName="description" />
+                        </mat-form-field>
+                    </p>
+
+                </form>
+            </div>
+
+            <div>
+                <mat-divider></mat-divider>
+                <mat-toolbar style=" height:35px">
+                    <mat-action-row class="config-ip-intelligence-bwlist-actions" fxFlex fxLayoutAlign="start center">
+
+                        <span *ngIf="saveModel.isChanged" fxFlex fxLayoutAlign="end center">
+                            <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                (click)="clear()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <button test-id="config-ip-intelligence-bwlist-ok-button" mat-icon-button color="warn"
+                                matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                        </span>
+
+                    </mat-action-row>
+                </mat-toolbar>
+
+            </div>
+
+        </div>
+        <div class="content" *ngIf="model.showViewSaveResults" test-id="config-ip-intelligence-bwlist-viewresult">
+            <div class="results-result">
+                <mat-card-title class="results-title">{{"Results"|translate}}</mat-card-title>
+                <mat-list>
+
+                    <mat-list-item *ngFor="let result of model.saveResults"
+                        test-id="config-ip-intelligence-save-results-item">
+                        <div fxFill class="results-result">
+                            <span class="results-ip" fxFlex="50">{{result.item.val}}</span>
+                            <span class="results-msg" fxFlex="50"
+                                matTooltip="{{result.errMsg||('Saved'|translate)}}">{{result.errMsg||('Saved'|translate)}}</span>
+                            <mat-divider></mat-divider>
+                        </div>
+
+                    </mat-list-item>
+
+                </mat-list>
+
+            </div>
+        </div>
+
+    </mat-card>
+
+</div>

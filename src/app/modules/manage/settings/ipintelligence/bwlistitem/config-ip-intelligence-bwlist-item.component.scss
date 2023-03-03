@@ -1,0 +1,45 @@
+.config-ip-intelligence-bwlist-item {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    padding-left: 15px;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+
+.config-ip-intelligence-bwlist-item mat-card {
+    min-width: 200px;
+    width: 200px;
+    margin-left: 20px;
+}
+
+.config-ip-intelligence-bwlist-item-explanation {
+    padding-top: 10px;
+}
+
+.config-ip-intelligence-bwlist-item .row {
+    /* padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px; */
+}
+
+.config-ip-intelligence-bwlist-item .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-ip-intelligence-bwlist-item .config-ip-intelligence-bwlist-item-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.config-ip-intelligence-bwlist-item .actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.config-ip-intelligence-bwlist-item .pb-10 {
+    padding-bottom: 10px;
+}

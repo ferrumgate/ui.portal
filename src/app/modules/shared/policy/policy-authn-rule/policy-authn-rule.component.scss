@@ -2,6 +2,10 @@
     min-width: 300px;
 }
 
+.policy-authn-rule .tabpanel {
+    min-height: 200px;
+}
+
 .policy-authn-rule .row {
     padding-left: 25px;
     padding-right: 25px;
@@ -28,6 +32,16 @@
 
 }
 
+
+.policy-authn-rule .add-time {
+    margin-top: -30px;
+    margin-bottom: 30px;
+    border-width: 1px;
+    border-style: groove;
+    //max-width: 500px;
+
+}
+
 .policy-authn-rule .policy-authn-rule-header-actions {
     padding: 0px;
     border-top-style: none;
@@ -35,7 +49,7 @@
 
 .policy-authn-rule .explanation {
     padding-top: 5px;
-    padding-bottom: 5px;
+    //padding-bottom: 5px;
 }
 
 .policy-authn-rule .drop {
@@ -65,9 +79,7 @@
 
 
 
-.policy-authn-rule .policy-authn-rule-item {
-    min-width: 500px;
-}
+.policy-authn-rule .policy-authn-rule-item {}
 
 
 .policy-authn-rule .policy-authn-rule-header-actions {
@@ -92,4 +104,37 @@
 .policy-authn-rule .reorder {
     cursor: move;
     color: #ccc;
+}
+
+.policy-authn-rule .ips-header {
+    padding-top: 20px;
+    //padding-left: 10px;
+    padding-bottom: 20px;
+    padding-right: 10px;
+
+}
+
+
+.policy-authn-rule .ips-header-hint {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}
+
+
+
+
+.policy-authn-rule .ips-group {
+    border-width: 1px;
+    border-style: groove;
+    padding-top: 20px;
+    padding-left: 10px;
+    margin: 5px;
+    min-width: 400px;
+}
+
+.policy-authn-rule .direct-deny-item {
+
+    //padding-top: 10px;
+
 }

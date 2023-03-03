@@ -89,6 +89,22 @@ export class AppComponent implements OnInit {
       "elasticsearch",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/elasticsearch.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "ip-address",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/ip-address.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "dns",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/dns.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "domain",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/domain.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "api",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/api.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

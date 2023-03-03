@@ -54,8 +54,9 @@
                                 <div class="drag-box" *ngFor="let rule of pol.rules" cdkDrag
                                     [cdkDragDisabled]="isDragDisabled(pol)">
                                     <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks"
-                                        [users]="users" [groups]="groups" [rule]="rule"
-                                        [dragDisabled]="isDragDisabled(pol)" (deleteAuthnRule)="deleteAuthnRule($event)"
+                                        [users]="users" [groups]="groups" [countryList]="countryList"
+                                        [timezoneList]="timezoneList" [rule]="rule" [dragDisabled]="isDragDisabled(pol)"
+                                        (deleteAuthnRule)="deleteAuthnRule($event)"
                                         (saveAuthnRule)="saveAuthnRule($event)">
                                     </app-policy-authn-rule>
                                 </div>

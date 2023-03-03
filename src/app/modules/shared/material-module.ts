@@ -45,6 +45,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
     exports: [
@@ -96,7 +97,8 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateMod
         FlexLayoutModule,
         NgxMatTimepickerModule,
         NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule
+        NgxMatNativeDateModule,
+        NgxMatSelectSearchModule
     ]
 
 })

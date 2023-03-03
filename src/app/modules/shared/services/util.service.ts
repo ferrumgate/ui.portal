@@ -1,3 +1,4 @@
+import * as moment from 'moment-timezone';
 export class UtilService {
     /**
      * creates a random string with 6 length
@@ -33,6 +34,9 @@ export class UtilService {
         }
         return false;
     }
+    static checkUndefinedBoolean(source?: boolean, target?: boolean) {
+        return Boolean(source) == Boolean(target) ? false : true;
+    }
 
     static dateFormatDD(date: Date | number) {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -57,4 +61,23 @@ export class UtilService {
         return `${year}-${month}-${day} ${hour}:${minute}:${second}`
 
     }
+    static timeZoneList(): { name: string, offset: number }[] {
+        let zones = [];
+        const zonenames = moment.tz.names();
+        for (const zone of zonenames) {
+            const tz = moment.tz.zone(zone);
+            if (tz) {
+                var z = moment.tz.zone(tz.name);
+                if (z)
+                    zones.push({ name: tz.name, offset: z?.parse(Date.now()) })
+
+            }
+
+        }
+        return zones;
+
+    }
+
+
+
 }

@@ -7,25 +7,47 @@ export function cloneIpProfile(p: IpProfile): IpProfile {
         ip: p.ip
     }
 }
-
-export interface DayProfile {
-    day: number;
-    hourStart?: number;
-    hourEnd?: number;
+export interface IpIntelligenceProfile {
+    isWhiteList: boolean;
+    isBlackList: boolean;
+    isProxy: boolean;
+    isHosting: boolean;
+    isCrawler: boolean;
 }
-export function cloneDayProfile(p: DayProfile): DayProfile {
+export function cloneIpIntelligenceProfile(p: IpIntelligenceProfile): IpIntelligenceProfile {
     return {
-        day: p.day,
-        hourStart: p.hourStart, hourEnd: p.hourEnd
+        isWhiteList: p.isWhiteList,
+        isBlackList: p.isBlackList,
+        isCrawler: p.isCrawler,
+        isHosting: p.isHosting,
+        isProxy: p.isProxy
+    }
+}
+
+
+export interface TimeProfile {
+    timezone: string;
+    days: number[],
+    startTime?: number
+    endTime?: number
+
+    [key: string]: any;
+}
+export function cloneTimeProfile(p: TimeProfile): TimeProfile {
+    return {
+        timezone: p.timezone,
+        days: Array.from(p.days),
+        endTime: p.endTime,
+        startTime: p.startTime
     }
 }
 export interface LocationProfile {
-    loc: string;
+    countryCode: string;
 }
 
 export function cloneLocationProfile(p: LocationProfile): LocationProfile {
     return {
-        loc: p.loc
+        countryCode: p.countryCode
     }
 }
 
@@ -161,7 +183,8 @@ export interface AuthenticationProfile {
     app?: AppVersion;
     is2FA?: boolean;
     ips?: IpProfile[];
-    days?: DayProfile[];
+    ipIntelligence?: IpIntelligenceProfile;
+    times?: TimeProfile[];
     locations?: LocationProfile[];
     devices?: DeviceProfile[];
 
@@ -173,7 +196,8 @@ export function cloneAuthenticationProfile(pr: AuthenticationProfile): Authentic
         is2FA: pr.is2FA,
         app: pr.app ? { version: pr.app?.version } : undefined,
         ips: pr.ips ? Array.from(pr.ips.map(x => cloneIpProfile(x))) : undefined,
-        days: pr.days ? Array.from(pr.days.map(x => cloneDayProfile(x))) : undefined,
+        ipIntelligence: pr.ipIntelligence ? cloneIpIntelligenceProfile(pr.ipIntelligence) : undefined,
+        times: pr.times ? Array.from(pr.times.map(x => cloneTimeProfile(x))) : undefined,
         locations: pr.locations ? Array.from(pr.locations.map(x => cloneLocationProfile(x))) : undefined,
         devices: pr.devices ? Array.from(pr.devices.map(x => cloneDeviceProfile(x))) : undefined
     }

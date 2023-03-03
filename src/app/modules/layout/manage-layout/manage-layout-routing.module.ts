@@ -139,6 +139,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/ip/intelligence',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/ipintelligence/config-ip-intelligence.module').then(m => m.ConfigIpIntelligenceModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

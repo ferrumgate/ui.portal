@@ -1,20 +1,25 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatSelect } from '@angular/material/select';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import validator from 'validator';
 import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticationProfile, IpProfile } from '../../models/authnProfile';
+import { cloneAuthenticationProfile, cloneTimeProfile, IpIntelligenceProfile, IpProfile, TimeProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
+import { Country } from '../../models/country';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
+import { TimeZone } from '../../models/timezone';
 import { User2 } from '../../models/user';
 import { ConfigService } from '../../services/config.service';
 import { InputService } from '../../services/input.service';
+import { NotificationService } from '../../services/notification.service';
 import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
@@ -37,8 +42,11 @@ export interface AuthenticationRuleExtended extends AuthenticationRule {
 })
 export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
+
   allSub = new SSubscription();
   helpLink = '';
+
+  selectedTab = 0;
 
 
   _model: AuthenticationRuleExtended =
@@ -46,9 +54,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       id: '', isChanged: false, name: '', networkId: '', profile: {
         is2FA: false,
 
-      }, userOrgroupIds: [], action: 'allow',
+      }, userOrgroupIds: [],
       orig: {
-        id: '', name: '', networkId: '', profile: { is2FA: false, }, userOrgroupIds: [], isEnabled: true, action: 'allow'
+        id: '', name: '', networkId: '', profile: { is2FA: false, }, userOrgroupIds: [], isEnabled: true,
       },
       userOrGroups: [], networkName: '', isEnabled: true, isExpanded: false
     };
@@ -75,7 +83,31 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return this._model;
   }
   get titleClass() {
-    return this.rule.action != 'allow' ? 'deny' : ''
+    return 'allow';
+  }
+
+
+  countryMap = new Map();
+  //country list
+  /** list of country */
+  @Input()
+  public set countryList(val: Country[]) {
+
+    this.countryMap = new Map();
+    val.forEach(x => {
+      this.countryMap.set(x.isoCode, x);
+    })
+    this._countryListAll = val;
+    // set initial selection
+    this.countryMultiCtrl.setValue([]);
+
+    // load the initial country list
+    this.filteredCountryListMulti.next(this._countryListAll.slice());
+  }
+
+
+  public get countryList() {
+    return this._countryListAll;
   }
 
   @Input()
@@ -94,8 +126,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       isExpanded: val.isExpanded
 
     }
-    debugger;
+
+    this.calculatesTimeProfiles(this._model.profile.times);
+
     this.prepareAutoCompletes();
+    this.prepareAutoCompleteCountry();
     this.formGroup = this.createFormGroup(this._model);
 
   }
@@ -107,8 +142,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   deleteAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
 
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string, } = { name: '' }
   filteredServices: Observable<Service[]> = of();
@@ -117,10 +150,41 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   userorGroupControl = new FormControl();
+
+
+
+
+  private _countryListAll: Country[] = [];
+
+  /** control for the selected country for multi-selection */
+  public countryMultiCtrl: FormControl = new FormControl([]);
+
+  /** control for the MatSelect filter keyword multi-selection */
+  public countryMultiFilterCtrl: FormControl = new FormControl('');
+
+  /** list of country filtered by search keyword */
+  public filteredCountryListMulti: ReplaySubject<Country[]> = new ReplaySubject<Country[]>(1);
+
+  /** local copy of filtered country to help set the toggle all checkbox state */
+  protected filteredCountryListCache: Country[] = [];
+  isCountryListIndeterminate = false;
+  isCountryListChecked = false;
+  @ViewChild('multiSelect', { static: true }) multiSelect!: MatSelect;
+  /** list of country filtered by search keyword */
+
+  protected _onDestroy = new Subject<void>();
+
+  get ipIntelligence(): IpIntelligenceProfile {
+    if (!this._model.profile.ipIntelligence)
+      this._model.profile.ipIntelligence = { isBlackList: false, isCrawler: false, isHosting: false, isProxy: false, isWhiteList: false };
+    return this._model.profile.ipIntelligence as IpIntelligenceProfile;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -128,20 +192,42 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         this.isThemeDark = x == 'dark';
 
       })
+
+
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.policyAuthnHelp;
 
   }
 
+
+
+  _timezoneList: TimeZone[] = [];
+  @Input()
+  public set timezoneList(vals: TimeZone[]) {
+    this._timezoneList = vals;
+
+  }
+
+  public get timezoneList() {
+    return this._timezoneList;
+  }
+
   ngOnInit(): void {
     this.prepareAutoCompletes();
 
 
+
+  }
+  ngAfterViewInit() {
+    this.setInitialValue();
   }
   ngOnDestroy(): void {
+    this._onDestroy.next();
+    this._onDestroy.complete();
     this.allSub.unsubscribe();
   }
+
 
   openHelp() {
     if (this.helpLink) {
@@ -161,6 +247,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     users.sort(this.simpleUsernameSort);
     return groups.concat(users);
   }
+
   prepareAutoCompletes() {
 
 
@@ -182,10 +269,52 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         }
       })
 
+  }
+  prepareAutoCompleteCountry() {
+    // set initial selection
+    let selectedCountryList: Country[] = [];
+    for (const loc of this.rule.profile.locations || []) {
+      const country = this.countryMap.get(loc.countryCode);
+      if (country)
+        selectedCountryList.push(UtilService.clone(country));
+    }
 
+    this.countryMultiCtrl.setValue(selectedCountryList);
 
+    // load the initial country list
+    this.filteredCountryListMulti.next(this._countryListAll.slice());
+
+    // listen for search field value changes
+    this.allSub.addThis =
+      this.countryMultiFilterCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+
+          this.filterCountryListMulti();
+          this.setToggleAllCheckboxStateCountryList();
+        });
+
+    // listen for multi select field value changes
+    this.allSub.addThis =
+      this.countryMultiCtrl.valueChanges
+        .pipe(takeUntil(this._onDestroy)).subscribe(() => {
+
+          this.setToggleAllCheckboxStateCountryList();
+          this.prepareCountryList();
+        });
   }
 
+
+
+  prepareCountryList() {
+    this._model.profile.locations = (this.countryMultiCtrl.value as Country[]).map(x => {
+      return {
+        countryCode: x.isoCode
+      }
+    })
+    this.modelChanged();
+
+  }
 
 
   displayServiceFn(net: Service | string) {
@@ -289,6 +418,24 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.rule.isChanged = true;
     if (UtilService.checkChanged(original.profile.ips?.map(x => x.ip), this.rule.profile.ips?.map(x => x.ip)))
       this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isBlackList, this.rule.profile.ipIntelligence?.isBlackList))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isWhiteList, this.rule.profile.ipIntelligence?.isWhiteList))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isCrawler, this.rule.profile.ipIntelligence?.isCrawler))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isHosting, this.rule.profile.ipIntelligence?.isHosting))
+      this.rule.isChanged = true;
+    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isProxy, this.rule.profile.ipIntelligence?.isProxy))
+      this.rule.isChanged = true;
+    if (UtilService.checkChanged(original.profile.locations?.map(x => x.countryCode), this.rule.profile.locations?.map(x => x.countryCode)))
+      this.rule.isChanged = true;
+
+    if (UtilService.checkChanged(
+      original.profile.times?.map(x => this.calculateTimeProfileName(x)),
+      this.rule.profile.times?.map(x => this.calculateTimeProfileName(x))))
+      this.rule.isChanged = true;
+
 
 
   }
@@ -356,9 +503,41 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
 
   getExplanationIps() {
+
+    const whitelist = []
     if (this.rule.profile.ips?.length)
-      return `${this.rule.profile.ips.map(x => x.ip).join(', ')}`;
-    else return `all ips`
+      whitelist.push(`ip is in ${this.rule.profile.ips.map(x => x.ip).join(', ')}`);
+    if (this.rule.profile.ipIntelligence?.isWhiteList)
+      whitelist.push('ip is in whitelist');
+    if (this.rule.profile.locations?.length)
+      whitelist.push(`ip from ${this.rule.profile.locations.slice(0, 3).map(x => x.countryCode).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
+
+
+    const blacklist = [];
+    if (this.rule.profile.ipIntelligence?.isBlackList)
+      blacklist.push(`in blacklist`);
+    if (this.rule.profile.ipIntelligence?.isProxy)
+      blacklist.push(`from a proxy`);
+    if (this.rule.profile.ipIntelligence?.isCrawler)
+      blacklist.push(`from a crawler`);
+    if (this.rule.profile.ipIntelligence?.isHosting)
+      blacklist.push(`from a hosting`);
+
+    if (!whitelist.length && !blacklist.length)
+      return `all ips`;
+
+    let result = whitelist.join(' or ');
+    if (blacklist.length)
+      result += (whitelist.length ? ' or ' : '') + ` ip not ` + blacklist.join(' or ');
+
+    return result;
+  }
+
+  getExplanationTimes() {
+
+    if (this.rule.profile.times?.length)
+      return `time is in ${this.rule.profile.times.slice(0, 3).map(x => x.timezone).join(' or ') + `${this.rule.profile.times.length > 3 ? ' ...' : ''}`}`
+    return ``;
   }
 
 
@@ -374,19 +553,15 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     {${this.rule.isEnabled ? 'enabled' : 'not enabled'}}, 
     ${users} 
     ${this.rule.profile.is2FA ? ' {2FA},' : ''} 
-    ${ips} 
-    {${this.rule.action}}`
+    ${ips}`
   }
 
-  ruleActionChanged($event: any) {
-    this.rule.action = this.rule.action === 'allow' ? 'deny' : 'allow';
-    this.modelChanged();
-  }
+
 
 
 
   addIpOrCidr(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    let value = (event.value || '').trim();
 
     // Add our fruit
     if (value) {
@@ -394,13 +569,19 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       if (!isExits) {
         if (!this.rule.profile.ips)
           this.rule.profile.ips = [];
-        if (validator.isIP(value) || validator.isIPRange(value))
+        if (validator.isIP(value)) {
+          if (validator.isIP(value, 4))
+            value += '/32';
+          else
+            value += '/128';
+        }
+        if (validator.isIPRange(value))
           this.rule.profile.ips.push({ ip: value });
       }
     }
 
     // Clear the input value
-    if (validator.isIP(value) || validator.isIPRange(value))
+    if (validator.isIPRange(value))
       event.chipInput!.clear();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -415,8 +596,151 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
 
+  toggleSelectAllCountryList(selectAllValue: boolean) {
+    this.filteredCountryListMulti.pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(val => {
+        if (selectAllValue) {
+          this.countryMultiCtrl.patchValue(val);
+        } else {
+          this.countryMultiCtrl.patchValue([]);
+        }
+      });
+  }
+
+  /**
+  * Sets the initial value after the filteredCountrys are loaded initially
+  */
+  protected setInitialValue() {
+    this.filteredCountryListMulti
+      .pipe(take(1), takeUntil(this._onDestroy))
+      .subscribe(() => {
+        // setting the compareWith property to a comparison function
+        // triggers initializing the selection according to the initial value of
+        // the form control (i.e. _initializeSelection())
+        // this needs to be done after the filteredCountrys are loaded initially
+        // and after the mat-option elements are available
+        this.multiSelect.compareWith = (a: Country, b: Country) => a && b && a.name === b.name;
+      });
+  }
+
+  protected filterCountryListMulti() {
+    if (!this._countryListAll) {
+      return;
+    }
+    // get the search keyword
+    let search = this.countryMultiFilterCtrl.value;
+    if (!search) {
+      this.filteredCountryListCache = this._countryListAll.slice();
+      this.filteredCountryListMulti.next(this.filteredCountryListCache);
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the countrys
+    this.filteredCountryListCache = this._countryListAll.filter(country => country.name.toLowerCase().indexOf(search) > -1);
+    this.filteredCountryListMulti.next(this.filteredCountryListCache);
+  }
+
+  protected setToggleAllCheckboxStateCountryList() {
+    let filteredLength = 0;
+    if (this.countryMultiCtrl && this.countryMultiCtrl.value) {
+      this.filteredCountryListCache.forEach(el => {
+        if (this.countryMultiCtrl.value.indexOf(el) > -1) {
+          filteredLength++;
+        }
+      });
+      this.isCountryListIndeterminate = filteredLength > 0 && filteredLength < this.filteredCountryListCache.length;
+      this.isCountryListChecked = filteredLength > 0 && filteredLength === this.filteredCountryListCache.length;
+    }
+  }
+
+  showAddTime = false;
+  showHideAddTime() {
+    this.showAddTime = !this.showAddTime;
+  }
+
+  minuteToHour(m: number) {
+    const hour = Math.floor(m / 60);
+    const minute = m - hour * 60;
+    let hourStr = hour < 10 ? `0${hour}` : `${hour}`;
+    let minuteStr = minute < 10 ? `0${minute}` : `${minute}`;
+    return hourStr + ':' + minuteStr;
+  }
+
+  calculateTimeProfileName(pf: TimeProfile) {
+    const days = pf.days.sort((a, b) => a - b);
+    let day = '';
+    days.forEach(x => {
+      switch (x) {
+        case 0:
+          day += 'S ';
+          break;
+        case 1:
+          day += 'M ';
+          break;
+        case 2:
+          day += 'T ';
+          break;
+        case 3:
+          day += 'W ';
+          break;
+        case 4:
+          day += 'TH ';
+          break;
+        case 5:
+          day += 'F ';
+          break;
+        case 6:
+          day += 'SA ';
+          break;
+        default:
+          break;
+      }
+    })
+    let start = '00:00';
+    let end = '23:59';
+    if (pf.startTime)
+      start = this.minuteToHour(pf.startTime);
+    if (pf.endTime)
+      end = this.minuteToHour(pf.endTime);
+    const txt = `${pf.timezone} ${day} ${start} - ${end}`;
+    return txt;
+  }
+
+  calculatesTimeProfiles(times?: TimeProfile[]) {
+    if (!times)
+      return;
+    times.forEach(x => {
+      x.name = this.calculateTimeProfileName(x);
+      x.objId = UtilService.randomNumberString();
+    })
+  }
+
+  removeTimeProfile(objId: string) {
+    if (this.rule.profile.times) {
+      const index = this.rule.profile.times?.findIndex(x => x.objId == objId)
+      if (index > -1) {
+        this.rule.profile.times?.splice(index, 1);
+      }
+    }
+    this.modelChanged();
+  }
+
+  addTimeProfile(event: TimeProfile) {
+
+    const cloned = cloneTimeProfile(event);
+    if (!this.rule.profile.times)
+      this.rule.profile.times = [];
+    cloned.name = this.calculateTimeProfileName(cloned);
+    cloned.objId = UtilService.randomNumberString();
+    if (!this.rule.profile.times.find(x => x.name == cloned.name))
+      this.rule.profile.times.push(cloned);
+    this.modelChanged();
+  }
 
 
 
 
 }
+
+

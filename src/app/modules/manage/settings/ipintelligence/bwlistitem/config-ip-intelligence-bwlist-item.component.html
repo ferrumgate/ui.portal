@@ -1,0 +1,58 @@
+<div class="config-ip-intelligence-bwlist-item">
+    <mat-accordion test-id="config-ip-intelligence-bwlist-item" class="row">
+        <mat-expansion-panel [expanded]="isExpanded">
+            <mat-expansion-panel-header>
+                <mat-panel-title test-id="policy-authn-rule-title" fxLayout="row" fxLayoutAlign="start center">
+
+                    <div fxFlexAlign="center">
+                        <mat-icon *ngIf="!isBlackList" matTooltip="{{'Allow'|translate}}">
+                            check_circle_outline
+                        </mat-icon>
+                        <mat-icon color="warn" *ngIf="isBlackList" matTooltip="{{'Deny'|translate}}">
+                            block</mat-icon>
+                    </div>
+
+                    <div fxFlexAlign="center" style="padding-left: 10px;"
+                        test-id="config-ip-intelligence-bwlist-item-val-input">{{model.val}}</div>
+                </mat-panel-title>
+
+            </mat-expansion-panel-header>
+            <mat-divider></mat-divider>
+
+            <div fxFill class="config-ip-intelligence-bwlist-item-explanation ">
+                <div appearance="fill" fxFill class="config-ip-intelligence-bwlist-item-width">
+                    <mat-label>{{"InsertDate"|translate}}</mat-label>
+                    <input matInput test-id="config-ip-intelligence-bwlist-item-insertdate-input"
+                        [ngModel]="model.insertDate" [ngModelOptions]="{standalone:true}" type="text" readonly>
+
+
+                </div>
+            </div>
+            <div fxFill class="config-ip-intelligence-bwlist-item-explanation pb-10">
+                <div appearance="fill" fxFill class="config-ip-intelligence-bwlist-item-width">
+                    <mat-label>{{"Description"|translate}}</mat-label>
+                    <input matInput test-id="config-ip-intelligence-bwlist-item-description-input" placeholder="note"
+                        [ngModel]="model.description" [ngModelOptions]="{standalone:true}" type="text" readonly>
+                </div>
+            </div>
+
+
+            <div>
+                <mat-divider></mat-divider>
+                <mat-toolbar style="height:35px">
+                    <mat-action-row class="actions" fxFlex fxLayoutAlign="start center">
+                        <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+
+                    </mat-action-row>
+                </mat-toolbar>
+
+
+
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+
+</div>

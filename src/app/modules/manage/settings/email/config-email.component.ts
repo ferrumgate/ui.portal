@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { delay, map, of, switchMap, takeWhile } from 'rxjs';
@@ -36,7 +36,7 @@ interface SmtpModel extends Model {
   templateUrl: './config-email.component.html',
   styleUrls: ['./config-email.component.scss']
 })
-export class ConfigEmailComponent implements OnInit {
+export class ConfigEmailComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
 
   helpLink = '';
@@ -78,6 +78,9 @@ export class ConfigEmailComponent implements OnInit {
     this.helpLink = this.configService.links.emailHelp;
 
   }
+  ngOnDestroy(): void {
+    this.allSub.unsubscribe();
+  }
 
   createFormGroup(model: any) {
     const fmg = new FormGroup(
@@ -106,21 +109,21 @@ export class ConfigEmailComponent implements OnInit {
       type: ''
     }
   }
-  checkFormError() {
-    //check errors 
-    this.error = this.resetFormErrors();
-
-
-    const userError = this.formGroup.controls['user'].errors;
-
-    if (userError) {
-      if (userError['required'])
-        this.error.type = 'TypeRequired';
-      else
-        this.error.type = 'TypeRequired';
-    }
-
-  }
+  /*   checkFormError() {
+      //check errors 
+      this.error = this.resetFormErrors();
+  
+  
+      const userError = this.formGroup.controls['user'].errors;
+  
+      if (userError) {
+        if (userError['required'])
+          this.error.type = 'TypeRequired';
+        else
+          this.error.type = 'TypeRequired';
+      }
+  
+    } */
   openHelp() {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');

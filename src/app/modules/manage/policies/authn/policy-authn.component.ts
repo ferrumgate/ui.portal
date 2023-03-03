@@ -21,6 +21,9 @@ import { TranslationService } from '../../../shared/services/translation.service
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { PolicyAuthnService } from 'src/app/modules/shared/services/policyAuthn.service';
 import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
+import { Country } from 'src/app/modules/shared/models/country';
+import { DataService } from 'src/app/modules/shared/services/data.service';
+import { TimeZone } from 'src/app/modules/shared/models/timezone';
 
 
 
@@ -42,6 +45,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   users: User2[] = [];
   groups: Group[] = [];
+
   performance: {
     users: Map<string, User2>,
     groups: Map<string, Group>,
@@ -54,9 +58,11 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     network: { id: '' } as any, rules: [], isExpanded: false
   }]
   policyAuthn: AuthenticationPolicy = { rules: [] } as any;
+  countryList: Country[] = [];
   helpLink = '';
   isThemeDark = false;
   searchKey = '';
+  timezoneList: TimeZone[] = [];
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -65,7 +71,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     private networkService: NetworkService,
     private userService: UserService,
     private groupService: GroupService,
-    private policyAuthnService: PolicyAuthnService
+    private policyAuthnService: PolicyAuthnService,
+    private dataService: DataService
 
   ) {
 
@@ -158,16 +165,16 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     this.policies.push({
       network: network, isExpanded: true,
       rules: [
-        { id: 'rule1', objId: UtilService.randomNumberString(), name: 'rule1', action: 'allow', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
+        { id: 'rule1', objId: UtilService.randomNumberString(), name: 'rule1',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, },
 
-        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true }, isEnabled: true, isExpanded: true }
       ]
     })
 
     this.policies.push({
       network: network, isExpanded: false,
       rules: [
-        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2', action: 'deny', networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
+        { id: 'rule2', objId: UtilService.randomNumberString(), name: 'rule2',  networkId: 'testNetworkId', userOrgroupIds: ['someid2', 'group1'], profile: { is2FA: true, ips: [] }, isEnabled: true, }
       ]
     }) */
     this.getAllData().subscribe();
@@ -183,10 +190,32 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');
   }
-
+  offsetToHour(offset: number) {
+    const absOffset = Math.abs(offset);
+    const first = Math.floor(absOffset / 60);
+    const second = absOffset - (first * 60);
+    let offsetHour = offset < 0 ? '+' : offset == 0 ? '' : '-';
+    offsetHour += first < 10 ? '0' + first : first;
+    offsetHour += ":";
+    offsetHour += second < 10 ? '0' + second : second;
+    return offsetHour;
+  }
 
   getAllData() {
-    return this.networkService.get2().pipe(
+    return this.dataService.getCountry().pipe(
+      map(y => {
+        this.countryList = y.items.sort((a, b) => a.name.localeCompare(b.name)) as any;
+      }),
+      switchMap(y => this.dataService.getTimeZone()),
+      map(y => {
+        this.timezoneList = y.items.sort((a, b) => a.name.localeCompare(b.name)) as any;
+
+        this.timezoneList.forEach(x => {
+          x.offsetHour = this.offsetToHour(x.offset);
+          x.nameEx = x.name + ' ' + x.offsetHour;
+        })
+      }),
+      switchMap(y => this.networkService.get2()),
       map(y => {
         this.networks = y.items as any;
         this.performance.networks = new Map();
@@ -209,8 +238,6 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         this.policyAuthn = z;
         this.fillPolicy('');
       })
-
-
     )
 
   }
@@ -225,7 +252,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     })
     this.policyAuthn.rules.forEach(x => {
       if (!x.objId)
-        x.objId = UtilService.randomNumberString()
+        x.objId = UtilService.randomNumberString();
     })
     if (!search) {
       this.networks.forEach(net => {
@@ -276,8 +303,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
 
     this.policies.find(x => x.network.id == net.id)?.rules.unshift({
       id: '', objId: UtilService.randomNumberString(), name: '', networkId: net.id, profile: {
-        is2FA: false
-      }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true, action: 'allow'
+        is2FA: false, ipIntelligence: { isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true }
+      }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true,
     })
   }
 

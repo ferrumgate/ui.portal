@@ -113,16 +113,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
     this.allSub.unsubscribe();
   }
   prepareAutoComplete() {
-    this.filteredOptions = of(this.networks).pipe(
-
-      map(data => {
-
-        data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        })
-        return data;
-      })
-    )
+    this.filteredOptions = this.filter('');
   }
   testForm = new FormControl();
 
@@ -356,6 +347,29 @@ export class ServiceComponent implements OnInit, OnDestroy {
   displayFn(net: Network | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || '';
+  }
+
+  private filter(name: string) {
+    const filterValue = name.toLowerCase();
+    let items = this.networks;
+    if (name)
+      items = items.filter(x => x.name.toLocaleLowerCase().includes(filterValue));
+    return of(items).pipe(
+      map(data => {
+
+        data.sort((a, b) => {
+          return a.name < b.name ? -1 : 1;
+        })
+        return data;
+      })
+    )
+  }
+
+  searchNetwork(ev: any) {
+    if (typeof (ev) == 'string') {
+      this.filteredOptions = this.filter(ev);
+    }
+
   }
 
 

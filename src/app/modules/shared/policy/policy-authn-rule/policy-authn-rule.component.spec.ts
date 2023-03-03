@@ -1,7 +1,7 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatTabGroupHarness } from '@angular/material/tabs/testing'
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { MatTabGroup } from '@angular/material/tabs';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { GroupComponent } from '../../group/group.component';
-import { dispatchFakeEvent, expectValue, findEl, findEls, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
+import { click, dispatchFakeEvent, expectValue, findEl, findEls, getCheckValue, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
 import { AuthenticationPolicy, AuthenticationRule } from '../../models/authnPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
@@ -26,6 +26,8 @@ import { SharedModule } from '../../shared.module';
 
 
 import { PolicyAuthnRuleComponent } from './policy-authn-rule.component';
+import { By } from '@angular/platform-browser';
+import { UtilService } from '../../services/util.service';
 
 describe('PolicyAuthnRuleComponent', () => {
   let component: PolicyAuthnRuleComponent;
@@ -36,7 +38,8 @@ describe('PolicyAuthnRuleComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [PolicyAuthnRuleComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
-        NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
+        NoopAnimationsModule, SharedModule, RecaptchaV3Module,
+        MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,
         TranslationService, NotificationService,
@@ -60,26 +63,51 @@ describe('PolicyAuthnRuleComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(fakeAsync(() => {
+    flush();
+  }))
+
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('data binding', fakeAsync(async () => {
-    expect(component).toBeTruthy();
-    let group: Group = {
-      id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
+
+
+  let group: Group = {
+    id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
+  }
+  const groups = [group];
+
+  let network: Network = {
+    id: 'network1', name: 'networkname'
+  } as Network;
+
+
+  let network2: Network = {
+    id: 'network12', name: 'networkname2'
+  } as Network;
+
+  const networks = [network, network2];
+
+  const countries = [
+    {
+      "id": "Bangladesh",
+      "isoCode": "BD",
+      "name": "Bangladesh"
+    },
+    {
+      "id": "Belgium",
+      "isoCode": "BE",
+      "name": "Belgium"
+    },
+    {
+      "id": "Burkina_Faso",
+      "isoCode": "BF",
+      "name": "Burkina Faso"
     }
-    const groups = [group];
-
-    let network: Network = {
-      id: 'network1', name: 'networkname'
-    } as Network;
-
-
-    let network2: Network = {
-      id: 'network12', name: 'networkname2'
-    } as Network;
-
-    const networks = [network, network2];
+  ];
+  it('data binding first tab', fakeAsync(async () => {
+    expect(component).toBeTruthy();
 
 
     const rule: AuthenticationRule = {
@@ -87,13 +115,14 @@ describe('PolicyAuthnRuleComponent', () => {
       networkId: network.id,
       profile: { is2FA: true, ips: [{ ip: '1.2.3.4' }] },
       userOrgroupIds: [group.id], isExpanded: true,
-      action: 'allow'
+
 
     }
 
     component.users = [];
     component.groups = groups;
     component.networks = networks;
+    component.countryList = countries;
 
     component.rule = rule
 
@@ -123,24 +152,11 @@ describe('PolicyAuthnRuleComponent', () => {
     const testEnabledId = 'policy-authn-rule-checkbox-enabled';
     findEl(fixture, testEnabledId);
 
-    const testActionId = 'policy-auth-rule-toogle-action';
-    findEl(fixture, testActionId);
+
 
     const testIpsTabId = 'policy-authn-tab-ips';
-    //tab does not work
-    //const tabs = await loader.getHarness(MatTabGroupHarness);
-    //(await tabs.getTabs())[1].select();
-    //const tabs = queryAllByCss(fixture, '.mat-tab-label');
 
-
-    //dispatchFakeEvent(tabs[1].nativeElement, 'click');
-    //tick(5000);
-    //fixture.detectChanges();
-    //debugger;
     const testIpsId = 'policy-authn-rule-ip-chip';
-    //const ipChips = findEls(fixture, testIpsId);
-    //expect(ipChips.length).toEqual(1);
-
 
     const testOkButtonId = 'policy-authn-rule-ok-button';
 
@@ -163,6 +179,256 @@ describe('PolicyAuthnRuleComponent', () => {
     expect(component.rule.isChanged).toBeTrue;
 
 
+
   }));
+
+  it('data binding second tab first ipIntelligence null', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+
+    //component.tabs.selectedIndex = 1;
+    component.selectedTab = 1;
+    tick(1000);
+    fixture.detectChanges();
+
+
+
+    const rule: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: {
+        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+      },
+
+      userOrgroupIds: [group.id], isExpanded: true,
+
+
+
+    }
+
+    component.users = [];
+    component.groups = groups;
+    component.networks = networks;
+    component.countryList = countries;
+
+    component.rule = rule
+
+    tick(1000);
+    fixture.detectChanges();
+
+    await fixture.whenStable();
+
+    const ipTab = findEl(fixture, 'policy-authn-tab-ips', false)
+
+    expect(ipTab).toBeTruthy();
+
+    const isWhiteListEl = getCheckValue(fixture, 'policy-authn-rule-ip-iswhitelist-enabled')
+    expect(isWhiteListEl).toBeFalse();
+
+    const isBlackListEl = getCheckValue(fixture, 'policy-authn-rule-ip-isblacklist-enabled')
+    expect(isBlackListEl).toBeFalse();
+
+
+    const isProxyEl = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
+    expect(isProxyEl).toBeFalse();
+
+    const isHostingEl = getCheckValue(fixture, 'policy-authn-rule-ip-ishosting-enabled')
+    expect(isHostingEl).toBeFalse();
+
+    const isCrawlerEl = getCheckValue(fixture, 'policy-authn-rule-ip-iscrawler-enabled')
+    expect(isCrawlerEl).toBeFalse();
+
+    const selectedCountryList = findEls(fixture, 'policy-authn-rule-ip-country');
+    expect(selectedCountryList.length).toEqual(0);
+
+
+  }));
+
+  it('data binding second tab first ipIntelligence not null', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+
+    //component.tabs.selectedIndex = 1;
+    component.selectedTab = 1;
+    tick(1000);
+    fixture.detectChanges();
+
+
+    const rule2: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: {
+        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        ipIntelligence: {
+          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+        }
+      },
+      userOrgroupIds: [group.id], isExpanded: true,
+
+
+
+
+    }
+
+    component.users = [];
+    component.groups = groups;
+    component.networks = networks;
+    component.countryList = countries;
+
+    component.rule = rule2
+
+
+
+
+
+    tick(1000);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+
+
+    const isWhiteListEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-iswhitelist-enabled')
+    expect(isWhiteListEl2).toBeTrue();
+
+    const isBlackListEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-isblacklist-enabled')
+    expect(isBlackListEl2).toBeTrue();
+
+
+    const isProxyEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
+    expect(isProxyEl2).toBeTrue();
+
+    const isHostingEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-ishosting-enabled')
+    expect(isHostingEl2).toBeTrue();
+
+    const isCrawlerEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-iscrawler-enabled')
+    expect(isCrawlerEl2).toBeTrue();
+
+
+    const testOkButtonId = 'policy-authn-rule-ok-button';
+
+
+
+  }));
+
+
+  it('data binding country list', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+
+    //component.tabs.selectedIndex = 1;
+    component.selectedTab = 1;
+
+    tick(1000);
+    fixture.detectChanges();
+    const rule2: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: {
+        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        ipIntelligence: {
+          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+        }, locations: [
+          { countryCode: countries[1].isoCode }
+        ]
+      },
+      userOrgroupIds: [group.id], isExpanded: true,
+
+
+
+
+    }
+
+    component.users = [];
+    component.groups = groups;
+    component.networks = networks;
+    component.countryList = countries;
+    component.rule = rule2
+
+    tick(1000);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    //debugger;
+    //const selectedCountryList = findEls(fixture, 'policy-authn-rule-ip-country-options');
+    //expect(selectedCountryList.length).toEqual(1);
+    expect(component.countryMultiCtrl.value.length).toEqual(1);
+
+
+  }));
+
+
+
+  it('data binding time tab', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+
+
+    //component.tabs.selectedIndex = 1;
+    component.selectedTab = 2;
+
+    tick(1000);
+    fixture.detectChanges();
+    const rule2: AuthenticationRule = {
+      id: 'somid', isEnabled: true, name: 'only north group can access',
+      networkId: network.id,
+      profile: {
+        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        ipIntelligence: {
+          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+        }, locations: [
+          { countryCode: countries[1].isoCode }
+        ],
+        times: [
+          { days: [0, 1, 2], timezone: 'Africa', endTime: 1200, startTime: 10 }
+        ]
+      },
+      userOrgroupIds: [group.id], isExpanded: true,
+
+
+
+
+    }
+
+    component.users = [];
+    component.groups = groups;
+    component.networks = networks;
+    component.countryList = countries;
+    component.rule = rule2
+
+    tick(1000);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    //debugger;
+    const selectedTimeProfiles = findEls(fixture, 'policy-authn-rule-time-chip');
+    expect(selectedTimeProfiles.length).toEqual(1);
+
+    const addUI = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI).toBeFalsy();
+
+    // open add ui 
+    click(fixture, 'policy-authn-rule-time-add-button');
+    fixture.detectChanges();
+    const addUI2 = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI2).toBeTruthy();
+
+    // close add ui 
+    click(fixture, 'policy-authn-rule-time-add-button');
+    fixture.detectChanges();
+
+    const addUI3 = findEl(fixture, 'policy-authn-rule-time-add-ui', false);
+    expect(addUI3).toBeFalsy();
+
+    //add new profile
+    component.addTimeProfile({ days: [0, 1], timezone: 'Africa' });
+    fixture.detectChanges();
+    const selectedTimeProfiles2 = findEls(fixture, 'policy-authn-rule-time-chip');
+    expect(selectedTimeProfiles2.length).toEqual(2);
+
+
+
+
+  }));
+
+
 });
 

@@ -160,15 +160,25 @@ export class ServiceComponent implements OnInit, OnDestroy {
   createFormGroup(service: ServiceExtended) {
     const fmg = new FormGroup({
       name: new FormControl(service.name, [Validators.required]),
+      protocol: new FormControl(service.protocol, [Validators.required]),
       tcp: new FormControl(service.tcp, []),
       udp: new FormControl(service.udp, []),
       host: new FormControl(service.host, [Validators.required, InputService.ipOrdomainValidator]),
       networkId: new FormControl(service.networkId, [Validators.required]),
-      networkName: new FormControl(service.networkName, [Validators.required])
+      networkName: new FormControl(service.networkName, [Validators.required]),
+      assignedIp: new FormControl(service.assignedIp, []),
 
     });
-    if (service.isSystem)
-      fmg.disable();
+    fmg.controls['protocol'].disable();
+    fmg.controls['assignedIp'].disable();
+    if (service.isSystem) {
+
+      fmg.controls['networkId'].disable();
+      fmg.controls['networkName'].disable();
+      fmg.controls['name'].disable();
+    }
+    //if (service.isSystem)
+    //  fmg.disable();
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {

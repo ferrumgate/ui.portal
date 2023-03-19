@@ -22,12 +22,21 @@
                             <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Name"|translate}}</mat-label>
                                 <input matInput test-id="service-name-input" placeholder="{{'ServiceName'|translate}}"
-                                    formControlName="name" required>
+                                    formControlName="name" required [readonly]="service.isSystem">
                                 <mat-error>{{formError.name|translate}}</mat-error>
 
                             </mat-form-field>
                         </p>
 
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Protocol"|translate}}</mat-label>
+                                <input matInput test-id="service-protocol-input" formControlName="protocol"
+                                    readonly="true" required="true">
+
+                                <mat-hint>{{"ServiceProtocolHint"|translate}}</mat-hint>
+                            </mat-form-field>
+                        </p>
                         <p>
                             <mat-form-field fxFlex appearance="fill">
                                 <mat-label>{{"Host"|translate}}</mat-label>
@@ -60,7 +69,8 @@
                                 <mat-label>{{"Network"|translate}}</mat-label>
                                 <input type="text" test-id="service-network-input"
                                     placeholder="{{'SelectANetwork'|translate}}" matInput formControlName="networkName"
-                                    [matAutocomplete]="auto" (ngModelChange)="searchNetwork($event)">
+                                    [matAutocomplete]="auto" (ngModelChange)="searchNetwork($event)"
+                                    [readonly]="service.isSystem">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
                                     [displayWith]="displayFn">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
@@ -85,16 +95,15 @@
                                     </mat-chip>
                                     <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)"
-                                        [readOnly]="service.isSystem">
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
                                 </mat-chip-list>
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-form-field fxFlex appearance="fill">
+                            <mat-form-field fxFlex appearance="fill" disa>
                                 <mat-label>{{"AssignedIp"|translate}}</mat-label>
-                                <input matInput test-id="service-assingedip-input" [(ngModel)]="service.assignedIp"
-                                    [ngModelOptions]="{standalone:true}" readonly="true">
+                                <input matInput test-id="service-assignedip-input" formControlName="assignedIp"
+                                    readonly="true" required="false">
                                 <mat-hint>{{"AssignedIpHint"|translate}}</mat-hint>
                             </mat-form-field>
                         </p>
@@ -113,10 +122,9 @@
                 <div>
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
-                        <mat-action-row *ngIf="!service.isSystem" class="service-actions" fxFlex
-                            fxLayoutAlign="start center">
-                            <button test-id="service-delete-button" mat-icon-button color="primary"
-                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                        <mat-action-row class="service-actions" fxFlex fxLayoutAlign="start center">
+                            <button *ngIf="!service.isSystem" test-id="service-delete-button" mat-icon-button
+                                color="primary" matTooltip="{{'Delete'|translate}}" (click)="delete()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                             <span *ngIf="service.isChanged" fxFlex fxLayoutAlign="end center">

@@ -16,10 +16,23 @@
                     </mat-select>
                 </mat-form-field>
                 <div fxLayoutAlign="center center">
-                    <button mat-raised-button color="primary" class="add" (click)="addNewService()">
-                        <mat-icon>add</mat-icon>
+                    <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+
                         {{"Add"|translate}}
+                        <mat-icon>keyboard_arrow_down</mat-icon>
                     </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="addNewService('raw')">
+                            <mat-icon>swap_vert</mat-icon>
+                            <span>Tcp/Udp</span>
+                        </button>
+                        <button mat-menu-item (click)="addNewService('dns')">
+                            <mat-icon svgIcon="dns"></mat-icon>
+                            <span>Dns</span>
+                        </button>
+
+                    </mat-menu>
                 </div>
             </div>
             <mat-divider></mat-divider>

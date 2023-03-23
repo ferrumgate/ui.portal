@@ -1,0 +1,76 @@
+.config-ip-intelligence-list {
+    margin-top: 10px;
+}
+
+.config-ip-intelligence-list .toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    //font-size: 0.9rem;
+    //height: 60px;
+    padding-bottom: 20px;
+
+}
+
+
+.config-ip-intelligence-list mat-card {
+
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.config-ip-intelligence-list .search {
+    margin-left: 10px;
+
+}
+
+.config-ip-intelligence-list .items {
+    //height: calc(100vh - 425px);
+    //overflow: auto;
+    margin-top: 10px;
+}
+
+
+
+.config-ip-intelligence-list .add {
+    margin-left: 10px;
+
+}
+
+.config-ip-intelligence-list-explanation {
+    padding-top: 20px;
+}
+
+.config-ip-intelligence-list .row {
+
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+
+}
+
+.config-ip-intelligence-list .title {
+    //padding-top: 15px;
+    //padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-ip-intelligence-list .header-actions {}
+
+.config-ip-intelligence-list .results-title {
+    font-size: 1rem;
+
+}
+
+.config-ip-intelligence-list .results-result {
+    padding-top: 20px;
+}
+
+.config-ip-intelligence-list .results-ips {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

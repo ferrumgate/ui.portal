@@ -30,6 +30,8 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   file: File | null = null;
   @Input()
   uploadProgress: number;
+  @Input()
+  filename: string = '';
   @Output()
   onFileSelectedEvent: EventEmitter<any> = new EventEmitter();
 

@@ -4,17 +4,18 @@ import { CommonModule } from '@angular/common';
 import { ConfigIpIntelligenceRoutingModule } from './config-ip-intelligence-routing.module';
 import { ConfigIpIntelligenceComponent } from './config-ip-intelligence.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ConfigIpIntelligenceBWListComponent } from './bwlist/config-ip-intelligence-bwlist.component';
+
 import { ConfigIpIntelligenceSourceComponent } from './source/config-ip-intelligence-source.component';
-import { ConfigIpIntelligenceBWListItemComponent } from './bwlistitem/config-ip-intelligence-bwlist-item.component';
+import { ConfigIpIntelligenceListComponent } from './list/config-ip-intelligence-list.component';
+import { ConfigIpIntelligenceListItemComponent } from './listitem/config-ip-intelligence-list-item.component';
 
 
 @NgModule({
   declarations: [
     ConfigIpIntelligenceComponent,
-    ConfigIpIntelligenceBWListComponent,
-    ConfigIpIntelligenceBWListItemComponent,
-    ConfigIpIntelligenceSourceComponent
+    ConfigIpIntelligenceSourceComponent,
+    ConfigIpIntelligenceListComponent,
+    ConfigIpIntelligenceListItemComponent,
   ],
   imports: [
     CommonModule,

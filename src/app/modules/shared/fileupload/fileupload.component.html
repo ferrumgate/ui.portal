@@ -4,7 +4,7 @@
         <div>
             <div fxFill>
                 <span test-id="fileupload-filename-input" class="filename">
-                    {{file?.name || ("NoFileUploadedYet"|translate)}}
+                    {{file?.name || filename || ("NoFileUploadedYet"|translate)}}
                 </span>
                 <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
                     <mat-icon>attach_file</mat-icon>

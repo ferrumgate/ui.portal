@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of, switchMap, takeWhile } from 'rxjs';
 import { ConfigES } from 'src/app/modules/shared/models/config';
-import { IpIntelligenceBWItem, IpIntelligenceList, IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
+import { IpIntelligenceList, IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';

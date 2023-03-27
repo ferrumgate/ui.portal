@@ -71,6 +71,8 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   deleteIpIntelligenceList: EventEmitter<IpIntelligenceList> = new EventEmitter();
   @Output()
   downloadIpIntelligenceList: EventEmitter<IpIntelligenceList> = new EventEmitter();
+  @Output()
+  resetIpIntelligenceList: EventEmitter<IpIntelligenceList> = new EventEmitter();
 
 
 
@@ -342,6 +344,11 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   download() {
     this.downloadIpIntelligenceList.emit(this.createBaseModel());
   }
+
+  reset() {
+    this.resetIpIntelligenceList.emit(this.createBaseModel());
+  }
+
 
 
 }

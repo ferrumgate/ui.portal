@@ -420,5 +420,7 @@
     "FileUploadedSuccessfuly": "File uploaded successfuly",
     "IpIntelligenceLists": "Ip intelligence lists",
     "SelectYouWantToAllow": "Select you want to allow",
-    "SelectYouWantToDeny": "Select you want to deny"
+    "SelectYouWantToDeny": "Select you want to deny",
+    "Reset": "Reset",
+    "SuccessfullyReseted": "Successfully reseted"
 }

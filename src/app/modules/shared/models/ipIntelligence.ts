@@ -18,15 +18,7 @@ export interface IpIntelligenceFilterCategory {
     hosting?: boolean,
     crawler?: boolean,
 }
-export interface IpIntelligenceBWItem {
-    id: string;
-    val: string;
-    insertDate: string;
-    description?: string;
-}
-export function calculateIpIntelligenceBWItemId(net: string) {
-    return net.replace(/\//g, '#');
-}
+
 
 export interface IpIntelligenceCountryList {
     items: Country[];
@@ -34,8 +26,6 @@ export interface IpIntelligenceCountryList {
 
 export interface IpIntelligence {
 
-    whiteList: IpIntelligenceBWItem[],
-    blackList: IpIntelligenceBWItem[],
     //allowed country list
     countryList: IpIntelligenceCountryList,
     //filter category option

@@ -103,7 +103,11 @@
                             </mat-form-field>
                         </p>
                         <p *ngIf="list.status?.hasFile">
-
+                            <span fxFlex fxLayout="row" fxLayoutAlign="start center">
+                                <button test-id="reset-button" mat-stroked-button (click)="reset()">
+                                    <mat-icon>clear_all</mat-icon>
+                                    {{'Reset'|translate}}</button>
+                            </span>
                             <span fxFlex fxLayout="row" fxLayoutAlign="end center">
                                 <button test-id="download-button" mat-stroked-button (click)="download()">
                                     <mat-icon>arrow_downward</mat-icon>

@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } from 'rxjs';
 import { ConfigES } from 'src/app/modules/shared/models/config';
-import { IpIntelligenceBWItem, IpIntelligenceList, IpIntelligenceListStatus } from 'src/app/modules/shared/models/ipIntelligence';
+import { IpIntelligenceList, IpIntelligenceListStatus } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
@@ -220,7 +220,18 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
 
     this.confirmService.showAreYouSure().pipe(
       takeWhile(x => x),
-      switchMap(x => x)).subscribe();
+      switchMap(x => this.ipIntelligenceService.downloadList($event))).subscribe();
+
+  }
+
+  resetList($event: IpIntelligenceList) {
+    if (!$event.id) return; // a problem
+
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(x => this.ipIntelligenceService.resetList($event))).subscribe(x => {
+        this.notificationService.success(this.translateService.translate('SuccessfullyReseted'))
+      });
 
   }
 

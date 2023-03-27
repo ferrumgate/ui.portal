@@ -8,16 +8,18 @@ export function cloneIpProfile(p: IpProfile): IpProfile {
     }
 }
 export interface IpIntelligenceProfile {
-    isWhiteList: boolean;
-    isBlackList: boolean;
+    whiteLists: string[];
+    whiteListsEx?: { id: string, name: string }[];
+    blackLists: string[];
+    blackListsEx?: { id: string, name: string }[];
     isProxy: boolean;
     isHosting: boolean;
     isCrawler: boolean;
 }
 export function cloneIpIntelligenceProfile(p: IpIntelligenceProfile): IpIntelligenceProfile {
     return {
-        isWhiteList: p.isWhiteList,
-        isBlackList: p.isBlackList,
+        blackLists: Array.from(p.blackLists),
+        whiteLists: Array.from(p.whiteLists),
         isCrawler: p.isCrawler,
         isHosting: p.isHosting,
         isProxy: p.isProxy
@@ -182,7 +184,9 @@ export interface AppVersion {
 export interface AuthenticationProfile {
     app?: AppVersion;
     is2FA?: boolean;
-    ips?: IpProfile[];
+    //custom white list
+    whiteListIps?: IpProfile[];
+    blackListIps?: IpProfile[]
     ipIntelligence?: IpIntelligenceProfile;
     times?: TimeProfile[];
     locations?: LocationProfile[];
@@ -195,7 +199,8 @@ export function cloneAuthenticationProfile(pr: AuthenticationProfile): Authentic
     return {
         is2FA: pr.is2FA,
         app: pr.app ? { version: pr.app?.version } : undefined,
-        ips: pr.ips ? Array.from(pr.ips.map(x => cloneIpProfile(x))) : undefined,
+        whiteListIps: pr.whiteListIps ? Array.from(pr.whiteListIps.map(x => cloneIpProfile(x))) : undefined,
+        blackListIps: pr.blackListIps ? Array.from(pr.blackListIps.map(x => cloneIpProfile(x))) : undefined,
         ipIntelligence: pr.ipIntelligence ? cloneIpIntelligenceProfile(pr.ipIntelligence) : undefined,
         times: pr.times ? Array.from(pr.times.map(x => cloneTimeProfile(x))) : undefined,
         locations: pr.locations ? Array.from(pr.locations.map(x => cloneLocationProfile(x))) : undefined,

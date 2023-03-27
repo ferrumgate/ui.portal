@@ -123,7 +123,7 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   modelChanged() {
 
     this.checkFormError();
-    if (this.formGroup.valid)
+    if (this.checkFormIsValid())
       this.checkIfModelChanged();
     else this.list.isChanged = false;
 
@@ -199,13 +199,16 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
 
     // Clear the input value
     event.chipInput!.clear();
-    if (this.formGroup.valid)
+    if (this.checkFormIsValid())
       this.checkIfModelChanged();
+  }
+  checkFormIsValid() {
+    return this.formGroup.valid && this._model.file && this._model.file.source
   }
 
   removeLabel(label: string): void {
     this._model.labels = this._model.labels?.filter(x => x != label);
-    if (this.formGroup.valid)
+    if (this.checkFormIsValid())
       this.checkIfModelChanged();
   }
 
@@ -247,8 +250,10 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       }
     }
     if (this.list.file) {
-      if (!this.list.file.source)
+      if (!this.list.file.source) {
         error.fileSource = 'FileRequired';
+
+      }
 
 
     }

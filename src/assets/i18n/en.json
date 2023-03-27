@@ -369,6 +369,7 @@
     "ApiKeyHint": "Access key for api",
     "ApiKeyRequired": "Api key required",
     "CustomWhiteList": "Custom white list",
+    "CustomBlackList": "Custom black list",
     "IsIpIntelligenceWhiteListEnabled": "Ip intelligence white list enabled",
     "IsIpIntelligenceBlackListEnabled": "Ip intelligence black list enabled",
     "IsProxyIp": "VPN, tor, web proxy enabled",
@@ -416,5 +417,8 @@
     "Updated": "Updated",
     "NothingChanged": "Nothing changed",
     "FileRequired": "File required",
-    "FileUploadedSuccessfuly": "File uploaded successfuly"
+    "FileUploadedSuccessfuly": "File uploaded successfuly",
+    "IpIntelligenceLists": "Ip intelligence lists",
+    "SelectYouWantToAllow": "Select you want to allow",
+    "SelectYouWantToDeny": "Select you want to deny"
 }

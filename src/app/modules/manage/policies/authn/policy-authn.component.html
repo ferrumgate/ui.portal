@@ -55,7 +55,8 @@
                                     [cdkDragDisabled]="isDragDisabled(pol)">
                                     <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks"
                                         [users]="users" [groups]="groups" [countryList]="countryList"
-                                        [timezoneList]="timezoneList" [rule]="rule" [dragDisabled]="isDragDisabled(pol)"
+                                        [ipIntelligenceLists]="ipIntelligenceList" [timezoneList]="timezoneList"
+                                        [rule]="rule" [dragDisabled]="isDragDisabled(pol)"
                                         (deleteAuthnRule)="deleteAuthnRule($event)"
                                         (saveAuthnRule)="saveAuthnRule($event)">
                                     </app-policy-authn-rule>

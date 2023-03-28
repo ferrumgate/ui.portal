@@ -422,5 +422,8 @@
     "SelectYouWantToAllow": "Select you want to allow",
     "SelectYouWantToDeny": "Select you want to deny",
     "Reset": "Reset",
-    "SuccessfullyReseted": "Successfully reseted"
+    "SuccessfullyReseted": "Successfully reseted",
+    "DownloadStarted": "Download started",
+    "DownloadFinished": "Download finished",
+    "WaitWhileDownloading": "Wait while downloading"
 }

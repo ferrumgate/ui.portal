@@ -121,10 +121,11 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
 
   }
   prepareList(list: IpIntelligenceList, status?: IpIntelligenceListStatus) {
+
     list.objId = UtilService.randomNumberString();
     list.insertDateStr = UtilService.dateFormatToLocale(new Date(list.insertDate));
     list.status = status;
-    list.status = { hasFile: true }
+    list.status = { ...list.status, hasFile: status ? true : false }
     if (list.status) {
       if (list.status.lastCheck)
         list.status.lastCheck = UtilService.dateFormatToLocale(new Date(list.status.lastCheck))
@@ -141,11 +142,14 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
       this.getAllData().subscribe();
     else {
       this.ipIntelligenceService.getList(search).pipe(
-        map(y => {
-          this.lists = y.items.map(x => {
-            return this.prepareList(x)
-          });
-          return y;
+        map(z => {
+          this.lists = z.items.map(x => {
+
+            return this.prepareList(x, z.itemsStatus.find(y => y.id == x.id))
+          }).sort((a, b) => {
+
+            return a.name.localeCompare(b.name)
+          })
         })
       ).subscribe();
     }
@@ -220,7 +224,13 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
 
     this.confirmService.showAreYouSure().pipe(
       takeWhile(x => x),
-      switchMap(x => this.ipIntelligenceService.downloadList($event))).subscribe();
+      switchMap(x => {
+        this.notificationService.success(this.translateService.translate('WaitWhileDownloading'));
+        return of(x);
+      }),
+      switchMap(x => this.ipIntelligenceService.downloadList($event))).subscribe(x => {
+        this.notificationService.success(this.translateService.translate('DownloadFinished'))
+      });
 
   }
 

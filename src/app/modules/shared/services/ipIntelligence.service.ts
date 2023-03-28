@@ -11,7 +11,7 @@ import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
-
+import { saveAs } from 'file-saver';
 
 
 @Injectable({
@@ -143,14 +143,27 @@ export class IpIntelligenceService extends BaseService {
       }))
   }
 
+
   downloadList(item: IpIntelligenceList) {
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
 
         let url = this.joinUrl(this._ipIntelligenceList, `${item.id}`, 'file', y);
-        return this.httpService.get(url);
+        return this.httpService.get(url, { responseType: 'blob' });
 
+      }),
+      switchMap(data => {
+        const filename = `${item.name}_${new Date().toISOString()}.list`;
+        //let blob = new Blob([data], { type: 'application/txt' });
+        //FileSaver.saveAs(data, "hello world.txt");
+        saveAs(data, filename);
+
+        // var downloadURL = window.URL.createObjectURL(data);
+
+
+        // window.open(this.downloadUrl(item) + '/' + data.key, '_self');
+        return of({});
       }))
   }
 

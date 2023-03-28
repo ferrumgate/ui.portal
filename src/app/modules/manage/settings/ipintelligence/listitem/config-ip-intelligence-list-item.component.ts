@@ -205,7 +205,9 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       this.checkIfModelChanged();
   }
   checkFormIsValid() {
-    return this.formGroup.valid && this._model.file && this._model.file.source
+    if (this._model.file)
+      return this.formGroup.valid && this._model.file.source
+    return this.formGroup.valid;
   }
 
   removeLabel(label: string): void {

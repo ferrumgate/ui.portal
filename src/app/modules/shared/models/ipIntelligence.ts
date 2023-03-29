@@ -53,6 +53,8 @@ export interface IpIntelligenceList {
 
 
     };
+    splitter?: string;
+    splitterIndex?: number;
     labels?: string[],
     updateDate: string;
     insertDate: string;

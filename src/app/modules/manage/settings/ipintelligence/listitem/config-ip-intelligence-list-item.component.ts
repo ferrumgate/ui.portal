@@ -38,9 +38,9 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
 
   _model: IpIntelligenceListExtended =
     {
-      id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 1, url: 'https://ferrumgate.com' }, insertDateStr: '',
+      id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 60, url: 'https://ferrumgate.com' }, insertDateStr: '', isExpanded: false,
       orig: {
-        id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 1, url: 'https://ferrumgate.com' }
+        id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 60, url: 'https://ferrumgate.com' }
       }
     };
 
@@ -115,7 +115,10 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   }
 
   testForm = new FormControl();
+  expand($event: any) {
 
+    this._model.isExpanded = $event
+  }
 
   openHelp() {
     if (this.helpLink) {
@@ -138,6 +141,8 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
     const fmg = new FormGroup({
       name: new FormControl(list.name, [Validators.required]),
       insertDateStr: new FormControl(list.insertDateStr, []),
+      splitter: new FormControl(list.splitter, []),
+      splitterIndex: new FormControl(list.splitterIndex, []),
 
 
 
@@ -169,7 +174,13 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       const fm = fmg.controls[iterator] as FormControl;
       this.allSub.addThis =
         fm.valueChanges.subscribe(x => {
-          (this._model as any)[iterator] = x;
+          if (iterator == 'httpUrl')
+            (this._model as any).http.url = x;
+          else
+            if (iterator == 'httpCheckFrequency')
+              (this._model as any).http.checkFrequency = x;
+            else
+              (this._model as any)[iterator] = x;
 
         })
     }
@@ -225,6 +236,14 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       this.list.isChanged = true;
     if (UtilService.checkChanged(original.labels, this.list.labels))
       this.list.isChanged = true
+    if (original.splitter != this.list.splitter)
+      this.list.isChanged = true;
+    if (original.splitterIndex != this.list.splitterIndex)
+      this.list.isChanged = true;
+    if (original.http?.checkFrequency != this.list.http?.checkFrequency)
+      this.list.isChanged = true;
+    if (original.http?.url != this.list.http?.url)
+      this.list.isChanged = true;
     if (this.uploadFile)
       this.list.isChanged = true;
 
@@ -289,6 +308,8 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       name: this._model.name,
       insertDate: this._model.insertDate,
       updateDate: this._model.updateDate,
+      splitter: this._model.splitter,
+      splitterIndex: this._model.splitterIndex,
       file: this._model.file,
       http: this._model.http,
       uploadFile: this.uploadFile,

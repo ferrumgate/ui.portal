@@ -109,7 +109,8 @@ export class IpIntelligenceService extends BaseService {
       id: item.id, name: item.name, insertDate: item.insertDate, updateDate: item.updateDate,
       file: item.file ? { source: item.file.source, key: item.file.key } : undefined,
       http: item.http ? { checkFrequency: item.http.checkFrequency, url: item.http.url } : undefined,
-      labels: item.labels
+      labels: item.labels,
+      splitter: item.splitter, splitterIndex: item.splitterIndex
     }
     return this.preExecute(list).pipe(
       switchMap(y => {

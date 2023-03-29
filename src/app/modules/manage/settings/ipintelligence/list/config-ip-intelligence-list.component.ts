@@ -87,7 +87,7 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
           {
             id: '1', insertDate: new Date().toString(), name: 'htt list', updateDate: new Date().toString(), labels: ['test'],
             http: {
-              url: 'https://ferrumgate.com', checkFrequency: 1
+              url: 'https://ferrumgate.com', checkFrequency: 60
             }
           },
 
@@ -159,11 +159,12 @@ export class ConfigIpIntelligenceListComponent implements OnInit, OnDestroy {
     const list: IpIntelligenceList = {
       objId: UtilService.randomNumberString(),
       id: '', name: '', labels: [],
-      insertDate: new Date().toISOString(), updateDate: ''
+      insertDate: new Date().toISOString(), updateDate: '',
+      isExpanded: true,
     }
     if (type == 'file')
       list.file = { source: '' };
-    else list.http = { checkFrequency: 1, url: 'https://www.ferrumgate.com' }
+    else list.http = { checkFrequency: 60, url: 'https://www.ferrumgate.com' }
     this.lists.unshift(list);
   }
   saveList($event: IpIntelligenceList) {

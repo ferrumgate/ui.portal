@@ -411,7 +411,7 @@
     "ListName": "List name",
     "DownloadUrl": "Download url",
     "ListCheckUrlFrequency": "Check url and update if newer",
-    "CheckFrequency": "Check frequency (Hour)",
+    "CheckFrequency": "Check frequency (Minutes)",
     "LastCheck": "Last check",
     "Status": "Status",
     "Updated": "Updated",
@@ -425,5 +425,9 @@
     "SuccessfullyReseted": "Successfully reseted",
     "DownloadStarted": "Download started",
     "DownloadFinished": "Download finished",
-    "WaitWhileDownloading": "Wait while downloading"
+    "WaitWhileDownloading": "Wait while downloading",
+    "Splitter": "Splitter",
+    "SplitterIndex": "Splitter index",
+    "SplitterHint": "Splitter for csv or other files",
+    "SplitterIndexHint": "Which index data is, starts from 0"
 }

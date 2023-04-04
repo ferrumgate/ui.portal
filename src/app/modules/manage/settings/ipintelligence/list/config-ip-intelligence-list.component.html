@@ -1,0 +1,64 @@
+<div class="config-ip-intelligence-list">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Lists'|translate}}">
+                <mat-icon>list</mat-icon>
+
+            </mat-card-title>
+            <div class="header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </div>
+        </mat-card-header>
+        <div class="row toolbar" fxLayout="row">
+            <mat-form-field fxFlex>
+                <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                <mat-hint>{{"IpIntelligenceListSearchHint"|translate}}</mat-hint>
+            </mat-form-field>
+            <div fxLayoutAlign="end center">
+                <button test-id="button-search" mat-raised-button color="primary" class="search" (click)="search()">
+                    <mat-icon>search</mat-icon>
+                    {{"Search"|translate}}
+                </button>
+                <button test-id="button-add" mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+
+                    {{"Add"|translate}}
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <button test-id="button-http" mat-menu-item (click)="addNewList('http')">
+                        <mat-icon>http</mat-icon>
+                        <span>Http</span>
+                    </button>
+                    <button test-id="button-file" mat-menu-item (click)="addNewList('file')">
+                        <mat-icon>insert_drive_file</mat-icon>
+                        <span>File</span>
+                    </button>
+
+                </mat-menu>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+
+        <div class="items">
+            <div fxLayout="row wrap">
+
+                <p class="row services-item" fxLayout="row" *ngFor="let list of  lists">
+
+                    <app-config-ip-intelligence-list-item [list]="list" (deleteIpIntelligenceList)="deleteList($event)"
+                        (saveIpIntelligenceList)="saveList($event)" (downloadIpIntelligenceList)="downloadList($event)"
+                        (resetIpIntelligenceList)="resetList($event)"
+                        test-id="config-ip-intelligence-list-item"></app-config-ip-intelligence-list-item>
+                </p>
+
+            </div>
+        </div>
+
+
+
+    </mat-card>
+
+</div>

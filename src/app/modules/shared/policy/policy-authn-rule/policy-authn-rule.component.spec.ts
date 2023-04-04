@@ -28,6 +28,7 @@ import { SharedModule } from '../../shared.module';
 import { PolicyAuthnRuleComponent } from './policy-authn-rule.component';
 import { By } from '@angular/platform-browser';
 import { UtilService } from '../../services/util.service';
+import { IpIntelligence, IpIntelligenceList } from '../../models/ipIntelligence';
 
 describe('PolicyAuthnRuleComponent', () => {
   let component: PolicyAuthnRuleComponent;
@@ -106,6 +107,15 @@ describe('PolicyAuthnRuleComponent', () => {
       "name": "Burkina Faso"
     }
   ];
+  const ipLists: IpIntelligenceList[] = [
+    {
+      id: UtilService.randomNumberString(), name: "global list", insertDate: new Date().toISOString(), updateDate: new Date().toISOString()
+    },
+    {
+      id: UtilService.randomNumberString(), name: "talos list", insertDate: new Date().toISOString(), updateDate: new Date().toISOString()
+    },
+
+  ]
   it('data binding first tab', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
@@ -113,7 +123,7 @@ describe('PolicyAuthnRuleComponent', () => {
     const rule: AuthenticationRule = {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
-      profile: { is2FA: true, ips: [{ ip: '1.2.3.4' }] },
+      profile: { is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }] },
       userOrgroupIds: [group.id], isExpanded: true,
 
 
@@ -197,12 +207,11 @@ describe('PolicyAuthnRuleComponent', () => {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
       profile: {
-        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }],
+        blackListIps: [{ ip: '1.2.3.5' }, { ip: '1.2.3.6' }],
       },
 
       userOrgroupIds: [group.id], isExpanded: true,
-
-
 
     }
 
@@ -222,11 +231,20 @@ describe('PolicyAuthnRuleComponent', () => {
 
     expect(ipTab).toBeTruthy();
 
-    const isWhiteListEl = getCheckValue(fixture, 'policy-authn-rule-ip-iswhitelist-enabled')
-    expect(isWhiteListEl).toBeFalse();
 
-    const isBlackListEl = getCheckValue(fixture, 'policy-authn-rule-ip-isblacklist-enabled')
-    expect(isBlackListEl).toBeFalse();
+    const customWhiteList = findEls(fixture, 'policy-authn-rule-whitelist-chip');
+    expect(customWhiteList.length).toEqual(1);
+
+    const customBlackList = findEls(fixture, 'policy-authn-rule-blacklist-chip');
+    expect(customBlackList.length).toEqual(2);
+
+
+    const ipIntelligenceWhiteList = findEls(fixture, 'policy-authn-rule-intel-whitelist-chip');
+    expect(ipIntelligenceWhiteList.length).toEqual(0);
+
+    const ipIntelligenceBlackList = findEls(fixture, 'policy-authn-rule-intel-blacklist-chip');
+    expect(ipIntelligenceBlackList.length).toEqual(0);
+
 
 
     const isProxyEl = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
@@ -258,15 +276,14 @@ describe('PolicyAuthnRuleComponent', () => {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
       profile: {
-        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }], blackListIps: [{ ip: '1.2.3.5' }, { ip: '1.2.3.6' }],
         ipIntelligence: {
-          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+          isCrawler: true, isHosting: true, isProxy: true, blackLists: [ipLists[0].id],
+          whiteLists: [ipLists[0].id, ipLists[1].id],
+
         }
       },
       userOrgroupIds: [group.id], isExpanded: true,
-
-
-
 
     }
 
@@ -274,6 +291,7 @@ describe('PolicyAuthnRuleComponent', () => {
     component.groups = groups;
     component.networks = networks;
     component.countryList = countries;
+    component.ipIntelligenceLists = ipLists;
 
     component.rule = rule2
 
@@ -287,11 +305,18 @@ describe('PolicyAuthnRuleComponent', () => {
 
 
 
-    const isWhiteListEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-iswhitelist-enabled')
-    expect(isWhiteListEl2).toBeTrue();
+    const customWhiteList = findEls(fixture, 'policy-authn-rule-whitelist-chip');
+    expect(customWhiteList.length).toEqual(1);
 
-    const isBlackListEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-isblacklist-enabled')
-    expect(isBlackListEl2).toBeTrue();
+    const customBlackList = findEls(fixture, 'policy-authn-rule-blacklist-chip');
+    expect(customBlackList.length).toEqual(2);
+
+
+    const ipIntelligenceWhiteList = findEls(fixture, 'policy-authn-rule-intel-whitelist-chip');
+    expect(ipIntelligenceWhiteList.length).toEqual(2);
+
+    const ipIntelligenceBlackList = findEls(fixture, 'policy-authn-rule-intel-blacklist-chip');
+    expect(ipIntelligenceBlackList.length).toEqual(1);
 
 
     const isProxyEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
@@ -324,9 +349,9 @@ describe('PolicyAuthnRuleComponent', () => {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
       profile: {
-        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }],
         ipIntelligence: {
-          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+          isCrawler: true, isHosting: true, isProxy: true, blackLists: [], whiteLists: []
         }, locations: [
           { countryCode: countries[1].isoCode }
         ]
@@ -371,9 +396,9 @@ describe('PolicyAuthnRuleComponent', () => {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
       profile: {
-        is2FA: true, ips: [{ ip: '1.2.3.4' }],
+        is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }],
         ipIntelligence: {
-          isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true
+          isCrawler: true, isHosting: true, isProxy: true, blackLists: [], whiteLists: []
         }, locations: [
           { countryCode: countries[1].isoCode }
         ],

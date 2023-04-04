@@ -13,6 +13,7 @@ import { cloneAuthenticationProfile, cloneTimeProfile, IpIntelligenceProfile, Ip
 import { AuthorizationRule } from '../../models/authzPolicy';
 import { Country } from '../../models/country';
 import { Group } from '../../models/group';
+import { IpIntelligenceList } from '../../models/ipIntelligence';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
 import { TimeZone } from '../../models/timezone';
@@ -86,6 +87,14 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return 'allow';
   }
 
+  _ipIntelligenceLists: IpIntelligenceList[] = [];
+  @Input()
+  set ipIntelligenceLists(val: IpIntelligenceList[]) {
+    this._ipIntelligenceLists = val;
+    this.prepareAutoCompleteIpIntelligenceLists();
+  }
+  get ipIntelligenceLists() { return this._ipIntelligenceLists; };
+
 
   countryMap = new Map();
   //country list
@@ -126,11 +135,16 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       isExpanded: val.isExpanded
 
     }
+    if (!this._model.profile.ipIntelligence)
+      this._model.profile.ipIntelligence = { blackLists: [], whiteLists: [], isCrawler: false, isHosting: false, isProxy: false };
 
+    this._model.profile.ipIntelligence.blackListsEx = this.findIpIntelligenceLists(this._model.profile.ipIntelligence.blackLists);
+    this._model.profile.ipIntelligence.whiteListsEx = this.findIpIntelligenceLists(this._model.profile.ipIntelligence.whiteLists);
     this.calculatesTimeProfiles(this._model.profile.times);
 
     this.prepareAutoCompletes();
     this.prepareAutoCompleteCountry();
+    this.prepareAutoCompleteIpIntelligenceLists();
     this.formGroup = this.createFormGroup(this._model);
 
   }
@@ -150,6 +164,10 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   userorGroupControl = new FormControl();
+  ipIntelligenceWhiteListControl = new FormControl();
+  ipIntelligenceBlackListControl = new FormControl();
+  filteredIpIntelligenceWhiteLists: IpIntelligenceList[] = [];
+  filteredIpIntelligenceBlackLists: IpIntelligenceList[] = [];
 
 
 
@@ -176,7 +194,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   get ipIntelligence(): IpIntelligenceProfile {
     if (!this._model.profile.ipIntelligence)
-      this._model.profile.ipIntelligence = { isBlackList: false, isCrawler: false, isHosting: false, isProxy: false, isWhiteList: false };
+      this._model.profile.ipIntelligence = { isCrawler: false, isHosting: false, isProxy: false, blackLists: [], whiteLists: [] };
     return this._model.profile.ipIntelligence as IpIntelligenceProfile;
   }
 
@@ -215,6 +233,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.prepareAutoCompletes();
+    this.prepareAutoCompleteIpIntelligenceLists();
 
 
 
@@ -248,6 +267,14 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return groups.concat(users);
   }
 
+  findIpIntelligenceLists(ids: string[]) {
+
+    const lists = this.ipIntelligenceLists.filter(x => ids.includes(x.id)).map(x => { return { id: x.id, name: x.name } });
+    lists.sort(this.simpleNameSort);
+
+    return lists;
+  }
+
   prepareAutoCompletes() {
 
 
@@ -269,6 +296,37 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         }
       })
 
+
+  }
+  prepareAutoCompleteIpIntelligenceLists() {
+
+    this.filteredIpIntelligenceWhiteLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
+    this.allSub.addThis =
+      this.ipIntelligenceWhiteListControl.valueChanges.subscribe(x => {
+        const value = x;
+        const val = typeof (x) === 'string' ? value.toLowerCase() : ''
+        if (val) {
+
+          this.filteredIpIntelligenceWhiteLists = this.ipIntelligenceLists.filter(x => x.name.toLowerCase().includes(val)).sort(this.simpleNameSort);
+        } else {
+          this.filteredIpIntelligenceWhiteLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
+        }
+
+      })
+
+    this.filteredIpIntelligenceBlackLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
+    this.allSub.addThis =
+      this.ipIntelligenceBlackListControl.valueChanges.subscribe(x => {
+        const value = x;
+        const val = typeof (x) === 'string' ? value.toLowerCase() : ''
+        if (val) {
+
+          this.filteredIpIntelligenceBlackLists = this.ipIntelligenceLists.filter(x => x.name.toLowerCase().includes(val)).sort(this.simpleNameSort);
+        } else {
+          this.filteredIpIntelligenceBlackLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
+        }
+
+      })
   }
   prepareAutoCompleteCountry() {
     // set initial selection
@@ -327,6 +385,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   displayUserOrGroupFn(net: User2 | Group | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || net?.username || '';
+  }
+
+  displayIpIntelligenceListFn(net: User2 | Group | string) {
+    if (typeof (net) == 'string') return net;
+    return net?.name || '';
   }
 
 
@@ -416,12 +479,16 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     if (original.profile.is2FA != this.rule.profile.is2FA)
       this.rule.isChanged = true;
-    if (UtilService.checkChanged(original.profile.ips?.map(x => x.ip), this.rule.profile.ips?.map(x => x.ip)))
+    if (UtilService.checkChanged(original.profile.whiteListIps?.map(x => x.ip), this.rule.profile.whiteListIps?.map(x => x.ip)))
       this.rule.isChanged = true;
-    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isBlackList, this.rule.profile.ipIntelligence?.isBlackList))
+    if (UtilService.checkChanged(original.profile.blackListIps?.map(x => x.ip), this.rule.profile.blackListIps?.map(x => x.ip)))
       this.rule.isChanged = true;
-    if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isWhiteList, this.rule.profile.ipIntelligence?.isWhiteList))
+
+    if (UtilService.checkChanged(original.profile.ipIntelligence?.blackLists?.map(x => x), this.rule.profile.ipIntelligence?.blackLists?.map(x => x)))
       this.rule.isChanged = true;
+    if (UtilService.checkChanged(original.profile.ipIntelligence?.whiteLists?.map(x => x), this.rule.profile.ipIntelligence?.whiteLists?.map(x => x)))
+      this.rule.isChanged = true;
+
     if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isCrawler, this.rule.profile.ipIntelligence?.isCrawler))
       this.rule.isChanged = true;
     if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isHosting, this.rule.profile.ipIntelligence?.isHosting))
@@ -505,17 +572,23 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   getExplanationIps() {
 
     const whitelist = []
-    if (this.rule.profile.ips?.length)
-      whitelist.push(`ip is in ${this.rule.profile.ips.map(x => x.ip).join(', ')}`);
-    if (this.rule.profile.ipIntelligence?.isWhiteList)
-      whitelist.push('ip is in whitelist');
+    if (this.rule.profile.whiteListIps?.length)
+      whitelist.push(`in ${this.rule.profile.whiteListIps.map(x => x.ip).join(', ')}`);
+
+    if (this.rule.profile.ipIntelligence?.whiteListsEx?.length)
+      whitelist.push(`in ${this.rule.profile.ipIntelligence.whiteListsEx.map(x => x.name).join(', ')}`);
+
     if (this.rule.profile.locations?.length)
-      whitelist.push(`ip from ${this.rule.profile.locations.slice(0, 3).map(x => x.countryCode).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
+      whitelist.push(`from ${this.rule.profile.locations.slice(0, 3).map(x => x.countryCode).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
 
 
     const blacklist = [];
-    if (this.rule.profile.ipIntelligence?.isBlackList)
-      blacklist.push(`in blacklist`);
+    if (this.rule.profile.blackListIps?.length)
+      blacklist.push(`not in ${this.rule.profile.blackListIps.map(x => x.ip).join(', ')}`);
+
+    if (this.rule.profile.ipIntelligence?.blackListsEx?.length)
+      blacklist.push(`not in ${this.rule.profile.ipIntelligence.blackListsEx.map(x => x.name).join(', ')}`);
+
     if (this.rule.profile.ipIntelligence?.isProxy)
       blacklist.push(`from a proxy`);
     if (this.rule.profile.ipIntelligence?.isCrawler)
@@ -528,9 +601,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     let result = whitelist.join(' or ');
     if (blacklist.length)
-      result += (whitelist.length ? ' or ' : '') + ` ip not ` + blacklist.join(' or ');
+      result += (whitelist.length ? ' or ' : '') + blacklist.join(' or ');
 
-    return result;
+    return 'ip ' + result;
   }
 
   getExplanationTimes() {
@@ -542,7 +615,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
   getExplanationSummary() {
-    let ips = this.rule.profile.ips?.map(x => x.ip).join(',').substring(0, 30) || '';
+    let ips = this.rule.profile.whiteListIps?.map(x => x.ip).join(',').substring(0, 30) || '';
     if (ips)
       ips = `{${ips}},`
     let users = this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60);
@@ -558,17 +631,78 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
 
 
+  removeIpIntelligenceWhiteList(ug: { id: string }): void {
+    if (this.rule.profile.ipIntelligence?.whiteLists && this.rule.profile.ipIntelligence?.whiteListsEx) {
+      this.rule.profile.ipIntelligence.whiteLists = this.rule.profile.ipIntelligence.whiteLists.filter(x => x != ug.id);
+      this.rule.profile.ipIntelligence.whiteListsEx = this.rule.profile.ipIntelligence.whiteListsEx.filter(x => x.id != ug.id);
+      if (this.formGroup.valid)
+        this.checkIfModelChanged();
+    }
+
+  }
+
+  removeIpIntelligenceBlackList(ug: { id: string }): void {
+    if (this.rule.profile.ipIntelligence?.blackLists && this.rule.profile.ipIntelligence?.blackListsEx) {
+      this.rule.profile.ipIntelligence.blackLists = this.rule.profile.ipIntelligence.blackLists.filter(x => x != ug.id);
+      this.rule.profile.ipIntelligence.blackListsEx = this.rule.profile.ipIntelligence.blackListsEx.filter(x => x.id != ug.id);
+      if (this.formGroup.valid)
+        this.checkIfModelChanged();
+    }
+
+  }
+
+  ipIntelligenceWhiteListSelected(event: any) {
+
+    const value = event.option.value;
+    if (value.id) {
+      if (!this.rule.profile.ipIntelligence?.whiteLists.includes(value.id)) {
+
+        this.rule.profile.ipIntelligence?.whiteLists.push(value.id);
+        //
+        const items = this.findIpIntelligenceLists([value.id])
+        if (this.rule.profile.ipIntelligence && !this.rule.profile.ipIntelligence?.whiteListsEx)
+          this.rule.profile.ipIntelligence.whiteListsEx = [];
+        if (this.rule.profile.ipIntelligence && this.rule.profile.ipIntelligence.whiteListsEx)
+          this.rule.profile.ipIntelligence.whiteListsEx = this.rule.profile.ipIntelligence.whiteListsEx.concat(items);
+
+        this.modelChanged();
+      }
+    }
+  }
+
+  ipIntelligenceBlackListSelected(event: any) {
+
+    const value = event.option.value;
+    if (value.id) {
+      if (!this.rule.profile.ipIntelligence?.blackLists.includes(value.id)) {
+
+        this.rule.profile.ipIntelligence?.blackLists.push(value.id);
+        //
+        const items = this.findIpIntelligenceLists([value.id])
+        if (this.rule.profile.ipIntelligence && !this.rule.profile.ipIntelligence?.blackListsEx)
+          this.rule.profile.ipIntelligence.blackListsEx = [];
+        if (this.rule.profile.ipIntelligence && this.rule.profile.ipIntelligence.blackListsEx)
+          this.rule.profile.ipIntelligence.blackListsEx = this.rule.profile.ipIntelligence.blackListsEx.concat(items);
+
+        this.modelChanged();
+      }
+    }
+  }
 
 
-  addIpOrCidr(event: MatChipInputEvent): void {
+
+
+
+
+  addIpOrCidrWhiteList(event: MatChipInputEvent): void {
     let value = (event.value || '').trim();
 
     // Add our fruit
     if (value) {
-      const isExits = this.rule.profile.ips?.find(x => x.ip == value);
+      const isExits = this.rule.profile.whiteListIps?.find(x => x.ip == value);
       if (!isExits) {
-        if (!this.rule.profile.ips)
-          this.rule.profile.ips = [];
+        if (!this.rule.profile.whiteListIps)
+          this.rule.profile.whiteListIps = [];
         if (validator.isIP(value)) {
           if (validator.isIP(value, 4))
             value += '/32';
@@ -576,7 +710,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
             value += '/128';
         }
         if (validator.isIPRange(value))
-          this.rule.profile.ips.push({ ip: value });
+          this.rule.profile.whiteListIps.push({ ip: value });
       }
     }
 
@@ -587,8 +721,42 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
   }
 
-  removeIpOrCidr(label: IpProfile): void {
-    this.rule.profile.ips = this.rule.profile.ips?.filter(x => x.ip != label.ip);
+  addIpOrCidrBlackList(event: MatChipInputEvent): void {
+    let value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      const isExits = this.rule.profile.blackListIps?.find(x => x.ip == value);
+      if (!isExits) {
+        if (!this.rule.profile.blackListIps)
+          this.rule.profile.blackListIps = [];
+        if (validator.isIP(value)) {
+          if (validator.isIP(value, 4))
+            value += '/32';
+          else
+            value += '/128';
+        }
+        if (validator.isIPRange(value))
+          this.rule.profile.blackListIps.push({ ip: value });
+      }
+    }
+
+    // Clear the input value
+    if (validator.isIPRange(value))
+      event.chipInput!.clear();
+    if (this.formGroup.valid)
+      this.checkIfModelChanged();
+  }
+
+  removeIpOrCidrWhiteList(label: IpProfile): void {
+    this.rule.profile.whiteListIps = this.rule.profile.whiteListIps?.filter(x => x.ip != label.ip);
+    if (this.formGroup.valid)
+      this.checkIfModelChanged();
+
+  }
+
+  removeIpOrCidrBlackList(label: IpProfile): void {
+    this.rule.profile.blackListIps = this.rule.profile.blackListIps?.filter(x => x.ip != label.ip);
     if (this.formGroup.valid)
       this.checkIfModelChanged();
 

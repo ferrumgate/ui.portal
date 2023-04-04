@@ -1,7 +1,7 @@
 <div [ngClass]="isThemeDark?'theme-dark':''">
     <div class="policy-authn-rule">
         <mat-accordion test-id="policy-authn-rule-accordion">
-            <mat-expansion-panel [expanded]="rule.isExpanded">
+            <mat-expansion-panel [expanded]="rule.isExpanded||true">
                 <mat-expansion-panel-header [ngClass]="titleClass">
                     <mat-panel-title test-id="policy-authn-rule-title">
                         <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">
@@ -153,32 +153,61 @@
 
                                         <mat-form-field fxFlex appearance="fill">
                                             <mat-label>{{"CustomWhiteList"|translate}}</mat-label>
-                                            <mat-chip-list #chipListIp>
-                                                <mat-chip test-id="policy-authn-rule-ip-chip"
-                                                    *ngFor="let ip of rule.profile?.ips || []"
-                                                    (removed)="removeIpOrCidr(ip)">
+                                            <mat-chip-list #chipListWhiteListIp>
+                                                <mat-chip test-id="policy-authn-rule-whitelist-chip"
+                                                    *ngFor="let ip of rule.profile?.whiteListIps || []"
+                                                    (removed)="removeIpOrCidrWhiteList(ip)">
                                                     {{ip.ip}}
                                                     <button matChipRemove>
                                                         <mat-icon>cancel</mat-icon>
                                                     </button>
                                                 </mat-chip>
                                                 <input placeholder="{{'NewIpOrNetwork' |translate}}"
-                                                    [matChipInputFor]="chipListIp"
+                                                    [matChipInputFor]="chipListWhiteListIp"
                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                                     [matChipInputAddOnBlur]="addOnBlur"
-                                                    (matChipInputTokenEnd)="addIpOrCidr($event)">
+                                                    (matChipInputTokenEnd)="addIpOrCidrWhiteList($event)">
                                             </mat-chip-list>
                                             <mat-hint>{{"IpOrNewtorkHint"|translate}}</mat-hint>
                                         </mat-form-field>
                                     </p>
-                                    <p>
-                                        <mat-checkbox test-id="policy-authn-rule-ip-iswhitelist-enabled"
-                                            [(ngModel)]="ipIntelligence.isWhiteList"
-                                            [ngModelOptions]="{standalone:true}" [checked]="ipIntelligence.isWhiteList"
-                                            (ngModelChange)="modelChanged()">
-                                            {{"IsIpIntelligenceWhiteListEnabled"|translate}}</mat-checkbox>
 
+
+                                    <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"IpIntelligenceLists"|translate}}</mat-label>
+                                            <mat-chip-list #chipListIpIntelligenceWhiteList>
+                                                <mat-chip test-id="policy-authn-rule-intel-whitelist-chip"
+                                                    *ngFor="let ug of rule.profile.ipIntelligence?.whiteListsEx||[]"
+                                                    (removed)="removeIpIntelligenceWhiteList(ug)">
+                                                    {{ug.name}}
+                                                    <button matChipRemove>
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+                                                </mat-chip>
+                                                <input placeholder="{{'Search' |translate}}"
+                                                    [matChipInputFor]="chipListIpIntelligenceWhiteList"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto3"
+                                                    [formControl]="ipIntelligenceWhiteListControl">
+                                            </mat-chip-list>
+                                            <mat-autocomplete #auto3="matAutocomplete"
+                                                (optionSelected)="ipIntelligenceWhiteListSelected($event)"
+                                                [displayWith]="displayIpIntelligenceListFn">
+
+                                                <mat-option *ngFor="let option of filteredIpIntelligenceWhiteLists"
+                                                    [value]="option">
+                                                    {{option.name}}
+                                                </mat-option>
+
+
+
+                                            </mat-autocomplete>
+                                        </mat-form-field>
                                     </p>
+
+
 
                                 </div>
 
@@ -189,14 +218,65 @@
                                         <div></div>
                                         <mat-hint class="ips-header-hint">{{'DenyImmediatelyHint'|translate}}</mat-hint>
                                     </div>
-                                    <p class="direct-deny-item">
-                                        <mat-checkbox test-id="policy-authn-rule-ip-isblacklist-enabled"
-                                            [(ngModel)]="ipIntelligence.isBlackList"
-                                            [ngModelOptions]="{standalone:true}" [checked]="ipIntelligence.isBlackList"
-                                            (ngModelChange)="modelChanged()">
-                                            {{"IsIpIntelligenceBlackListEnabled"|translate}}</mat-checkbox>
 
+                                    <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"CustomBlackList"|translate}}</mat-label>
+                                            <mat-chip-list #chipListBlackListIp>
+                                                <mat-chip test-id="policy-authn-rule-blacklist-chip"
+                                                    *ngFor="let ip of rule.profile?.blackListIps || []"
+                                                    (removed)="removeIpOrCidrBlackList(ip)">
+                                                    {{ip.ip}}
+                                                    <button matChipRemove>
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+                                                </mat-chip>
+                                                <input placeholder="{{'NewIpOrNetwork' |translate}}"
+                                                    [matChipInputFor]="chipListBlackListIp"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                    (matChipInputTokenEnd)="addIpOrCidrBlackList($event)">
+                                            </mat-chip-list>
+                                            <mat-hint>{{"IpOrNewtorkHint"|translate}}</mat-hint>
+                                        </mat-form-field>
                                     </p>
+
+                                    <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"IpIntelligenceLists"|translate}}</mat-label>
+                                            <mat-chip-list #chipListIpIntelligenceBlackList>
+                                                <mat-chip test-id="policy-authn-rule-intel-blacklist-chip"
+                                                    *ngFor="let ug of rule.profile.ipIntelligence?.blackListsEx||[]"
+                                                    (removed)="removeIpIntelligenceBlackList(ug)">
+                                                    {{ug.name}}
+                                                    <button matChipRemove>
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+                                                </mat-chip>
+                                                <input placeholder="{{'Search' |translate}}"
+                                                    [matChipInputFor]="chipListIpIntelligenceBlackList"
+                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                    [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto4"
+                                                    [formControl]="ipIntelligenceBlackListControl">
+                                            </mat-chip-list>
+                                            <mat-autocomplete #auto4="matAutocomplete"
+                                                (optionSelected)="ipIntelligenceBlackListSelected($event)"
+                                                [displayWith]="displayIpIntelligenceListFn">
+
+                                                <mat-option *ngFor="let option of filteredIpIntelligenceBlackLists"
+                                                    [value]="option">
+                                                    {{option.name}}
+                                                </mat-option>
+
+
+
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </p>
+
+
                                     <p class="direct-deny-item">
                                         <mat-checkbox test-id="policy-authn-rule-ip-isproxy-enabled"
                                             [(ngModel)]="ipIntelligence.isProxy" [ngModelOptions]="{standalone:true}"

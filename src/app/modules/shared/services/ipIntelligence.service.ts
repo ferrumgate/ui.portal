@@ -4,15 +4,15 @@ import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { Configure } from '../models/configure';
-import { IpIntelligenceBWItem, IpIntelligenceSource } from '../models/ipIntelligence';
+import { IpIntelligenceList, IpIntelligenceListStatus, IpIntelligenceSource } from '../models/ipIntelligence';
 import { Network } from '../models/network';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
+import { saveAs } from 'file-saver';
 
-type BW = 'blacklist' | 'whitelist';
 
 @Injectable({
   providedIn: 'root'
@@ -23,58 +23,14 @@ export class IpIntelligenceService extends BaseService {
   private _ipIntelligenceUrl = this.configService.getApiUrl() + '/ip/intelligence';
   private _ipIntelligenceUrlSource = this.configService.getApiUrl() + '/ip/intelligence/source';
   private _ipIntelligenceUrlSourceCheck = this.configService.getApiUrl() + '/ip/intelligence/source/check';
+  private _ipIntelligenceList = this.configService.getApiUrl() + '/ip/intelligence/list';
+  private _ipIntelligenceListFile = this.configService.getApiUrl() + '/ip/intelligence/list/file';
+
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('ipIntelligence', captchaService)
 
   }
 
-
-  deleteBWList(type: 'blacklist' | 'whitelist', item: IpIntelligenceBWItem) {
-
-    const urlParams = new URLSearchParams();
-    return this.preExecute(urlParams).pipe(
-      switchMap(y => {
-
-        let url = this.joinUrl(this._ipIntelligenceUrl, type, `${item.id}`, y);
-        return this.httpService.delete(url);
-
-      }))
-  }
-
-
-  saveOrupdateBWList(type: 'blacklist' | 'whitelist', ips: IpIntelligenceBWItem[]) {
-    const iplist: IpIntelligenceBWItem[] = ips.map(x => {
-      return { id: x.id, val: x.val, description: x.description, insertDate: x.insertDate }
-    })
-
-    return this.preExecute({ items: iplist }).pipe(
-      switchMap(y => {
-        let url = this.joinUrl(this._ipIntelligenceUrl, type);
-        return this.httpService.post<{ results: { item: IpIntelligenceBWItem, errMsg?: string }[] }>(url, y, this.jsonHeader)
-      }))
-
-  }
-
-
-
-
-  getBWList(type: 'blacklist' | 'whitelist', page: number, pageSize: number, ip?: string, ids?: string[]) {
-
-    const searchParams = new URLSearchParams();
-    if (ip)
-      searchParams.append('ip', ip);
-    if (ids)
-      searchParams.append('ids', ids.join(','));
-    searchParams.append('page', page.toString());
-    searchParams.append('pageSize', pageSize.toString());
-    return this.preExecute(searchParams).pipe(
-      switchMap(y => {
-        const url = this.joinUrl(this._ipIntelligenceUrl, type, y);
-        return this.httpService.get<{ items: IpIntelligenceBWItem[], total: number }>(url);
-      })
-    )
-
-  }
 
 
   getSource() {
@@ -133,6 +89,94 @@ export class IpIntelligenceService extends BaseService {
 
 
 
+  getList(search: string) {
+    const searchParams = new URLSearchParams();
+    if (search)
+      searchParams.append('search', search);
 
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._ipIntelligenceList, y);
+        return this.httpService.get<{ items: IpIntelligenceList[], itemsStatus: IpIntelligenceListStatus[] }>(url);
+      })
+    )
+  }
+
+
+
+  saveOrupdateList(item: IpIntelligenceList) {
+    const list: IpIntelligenceList = {
+      id: item.id, name: item.name, insertDate: item.insertDate, updateDate: item.updateDate,
+      file: item.file ? { source: item.file.source, key: item.file.key } : undefined,
+      http: item.http ? { checkFrequency: item.http.checkFrequency, url: item.http.url } : undefined,
+      labels: item.labels,
+      splitter: item.splitter, splitterIndex: item.splitterIndex
+    }
+    return this.preExecute(list).pipe(
+      switchMap(y => {
+        if (list.id)
+          return this.httpService.put<IpIntelligenceList>(this._ipIntelligenceList, y, this.jsonHeader)
+        else return this.httpService.post<IpIntelligenceList>(this._ipIntelligenceList, y, this.jsonHeader)
+      }))
+
+  }
+  uploadListFile(upload: File) {
+    const formData = new FormData();
+    formData.append('file', upload);
+    return this.preExecute({}).pipe(
+      switchMap(y => {
+        return this.httpService.post(this._ipIntelligenceListFile, formData, {
+          reportProgress: true, observe: 'events'
+        })
+      }))
+
+  }
+
+  deleteList(item: IpIntelligenceList) {
+
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._ipIntelligenceList, `${item.id}`, y);
+        return this.httpService.delete(url);
+
+      }))
+  }
+
+
+  downloadList(item: IpIntelligenceList) {
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._ipIntelligenceList, `${item.id}`, 'file', y);
+        return this.httpService.get(url, { responseType: 'blob' });
+
+      }),
+      switchMap(data => {
+        const filename = `${item.name}_${new Date().toISOString()}.list`;
+        //let blob = new Blob([data], { type: 'application/txt' });
+        //FileSaver.saveAs(data, "hello world.txt");
+        saveAs(data, filename);
+
+        // var downloadURL = window.URL.createObjectURL(data);
+
+
+        // window.open(this.downloadUrl(item) + '/' + data.key, '_self');
+        return of({});
+      }))
+  }
+
+  resetList(item: IpIntelligenceList) {
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._ipIntelligenceList, `${item.id}`, 'reset', y);
+        return this.httpService.put(url, {}, this.jsonHeader);
+
+      }))
+  }
 
 }

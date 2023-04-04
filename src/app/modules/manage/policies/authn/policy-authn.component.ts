@@ -24,6 +24,8 @@ import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared
 import { Country } from 'src/app/modules/shared/models/country';
 import { DataService } from 'src/app/modules/shared/services/data.service';
 import { TimeZone } from 'src/app/modules/shared/models/timezone';
+import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
+import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 
 
 
@@ -59,6 +61,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   }]
   policyAuthn: AuthenticationPolicy = { rules: [] } as any;
   countryList: Country[] = [];
+  ipIntelligenceList: IpIntelligenceList[] = [];
   helpLink = '';
   isThemeDark = false;
   searchKey = '';
@@ -72,7 +75,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private groupService: GroupService,
     private policyAuthnService: PolicyAuthnService,
-    private dataService: DataService
+    private dataService: DataService,
+    private ipIntelligenceService: IpIntelligenceService
 
   ) {
 
@@ -215,6 +219,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
           x.nameEx = x.name + ' ' + x.offsetHour;
         })
       }),
+      switchMap(y => this.ipIntelligenceService.getList('')),
+      map(y => this.ipIntelligenceList = y.items),
       switchMap(y => this.networkService.get2()),
       map(y => {
         this.networks = y.items as any;
@@ -303,7 +309,7 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
 
     this.policies.find(x => x.network.id == net.id)?.rules.unshift({
       id: '', objId: UtilService.randomNumberString(), name: '', networkId: net.id, profile: {
-        is2FA: false, ipIntelligence: { isBlackList: true, isCrawler: true, isHosting: true, isProxy: true, isWhiteList: true }
+        is2FA: false, ipIntelligence: { isCrawler: true, isHosting: true, isProxy: true, blackLists: [], whiteLists: [] }
       }, serviceId: '', userOrgroupIds: [], isEnabled: true, isExpanded: true,
     })
   }

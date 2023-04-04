@@ -1,0 +1,188 @@
+<div class="config-ip-intelligence-list-item">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'List'|translate}} {{list.name}}">
+                <mat-icon matListIcon>{{list.http?'http':'insert_drive_file'}}</mat-icon>
+            </mat-card-title>
+            <mat-action-row class="list-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="list-form" [formGroup]="formGroup">
+                        <mat-accordion class="user-details">
+                            <mat-expansion-panel [(expanded)]="list.isExpanded" (expandedChange)="expand($event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title test-id="user-username-title">
+                                        {{list.name}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="list-name-input" placeholder="{{'ListName'|translate}}"
+                                            formControlName="name" required>
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="list-label-chip" *ngFor="let label of list.labels||[]"
+                                                (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill" disa>
+                                        <mat-label>{{"InsertDate"|translate}}</mat-label>
+                                        <input matInput test-id="list-insertdate-input" formControlName="insertDateStr"
+                                            readonly="true" required="false">
+
+                                    </mat-form-field>
+                                </p>
+
+                                <p *ngIf="list.http">
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Url"|translate}}</mat-label>
+                                        <input matInput test-id="list-http-url-input"
+                                            placeholder="{{'DownloadUrl'|translate}}" formControlName="httpUrl"
+                                            required>
+                                        <mat-error>{{formError.httpUrl|translate}}</mat-error>
+
+                                    </mat-form-field>
+                                </p>
+                                <p *ngIf="list.http">
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"CheckFrequency"|translate}}</mat-label>
+                                        <input type="number" min="1" max="65535" matInput
+                                            test-id="list-http-check-frequency-hours" placeholder="1 hour"
+                                            formControlName="httpCheckFrequency">
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                        <mat-hint>{{"ListCheckUrlFrequency"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p *ngIf="list.file">
+                                    <app-fileupload test-id="list-fileupload" [uploadProgress]="list.uploadProgress"
+                                        name="file" [filename]="list.file.source||''"
+                                        (onFileSelectedEvent)="restore($event)" #fileupload></app-fileupload>
+                                    <mat-error>{{formError.fileSource|translate}}</mat-error>
+                                </p>
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Splitter"|translate}}</mat-label>
+                                        <input matInput test-id="list-splitter-input" placeholder=",:."
+                                            formControlName="splitter">
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                        <mat-hint>{{"SplitterHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"SplitterIndex"|translate}}</mat-label>
+                                        <input type="number" min="0" max="1000" matInput
+                                            test-id="list-http-slitter-index" placeholder=",:. or any character"
+                                            formControlName="splitterIndex">
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                        <mat-hint>{{"SplitterIndexHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p *ngIf="list.status">
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"LastCheck"|translate}}</mat-label>
+                                        <input matInput test-id="list-status-check-input"
+                                            formControlName="statusLastCheck">
+                                    </mat-form-field>
+                                </p>
+                                <p *ngIf="list.status">
+                                    <mat-form-field fxFlex appearance="fill" *ngIf="list.status.lastError">
+                                        <mat-label>{{"Status"|translate}}</mat-label>
+                                        <input matInput test-id="list-status-input" formControlName="statusLastError">
+
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex appearance="fill" *ngIf="!list.status.lastError">
+                                        <mat-label>{{"Status"|translate}}</mat-label>
+                                        <input matInput test-id="list-status-input"
+                                            value="{{list.status.lastMessage|translate}}" disabled>
+
+                                    </mat-form-field>
+                                </p>
+                                <p *ngIf="list.status?.hasFile">
+                                    <span fxFlex fxLayout="row" fxLayoutAlign="start center">
+                                        <button test-id="reset-button" mat-stroked-button (click)="reset()">
+                                            <mat-icon>clear_all</mat-icon>
+                                            {{'Reset'|translate}}</button>
+                                    </span>
+                                    <span fxFlex fxLayout="row" fxLayoutAlign="end center">
+
+                                        <button test-id="download-button" mat-stroked-button (click)="download()">
+                                            <mat-icon>arrow_downward</mat-icon>
+                                            {{'Download'|translate}}</button>
+
+                                    </span>
+
+
+                                </p>
+
+                            </mat-expansion-panel>
+                        </mat-accordion>
+
+                    </form>
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="list-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="list-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="list.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="list-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="list-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

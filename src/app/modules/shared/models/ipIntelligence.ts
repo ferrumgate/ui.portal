@@ -18,15 +18,7 @@ export interface IpIntelligenceFilterCategory {
     hosting?: boolean,
     crawler?: boolean,
 }
-export interface IpIntelligenceBWItem {
-    id: string;
-    val: string;
-    insertDate: string;
-    description?: string;
-}
-export function calculateIpIntelligenceBWItemId(net: string) {
-    return net.replace(/\//g, '#');
-}
+
 
 export interface IpIntelligenceCountryList {
     items: Country[];
@@ -34,14 +26,70 @@ export interface IpIntelligenceCountryList {
 
 export interface IpIntelligence {
 
-    whiteList: IpIntelligenceBWItem[],
-    blackList: IpIntelligenceBWItem[],
     //allowed country list
     countryList: IpIntelligenceCountryList,
     //filter category option
     filterCategory: IpIntelligenceFilterCategory,
     //intelligence sources
     sources: IpIntelligenceSources
+    lists: IpIntelligenceList[];
 
+}
+
+
+export interface IpIntelligenceList {
+    // for using in ui
+    objId?: string;
+    id: string;
+    name: string;
+    http?: {
+        url: string;
+        checkFrequency: number;//minutes
+
+    };
+    file?: {
+        source?: string;
+        key?: string;
+
+
+    };
+    splitter?: string;
+    splitterIndex?: number;
+    labels?: string[],
+    updateDate: string;
+    insertDate: string;
+    [key: string]: any;
+
+}
+
+export interface IpIntelligenceListStatus {
+    id: string;
+    lastCheck?: string;
+    lastError?: string;
+    hash?: string;
+    isChanged?: boolean;
+    hasFile?: boolean;
+    [key: symbol]: string;
+}
+
+export interface IpIntelligenceListFiles {
+    [key: string]: { page: number, hash: string };
+}
+export interface IpIntelligenceListItem {
+    id: string;
+    cidr: string;
+    listId: string;
+}
+
+
+
+
+export interface IpIntelligenceItem {
+    ip: string;
+    countryCode: string;
+    countryName: string;
+    isProxy: boolean;
+    isHosting: boolean;
+    isCrawler: boolean;
 }
 

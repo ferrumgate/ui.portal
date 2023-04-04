@@ -89,7 +89,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
 
 
 
-    this.helpLink = this.configService.links.emailHelp;
+    this.helpLink = this.configService.links.ipIntelligenceHelp;
 
   }
 
@@ -204,5 +204,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
       apiKey: ''
     }
   }
+
+
 
 }

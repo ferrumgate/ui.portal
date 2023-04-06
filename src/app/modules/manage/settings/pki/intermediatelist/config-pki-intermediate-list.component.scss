@@ -1,0 +1,80 @@
+.config-pki-intermediate-list {
+    margin-top: 10px;
+
+}
+
+.config-pki-intermediate-list .toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    //font-size: 0.9rem;
+    //height: 60px;
+    padding-bottom: 20px;
+
+}
+
+
+.config-pki-intermediate-list mat-card {
+
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.config-pki-intermediate-list .search {
+    margin-left: 10px;
+
+}
+
+.config-pki-intermediate-list .items {
+    //height: calc(100vh - 425px);
+    //overflow: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 350px);
+    overflow: auto;
+}
+
+
+
+.config-pki-intermediate-list .add {
+    margin-left: 10px;
+
+}
+
+.config-pki-intermediate-list-explanation {
+    padding-top: 20px;
+}
+
+.config-pki-intermediate-list .row {
+
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+
+}
+
+.config-pki-intermediate-list .title {
+    //padding-top: 15px;
+    //padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-pki-intermediate-list .header-actions {}
+
+.config-pki-intermediate-list .results-title {
+    font-size: 1rem;
+
+}
+
+.config-pki-intermediate-list .results-result {
+    padding-top: 20px;
+}
+
+.config-pki-intermediate-list .results-ips {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

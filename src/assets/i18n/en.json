@@ -46,6 +46,7 @@
     "ErrSystemIsNotReady": "System is not ready yet, please wait",
     "ErrEmailConfigNeed": "Please define email setting",
     "ErrFqdnIsNotValid": "Name is not a valid fqdn",
+    "ErrSystemParameterDelete": "System parameter cannot delete",
     "Test": "Ferrum",
     "Title": "FerrumGate Management",
     "White": "White",
@@ -429,5 +430,9 @@
     "Splitter": "Splitter",
     "SplitterIndex": "Splitter index",
     "SplitterHint": "Splitter for csv or other files",
-    "SplitterIndexHint": "Which index data is, starts from 0"
+    "SplitterIndexHint": "Which index data is, starts from 0",
+    "PKI": "PKI",
+    "IntermediateCertificates": "Intermediate Certificates",
+    "WebCertificate": "Web Certificate",
+    "CertName": "Certificate name"
 }

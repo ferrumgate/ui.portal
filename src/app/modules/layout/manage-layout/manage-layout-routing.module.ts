@@ -148,6 +148,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/pki',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/pki/config-pki.module').then(m => m.ConfigPKIModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

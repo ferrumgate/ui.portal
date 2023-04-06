@@ -1,0 +1,22 @@
+<div class="config-pki">
+    <div class="config-pki-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'PKI'|translate}}
+            </div>
+
+        </div>
+    </div>
+
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="{{'IntermediateCertificates'|translate}}">
+            <app-config-pki-intermediate-list>list</app-config-pki-intermediate-list>
+        </mat-tab>
+
+        <mat-tab label="{{'WebCertificate'|translate}}">
+            <app-config-ip-intelligence-source helpLink="{{helpLink}}" [model]="getSource()" (save)="saveSource($event)"
+                (delete)="deleteSource($event)" (check)="checkSource($event)"></app-config-ip-intelligence-source>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>

@@ -14,18 +14,20 @@ import { ConfirmService } from 'src/app/modules/shared/services/confirm.service'
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { ConfigIpIntelligenceSourceComponent } from './config-ip-intelligence-source.component';
+import { ConfigPKIWebComponent } from './config-pki-web.component';
+import { SSLCertificate } from 'src/app/modules/shared/models/sslCertificate';
 
 
 
-describe('ConfigIpIntelligenceSourceComponent', () => {
-  let component: ConfigIpIntelligenceSourceComponent;
-  let fixture: ComponentFixture<ConfigIpIntelligenceSourceComponent>;
+
+describe('ConfigPKIWebComponent', () => {
+  let component: ConfigPKIWebComponent;
+  let fixture: ComponentFixture<ConfigPKIWebComponent>;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get', 'put']);
   let confirmService: ConfirmService;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigIpIntelligenceSourceComponent],
+      declarations: [ConfigPKIWebComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
         RouterTestingModule.withRoutes([])],
@@ -50,7 +52,7 @@ describe('ConfigIpIntelligenceSourceComponent', () => {
 
   beforeEach(() => {
     confirmService = TestBed.inject(ConfirmService);
-    fixture = TestBed.createComponent(ConfigIpIntelligenceSourceComponent);
+    fixture = TestBed.createComponent(ConfigPKIWebComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -66,37 +68,43 @@ describe('ConfigIpIntelligenceSourceComponent', () => {
     const apiKeyInput = findEl(fixture, 'config-ip-intelligence-source-apikey-input', false);
     expect(apiKeyInput).toBeFalsy();
 
+    let item1: SSLCertificate = {
+      idEx: '1', name: 'authenticatonEx', labels: ['test'], isEnabled: true,
+      insertDate: '01.01.01', updateDate: '01.01.01', privateKey: 'private key',
+      publicCrt: 'public crt', isSystem: true
 
-
-
-
-    component.model = {
-      type: 'test', name: 'test', id: '', insertDate: '', updateDate: 'a'
     }
+    component.cert = item1;
     tick(1000);
     fixture.detectChanges();
-
-
-    const apiKeyInput2 = findEl(fixture, 'config-ip-intelligence-source-apikey-input', false);
-    expect(apiKeyInput2).toBeTruthy();
-
-    expect(component.formGroup.invalid).toBeTrue();
-    setFieldValue(fixture, 'config-ip-intelligence-source-apikey-input', 'newpass');
-    dispatchFakeEvent(findEl(fixture, 'config-ip-intelligence-source-apikey-input').nativeElement, 'blur');
-
 
     expect(component.formGroup.valid).toBeTrue();
+    expect(component.formError.name).toBeFalsy();
 
-    tick(1000);
+
+    expectValue(fixture, 'cert-name-input', item1.name);
+    expectValue(fixture, 'cert-updatedate-input', '2001-01-01 00:00:00');
+    expectValue(fixture, 'cert-pem-input', 'public crt');
+
+    const deleteButton2 = findEl(fixture, 'cert-delete-button', false);
+    expect(deleteButton2).toBeTruthy();
+    //expectCheckValue(fixture, 'cert-checkbox-enabled', true);
+
+    //set name to empty
+    setFieldValue(fixture, 'cert-name-input', '')
+    dispatchFakeEvent(findEl(fixture, 'cert-name-input').nativeElement, 'blur');
     fixture.detectChanges();
-    const okButton = findEl(fixture, 'setttings-config-ip-intelligence-source-ok-button');
-    expect(okButton).toBeTruthy();
+    expect(component.formGroup.invalid).toBeTrue();
 
-    flush();
+    setFieldValue(fixture, 'cert-name-input', 'test')
+    dispatchFakeEvent(findEl(fixture, 'cert-name-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    expect(component.formGroup.valid).toBeTrue();
+
+    const deleteButton = findEl(fixture, 'cert-delete-button', false);
+    expect(deleteButton).toBeTruthy();
+
 
 
   }));
 });
-
-
-

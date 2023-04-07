@@ -23,6 +23,7 @@ export class PKIService extends BaseService {
 
   private _pkiUrl = this.configService.getApiUrl() + '/pki';
   private _pkiIntermediateUrl = this.configService.getApiUrl() + '/pki/intermediate';
+  private _pkiWebUrl = this.configService.getApiUrl() + '/pki/cert/web';
 
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('pki', captchaService)
@@ -70,6 +71,43 @@ export class PKIService extends BaseService {
 
       }))
   }
+
+  getWebCert() {
+    const searchParams = new URLSearchParams();
+
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._pkiWebUrl, y);
+        return this.httpService.get<{ items: SSLCertificate[] }>(url);
+      })
+    )
+  }
+  saveOrupdateWebCert(item: SSLCertificate) {
+    const cert: SSLCertificate = {
+      id: item.id, insertDate: item.insertDate, isEnabled: item.isEnabled, labels: item.labels, name: item.name,
+      updateDate: item.updateDate, category: item.category, idEx: item.idEx, isIntermediate: item.isIntermediate, parentId: item.parentId,
+      privateKey: item.privateKey, publicCrt: item.publicCrt
+    }
+    return this.preExecute(cert).pipe(
+      switchMap(y => {
+        return this.httpService.put<SSLCertificate>(this._pkiWebUrl, y, this.jsonHeader)
+
+      }))
+
+  }
+  deleteWebCert(item: SSLCertificate) {
+
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._pkiWebUrl, y);
+        return this.httpService.delete<SSLCertificate>(url);
+
+      }))
+  }
+
+
 
 
 

@@ -280,6 +280,7 @@
     "StartDate": "Start date",
     "EndDate": "End date",
     "InsertDate": "Insert date",
+    "UpdateDate": "Update date",
     "Message": "Message",
     "Detail": "Detail",
     "ClientIp": "Client ip",
@@ -434,5 +435,6 @@
     "PKI": "PKI",
     "IntermediateCertificates": "Intermediate Certificates",
     "WebCertificate": "Web Certificate",
-    "CertName": "Certificate name"
+    "CertName": "Certificate name",
+    "PrivateKey": "Private key"
 }

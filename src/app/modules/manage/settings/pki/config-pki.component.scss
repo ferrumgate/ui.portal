@@ -31,6 +31,11 @@
     padding-bottom: 15px;
 }
 
+.config-pki .tab {
+    height: calc(100vh - 180px);
+    overflow: auto;
+}
+
 .config-pki .title {
     padding-top: 15px;
     padding-bottom: 10px;

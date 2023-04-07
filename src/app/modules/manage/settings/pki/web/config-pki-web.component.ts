@@ -1,63 +1,66 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { map, Observable, of, switchMap, takeWhile } from 'rxjs';
+import { switchMap, takeWhile } from 'rxjs';
+import { ConfigEmail, ConfigES } from 'src/app/modules/shared/models/config';
+import { IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
 import { SSLCertificate, SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { PKIService } from 'src/app/modules/shared/services/pki.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 
 
-
-interface SSLCertificateExExtended extends SSLCertificateEx {
-  orig: SSLCertificateEx;
+interface SSLCertificateExtended extends SSLCertificate {
+  orig: SSLCertificate;
   isChanged: boolean;
   insertDateStr: string;
+  updateDateStr: string;
 
 
 }
 
 @Component({
-  selector: 'app-config-pki-intermediate-cert',
-  templateUrl: './config-pki-intermediate-cert.component.html',
-  styleUrls: ['./config-pki-intermediate-cert.component.scss']
+  selector: 'app-config-pki-web',
+  templateUrl: './config-pki-web.component.html',
+  styleUrls: ['./config-pki-web.component.scss']
 })
-export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
+export class ConfigPKIWebComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
 
-  _model: SSLCertificateExExtended =
+  _model: SSLCertificateExtended =
     {
       id: '', name: '', labels: [], isChanged: false, insertDate: '',
-      updateDate: '', insertDateStr: '', isExpanded: false, isEnabled: true,
+      category: 'web',
+      updateDate: '', insertDateStr: '', updateDateStr: '', isExpanded: false, isEnabled: true,
       orig: {
-        id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '',
-        isEnabled: true, category: 'auth', isIntermediate: true,
+        idEx: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '',
+        isEnabled: true, category: 'web', isIntermediate: true,
       }
     };
 
 
-  get cert(): SSLCertificateExExtended {
+  get cert(): SSLCertificateExtended {
     return this._model;
   }
 
   @Input()
-  set cert(val: SSLCertificateEx) {
+  set cert(val: SSLCertificate) {
     this._model = {
       ...val,
       isChanged: false,
       orig: val,
       labels: Array.from(val.labels || []),
       insertDateStr: UtilService.dateFormatToLocale(new Date(val.insertDate)),
+      updateDateStr: UtilService.dateFormatToLocale(new Date(val.updateDate)),
+
 
 
 
@@ -131,16 +134,15 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
 
 
 
-  createFormGroup(cert: SSLCertificateExExtended) {
+  createFormGroup(cert: SSLCertificateExtended) {
     const fmg = new FormGroup({
       name: new FormControl(cert.name, [Validators.required]),
-      insertDateStr: new FormControl(cert.insertDateStr, []),
+      updateDateStr: new FormControl(cert.updateDateStr, []),
       publicCrt: new FormControl(cert.publicCrt, []),
       privateKey: new FormControl(cert.privateKey, []),
 
-
     });
-    fmg.controls['insertDateStr'].disable();
+    fmg.controls['updateDateStr'].disable();
 
 
 
@@ -267,6 +269,8 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
   delete() {
     this.deleteCert.emit(this.createBaseModel());
   }
+
+
 
 
 }

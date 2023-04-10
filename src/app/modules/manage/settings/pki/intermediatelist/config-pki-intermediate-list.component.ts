@@ -1,7 +1,9 @@
+import { X } from '@angular/cdk/keycodes';
 import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { debug } from 'console';
 import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } from 'rxjs';
 import { ConfigES } from 'src/app/modules/shared/models/config';
 import { IpIntelligenceList, IpIntelligenceListStatus } from 'src/app/modules/shared/models/ipIntelligence';
@@ -31,6 +33,7 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
   networkFormControl = new FormControl();
 
   certs: SSLCertificateEx[] = [];
+  caCerts: SSLCertificateEx[] = [];
 
   helpLink = ''
   isThemeDark = false;
@@ -144,8 +147,15 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
        } */
     let testData = { items: [] };
 
-    return (testData.items.length ? of(testData) :
-      this.pkiService.getIntermediateList()).pipe(
+    return (testData.items.length ?
+      of(testData) :
+      of('').pipe(
+        switchMap(k => this.pkiService.getCAList()),
+        map(x => {
+          this.caCerts = x.items
+          return x;
+        }),
+        switchMap(y => this.pkiService.getIntermediateList()),
         map(z => {
 
           this.certs = z.items.map(x => {
@@ -155,8 +165,9 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
 
             return a.name.localeCompare(b.name)
           })
+          return z;
         })
-      )
+      ))
 
   }
   prepareCert(cert: SSLCertificateEx,) {
@@ -246,7 +257,16 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
         });
     }
   }
+  exportCACert($event: SSLCertificate) {
 
+    if (!$event.id)
+      return;
+    debugger;
+    if (this.caCerts.length)
+      this.pkiService.exportPem(this.caCerts[0]);
+    this.notificationService.success(this.translateService.translate('Downloading'))
+
+  }
 
 
 

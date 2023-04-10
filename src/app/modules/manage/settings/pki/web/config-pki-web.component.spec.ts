@@ -71,7 +71,7 @@ describe('ConfigPKIWebComponent', () => {
     let item1: SSLCertificate = {
       idEx: '1', name: 'authenticatonEx', labels: ['test'], isEnabled: true,
       insertDate: '01.01.01', updateDate: '01.01.01', privateKey: 'private key',
-      publicCrt: 'public crt', isSystem: true
+      publicCrt: 'public crt', isSystem: true, usages: []
 
     }
     component.cert = item1;

@@ -438,5 +438,6 @@
     "CertName": "Certificate name",
     "PrivateKey": "Private key",
     "Usages": "Usages",
-    "NewUsage": "New usage ..."
+    "NewUsage": "New usage ...",
+    "Refresh": "Refresh"
 }

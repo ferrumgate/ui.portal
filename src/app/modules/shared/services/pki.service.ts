@@ -127,12 +127,14 @@ export class PKIService extends BaseService {
     )
   }
   saveOrupdateWebCert(item: SSLCertificate) {
+
     const cert: SSLCertificate = {
       id: item.id, insertDate: item.insertDate, isEnabled: item.isEnabled, labels: item.labels, name: item.name,
       updateDate: item.updateDate, category: item.category, idEx: item.idEx, isIntermediate: item.isIntermediate, parentId: item.parentId,
       privateKey: item.privateKey, publicCrt: item.publicCrt,
       usages: item.usages
     }
+
     return this.preExecute(cert).pipe(
       switchMap(y => {
         return this.httpService.put<SSLCertificate>(this._pkiWebUrl, y, this.jsonHeader)

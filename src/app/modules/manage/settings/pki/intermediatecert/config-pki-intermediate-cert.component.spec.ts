@@ -55,7 +55,7 @@ describe('ConfigPKIIntermediateCertComponent', () => {
     let item1: SSLCertificateEx = {
       id: '1', name: 'authenticatonEx', labels: ['test'], isEnabled: true,
       insertDate: '01.01.01', updateDate: '', privateKey: 'private key',
-      publicCrt: 'public crt', isSystem: true
+      publicCrt: 'public crt', isSystem: true, usages: []
 
     }
     component.cert = item1;
@@ -96,7 +96,7 @@ describe('ConfigPKIIntermediateCertComponent', () => {
     let item1: SSLCertificateEx = {
       id: '1', name: 'authenticatonEx', labels: ['test'], isEnabled: true,
       insertDate: '01.01.01', updateDate: '', privateKey: 'private key',
-      publicCrt: 'public crt', isSystem: false
+      publicCrt: 'public crt', isSystem: false, usages: []
 
     }
     component.cert = item1;

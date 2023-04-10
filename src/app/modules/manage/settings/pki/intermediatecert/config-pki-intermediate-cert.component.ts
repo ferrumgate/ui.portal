@@ -86,6 +86,9 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
   @Output()
   exportCert: EventEmitter<SSLCertificate> = new EventEmitter();
 
+  @Output()
+  exportCACert: EventEmitter<SSLCertificate> = new EventEmitter();
+
 
 
   formGroup: FormGroup = this.createFormGroup(this._model);
@@ -366,6 +369,7 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
     let model = this.createBaseModel();
     model.publicCrt = this._model.publicCrt;
     this.pkiService.exportPem(model);
+    this.exportCACert.emit(model);
   }
   usageChanged() {
 

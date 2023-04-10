@@ -210,6 +210,8 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.cert.isChanged = true;
     if (UtilService.checkChanged(original.labels, this.cert.labels))
       this.cert.isChanged = true
+    if (original.publicCrt != this.cert.publicCrt)
+      this.cert.isChanged = true;
 
 
   }
@@ -264,7 +266,10 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
 
 
   saveOrUpdate() {
-    this.saveCert.emit(this.createBaseModel());
+    const model = this.createBaseModel();
+    model.publicCrt = this._model.publicCrt?.replace(/^\n+|\n+$/gm, '');
+    model.privateKey = this._model.privateKey?.replace(/^\n+|\n+$/gm, '');
+    this.saveCert.emit(model);
   }
 
   delete() {

@@ -4,6 +4,7 @@ export interface SSLCertificate {
     idEx?: string;
     name: string;
     labels: string[];
+    usages: string[],
     insertDate: string;
     updateDate: string;
     publicCrt?: string;

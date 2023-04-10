@@ -37,12 +37,12 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
 
   _model: SSLCertificateExtended =
     {
-      id: '', name: '', labels: [], isChanged: false, insertDate: '',
+      id: '', name: '', labels: [], isChanged: false, insertDate: '', usages: [],
       category: 'web',
       updateDate: '', insertDateStr: '', updateDateStr: '', isExpanded: false, isEnabled: true,
       orig: {
         idEx: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '',
-        isEnabled: true, category: 'web', isIntermediate: true,
+        isEnabled: true, category: 'web', isIntermediate: true, usages: []
       }
     };
 
@@ -251,6 +251,7 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       id: this._model.id,
       objId: this._model.objId,
       labels: Array.from(this._model.labels || []),
+      usages: Array.from(this._model.usages || []),
       name: this._model.name,
       insertDate: this._model.insertDate,
       updateDate: this._model.updateDate,

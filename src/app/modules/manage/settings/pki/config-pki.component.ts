@@ -51,7 +51,8 @@ export class ConfigPKIComponent implements OnInit, OnDestroy {
   defaultCert(): SSLCertificate {
     return {
       insertDate: new Date().toISOString(), isEnabled: true, labels: [],
-      name: '', category: 'web', updateDate: new Date().toISOString()
+      name: '', category: 'web', updateDate: new Date().toISOString(),
+      usages: []
     }
   }
 

@@ -144,18 +144,19 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
        } */
     let testData = { items: [] };
 
-    return (testData.items.length ? of(testData) : this.pkiService.getIntermediateList()).pipe(
-      map(z => {
+    return (testData.items.length ? of(testData) :
+      this.pkiService.getIntermediateList()).pipe(
+        map(z => {
 
-        this.certs = z.items.map(x => {
+          this.certs = z.items.map(x => {
 
-          return this.prepareCert(x)
-        }).sort((a, b) => {
+            return this.prepareCert(x)
+          }).sort((a, b) => {
 
-          return a.name.localeCompare(b.name)
+            return a.name.localeCompare(b.name)
+          })
         })
-      })
-    )
+      )
 
   }
   prepareCert(cert: SSLCertificateEx,) {
@@ -173,7 +174,7 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
       id: '', name: '', labels: [],
       insertDate: new Date().toISOString(), updateDate: '',
       isExpanded: true, category: type, isEnabled: true, isIntermediate: true,
-      isNew: true
+      isNew: true, usages: type == 'auth' ? ['for authentication'] : ['for web', 'for tls inspection', 'for service']
     }
 
     this.certs.unshift(cert);
@@ -224,6 +225,25 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
         this.certs.splice(index, 1);
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
+    }
+  }
+  exportCert($event: SSLCertificate) {
+    if (!$event.id) {//list we created temporarily
+      return;
+
+    } else {
+      //real  execute
+      this.confirmService.showAreYouSure().pipe(
+        takeWhile(x => x),
+        switchMap(y =>
+          this.pkiService.exportIntermediateCert($event as SSLCertificateEx)
+        )
+      )
+        .subscribe((x) => {
+          //delete from group list
+
+          this.notificationService.success(this.translateService.translate('Downloading'))
+        });
     }
   }
 

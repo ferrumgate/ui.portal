@@ -16,15 +16,15 @@
         <mat-card-content>
             <div>
                 <div>
+                    <mat-accordion class="cert-details">
+                        <mat-expansion-panel [(expanded)]="cert.isExpanded" (expandedChange)="expand($event)">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title test-id="cert-name">
+                                    {{cert.name}}
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <form test-id="cert-form" [formGroup]="formGroup">
 
-                    <form test-id="cert-form" [formGroup]="formGroup">
-                        <mat-accordion class="cert-details">
-                            <mat-expansion-panel [(expanded)]="cert.isExpanded" (expandedChange)="expand($event)">
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title test-id="cert-name">
-                                        {{cert.name}}
-                                    </mat-panel-title>
-                                </mat-expansion-panel-header>
 
                                 <p>
                                     <mat-form-field fxFlex appearance="fill">
@@ -53,6 +53,15 @@
                                                 [matChipInputAddOnBlur]="addOnBlur"
                                                 (matChipInputTokenEnd)="addLabel($event)" [readonly]="cert.isSystem">
                                         </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p fxFill *ngIf="usages.length">
+                                    <mat-form-field fxFlex class="user-search-item">
+                                        <mat-label>{{"Usages"|translate}}</mat-label>
+                                        <mat-select [formControl]="usageFormControl" multiple onchange="usageChanged()">
+                                            <mat-option *ngFor="let usage of usages" [value]="usage">{{usage.value}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </p>
                                 <p>
@@ -85,13 +94,54 @@
                                 </p>
 
 
+                            </form>
+
+                            <form test-id="cert-form2" [formGroup]="formGroupPassword">
+
+                                <p *ngIf="cert.id" fxFill fxLayoutAlign="end center">
+
+                                    <button test-id="cert-export-button" mat-stroked-button (click)="exportPEM()">
+                                        <mat-icon>arrow_downward</mat-icon>
+                                        {{'PEM'|translate}} </button>
+                                </p>
+
+                                <p fxFill *ngIf="cert.id && !cert.isSystem">
+                                    <mat-accordion>
+                                        <mat-expansion-panel>
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    {{'Pfx (P12)'|translate}}
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <p>
+                                                <mat-form-field fxFlex appearance="fill">
+                                                    <mat-label>{{"Password"|translate}}</mat-label>
+                                                    <input matInput test-id="cert-password-input"
+                                                        formControlName="password" required="true">
+                                                    <mat-error>
+                                                        {{formErrorPassword.password|translate}}</mat-error>
+
+                                                </mat-form-field>
+                                            </p>
+                                            <p fxFill fxLayoutAlign="end center">
+
+                                                <button test-id="cert-export-button" mat-stroked-button
+                                                    [disabled]="downloadButtonDisabled" (click)="exportP12()">
+                                                    <mat-icon>arrow_downward</mat-icon>
+                                                    {{'Download'|translate}} </button>
+                                            </p>
 
 
 
-                            </mat-expansion-panel>
-                        </mat-accordion>
+                                        </mat-expansion-panel>
 
-                    </form>
+                                    </mat-accordion>
+                                </p>
+
+                            </form>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
 
                 </div>
 

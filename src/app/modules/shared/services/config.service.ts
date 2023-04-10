@@ -522,8 +522,6 @@ export class ConfigService extends BaseService {
         return this.http.get(url, { responseType: 'blob' })
       }),
       switchMap(data => {
-        let blob = new Blob([data], { type: 'application/txt' });
-
         var downloadURL = window.URL.createObjectURL(data);
         var link = document.createElement('a');
         link.href = downloadURL;

@@ -15,23 +15,23 @@
 
             <div fxFlex fxLayoutAlign="end center">
 
-                <button test-id="button-add" mat-raised-button color="primary" class="add" (click)="addNewCert('auth')">
+                <button test-id="button-add" mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
 
                     {{"Add"|translate}}
-                    <!-- <mat-icon>keyboard_arrow_down</mat-icon> -->
+                    <mat-icon>keyboard_arrow_down</mat-icon>
                 </button>
 
-                <!-- <mat-menu #menu="matMenu">
+                <mat-menu #menu="matMenu">
                     <button test-id="button-http" mat-menu-item (click)="addNewCert('auth')">
-                        <mat-icon>http</mat-icon>
+
                         <span>Authentication</span>
                     </button>
                     <button test-id="button-file" mat-menu-item (click)="addNewCert('tls')">
-                        <mat-icon>insert_drive_file</mat-icon>
+
                         <span>TLS</span>
                     </button>
 
-                </mat-menu> -->
+                </mat-menu>
             </div>
         </div>
         <mat-divider></mat-divider>
@@ -43,8 +43,8 @@
                 <p class="row services-item" fxLayout="row" *ngFor="let cert of  certs">
 
                     <app-config-pki-intermediate-cert test-id="config-pki-intermediate-cert" [cert]="cert"
-                        (deleteCert)="deleteCert($event)"
-                        (saveCert)="saveCert($event)"></app-config-pki-intermediate-cert>
+                        (deleteCert)="deleteCert($event)" (saveCert)="saveCert($event)"
+                        (exportCert)="exportCert($event)"></app-config-pki-intermediate-cert>
                 </p>
 
             </div>

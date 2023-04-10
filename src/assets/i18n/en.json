@@ -121,7 +121,7 @@
     "ClientIpRange": "Client ip range",
     "SshHostDefinition": "Clients will create tunnels over this host",
     "Network": "Network",
-    "UrlDefinition": "Login host url that all clients will login,like https://secure.ferrumgate.com",
+    "UrlDefinition": "Login web page, all clients will open this url for login, like https://secure.ferrumgate.com",
     "LoginUrl": "Login url",
     "PrivateDomainDefinition": "Local domain name like ferrumgate.zero for services like mysql.dev.ferrumgate.zero",
     "PrivateDomain": "Private domain",
@@ -436,5 +436,7 @@
     "IntermediateCertificates": "Intermediate Certificates",
     "WebCertificate": "Web Certificate",
     "CertName": "Certificate name",
-    "PrivateKey": "Private key"
+    "PrivateKey": "Private key",
+    "Usages": "Usages",
+    "NewUsage": "New usage ..."
 }

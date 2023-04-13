@@ -131,7 +131,7 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
 
   }
   getAllData() {
-    return this.userService.get2(0, 0, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, 'simple').pipe(
+    return this.userService.get2(0, 0, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, 'simple').pipe(
       map(y => {
         this.users = y.items as any;
       }),

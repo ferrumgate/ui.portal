@@ -81,9 +81,19 @@
                                             placeholder="-----BEGIN CERTIFICATE-----" formControlName="publicCrt"
                                             [readonly]="cert.isSystem">
                                             </textarea>
+                                        <span fxFlex fxLayout="column" fxLayoutAlign="end end">
+
+                                            <button matSuffix mat-icon-button (click)="copyCert()"
+                                                [disabled]="!cert.publicCrt">
+                                                <mat-icon matSuffix
+                                                    matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                            </button>
+
+                                        </span>
 
                                         <mat-error>
                                             {{formError.publicCrt|translate}}</mat-error>
+
                                     </mat-form-field>
                                 </p>
                                 <p>

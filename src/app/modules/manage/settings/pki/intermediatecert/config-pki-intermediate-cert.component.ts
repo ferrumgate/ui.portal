@@ -16,6 +16,7 @@ import { PKIService } from 'src/app/modules/shared/services/pki.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 export interface KeyValue {
   id: string; value: string
@@ -36,6 +37,7 @@ interface SSLCertificateExExtended extends SSLCertificateEx {
   styleUrls: ['./config-pki-intermediate-cert.component.scss']
 })
 export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
+
   allSub = new SSubscription();
   helpLink = '';
 
@@ -104,7 +106,7 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
   isThemeDark = false;
 
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, private clipboard: Clipboard,
     private configService: ConfigService,
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -373,6 +375,12 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
   }
   usageChanged() {
 
+  }
+  copyCert() {
+    if (this.cert.publicCrt) {
+      this.clipboard.copy(this.cert.publicCrt);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 

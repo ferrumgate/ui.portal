@@ -24,6 +24,7 @@ export class RBACDefault {
     static rightAdmin: Right = { id: 'Admin', name: 'Admin', };
     static rightReporter: Right = { id: 'Reporter', name: 'Reporter' };
     static rightUser: Right = { id: 'User', name: 'User' };
+    static rightDevOps: Right = { id: 'DevOps', name: 'DevOps', };
 
 
 
@@ -37,5 +38,6 @@ export class RBACDefault {
     static roleAdmin: Role = { id: 'Admin', name: 'Admin', rightIds: [this.rightAdmin.id] };
     static roleReporter: Role = { id: 'Reporter', name: 'Reporter', rightIds: [this.rightReporter.id] };
     static roleUser: Role = { id: 'User', name: 'User', rightIds: [this.rightUser.id] };
+    static roleDevOps: Role = { id: 'DevOps', name: 'DevOps', rightIds: [this.rightDevOps.id] };
 
 }

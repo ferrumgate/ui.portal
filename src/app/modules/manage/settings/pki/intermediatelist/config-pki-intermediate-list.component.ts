@@ -261,7 +261,7 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
 
     if (!$event.id)
       return;
-    debugger;
+
     if (this.caCerts.length)
       this.pkiService.exportPem(this.caCerts[0]);
     this.notificationService.success(this.translateService.translate('Downloading'))

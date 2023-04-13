@@ -78,7 +78,13 @@
                                 <textarea class="pem-text" multiple="true" matInput test-id="cert-pem-input"
                                     placeholder="-----BEGIN CERTIFICATE-----" formControlName="publicCrt">
                                             </textarea>
+                                <span fxFlex fxLayout="column" fxLayoutAlign="end end">
 
+                                    <button matSuffix mat-icon-button (click)="copyCert()" [disabled]="!cert.publicCrt">
+                                        <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                    </button>
+
+                                </span>
                                 <mat-error>
                                     {{formError.publicCrt|translate}}</mat-error>
                             </mat-form-field>

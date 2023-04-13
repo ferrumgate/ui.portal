@@ -3,11 +3,13 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } from 'rxjs';
 import { Group } from 'src/app/modules/shared/models/group';
 import { RBACDefault, Role } from 'src/app/modules/shared/models/rbac';
+import { SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 import { User, User2 } from 'src/app/modules/shared/models/user';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { PKIService } from 'src/app/modules/shared/services/pki.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
@@ -33,7 +35,11 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
   groups: Group[] = [];
 
   roleFormControl = new FormControl('');
-  roles: Role[] = [RBACDefault.roleAdmin, RBACDefault.roleReporter, RBACDefault.roleUser];
+  roles: Role[] = [RBACDefault.roleAdmin, RBACDefault.roleDevOps, RBACDefault.roleReporter, RBACDefault.roleUser];
+  loginMethodFormControl = new FormControl('');
+  //everyone has password
+  loginMethods: { id: string, name: string }[] = [{ id: "password", name: 'Password' }, { id: 'apikey', name: "ApiKey" }, { id: 'certificate', name: 'Certificate' }];
+  inCerts: SSLCertificateEx[] = [];
 
 
   users: User2[] = [];
@@ -48,6 +54,7 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private userService: UserService,
     private groupService: GroupService,
+    private pkiService: PKIService
   ) {
 
     this.allSubs.addThis =
@@ -129,8 +136,18 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
   }
 
   search() {
+    of(this.inCerts).pipe(//get only once 
+      switchMap(x => {
+        if (this.inCerts.length)
+          return of({ items: this.inCerts })
+        else return this.pkiService.getIntermediateList()
+      }),
+      map(x => {
 
-    of(this.groups).pipe(
+        this.inCerts = x.items.filter(y => y.isEnabled && y.category == 'auth')
+
+      }),
+      switchMap(a => of(this.groups)),
       switchMap((x) => {//get groups only once
         if (!x.length)
           return this.groupService.get2().pipe(map(x => x.items));
@@ -142,6 +159,7 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
           this.page, this.pageSize, this.searchKey, undefined,
           Array.isArray(this.groupFormControl.value) ? this.groupFormControl.value.map((x: any) => x.id) : [],
           Array.isArray(this.roleFormControl.value) ? this.roleFormControl.value.map((x: any) => x.id) : [],
+          Array.isArray(this.loginMethodFormControl.value) ? this.loginMethodFormControl.value.map((x: any) => x.id) : [],
           this.searchIs2FA,
           this.searchIsVerified,
           this.searchIsLocked,
@@ -199,6 +217,106 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
     });
   }
+
+  getUserSensitiveData($user: User2) {
+    this.userService.getSensitiveData($user.id, true, true)
+      .subscribe((item) => {
+        //find item and replace it
+        const index = this.users.findIndex(x => x.objId == $user.objId)
+
+        this.users[index] = {
+          ...this.users[index],
+          apiKey: item.apiKey,
+          cert: item.cert,
+          isExpanded: true,
+          isLoginMethodsExpanded: true
+        }
+
+
+      });
+  }
+  generateUserApiKey($user: User2) {
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.userService.updateSensitiveData($user.id, { key: 'apikey' })),
+    ).subscribe((item) => {
+      //find saved item and replace it
+      const index = this.users.findIndex(x => x.objId == $user.objId)
+
+      this.users[index] = {
+        ...this.users[index],
+        apiKey: item.apiKey,
+        isExpanded: true,
+        isLoginMethodsExpanded: true
+      }
+
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
+    });
+  }
+
+  deleteUserApiKey($user: User2) {
+    this.confirmService.showDelete().pipe(
+      takeWhile(x => x),
+      switchMap(y =>
+        this.userService.deleteUserSensitiveData($user.id, true, false)
+      ),
+    ).subscribe((item) => {
+      //delete from user list
+      const index = this.users.findIndex(x => x.objId == $user.objId);
+      this.users[index] = {
+        ...this.users[index],
+        apiKey: item.apiKey,
+        isExpanded: true,
+        isLoginMethodsExpanded: true
+      }
+
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
+    });
+  }
+
+  generateUserCert($user: User2) {
+
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.userService.updateSensitiveData($user.id, undefined, { parentId: $user.cert?.parentId } as any)),
+    ).subscribe((item) => {
+      //find saved item and replace it
+      const index = this.users.findIndex(x => x.objId == $user.objId)
+
+      this.users[index] = {
+        ...this.users[index],
+        cert: item.cert,
+        isExpanded: true,
+        isLoginMethodsExpanded: true
+      }
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
+    });
+  }
+
+  deleteUserCert($user: User2) {
+    this.confirmService.showDelete().pipe(
+      takeWhile(x => x),
+      switchMap(y =>
+        this.userService.deleteUserSensitiveData($user.id, true, false)
+      ),
+    ).subscribe((item) => {
+      //delete from user list
+      const index = this.users.findIndex(x => x.objId == $user.objId);
+      this.users[index] = {
+        ...this.users[index],
+        cert: item.cert,
+        isExpanded: true,
+        isLoginMethodsExpanded: true
+      }
+
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
+    });
+  }
+
+
+
 
 
 }

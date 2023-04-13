@@ -22,9 +22,10 @@
 
                     <!--   <p class="user-username">
                         <mat-label>{{user.username}}</mat-label>
+                        [(expanded)]="user.isExpanded"
                     </p> -->
                     <mat-accordion class="user-details">
-                        <mat-expansion-panel [(expanded)]="user.isExpanded" (expandedChange)="expand($event)">
+                        <mat-expansion-panel expanded="true" (expandedChange)="expand($event)">
                             <mat-expansion-panel-header>
                                 <mat-panel-title test-id="user-username-title">
                                     {{user.username}}
@@ -135,6 +136,99 @@
                                     </mat-chip-list>
                                 </mat-form-field>
                             </p>
+                            <mat-accordion class="user-details">
+                                <mat-expansion-panel [expanded]="user.isLoginMethodsExpanded"
+                                    (expandedChange)="expandLoginMethod($event)" (afterExpand)="getSensitiveData()">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title test-id="user-username-title">
+                                            {{"LoginMethods"|translate}}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <p>
+                                        <mat-form-field fxFlex appearance="fill">
+
+                                            <mat-label>{{"ApiKey"|translate}}</mat-label>
+
+                                            <input matInput test-id="user-apikey-input"
+                                                placeholder="{{'ComplexKey'|translate}}" [ngModel]="user.apiKey?.key"
+                                                [ngModelOptions]="{standalone:true}">
+                                            <button matSuffix mat-icon-button (click)="generateApiKey()">
+                                                <mat-icon matSuffix matTooltip="{{'Refresh'|translate}}">{{'refresh'}}
+                                                </mat-icon>
+                                            </button>
+                                            <button matSuffix mat-icon-button (click)="copyApiKey()"
+                                                [disabled]="!user.apiKey?.key">
+                                                <mat-icon matSuffix
+                                                    matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                            </button>
+                                            <button matSuffix mat-icon-button (click)="deleteApiKey()"
+                                                [disabled]="!user.apiKey?.key">
+                                                <mat-icon matSuffix
+                                                    matTooltip="{{'Delete'|translate}}">{{'delete_outline'}}</mat-icon>
+                                            </button>
+                                        </mat-form-field>
+
+                                    </p>
+
+
+                                    <p>
+
+                                        <mat-form-field fxFlex appearance="fill">
+                                            <mat-label>{{"IntermediateCertificate"|translate}}</mat-label>
+                                            <input type="text" test-id="user-intermediate-cert-input"
+                                                placeholder="{{'SelectAnIntermediateCertificateForSigning'|translate}}"
+                                                matInput formControlName="inCertName" [matAutocomplete]="auto"
+                                                (ngModelChange)="searchCert($event)">
+                                            <mat-autocomplete #auto="matAutocomplete"
+                                                (optionSelected)="certChanged($event)" [displayWith]="displayCertFn">
+                                                <mat-option *ngFor="let option of certfilteredOptions | async"
+                                                    [value]="option">
+                                                    {{option.name}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+
+                                            <mat-error>{{formError.name|translate}}</mat-error>
+                                            <mat-hint>{{"SignCertificateWithThisCertificate"|translate}}</mat-hint>
+                                        </mat-form-field>
+
+                                    </p>
+                                    <p>
+
+
+                                        <mat-form-field appearance="fill" fxFill>
+                                            <mat-label>{{"Certificate"|translate}}</mat-label>
+                                            <textarea class="user-cert-text" multiple="true" matInput
+                                                test-id="user-cert-pem-input" placeholder="-----BEGIN CERTIFICATE-----"
+                                                [ngModel]="user.cert?.publicCrt" [ngModelOptions]="{standalone:true}"
+                                                [readonly]="true">
+                                            </textarea>
+                                            <span fxFlex fxLayout="column" fxLayoutAlign="end end">
+                                                <button matSuffix mat-icon-button (click)="generateCert()">
+                                                    <mat-icon matSuffix
+                                                        matTooltip="{{'Refresh'|translate}}">{{'refresh'}}
+                                                    </mat-icon>
+                                                </button>
+                                                <button matSuffix mat-icon-button (click)="copyCert()"
+                                                    [disabled]="!user.cert?.publicCrt">
+                                                    <mat-icon matSuffix
+                                                        matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                                </button>
+                                                <button matSuffix mat-icon-button (click)="deleteCert()"
+                                                    [disabled]="!user.cert?.publicCrt">
+                                                    <mat-icon matSuffix
+                                                        matTooltip="{{'Delete'|translate}}">{{'delete_outline'}}</mat-icon>
+                                                </button>
+                                            </span>
+
+                                        </mat-form-field>
+
+                                    </p>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+
+
+
+
                         </mat-expansion-panel>
                     </mat-accordion>
                 </form>

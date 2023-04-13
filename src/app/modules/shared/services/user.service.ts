@@ -5,13 +5,14 @@ import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { Configure } from '../models/configure';
 import { Group } from '../models/group';
-import { User2 } from '../models/user';
+import { ApiKey, User2 } from '../models/user';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
+import { SSLCertificate } from '../models/sslCertificate';
 interface UpdateRequest {
   id: string;
   name?: string;
@@ -34,6 +35,8 @@ export class UserService extends BaseService {
   private _userCurrent2FARefreshUrl = this.configService.getApiUrl() + '/user/current/2fa/rekey';
   private _userCurrentPasswordUrl = this.configService.getApiUrl() + '/user/current/pass';
   private _userInviteUrl = this.configService.getApiUrl() + '/user/invite';
+
+
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
@@ -82,12 +85,14 @@ export class UserService extends BaseService {
       }))
   }
 
+
   get2(
     page: number = 0, pageSize: number = 0,
     search?: string,
     ids?: string[],
     groupIds?: string[],
     roleIds?: string[],
+    loginMethods?: string[],
     is2FA?: string,
     isVerified?: string,
     isLocked?: string,
@@ -106,6 +111,8 @@ export class UserService extends BaseService {
       searchParams.append('groupIds', groupIds.join(','));
     if (roleIds && roleIds.length)
       searchParams.append('roleIds', roleIds.join(','));
+    if (loginMethods && loginMethods.length)
+      searchParams.append('loginMethods', loginMethods.join(','));
     if (is2FA)
       searchParams.append('is2FA', is2FA);
     if (isVerified)
@@ -124,6 +131,9 @@ export class UserService extends BaseService {
       })
     )
   }
+
+
+
 
 
 
@@ -183,6 +193,52 @@ export class UserService extends BaseService {
 
       }))
 
+  }
+
+  getSensitiveData(id: string, apiKey: boolean, cert: boolean) {
+    const urlParams = new URLSearchParams();
+    if (apiKey)
+      urlParams.append('apiKey', 'true');
+    if (cert)
+      urlParams.append('cert', 'true');
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData', urlParams);
+        return this.httpService.get<{ apiKey?: { key: string }, cert?: SSLCertificate }>(url);
+
+      }))
+  }
+
+  updateSensitiveData(id: string, apiKey?: ApiKey, cert?: SSLCertificate) {
+
+    let request = {
+      apiKey: apiKey, cert: cert
+    }
+    return this.preExecute(request).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData');
+        return this.httpService.put<{ apiKey?: ApiKey, cert?: SSLCertificate }>(url, y, this.jsonHeader)
+
+      }))
+  }
+
+
+
+  deleteUserSensitiveData(id: string, isApiKey: boolean, isCert: boolean) {
+
+
+    const urlParams = new URLSearchParams();
+    if (isApiKey)
+      urlParams.append('apiKey', 'true');
+    if (isCert)
+      urlParams.append('cert', 'true');
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData', urlParams);
+        return this.httpService.delete<{ apiKey?: ApiKey, cert?: SSLCertificate }>(url);
+
+      }))
   }
 
 

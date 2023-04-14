@@ -7,7 +7,10 @@ import { InputService } from '../../shared/services/input.service';
 import { ConfigService } from '../services/config.service';
 import { UtilService } from '../services/util.service';
 import { SSubscription } from '../services/SSubscribtion';
-
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ActivatedRoute } from '@angular/router';
+import { TranslationService } from '../services/translation.service';
+import { NotificationService } from '../services/notification.service';
 
 
 
@@ -54,7 +57,10 @@ export class NetworkComponent implements OnInit, OnDestroy {
   @Output()
   deleteNetwork: EventEmitter<Network> = new EventEmitter();
 
-  constructor(private configService: ConfigService) {
+  constructor(private route: ActivatedRoute, private clipboard: Clipboard,
+    private configService: ConfigService,
+    private translateService: TranslationService,
+    private notificationService: NotificationService) {
 
     this.helpLink = this.configService.links.networkHelp;
   }
@@ -231,6 +237,12 @@ export class NetworkComponent implements OnInit, OnDestroy {
 
   delete() {
     this.deleteNetwork.emit(this.network);
+  }
+  copyNetworkId() {
+    if (this.network.id) {
+      this.clipboard.copy(this.network.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 

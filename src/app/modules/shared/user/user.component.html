@@ -6,6 +6,9 @@
                 </mat-icon>
             </mat-card-title>
             <mat-action-row class="user-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyUserId()" [disabled]="!user.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
                 <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
@@ -25,10 +28,10 @@
                         [(expanded)]="user.isExpanded"
                     </p> -->
                     <mat-accordion class="user-details">
-                        <mat-expansion-panel expanded="true" (expandedChange)="expand($event)">
+                        <mat-expansion-panel [expanded]="user.isExpanded" (expandedChange)="expand($event)">
                             <mat-expansion-panel-header>
                                 <mat-panel-title test-id="user-username-title">
-                                    {{user.username}}
+                                    {{user.name}}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <p>
@@ -40,23 +43,7 @@
                                     <mat-hint>{{"UserNameSurnameHint"|translate}}</mat-hint>
                                 </mat-form-field>
                             </p>
-                            <!--  <p>
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"Email"|translate}}</mat-label>
-                                        <input matInput test-id="user-username-input"
-                                            placeholder="{{'Email'|translate}}" formControlName="name">
-                                        <mat-error>{{formError.email|translate}}</mat-error>
-                                        <mat-hint>{{"UserEmailHint"|translate}}</mat-hint>
-                                    </mat-form-field>
-                                </p>
-                                <p >
 
-                                    <mat-checkbox test-id="user-checkbox-isEmailVerified" disabled="true"
-                                        [(ngModel)]="user.isEmailVerified" (ngModelChange)="modelChanged()"
-                                        [ngModelOptions]="{standalone:true}">
-                                        {{"EmailVerified"|translate}}</mat-checkbox>
-
-                                </p> -->
                             <p>
                                 <mat-form-field class="user-search-item">
                                     <mat-label>{{"Groups"|translate}}</mat-label>
@@ -136,7 +123,7 @@
                                     </mat-chip-list>
                                 </mat-form-field>
                             </p>
-                            <mat-accordion class="user-details">
+                            <mat-accordion test-id="user-login-method-accordion" class="user-details" *ngIf="user.id">
                                 <mat-expansion-panel [expanded]="user.isLoginMethodsExpanded"
                                     (expandedChange)="expandLoginMethod($event)" (afterExpand)="getSensitiveData()">
                                     <mat-expansion-panel-header>

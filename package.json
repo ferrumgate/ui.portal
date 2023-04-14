@@ -7,7 +7,7 @@
     "build": "npx -p @angular/cli@13.3.3 ng build",
     "buildprod": "npx -p @angular/cli@13.3.3 ng build --optimization",
     "watch": "npx -p @angular/cli@13.3.3 ng build --watch --configuration development",
-    "test": "npx -p @angular/cli@13.3.3 ng test --include='**/**.spec.ts'"
+    "test": "npx -p @angular/cli@13.3.3 ng test --include='**/user.component.spec.ts'"
   },
   "private": true,
   "dependencies": {

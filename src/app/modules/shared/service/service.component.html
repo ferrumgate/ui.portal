@@ -5,6 +5,9 @@
                 <mat-icon matListIcon svgIcon="services"></mat-icon>
             </mat-card-title>
             <mat-action-row class="service-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyServiceId()" [disabled]="!service.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
                 <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>

@@ -8,6 +8,8 @@ import { ConfigService } from '../services/config.service';
 import { SSubscription } from '../services/SSubscribtion';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
+import { NotificationService } from '../services/notification.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 
@@ -71,9 +73,11 @@ export class GroupComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, private clipboard: Clipboard,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private notificationService: NotificationService
+
   ) {
 
     this.allSub.addThis =
@@ -229,7 +233,12 @@ export class GroupComponent implements OnInit, OnDestroy {
     this._model.isUsersOpened = !this._model.isUsersOpened;
     this.openGroupUsers.emit(this.createBaseModel());
   }
-
+  copyGroupId() {
+    if (this.group.id) {
+      this.clipboard.copy(this.group.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
+  }
 
 
 

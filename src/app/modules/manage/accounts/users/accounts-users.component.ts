@@ -23,6 +23,7 @@ import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/the
 })
 export class AccountsUsersComponent implements OnInit, OnDestroy {
 
+
   private allSubs = new SSubscription();
   searchForm = new FormControl();
   searchIsVerified = 'none';
@@ -184,9 +185,9 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
   deleteUser($user: User2) {
     if (!$user.id) {//user we created temporarily
-      const index = this.groups.findIndex(x => x.objId == $user.objId)
+      const index = this.users.findIndex(x => x.objId == $user.objId)
       if (index >= 0)
-        this.groups.splice(index, 1);
+        this.users.splice(index, 1);
 
     } else {
       //real group execute
@@ -205,9 +206,33 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
   }
   saveUser($user: User2) {
+    if ($user.id)
+      this.updateUser($user);
+    else {
+      this.confirmService.showSave().pipe(
+        takeWhile(x => x),
+        switchMap(y => this.userService.save($user, true, false)),
+      ).subscribe((item) => {
+        //find saved item and replace it
+        const index = this.users.findIndex(x => x.objId == $user.objId)
+        $user.isExpanded = true;
+        this.users[index] = {
+          ...this.users[index],
+          ...item.user,
+          apiKey: item.sensitiveData.apiKey,
+          cert: item.sensitiveData.cert,
+          isExpanded: true,
+          isLoginMethodsExpanded: true
+        }
+        this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
+      });
+    }
+  }
+  updateUser($user: User2) {
     this.confirmService.showSave().pipe(
       takeWhile(x => x),
-      switchMap(y => this.userService.saveOrupdate($user)),
+      switchMap(y => this.userService.update($user)),
     ).subscribe((item) => {
       //find saved item and replace it
       const index = this.users.findIndex(x => x.objId == $user.objId)
@@ -217,6 +242,7 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
     });
   }
+
 
   getUserSensitiveData($user: User2) {
     this.userService.getSensitiveData($user.id, true, true)
@@ -313,6 +339,19 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
       this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
     });
+  }
+
+  addNewApiKey() {
+    const user: User2 = {
+      id: '',
+      objId: UtilService.randomNumberString(),
+      name: '',
+      groupIds: [], roles: [], source: 'local-local', username: '',
+      insertDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      roleIds: [], labels: [], isVerified: true
+    }
+    this.users.unshift(user);
   }
 
 

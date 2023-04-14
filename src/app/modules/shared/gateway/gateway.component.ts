@@ -11,7 +11,8 @@ import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
 import { SSubscription } from '../services/SSubscribtion';
 import { UtilService } from '../services/util.service';
-
+import { NotificationService } from '../services/notification.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 
@@ -87,6 +88,7 @@ export class GatewayComponent implements OnInit, OnDestroy {
     private router: Router,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private clipboard: Clipboard, private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -300,6 +302,12 @@ export class GatewayComponent implements OnInit, OnDestroy {
       this.filteredOptions = this.filter(ev);
     }
 
+  }
+  copyGatewayId() {
+    if (this.gateway.id) {
+      this.clipboard.copy(this.gateway.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 

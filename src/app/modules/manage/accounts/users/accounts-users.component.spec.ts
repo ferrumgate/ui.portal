@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { findEls } from 'src/app/modules/shared/helper.spec';
+import { click, findEls } from 'src/app/modules/shared/helper.spec';
 import { RBACDefault } from 'src/app/modules/shared/models/rbac';
 import { User2 } from 'src/app/modules/shared/models/user';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
@@ -99,6 +99,7 @@ describe('AccountsUsersComponent', () => {
     expect(component).toBeTruthy();
     const { groups, users, roles } = sampleData();
     spyOn(httpClient, 'get').and.returnValues(
+      of({ items: [] }),
       of({ items: groups }),
       of({ items: users, total: 2 })
     )
@@ -107,6 +108,24 @@ describe('AccountsUsersComponent', () => {
     fixture.detectChanges();
     const userElements = findEls(fixture, 'accounts-users-user');
     expect(userElements.length).toBe(2);
+
+  }))
+
+  it('add new Apikey', fakeAsync(async () => {
+    expect(component).toBeTruthy();
+    const { groups, users, roles } = sampleData();
+    spyOn(httpClient, 'get').and.returnValues(
+      of({ items: [] }),
+      of({ items: [] }),
+      of({ items: [], total: 0 })
+    )
+    component.search();
+    tick(1000);
+    fixture.detectChanges();
+    click(fixture, 'button-apikey');
+    fixture.detectChanges();
+    const userElements = findEls(fixture, 'accounts-users-user');
+    expect(userElements.length).toBe(1);
 
   }))
 

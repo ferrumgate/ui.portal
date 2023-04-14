@@ -211,7 +211,7 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
         let index = user.groupIds.findIndex(x => x == group.id);
         if (index >= 0)
           user.groupIds.splice(index, 1);
-        return this.userService.saveOrupdate(user);
+        return this.userService.update(user);
       }
       ),
     ).subscribe((x) => {

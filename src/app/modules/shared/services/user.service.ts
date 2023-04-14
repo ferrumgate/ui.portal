@@ -13,6 +13,7 @@ import { ConfigService } from './config.service';
 import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
 import { SSLCertificate } from '../models/sslCertificate';
+import { userInfo } from 'os';
 interface UpdateRequest {
   id: string;
   name?: string;
@@ -20,6 +21,13 @@ interface UpdateRequest {
   isLocked?: boolean;
   labels?: string[],
   roleIds?: string[],
+  groupIds?: string[]
+}
+
+interface SaveRequest {
+  name: string;
+  roleIds?: string[];
+  labels: string[],
   groupIds?: string[]
 }
 
@@ -46,20 +54,46 @@ export class UserService extends BaseService {
   }
 
 
-  saveOrupdate(user: User2) {
+  update(user: User2) {
     //only these fields updates
-    const request: UpdateRequest = {
+    const updateRequest: UpdateRequest = {
       id: user.id, labels: user.labels, name: user.name,
       is2FA: user.is2FA, isLocked: user.isLocked, roleIds: user.roleIds, groupIds: user.groupIds
     }
 
-    return this.preExecute(request).pipe(
-      switchMap(y => {
-        return this.httpService.put<Group>(this._userUrl, y, this.jsonHeader)
 
+    return this.preExecute(updateRequest).pipe(
+      switchMap(y => {
+        return this.httpService.put<User2>(this._userUrl, y, this.jsonHeader)
       }))
 
   }
+  save(user: User2, createApiKey = false, createCert = false) {
+    //only these fields updates
+
+    const saveRequest: SaveRequest = {
+      labels: user.labels || [],
+      name: user.name, roleIds: user.roleIds, groupIds: user.groupIds
+    }
+
+    const urlParams = new URLSearchParams();
+    if (createApiKey)
+      urlParams.append('apiKey', 'true');
+    if (createCert)
+      urlParams.append('cert', 'true');
+
+
+    return this.preExecute(saveRequest).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, urlParams);
+        return this.httpService.post<{
+          user: User2, sensitiveData:
+          { apiKey: ApiKey, cert: { publicCrt?: string } }
+        }>(url, y, this.jsonHeader)
+
+      }))
+  }
+
 
   delete(user: User2) {
 

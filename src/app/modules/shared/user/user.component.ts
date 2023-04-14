@@ -440,6 +440,12 @@ export class UserComponent implements OnInit, OnDestroy {
   getSensitiveData() {
     this.getUserSensitiveData.emit(this.createBaseModel());
   }
+  copyUserId() {
+    if (this.user.id) {
+      this.clipboard.copy(this.user.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
+  }
 
 
 

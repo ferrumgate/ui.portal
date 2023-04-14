@@ -1,0 +1,46 @@
+<div class="closewindow" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="row" class="closewindow-container">
+        <mat-card class="closewindow-mat-card">
+
+            <mat-card-content>
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <div>
+                    FerrumGate
+                </div>
+
+
+                <div class="email-subtitle">
+                    Zero Trust Access
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+        <mat-card test-id="closewindow-view" fxLayout="column" fxLayoutAlign="center center"
+            class="closewindow-mat-card">
+            <mat-card-content>
+
+                <div test-id="closewindow-not-confirmed">
+                    <p> <mat-icon matSuffix>check_circle_outline</mat-icon></p>
+                    <div fxLayout="row" fxLayoutAlign="center end">
+
+                        <p color="warn" class="closewindow-confirmed">
+                            {{
+                            "CloseWindowAuthenticatedSuccessfully"|translate}}
+
+                        </p>
+
+                    </div>
+
+
+
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+    </div>
+
+
+</div>

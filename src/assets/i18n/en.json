@@ -447,5 +447,6 @@
     "SignCertificateWithThisCertificate": "Certificate will be signed with this cerfiticate",
     "WillRegenerateBeforeSaving": "Will regenerate before saving",
     "CertificateNotSet": "Certificate not set",
-    "LoginMethods": "Login methods"
+    "LoginMethods": "Login methods",
+    "CloseWindowAuthenticatedSuccessfully": "You authenticated successfully, it is safe to close this window"
 }

@@ -94,7 +94,7 @@ export class ConfigPKIComponent implements OnInit, OnDestroy {
   }
 
   deleteWebCert(ev: SSLCertificate) {
-    this.confirmService.showDelete().pipe(
+    this.confirmService.showAreYouSure().pipe(
       takeWhile(x => x),
       switchMap(y => this.pkiService.deleteWebCert(ev))
     ).subscribe(y => {

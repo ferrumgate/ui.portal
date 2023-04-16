@@ -325,7 +325,7 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
     this.confirmService.showDelete().pipe(
       takeWhile(x => x),
       switchMap(y =>
-        this.userService.deleteUserSensitiveData($user.id, true, false)
+        this.userService.deleteUserSensitiveData($user.id, false, true)
       ),
     ).subscribe((item) => {
       //delete from user list
@@ -349,7 +349,8 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
       groupIds: [], roles: [], source: 'local-local', username: '',
       insertDate: new Date().toISOString(),
       updateDate: new Date().toISOString(),
-      roleIds: [], labels: [], isVerified: true
+      roleIds: [], labels: [], isVerified: true,
+      isExpanded: true
     }
     this.users.unshift(user);
   }

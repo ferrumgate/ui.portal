@@ -77,6 +77,7 @@ describe('ConfigureComponent', () => {
     // on load we must load default values and form must be valid
     fixture.detectChanges();
     expect(component.userFormGroup.valid).toBe(true);
+
     ////////// email
     //set email to empty
     setFieldValue(fixture, 'configure-email-input', '');

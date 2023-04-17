@@ -215,7 +215,7 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
         this.performance.groups = new Map();
         this.groups.forEach(x => this.performance.groups.set(x.id, x))
       }),
-      switchMap(y => this.userService.get2(0, 0, '', [], [], [], undefined, undefined, undefined, undefined, 'simple')),
+      switchMap(y => this.userService.get2(0, 0, '', [], [], [], [], undefined, undefined, undefined, undefined, 'simple')),
       map(z => {
         this.users = z.items;
         this.performance.users = new Map();

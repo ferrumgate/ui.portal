@@ -5,6 +5,9 @@
                 <mat-icon matListIcon svgIcon="services"></mat-icon>
             </mat-card-title>
             <mat-action-row class="service-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyServiceId()" [disabled]="!service.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
                 <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
@@ -18,102 +21,112 @@
                 <div>
 
                     <form test-id="service-form" [formGroup]="formGroup">
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Name"|translate}}</mat-label>
-                                <input matInput test-id="service-name-input" placeholder="{{'ServiceName'|translate}}"
-                                    formControlName="name" required [readonly]="service.isSystem">
-                                <mat-error>{{formError.name|translate}}</mat-error>
+                        <mat-accordion class="user-details">
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title test-id="user-username-title">
+                                        {{service.name}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="service-name-input"
+                                            placeholder="{{'ServiceName'|translate}}" formControlName="name" required
+                                            [readonly]="service.isSystem">
+                                        <mat-error>{{formError.name|translate}}</mat-error>
 
-                            </mat-form-field>
-                        </p>
+                                    </mat-form-field>
+                                </p>
 
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Protocol"|translate}}</mat-label>
-                                <input matInput test-id="service-protocol-input" formControlName="protocol"
-                                    readonly="true" required="true">
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Protocol"|translate}}</mat-label>
+                                        <input matInput test-id="service-protocol-input" formControlName="protocol"
+                                            readonly="true" required="true">
 
-                                <mat-hint>{{"ServiceProtocolHint"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Host"|translate}}</mat-label>
-                                <input matInput test-id="service-host-input" placeholder="10.0.0.100"
-                                    formControlName="host" required>
-                                <mat-error>{{formError.host|translate}}</mat-error>
-                                <mat-hint>{{"ServiceHostHint"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"TcpPort"|translate}}</mat-label>
-                                <input type="number" min="1" max="65535" matInput test-id="service-tcp-input"
-                                    placeholder="8080" formControlName="tcp">
-                                <mat-error>{{formError.tcp|translate}}</mat-error>
-                                <mat-hint>{{"ServiceTcpPort"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"UdpPort"|translate}}</mat-label>
-                                <input type="number" min="1" max="65535" matInput test-id="service-udp-input"
-                                    placeholder="53" formControlName="udp">
-                                <mat-error>{{formError.udp|translate}}</mat-error>
-                                <mat-hint>{{"ServiceUdpPort"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Network"|translate}}</mat-label>
-                                <input type="text" test-id="service-network-input"
-                                    placeholder="{{'SelectANetwork'|translate}}" matInput formControlName="networkName"
-                                    [matAutocomplete]="auto" (ngModelChange)="searchNetwork($event)"
-                                    [readonly]="service.isSystem">
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="networkChanged($event)"
-                                    [displayWith]="displayFn">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                        {{option.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
+                                        <mat-hint>{{"ServiceProtocolHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Host"|translate}}</mat-label>
+                                        <input matInput test-id="service-host-input" placeholder="10.0.0.100"
+                                            formControlName="host" required>
+                                        <mat-error>{{formError.host|translate}}</mat-error>
+                                        <mat-hint>{{"ServiceHostHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"TcpPort"|translate}}</mat-label>
+                                        <input type="number" min="1" max="65535" matInput test-id="service-tcp-input"
+                                            placeholder="8080" formControlName="tcp">
+                                        <mat-error>{{formError.tcp|translate}}</mat-error>
+                                        <mat-hint>{{"ServiceTcpPort"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"UdpPort"|translate}}</mat-label>
+                                        <input type="number" min="1" max="65535" matInput test-id="service-udp-input"
+                                            placeholder="53" formControlName="udp">
+                                        <mat-error>{{formError.udp|translate}}</mat-error>
+                                        <mat-hint>{{"ServiceUdpPort"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Network"|translate}}</mat-label>
+                                        <input type="text" test-id="service-network-input"
+                                            placeholder="{{'SelectANetwork'|translate}}" matInput
+                                            formControlName="networkName" [matAutocomplete]="auto"
+                                            (ngModelChange)="searchNetwork($event)" [readonly]="service.isSystem">
+                                        <mat-autocomplete #auto="matAutocomplete"
+                                            (optionSelected)="networkChanged($event)" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
 
-                                <mat-error>{{formError.network|translate}}</mat-error>
-                                <mat-hint>{{"BindedNetwork"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Labels"|translate}}</mat-label>
-                                <mat-chip-list #chipList>
-                                    <mat-chip test-id="service-label-chip" *ngFor="let label of service.labels||[]"
-                                        (removed)="removeLabel(label)">
-                                        {{label}}
-                                        <button matChipRemove>
-                                            <mat-icon>cancel</mat-icon>
-                                        </button>
-                                    </mat-chip>
-                                    <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
-                                </mat-chip-list>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill" disa>
-                                <mat-label>{{"AssignedIp"|translate}}</mat-label>
-                                <input matInput test-id="service-assignedip-input" formControlName="assignedIp"
-                                    readonly="true" required="false">
-                                <mat-hint>{{"AssignedIpHint"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-checkbox test-id="service-checkbox-enabled" [(ngModel)]="service.isEnabled"
-                                [checked]="service.isEnabled" [ngModelOptions]="{standalone:true}"
-                                (ngModelChange)="modelChanged()" disabled="{{service.isSystem==true}}">
-                                {{"Enabled"|translate}} </mat-checkbox>
-                        </p>
-
+                                        <mat-error>{{formError.network|translate}}</mat-error>
+                                        <mat-hint>{{"BindedNetwork"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="service-label-chip"
+                                                *ngFor="let label of service.labels||[]" (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill" disa>
+                                        <mat-label>{{"AssignedIp"|translate}}</mat-label>
+                                        <input matInput test-id="service-assignedip-input" formControlName="assignedIp"
+                                            readonly="true" required="false">
+                                        <mat-hint>{{"AssignedIpHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-checkbox test-id="service-checkbox-enabled" [(ngModel)]="service.isEnabled"
+                                        [checked]="service.isEnabled" [ngModelOptions]="{standalone:true}"
+                                        (ngModelChange)="modelChanged()" disabled="{{service.isSystem==true}}">
+                                        {{"Enabled"|translate}} </mat-checkbox>
+                                </p>
+                            </mat-expansion-panel>
+                        </mat-accordion>
                     </form>
 
 

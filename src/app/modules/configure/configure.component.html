@@ -72,7 +72,7 @@
                                 <mat-error>{{commonError.domain|translate}}</mat-error>
                             </mat-form-field>
                         </p>
-                        <p fxFill class="configure-common-explanation ">
+                        <!--   <p fxFill class="configure-common-explanation ">
                             <mat-form-field appearance="fill" class="configure-common-width">
                                 <mat-label>{{"LoginUrl"|translate}}</mat-label>
                                 <input matInput test-id="configure-url-input"
@@ -82,7 +82,7 @@
                                 <mat-error>{{commonError.url|translate}}</mat-error>
 
                             </mat-form-field>
-                        </p>
+                        </p> -->
 
                         <div fxFill fxLayout="row" fxLayoutAlign="end">
                             <button mat-button matStepperPrevious>{{"Back"|translate}}</button>
@@ -91,7 +91,7 @@
                     </form>
                 </mat-step>
 
-                <mat-step [stepControl]="networkFormGroup">
+                <!--   <mat-step [stepControl]="networkFormGroup">
                     <form [formGroup]="networkFormGroup">
                         <ng-template matStepLabel>{{"Network"|translate}}</ng-template>
                         <p fxFill class="configure-common-explanation">
@@ -133,7 +133,7 @@
                         </div>
                     </form>
                 </mat-step>
-
+ -->
 
 
 
@@ -160,7 +160,7 @@
                                 <span class="configure-summary-value">{{model.domain}}</span>
                             </mat-label>
                         </div>
-                        <div class="configure-list-item">
+                        <!--   <div class="configure-list-item">
                             <mat-label>
                                 <span class="configure-summary-name">{{"Url"|translate}}:</span>
                                 <span class="configure-summary-value">{{model.url}}</span>
@@ -183,7 +183,7 @@
                                 <span class="configure-summary-name">{{"SshHost"|translate}}:</span>
                                 <span class="configure-summary-value">{{model.sshHost}}</span>
                             </mat-label>
-                        </div>
+                        </div> -->
                     </div>
                     <div>
 

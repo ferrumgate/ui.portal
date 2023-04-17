@@ -6,15 +6,21 @@ import { ActivatedRoute } from '@angular/router';
 import { Group } from '../models/group';
 import { Role } from '../models/rbac';
 import { User2 } from '../models/user';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { ConfigService } from '../services/config.service';
 import { SSubscription } from '../services/SSubscribtion';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
+import { NotificationService } from '../services/notification.service';
+import { SSLCertificate, SSLCertificateBase, SSLCertificateEx } from '../models/sslCertificate';
+import { Observable, map, of } from 'rxjs';
 
 export interface UserExtended extends User2 {
   orig: User2;
   isChanged: boolean;
-
+  //intermediate cert name
+  inCertName: string;
+  inCertId: string;
 
 
 }
@@ -25,13 +31,14 @@ export interface UserExtended extends User2 {
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
+
   allSub = new SSubscription();
   helpLink = '';
   _model: UserExtended =
     {
       id: '', name: '',
       labels: [], groupIds: [], insertDate: '', updateDate: '',
-      source: '', username: '', isChanged: false, isExpanded: false,
+      source: '', username: '', isChanged: false, isExpanded: false, isLoginMethodsExpanded: false, inCertName: '', inCertId: '',
 
       orig: {
         id: '', name: '',
@@ -70,18 +77,46 @@ export class UserComponent implements OnInit, OnDestroy {
       ...val,
       orig: val,
       labels: Array.from(val.labels || []),
-      isChanged: false
+      isChanged: false,
+      inCertName: this.inCerts.find(x => x.id == val.cert?.parentId)?.name || '',
+      inCertId: this.inCerts.find(x => x.id == val.cert?.parentId)?.id || '',
 
     }
 
     this.formGroup = this.createFormGroup(this._model);
   }
 
+  _inCerts: SSLCertificateEx[] = [];
+
+  get inCerts(): SSLCertificateEx[] {
+    return this._inCerts;
+  }
+  @Input()
+  set inCerts(value: SSLCertificateEx[]) {
+    //empty network for reseting networkId
+    this._inCerts = value;
+    this.user.inCertName = this._inCerts.find(x => x.id == this.user.cert?.parentId)?.name || ''
+    this.prepareCertificatesAutoComplete();
+  }
+  certfilteredOptions: Observable<SSLCertificateEx[]> = of();
 
   @Output()
   saveUser: EventEmitter<User2> = new EventEmitter();
   @Output()
   deleteUser: EventEmitter<User2> = new EventEmitter();
+  @Output()
+  getUserSensitiveData: EventEmitter<User2> = new EventEmitter();
+
+  @Output()
+  generateUserApiKey: EventEmitter<User2> = new EventEmitter();
+  @Output()
+  deleteUserApiKey: EventEmitter<User2> = new EventEmitter();
+
+
+  @Output()
+  generateUserCert: EventEmitter<User2> = new EventEmitter();
+  @Output()
+  deleteUserCert: EventEmitter<User2> = new EventEmitter();
 
 
 
@@ -92,9 +127,10 @@ export class UserComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, private clipboard: Clipboard,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -112,6 +148,62 @@ export class UserComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
+
+  prepareCertificatesAutoComplete() {
+    this.certfilteredOptions = this.filterCerts('');
+  }
+
+  private filterCerts(name: string) {
+    const filterValue = name.toLowerCase();
+    let items = this.inCerts;
+    if (name)
+      items = items.filter(x => x.name.toLocaleLowerCase().includes(filterValue));
+    return of(items).pipe(
+      map(data => {
+
+        data.sort((a, b) => {
+          return a.name < b.name ? -1 : 1;
+        })
+        return data;
+      })
+    )
+  }
+  searchCert(ev: any) {
+    if (typeof (ev) == 'string') {
+      this.certfilteredOptions = this.filterCerts(ev);
+    }
+
+  }
+  displayCertFn(net: SSLCertificateEx | string) {
+    if (typeof (net) == 'string') return net;
+    return net?.name || '';
+  }
+
+  certChanged(event: any) {
+    if (!this.user.cert)
+      this.user.cert = this.defaultCertificate();
+    if (event?.option?.value) {
+      this.user.inCertId = event.option.value.id;
+      if (this.user.inCertId)
+        this.user.inCertName = event.option.value.name;
+      else
+        this.user.inCertName = ''
+
+      this.formGroup.controls.inCertName.setValue(this.user.inCertName);
+      this.modelChanged();
+
+    } else {
+      this.user.inCertId = '';
+      this.user.inCertName = '';
+
+      this.formGroup.controls.inCertName.setValue(this.user.inCertName);
+      this.modelChanged();
+    }
+
+
+  }
+
+
 
 
   openHelp() {
@@ -134,6 +226,8 @@ export class UserComponent implements OnInit, OnDestroy {
   createFormGroup(user: User2) {
     const fmg = new FormGroup({
       name: new FormControl(user.name, [Validators.required]),
+      inCertName: new FormControl(user.inCertName, []),
+
 
 
     });
@@ -225,8 +319,6 @@ export class UserComponent implements OnInit, OnDestroy {
       this.user.isChanged = true;
 
 
-
-
   }
 
   checkFormError() {
@@ -276,16 +368,20 @@ export class UserComponent implements OnInit, OnDestroy {
       is2FA: this.user.is2FA,
       isEmailVerified: this.user.isEmailVerified,
       isLocked: this.user.isLocked,
-      isOnlyApiKey: this.user.isOnlyApiKey,
       isVerified: this.user.isVerified,
       roleIds: Array.from(this.user.roleIds || []),
-      twoFASecret: this.user.twoFASecret
+      twoFASecret: this.user.twoFASecret,
+      cert: this.user.cert ? { ...this.user.cert } : undefined
 
     }
   }
   expand($event: any) {
 
     this._model.isExpanded = $event
+  }
+
+  expandLoginMethod($event: any) {
+
   }
 
   userGroupChanged() {
@@ -302,6 +398,53 @@ export class UserComponent implements OnInit, OnDestroy {
 
   delete() {
     this.deleteUser.emit(this.createBaseModel());
+  }
+  generateApiKey() {
+    this.generateUserApiKey.emit(this.createBaseModel());
+  }
+
+  deleteApiKey() {
+    this.deleteUserApiKey.emit(this.createBaseModel());
+  }
+  copyApiKey() {
+    if (this.user.apiKey?.key) {
+      this.clipboard.copy(this.user.apiKey.key);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
+  }
+  defaultCertificate(): SSLCertificateBase {
+    return {
+
+
+      category: 'auth'
+    }
+  }
+
+  generateCert() {
+    if (!this.user.cert)
+      this.user.cert = this.defaultCertificate();
+    if (this.user.inCertId)
+      this.user.cert.parentId = this.user.inCertId;
+    this.generateUserCert.emit(this.createBaseModel());
+  }
+  deleteCert() {
+    this.deleteUserCert.emit(this.createBaseModel());
+  }
+  copyCert() {
+    if (this.user.cert?.publicCrt) {
+      this.clipboard.copy(this.user.cert.publicCrt);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
+  }
+
+  getSensitiveData() {
+    this.getUserSensitiveData.emit(this.createBaseModel());
+  }
+  copyUserId() {
+    if (this.user.id) {
+      this.clipboard.copy(this.user.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 

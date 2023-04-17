@@ -105,6 +105,14 @@ export class AppComponent implements OnInit {
       "api",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/api.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "pki",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/pki.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "cert",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/cert.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

@@ -1,4 +1,5 @@
 import { Role } from "./rbac";
+import { SSLCertificate, SSLCertificateBase } from "./sslCertificate";
 
 
 export interface User {
@@ -26,8 +27,9 @@ export interface User2 {
     twoFASecret?: string;
     insertDate: string;
     updateDate: string;
-    isOnlyApiKey?: boolean;
-    apiKey?: string;
+
+    apiKey?: ApiKey;
+    cert?: SSLCertificateBase;
     roleIds?: string[];
     email?: string;
     isEmailVerified?: boolean;
@@ -36,3 +38,6 @@ export interface User2 {
 
 }
 
+export interface ApiKey {
+    key?: string;
+}

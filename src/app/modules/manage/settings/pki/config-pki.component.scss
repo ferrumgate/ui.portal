@@ -1,0 +1,49 @@
+.config-pki {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.config-pki-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+}
+
+.config-pki mat-card {
+    min-width: 400px;
+    //width: 800px;
+    min-height: 400px;
+    //height: 800px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.config-pki-explanation {
+    padding-top: 20px;
+}
+
+.config-pki .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-pki .tab {
+    height: calc(100vh - 180px);
+    overflow: auto;
+}
+
+.config-pki .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-pki .config-pki-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

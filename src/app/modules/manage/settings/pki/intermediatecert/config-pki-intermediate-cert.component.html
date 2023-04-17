@@ -1,0 +1,184 @@
+<div class="config-pki-intermediate-cert">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Cert'|translate}} {{cert.name}}">
+                <mat-icon matListIcon svgIcon="cert"></mat-icon>
+            </mat-card-title>
+            <mat-action-row class="cert-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <mat-accordion class="cert-details">
+                        <mat-expansion-panel [(expanded)]="cert.isExpanded" (expandedChange)="expand($event)">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title test-id="cert-name">
+                                    {{cert.name}}
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <form test-id="cert-form" [formGroup]="formGroup">
+
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="cert-name-input" placeholder="{{'CertName'|translate}}"
+                                            formControlName="name" required [readonly]="cert.isSystem">
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="cert-label-chip" *ngFor="let label of cert.labels||[]"
+                                                (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)" [readonly]="cert.isSystem">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p fxFill *ngIf="usages.length">
+                                    <mat-form-field fxFlex class="user-search-item">
+                                        <mat-label>{{"Usages"|translate}}</mat-label>
+                                        <mat-select [formControl]="usageFormControl" multiple onchange="usageChanged()">
+                                            <mat-option *ngFor="let usage of usages" [value]="usage">{{usage.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill" disa>
+                                        <mat-label>{{"InsertDate"|translate}}</mat-label>
+                                        <input matInput test-id="cert-insertdate-input" formControlName="insertDateStr"
+                                            readonly="true" required="false">
+
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p fxFill class="pem" *ngIf="!cert.isNew">
+                                    <mat-form-field appearance="fill" fxFill>
+                                        <mat-label>{{"PEM"|translate}}</mat-label>
+                                        <textarea class="pem-text" multiple="true" matInput test-id="cert-pem-input"
+                                            placeholder="-----BEGIN CERTIFICATE-----" formControlName="publicCrt"
+                                            [readonly]="cert.isSystem">
+                                            </textarea>
+                                        <span fxFlex fxLayout="column" fxLayoutAlign="end end">
+
+                                            <button matSuffix mat-icon-button (click)="copyCert()"
+                                                [disabled]="!cert.publicCrt">
+                                                <mat-icon matSuffix
+                                                    matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                            </button>
+
+                                        </span>
+
+                                        <mat-error>
+                                            {{formError.publicCrt|translate}}</mat-error>
+
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-checkbox test-id="cert-checkbox-enabled" [(ngModel)]="cert.isEnabled"
+                                        [checked]="cert.isEnabled" [ngModelOptions]="{standalone:true}"
+                                        (ngModelChange)="modelChanged()" disabled="{{cert.isSystem==true}}">
+                                        {{"Enabled"|translate}} </mat-checkbox>
+                                </p>
+
+
+                            </form>
+
+                            <form test-id="cert-form2" [formGroup]="formGroupPassword">
+
+                                <p *ngIf="cert.id" fxFill fxLayoutAlign="end center">
+
+                                    <button test-id="cert-export-button" mat-stroked-button (click)="exportPEM()">
+                                        <mat-icon>arrow_downward</mat-icon>
+                                        {{'PEM'|translate}} </button>
+                                </p>
+
+                                <p fxFill *ngIf="cert.id && !cert.isSystem">
+                                    <mat-accordion>
+                                        <mat-expansion-panel>
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    {{'Pfx (P12)'|translate}}
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <p>
+                                                <mat-form-field fxFlex appearance="fill">
+                                                    <mat-label>{{"Password"|translate}}</mat-label>
+                                                    <input matInput test-id="cert-password-input"
+                                                        formControlName="password" required="true">
+                                                    <mat-error>
+                                                        {{formErrorPassword.password|translate}}</mat-error>
+
+                                                </mat-form-field>
+                                            </p>
+                                            <p fxFill fxLayoutAlign="end center">
+
+                                                <button test-id="cert-export-button" mat-stroked-button
+                                                    [disabled]="downloadButtonDisabled" (click)="exportP12()">
+                                                    <mat-icon>arrow_downward</mat-icon>
+                                                    {{'Download'|translate}} </button>
+                                            </p>
+
+
+
+                                        </mat-expansion-panel>
+
+                                    </mat-accordion>
+                                </p>
+
+                            </form>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px" *ngIf="!cert.isSystem">
+                        <mat-action-row class="cert-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="cert-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="cert.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="cert-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="cert-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

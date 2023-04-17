@@ -14,7 +14,8 @@ import { SSubscription } from '../services/SSubscribtion';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
 import { ThemeSelectorComponent } from '../themeselector/themeselector.component';
-
+import { Clipboard } from '@angular/cdk/clipboard';
+import { NotificationService } from '../services/notification.service';
 
 
 export interface ServiceExtended extends Service {
@@ -91,9 +92,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, private clipboard: Clipboard,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -380,6 +382,13 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.filteredOptions = this.filter(ev);
     }
 
+  }
+
+  copyServiceId() {
+    if (this.service.id) {
+      this.clipboard.copy(this.service.id);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 

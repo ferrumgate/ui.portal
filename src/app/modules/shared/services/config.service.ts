@@ -73,6 +73,7 @@ export class ConfigService extends BaseService {
     installClientDebianHelp: "https://ferrumgate.com/docs/clients",
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
     ipIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/ip-intelligence",
+    pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
 
 
 
@@ -521,8 +522,6 @@ export class ConfigService extends BaseService {
         return this.http.get(url, { responseType: 'blob' })
       }),
       switchMap(data => {
-        let blob = new Blob([data], { type: 'application/txt' });
-
         var downloadURL = window.URL.createObjectURL(data);
         var link = document.createElement('a');
         link.href = downloadURL;

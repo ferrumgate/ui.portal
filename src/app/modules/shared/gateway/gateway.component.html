@@ -6,6 +6,9 @@
                 </mat-icon>
             </mat-card-title>
             <mat-action-row class="gateway-header-actions" fxFlex fxLayoutAlign="end start" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyGatewayId()" [disabled]="!gateway.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
                 <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>

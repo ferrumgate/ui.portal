@@ -56,6 +56,11 @@ const routes: Routes = [
         loadChildren: () => import('../../resetpass/resetpass.module').then(m => m.ResetPassModule),
       },
       {
+        canActivate: [AuthenticationGuard],
+        path: 'user/closewindow',
+        loadChildren: () => import('../../closewindow/closewindow.module').then(m => m.CloseWindowModule),
+      },
+      {
         path: 'pagenotfound',
         loadChildren: () => import('../../pagenotfound/pagenotfound.module').then(m => m.PagenotfoundModule)
 

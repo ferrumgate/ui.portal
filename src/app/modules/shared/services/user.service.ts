@@ -5,13 +5,15 @@ import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { Configure } from '../models/configure';
 import { Group } from '../models/group';
-import { User2 } from '../models/user';
+import { ApiKey, User2 } from '../models/user';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
+import { SSLCertificate } from '../models/sslCertificate';
+import { userInfo } from 'os';
 interface UpdateRequest {
   id: string;
   name?: string;
@@ -19,6 +21,13 @@ interface UpdateRequest {
   isLocked?: boolean;
   labels?: string[],
   roleIds?: string[],
+  groupIds?: string[]
+}
+
+interface SaveRequest {
+  name: string;
+  roleIds?: string[];
+  labels: string[],
   groupIds?: string[]
 }
 
@@ -35,6 +44,8 @@ export class UserService extends BaseService {
   private _userCurrentPasswordUrl = this.configService.getApiUrl() + '/user/current/pass';
   private _userInviteUrl = this.configService.getApiUrl() + '/user/invite';
 
+
+
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
     private captchaService: CaptchaService) {
@@ -43,20 +54,46 @@ export class UserService extends BaseService {
   }
 
 
-  saveOrupdate(user: User2) {
+  update(user: User2) {
     //only these fields updates
-    const request: UpdateRequest = {
+    const updateRequest: UpdateRequest = {
       id: user.id, labels: user.labels, name: user.name,
       is2FA: user.is2FA, isLocked: user.isLocked, roleIds: user.roleIds, groupIds: user.groupIds
     }
 
-    return this.preExecute(request).pipe(
-      switchMap(y => {
-        return this.httpService.put<Group>(this._userUrl, y, this.jsonHeader)
 
+    return this.preExecute(updateRequest).pipe(
+      switchMap(y => {
+        return this.httpService.put<User2>(this._userUrl, y, this.jsonHeader)
       }))
 
   }
+  save(user: User2, createApiKey = false, createCert = false) {
+    //only these fields updates
+
+    const saveRequest: SaveRequest = {
+      labels: user.labels || [],
+      name: user.name, roleIds: user.roleIds, groupIds: user.groupIds
+    }
+
+    const urlParams = new URLSearchParams();
+    if (createApiKey)
+      urlParams.append('apiKey', 'true');
+    if (createCert)
+      urlParams.append('cert', 'true');
+
+
+    return this.preExecute(saveRequest).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, urlParams);
+        return this.httpService.post<{
+          user: User2, sensitiveData:
+          { apiKey: ApiKey, cert: { publicCrt?: string } }
+        }>(url, y, this.jsonHeader)
+
+      }))
+  }
+
 
   delete(user: User2) {
 
@@ -82,12 +119,14 @@ export class UserService extends BaseService {
       }))
   }
 
+
   get2(
     page: number = 0, pageSize: number = 0,
     search?: string,
     ids?: string[],
     groupIds?: string[],
     roleIds?: string[],
+    loginMethods?: string[],
     is2FA?: string,
     isVerified?: string,
     isLocked?: string,
@@ -106,6 +145,8 @@ export class UserService extends BaseService {
       searchParams.append('groupIds', groupIds.join(','));
     if (roleIds && roleIds.length)
       searchParams.append('roleIds', roleIds.join(','));
+    if (loginMethods && loginMethods.length)
+      searchParams.append('loginMethods', loginMethods.join(','));
     if (is2FA)
       searchParams.append('is2FA', is2FA);
     if (isVerified)
@@ -124,6 +165,9 @@ export class UserService extends BaseService {
       })
     )
   }
+
+
+
 
 
 
@@ -183,6 +227,52 @@ export class UserService extends BaseService {
 
       }))
 
+  }
+
+  getSensitiveData(id: string, apiKey: boolean, cert: boolean) {
+    const urlParams = new URLSearchParams();
+    if (apiKey)
+      urlParams.append('apiKey', 'true');
+    if (cert)
+      urlParams.append('cert', 'true');
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData', urlParams);
+        return this.httpService.get<{ apiKey?: { key: string }, cert?: SSLCertificate }>(url);
+
+      }))
+  }
+
+  updateSensitiveData(id: string, apiKey?: ApiKey, cert?: SSLCertificate) {
+
+    let request = {
+      apiKey: apiKey, cert: cert
+    }
+    return this.preExecute(request).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData');
+        return this.httpService.put<{ apiKey?: ApiKey, cert?: SSLCertificate }>(url, y, this.jsonHeader)
+
+      }))
+  }
+
+
+
+  deleteUserSensitiveData(id: string, isApiKey: boolean, isCert: boolean) {
+
+
+    const urlParams = new URLSearchParams();
+    if (isApiKey)
+      urlParams.append('apiKey', 'true');
+    if (isCert)
+      urlParams.append('cert', 'true');
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, `${id}`, 'sensitiveData', urlParams);
+        return this.httpService.delete<{ apiKey?: ApiKey, cert?: SSLCertificate }>(url);
+
+      }))
   }
 
 

@@ -1,0 +1,42 @@
+.config-pki-web {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    padding: 10px;
+
+}
+
+.config-pki-web mat-card {
+    min-width: 400px;
+    width: 400px;
+    margin-left: 10px;
+}
+
+.config-pki-web-explanation {
+    padding-top: 20px;
+}
+
+.config-pki-web .pem-text {
+    min-height: 120px;
+}
+
+.config-pki-web .prv-text {
+    min-height: 80px;
+}
+
+.config-pki-web .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-pki-web .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.config-pki-web .config-pki-web-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

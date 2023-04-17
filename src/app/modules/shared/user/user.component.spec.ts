@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, queryByCss, setCheckValue, setFieldValue } from '../helper.spec';
+import { checkField, click, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, getValue, queryByCss, setCheckValue, setFieldValue } from '../helper.spec';
 import { Group } from '../models/group';
 import { Gateway, Network } from '../models/network';
 import { RBACDefault } from '../models/rbac';
@@ -19,11 +19,13 @@ import { SharedModule } from '../shared.module';
 
 
 import { UserComponent } from './user.component';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 
 describe('UserComponent', () => {
   let component: UserComponent;
   let fixture: ComponentFixture<UserComponent>;
-
+  let httpClient: HttpClient;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserComponent],
@@ -48,6 +50,7 @@ describe('UserComponent', () => {
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    httpClient = TestBed.inject(HttpClient);
   });
 
   it('should create', () => {
@@ -134,6 +137,22 @@ describe('UserComponent', () => {
 
     const el2FA = findEl(fixture, testis2FAId);
 
+    const accordionLoginMethod = 'user-login-method-accordion';
+    const loginMethodAccordion = findEl(fixture, accordionLoginMethod, false);
+    expect(loginMethodAccordion).toBeTruthy();
+
+    //click(fixture, accordionLoginMethod);
+    //component.getSensitiveData();
+    user1.apiKey = { key: 'akey' };
+    user1.cert = { publicCrt: 'acrt' };
+    user1.isLoginMethodsExpanded = true;
+    component.user = user1;
+    fixture.detectChanges();
+    tick(100);
+    const apikey = getValue(fixture, 'user-apikey-input')
+    expect(apikey).toEqual('akey');
+    const crt = getValue(fixture, 'user-cert-pem-input')
+    expect(crt).toEqual('acrt');
 
 
 

@@ -17,7 +17,9 @@ import { ConfigService } from './config.service';
 export interface Session {
   accessToken: string;
   refreshToken: string;
-  currentUser: User
+  currentUser: User;
+  createdWith: ('exchangeKey' | 'tunnelKey')[];
+
 }
 
 @Injectable({
@@ -30,6 +32,7 @@ export class AuthenticationService extends BaseService {
   // we need to store tunnel session key for later usage
   static StorageTunnelSessionKey = 'ferrumgate_tunnel_session_key';
   static StorageExchangeSessionKey = 'ferrumgate_exchange_session_key';
+
 
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
@@ -169,13 +172,17 @@ export class AuthenticationService extends BaseService {
         this._currentSession = {
           accessToken: resp.accessToken,
           currentUser: resp.user,
-          refreshToken: resp.refreshToken
+          refreshToken: resp.refreshToken,
+          createdWith: []
         }
+        if (exchangeSessionKey)
+          this._currentSession.createdWith.push('exchangeKey');
 
 
         //this.saveSession();
         sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
         sessionStorage.removeItem(AuthenticationService.StorageExchangeSessionKey);
+
         return this._currentSession;
       }))
   }
@@ -190,7 +197,8 @@ export class AuthenticationService extends BaseService {
           this._currentSession = {
             accessToken: resp.accessToken,
             currentUser: resp.user,
-            refreshToken: resp.refreshToken
+            refreshToken: resp.refreshToken,
+            createdWith: []
           }
         }
         //this.saveSession();
@@ -221,11 +229,12 @@ export class AuthenticationService extends BaseService {
   }
 
 
-  logout() {
+  logout(navigate = true) {
     sessionStorage.clear();
     this._currentSession = null;
     this.idle.stop();
-    this.router.navigate(['/login']);
+    if (navigate)
+      this.router.navigate(['/login']);
   }
   confirmUserEmail(key: string) {
     let data = { key: key };

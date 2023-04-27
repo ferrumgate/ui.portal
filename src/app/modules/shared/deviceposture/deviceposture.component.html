@@ -38,7 +38,7 @@
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Labels"|translate}}</mat-label>
                                         <mat-chip-list #chipList>
-                                            <mat-chip test-id="service-label-chip"
+                                            <mat-chip test-id="deviceposture-label-chip"
                                                 *ngFor="let label of model.labels||[]" (removed)="removeLabel(label)">
                                                 {{label}}
                                                 <button matChipRemove>
@@ -116,7 +116,7 @@
                                 <p fxFill class="deviceposture-exp" *ngFor="let client of model.clientVersions||[]">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"MinClientVersion"|translate}}</mat-label>
-                                        <input matInput test-id="deviceposture-name-input" placeholder="1.2.0"
+                                        <input matInput test-id="deviceposture-clientversion-input" placeholder="1.2.0"
                                             [(ngModel)]="client.version" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()">
                                         <mat-hint>{{"DevicePostureMinClientVersion"|translate}}</mat-hint>
@@ -131,8 +131,7 @@
                                 <p fxFill class="deviceposture-exp" *ngIf="model.macList">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Macs"|translate}}</mat-label>
-                                        <textarea matInput test-id="deviceposture-name-input"
-                                            class="deviceposture-multi"
+                                        <textarea matInput test-id="deviceposture-mac-input" class="deviceposture-multi"
                                             placeholder="00:11:22:33:44:55:66,11:22:33:44:55:66"
                                             [(ngModel)]="model.macs" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()" multiple="true">
@@ -149,7 +148,7 @@
                                 <p fxFill class="deviceposture-exp" *ngIf="model.serialList">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Serials"|translate}}</mat-label>
-                                        <textarea matInput test-id="deviceposture-name-input"
+                                        <textarea matInput test-id="deviceposture-serial-input"
                                             class="deviceposture-multi" placeholder="0FWeac23-3sksd00, 23sdad232"
                                             [(ngModel)]="model.serials" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()" multiple="true">
@@ -169,7 +168,7 @@
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Path"|translate}}</mat-label>
 
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-filepath-input"
                                             placeholder="c:\\Windows\\System32\\etc" [(ngModel)]="item.path"
                                             [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
 
@@ -199,7 +198,7 @@
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Name"|translate}}</mat-label>
 
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-process-input"
                                             placeholder="windows defender" [(ngModel)]="item.path"
                                             [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
 
@@ -207,7 +206,7 @@
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Sha256"|translate}}</mat-label>
 
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-process-sha256-input"
                                             placeholder="0sa3swsa2s23a2ser" [(ngModel)]="item.sha256"
                                             [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
 
@@ -229,7 +228,7 @@
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Path"|translate}}</mat-label>
 
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-registry-input"
                                             placeholder="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters"
                                             [(ngModel)]="item.path" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()">
@@ -257,7 +256,7 @@
                                 <p *ngIf="model.antivirusList?.length">
 
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-antivirus-input"
                                             value="{{'AntivirusCheck'|translate}}" readonly="true">
                                         <mat-hint>{{"AntivirusCheckHint"|translate}}</mat-hint>
                                         <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
@@ -271,7 +270,7 @@
                                 <p fxFill *ngIf="model.firewallList?.length">
 
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-firewall-input"
                                             value="{{'FirewallCheck'|translate}}" readonly="true">
                                         <mat-hint>{{"FirewallCheckHint"|translate}}</mat-hint>
                                         <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
@@ -283,7 +282,7 @@
                                 <p *ngIf="model.discEncryption">
 
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
-                                        <input matInput test-id="deviceposture-name-input"
+                                        <input matInput test-id="deviceposture-discencryption-input"
                                             value="{{'DiscEncryptedCheck'|translate}}" readonly="true">
                                         <mat-hint>{{"DiscEncryptedCheckHint"|translate}}</mat-hint>
                                         <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"

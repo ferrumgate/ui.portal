@@ -39,7 +39,7 @@
         <div fxLayout="row wrap">
             <p class="row services-item" fxLayout="row" *ngFor="let posture of postures">
 
-                <app-deviceposture test-id="services-service" [model]="posture"
+                <app-deviceposture test-id="config-deviceposture-item" [model]="posture"
                     (saveDevicePosture)="saveDevicePosture($event)" (deleteDevicePosture)="deleteDevicePosture($event)">
                 </app-deviceposture>
 

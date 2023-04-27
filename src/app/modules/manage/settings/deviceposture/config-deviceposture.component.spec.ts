@@ -1,4 +1,4 @@
-/* import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,14 +12,15 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 import { ConfigDevicePostureComponent } from './config-deviceposture.component';
+import { DevicePosture } from 'src/app/modules/shared/models/device';
 
-describe('ConfigAuthComponent', () => {
-  let component: ConfigAuthComponent;
-  let fixture: ComponentFixture<ConfigAuthComponent>;
+describe('ConfigDevicePostureComponent', () => {
+  let component: ConfigDevicePostureComponent;
+  let fixture: ComponentFixture<ConfigDevicePostureComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigAuthComponent],
+      declarations: [ConfigDevicePostureComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
@@ -33,7 +34,7 @@ describe('ConfigAuthComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfigAuthComponent);
+    fixture = TestBed.createComponent(ConfigDevicePostureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -44,27 +45,34 @@ describe('ConfigAuthComponent', () => {
 
   it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
-    const model: AuthSettings = {
-      common: {},
-      local: {
-        baseType: 'local', name: 'Local', type: 'local', isForgotPassword: true, isRegister: true, isEnabled: true
-      },
-      oauth: {
-        providers: [
-          { id: 'someid2', baseType: 'oauth', name: 'Google', type: 'google', clientId: 'someid', clientSecret: 'somesecret', isEnabled: true },
-          { id: 'someid3', baseType: 'oauth', name: 'Linked', type: 'linkedin', clientId: 'someid', clientSecret: 'somesecret', isEnabled: true }
-        ]
-      }
+    const model: DevicePosture = {
+
+      id: 'p1',
+      name: "window 10",
+      isEnabled: true,
+      labels: ['ab'],
+      os: 'win32',
+      insertDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      osVersions: [{ name: 'window10' }],
+      antivirusList: [{ name: 'general' }],
+      clientVersions: [{ version: '1.2.3' }],
+      discEncryption: true,
+      filePathList: [{ path: 'adaf' }],
+      firewallList: [{ name: 'asdfadf' }],
+      macList: [{ value: 'adfaf' }],
+      processList: [{ path: 'adfafda' }],
+      registryList: [{ path: 'adfa', key: 'adfa' }],
+      serialList: [{ value: 'adfa' }]
+
     }
-    component.model = model;
+    component.postures = [model]
     tick(1000);
     fixture.detectChanges();
-    const locals = findEls(fixture, 'config-auth-local');
+    const locals = findEls(fixture, 'config-deviceposture-item');
     expect(locals.length).toEqual(1);
 
-    const oauth2 = findEls(fixture, 'config-auth-oauth');
-    expect(oauth2.length).toEqual(2);
+
 
   }));
 });
- */

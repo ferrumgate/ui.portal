@@ -1,0 +1,335 @@
+<div class="deviceposture">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{model.name}}">
+                <mat-icon [svgIcon]="model.svgIcon"></mat-icon>
+            </mat-card-title>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="deviceposture-form" [formGroup]="formGroup">
+                        <mat-accordion class="user-details">
+                            <mat-expansion-panel [expanded]="model.isExpanded">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title test-id="user-username-title">
+                                        {{model.name}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+
+                                <p fxFill class="deviceposture-exp">
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="deviceposture-name-input"
+                                            placeholder="Windows 10 with Firewall" formControlName="name" required>
+                                        <mat-error>{{error.name|translate}}</mat-error>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="service-label-chip"
+                                                *ngFor="let label of model.labels||[]" (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+
+
+                                <p fxLayoutAlign="end center">
+                                    <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+
+                                        {{"Add"|translate}}
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item *ngIf="!model.clientVersions?.length"
+                                            (click)="addClientVersion()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"ClientVersion"|translate}}</span>
+                                        </button>
+                                        <button mat-menu-item *ngIf="!model.macList?.length" (click)="addMac()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"MacCheck"|translate}}</span>
+                                        </button>
+                                        <button mat-menu-item *ngIf="!model.serialList?.length" (click)="addSerial()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"SerialCheck"|translate}}</span>
+                                        </button>
+
+                                        <button mat-menu-item (click)="addFileCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"FileCheck"|translate}}</span>
+                                        </button>
+
+
+                                        <button mat-menu-item (click)="addProcessCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"ProcessCheck"|translate}}</span>
+                                        </button>
+                                        <button mat-menu-item *ngIf="model.os=='win32'" (click)="addRegistryCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"RegistryCheck"|translate}}</span>
+                                        </button>
+
+
+                                        <button mat-menu-item
+                                            *ngIf="!model.antivirusList?.length && (model.os=='win32'|| model.os=='darwin')"
+                                            (click)="addAntivirusCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"AntivirusCheck"|translate}}</span>
+                                        </button>
+
+                                        <button mat-menu-item
+                                            *ngIf="!model.firewallList?.length && (model.os=='win32'|| model.os=='darwin')"
+                                            (click)="addFirewallCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"FirewallCheck"|translate}}</span>
+                                        </button>
+                                        <button mat-menu-item *ngIf="!model.discEncryption"
+                                            (click)="addDiscEncryptedCheck()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"DiscEncryptedCheck"|translate}}</span>
+                                        </button>
+
+                                    </mat-menu>
+                                </p>
+                                <p fxFill class="deviceposture-exp" *ngFor="let client of model.clientVersions||[]">
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"MinClientVersion"|translate}}</mat-label>
+                                        <input matInput test-id="deviceposture-name-input" placeholder="1.2.0"
+                                            [(ngModel)]="client.version" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()">
+                                        <mat-hint>{{"DevicePostureMinClientVersion"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeClientVersion()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+                                </p>
+                                <p fxFill class="deviceposture-exp" *ngIf="model.macList">
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Macs"|translate}}</mat-label>
+                                        <textarea matInput test-id="deviceposture-name-input"
+                                            class="deviceposture-multi"
+                                            placeholder="00:11:22:33:44:55:66,11:22:33:44:55:66"
+                                            [(ngModel)]="model.macs" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()" multiple="true">
+                                </textarea>
+                                        <mat-hint>{{"DevicePostureMacHints"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeMac()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+                                </p>
+                                <p fxFill class="deviceposture-exp" *ngIf="model.serialList">
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Serials"|translate}}</mat-label>
+                                        <textarea matInput test-id="deviceposture-name-input"
+                                            class="deviceposture-multi" placeholder="0FWeac23-3sksd00, 23sdad232"
+                                            [(ngModel)]="model.serials" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()" multiple="true">
+                                </textarea>
+                                        <mat-hint>{{"DevicePostureSerialsHint"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeSerial()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+                                </p>
+                                <p fxFill class="deviceposture-filepath" fxLayout="column"
+                                    *ngFor="let item of model.filePathList||[]">
+                                    <mat-label>{{"File"|translate}}</mat-label>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Path"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input"
+                                            placeholder="c:\\Windows\\System32\\etc" [(ngModel)]="item.path"
+                                            [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+
+                                    </mat-form-field>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Sha256"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input" placeholder="0sa3swsa23a2ser"
+                                            [(ngModel)]="item.sha256" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()">
+
+
+                                        <mat-hint>{{"DevicePostureFileHint"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeFileCheck(item)">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+
+                                </p>
+
+                                <p fxFill class="deviceposture-process" fxLayout="column"
+                                    *ngFor="let item of model.processList||[]">
+                                    <mat-label>{{"Process"|translate}}</mat-label>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input"
+                                            placeholder="windows defender" [(ngModel)]="item.path"
+                                            [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+
+                                    </mat-form-field>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Sha256"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input"
+                                            placeholder="0sa3swsa2s23a2ser" [(ngModel)]="item.sha256"
+                                            [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+
+
+                                        <mat-hint>{{"DevicePostureProcessHint"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeProcessCheck(item)">delete</mat-icon>
+
+
+                                    </mat-form-field>
+                                    <mat-divider></mat-divider>
+
+                                </p>
+
+                                <p fxFill class="deviceposture-registry" fxLayout="column"
+                                    *ngFor="let item of model.registryList||[]">
+                                    <mat-label>{{"Registry"|translate}}</mat-label>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Path"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input"
+                                            placeholder="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters"
+                                            [(ngModel)]="item.path" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()">
+
+                                    </mat-form-field>
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"Key"|translate}}</mat-label>
+
+                                        <input matInput test-id="deviceposture-name-input" placeholder="ICSDomain"
+                                            [(ngModel)]="item.key" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()">
+
+
+                                        <mat-hint>{{"DevicePostureRegistryHint"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeRegistryCheck(item)">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+
+                                </p>
+
+                                <p *ngIf="model.antivirusList?.length">
+
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <input matInput test-id="deviceposture-name-input"
+                                            value="{{'AntivirusCheck'|translate}}" readonly="true">
+                                        <mat-hint>{{"AntivirusCheckHint"|translate}}</mat-hint>
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeAntivirusCheck()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+
+                                </p>
+                                <p fxFill *ngIf="model.firewallList?.length">
+
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <input matInput test-id="deviceposture-name-input"
+                                            value="{{'FirewallCheck'|translate}}" readonly="true">
+                                        <mat-hint>{{"FirewallCheckHint"|translate}}</mat-hint>
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeFirewallCheck()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+                                </p>
+                                <p *ngIf="model.discEncryption">
+
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <input matInput test-id="deviceposture-name-input"
+                                            value="{{'DiscEncryptedCheck'|translate}}" readonly="true">
+                                        <mat-hint>{{"DiscEncryptedCheckHint"|translate}}</mat-hint>
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeDiscEncryptedCheck()">delete</mat-icon>
+
+
+                                    </mat-form-field>
+
+                                </p>
+
+                                <p>
+                                    <mat-checkbox test-id="deviceposture-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                                        [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                        {{"Enabled"|translate}}</mat-checkbox>
+                                </p>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="deviceposture-actions" fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                                (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="deviceposture-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

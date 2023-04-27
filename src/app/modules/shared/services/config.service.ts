@@ -74,6 +74,7 @@ export class ConfigService extends BaseService {
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
     ipIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/ip-intelligence",
     pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
+    devicePostureHelp: "https://ferrumgate.com/docs/configuration/settings/deviceposture",
 
 
 

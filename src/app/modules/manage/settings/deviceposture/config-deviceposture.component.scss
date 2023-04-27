@@ -1,0 +1,42 @@
+.config-deviceposture-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.config-deviceposture-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 130px;
+
+}
+
+.config-deviceposture .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-deviceposture .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.config-deviceposture .add {
+    margin-left: 15px;
+}
+
+.config-deviceposture-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 130px - 10px);
+    overflow: auto;
+}
+
+.config-deviceposture-item {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}

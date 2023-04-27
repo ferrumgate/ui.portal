@@ -31,6 +31,7 @@
                 <p fxFlex></p>
             </div>
             <mat-divider></mat-divider>
+
             <div class="download-item download-item-row" fxFlex fxLayout="row" fxLayoutAlign="start center">
                 <p class="download-item-icon">
                     <mat-icon svgIcon="windows"></mat-icon>
@@ -40,6 +41,31 @@
                 </p>
                 <p class="download-item-package">
                     msi
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button (click)="openReleasePage()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </p>
+                <p class="download-item-link">
+                    <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp('windows')">
+                        <mat-icon>help_outline</mat-icon>
+                    </button>
+                </p>
+
+                <p fxFlex></p>
+            </div>
+            <mat-divider></mat-divider>
+
+            <div class="download-item download-item-row" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                <p class="download-item-icon">
+                    <mat-icon svgIcon="apple"></mat-icon>
+                </p>
+                <p class="download-item-definition">
+                    {{'MacOSLionAndAbove'|translate}}
+                </p>
+                <p class="download-item-package">
+                    dmg
                 </p>
                 <p class="download-item-link">
                     <button mat-icon-button (click)="openReleasePage()">

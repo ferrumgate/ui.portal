@@ -157,6 +157,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/device/posture',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/deviceposture/config-deviceposture.module').then(m => m.ConfigDevicePostureModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

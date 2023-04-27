@@ -35,6 +35,7 @@ import { ChangePassComponent } from "./changepass/changepass.component";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { FileUploadComponent } from "./fileupload/fileupload.component";
 import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/policy-authn-rule-time-add/policy-authn-rule-time-add.component";
+import { DevicePostureComponent } from "./deviceposture/deviceposture.component";
 
 
 
@@ -76,7 +77,8 @@ import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/poli
         DashboardChartComponent,
         T2FAComponent,
         ChangePassComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        DevicePostureComponent
 
     ],
     imports: [
@@ -125,7 +127,8 @@ import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/poli
         DashboardChartComponent,
         T2FAComponent,
         ChangePassComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        DevicePostureComponent
     ],
     providers: [
         {

@@ -59,6 +59,10 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/microsoft.svg")
     );
     this.matIconRegistry.addSvgIcon(
+      "social-apple",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/apple.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
       "social-auth0",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/auth0.svg")
     );
@@ -66,9 +70,14 @@ export class AppComponent implements OnInit {
       "linux",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/linux.svg")
     );
+
     this.matIconRegistry.addSvgIcon(
       "windows",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/windows.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "apple",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/apple.svg")
     );
     this.matIconRegistry.addSvgIcon(
       "debian",

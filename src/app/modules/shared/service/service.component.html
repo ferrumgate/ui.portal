@@ -22,7 +22,7 @@
 
                     <form test-id="service-form" [formGroup]="formGroup">
                         <mat-accordion class="user-details">
-                            <mat-expansion-panel>
+                            <mat-expansion-panel [expanded]="service.isExpanded">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title test-id="user-username-title">
                                         {{service.name}}

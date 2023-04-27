@@ -12,4 +12,5 @@ export interface Service {
     assignedIp: string;
     isSystem?: boolean;
     count: number;
+    [key: string]: any;
 }

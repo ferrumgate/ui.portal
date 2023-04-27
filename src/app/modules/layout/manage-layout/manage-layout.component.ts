@@ -128,6 +128,9 @@ export class ManageLayoutComponent implements OnInit {
         },
         {
           icon: 'pki', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('PKI'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/pki']) }
+        },
+        {
+          icon: 'devices', roleIds: [RBACDefault.roleAdmin.id], isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('DevicePosture'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/device/posture']) }
         }
       ],
     },

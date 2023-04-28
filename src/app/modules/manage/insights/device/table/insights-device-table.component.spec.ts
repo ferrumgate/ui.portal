@@ -1,4 +1,4 @@
-/* import { trigger } from '@angular/animations';
+import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -15,18 +15,18 @@ import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { InsightsActivityTableComponent } from './insights-device-table.component';
+import { InsightsDeviceTableComponent } from './insights-device-table.component';
 
 
 
 
 describe('InsightsActivitiyTableComponent', () => {
-  let component: InsightsActivityTableComponent;
-  let fixture: ComponentFixture<InsightsActivityTableComponent>;
+  let component: InsightsDeviceTableComponent;
+  let fixture: ComponentFixture<InsightsDeviceTableComponent>;
   let httpClient: HttpClient;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InsightsActivityTableComponent],
+      declarations: [InsightsDeviceTableComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
@@ -47,7 +47,7 @@ describe('InsightsActivitiyTableComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InsightsActivityTableComponent);
+    fixture = TestBed.createComponent(InsightsDeviceTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     httpClient = TestBed.inject(HttpClient);
@@ -61,28 +61,33 @@ describe('InsightsActivitiyTableComponent', () => {
     expect(component).toBeTruthy();
     component.dataSource = [
       {
-        insertDate: new Date(2021, 1.2).toISOString(),
-        insertDateStr: 'testdate',
-        authSource: 'activedirectory',
-        ip: '1.2.3.5',
-        requestId: '1234567',
-        status: 401,
-        statusMessage: 'ERRAUTH',
-        type: 'login 2fa',
-        sessionId: 's1',
-        username: 'abc@def',
-        is2FA: true
+        insertDate: new Date().toISOString(),
+        clientSha256: '',
+        clientVersion: 'adfa',
+        hasAntivirus: true,
+        hasEncryptedDisc: false,
+        hasFirewall: true,
+        hostname: 'ferr',
+        id: '123',
+        isHealthy: true,
+        macs: 'ops',
+        osName: 'ad',
+        osVersion: 'adfa',
+        platform: 'win32',
+        serial: 'asdfaf',
+        userId: 'asdfafa',
+        username: 'adfasdfawe',
       }];
     fixture.detectChanges();
-    findEl(fixture, 'insights-activity-table-header');
-    findEl(fixture, 'insights-activity-table-row');
-    const dateEl = findEl(fixture, 'insights-activity-table-row-date');
-    const value = getText(fixture, 'insights-activity-table-row-date');
+    findEl(fixture, 'insights-device-table-header');
+    findEl(fixture, 'insights-device-table-row');
+    const dateEl = findEl(fixture, 'insights-device-table-row-date');
+    const value = getText(fixture, 'insights-device-table-row-date');
     expect(value.trim()).toBe('testdate');
 
-    const username = getText(fixture, 'insights-activity-table-row-username');
+    const username = getText(fixture, 'insights-device-table-row-username');
 
-    expect(username.trim()).toBe('abc@def');
+    expect(username.trim()).toBe('adfasdfawe');
 
 
 
@@ -92,4 +97,3 @@ describe('InsightsActivitiyTableComponent', () => {
 });
 
 
- */

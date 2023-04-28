@@ -1,4 +1,4 @@
-/* import { trigger } from '@angular/animations';
+import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -9,7 +9,7 @@ import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng
 import { map, of } from 'rxjs';
 import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
 import { Group } from 'src/app/modules/shared/models/group';
-import { ActivityService } from 'src/app/modules/shared/services/activity.service';
+
 import { AuditService } from 'src/app/modules/shared/services/audit.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
@@ -24,21 +24,22 @@ import { UtilService } from '../../../shared/services/util.service';
 
 
 
-import { InsightsActivityComponent } from './insights-device.component';
+import { InsightsDeviceComponent } from './insights-device.component';
+import { DeviceService } from 'src/app/modules/shared/services/device.service';
 
-describe('InsightsActivityComponent', () => {
-  let component: InsightsActivityComponent;
-  let fixture: ComponentFixture<InsightsActivityComponent>;
+describe('InsightsDeviceComponent', () => {
+  let component: InsightsDeviceComponent;
+  let fixture: ComponentFixture<InsightsDeviceComponent>;
   let httpClient: HttpClient;
-  let activitySpy = jasmine.createSpyObj('ActivityService', ['get']);
+  let activitySpy = jasmine.createSpyObj('DeviceService', ['get']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InsightsActivityComponent],
+      declarations: [InsightsDeviceComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
-        { provide: ActivityService, useValue: activitySpy },
+        { provide: DeviceService, useValue: activitySpy },
         TranslationService,
         NotificationService,
 
@@ -49,7 +50,7 @@ describe('InsightsActivityComponent', () => {
 
   beforeEach(() => {
     httpClient = TestBed.inject(HttpClient);
-    fixture = TestBed.createComponent(InsightsActivityComponent);
+    fixture = TestBed.createComponent(InsightsDeviceComponent);
     component = fixture.componentInstance;
     activitySpy.get.and.returnValue(of({ total: 0, items: [] }));
 
@@ -66,17 +67,22 @@ describe('InsightsActivityComponent', () => {
     let item = {
       total: 1, items: [
         {
-          insertDate: new Date(2021, 1.2).toISOString(),
-          insertDateStr: 'testdate',
-          authSource: 'activedirectory',
-          ip: '1.2.3.5',
-          requestId: '1234567',
-          status: 401,
-          statusMessage: 'ERRAUTH',
-          type: 'login 2fa',
-          sessionId: 's1',
-          username: 'abc@def',
-          is2FA: true
+          insertDate: new Date().toISOString(),
+          clientSha256: '',
+          clientVersion: 'adfa',
+          hasAntivirus: true,
+          hasEncryptedDisc: false,
+          hasFirewall: true,
+          hostname: 'ferr',
+          id: '123',
+          isHealthy: true,
+          macs: 'ops',
+          osName: 'ad',
+          osVersion: 'adfa',
+          platform: 'win32',
+          serial: 'asdfaf',
+          userId: 'asdfafa',
+          username: 'adfasdfawe',
         }
       ]
     };
@@ -89,4 +95,3 @@ describe('InsightsActivityComponent', () => {
 
   }));
 });
- */

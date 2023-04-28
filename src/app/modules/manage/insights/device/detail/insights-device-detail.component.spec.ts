@@ -1,4 +1,4 @@
-/* import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
@@ -7,21 +7,21 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { findEls } from 'src/app/modules/shared/helper.spec';
 import { MaterialModule } from 'src/app/modules/shared/material-module';
-import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
+
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 
 
-import { InsightsActivityDetailComponent } from './insights-device-detail.component';
+import { InsightsDeviceDetailComponent } from './insights-device-detail.component';
 
-describe('InsightsActivityDetailComponent', () => {
-  let component: InsightsActivityDetailComponent;
-  let fixture: ComponentFixture<InsightsActivityDetailComponent>;
+describe('InsightsDeviceDetailComponent', () => {
+  let component: InsightsDeviceDetailComponent;
+  let fixture: ComponentFixture<InsightsDeviceDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InsightsActivityDetailComponent],
+      declarations: [InsightsDeviceDetailComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
         HttpClientModule, MaterialModule,
         NoopAnimationsModule, SharedModule
@@ -42,7 +42,7 @@ describe('InsightsActivityDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InsightsActivityDetailComponent);
+    fixture = TestBed.createComponent(InsightsDeviceDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -56,7 +56,7 @@ describe('InsightsActivityDetailComponent', () => {
     expect(component).toBeTruthy();
     component.dataSource = [{ key: 'id', value: '1' }];
     fixture.detectChanges();
-    const els = findEls(fixture, 'insights-activity-detail-table-row');
+    const els = findEls(fixture, 'insights-device-detail-table-row');
     expect(els.length).toBe(1);
 
   }));
@@ -65,4 +65,3 @@ describe('InsightsActivityDetailComponent', () => {
 
 
 });
- */

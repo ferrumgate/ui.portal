@@ -1,7 +1,7 @@
 <div [ngClass]="isThemeDark?'theme-dark':''">
     <div class="policy-authn-rule">
         <mat-accordion test-id="policy-authn-rule-accordion">
-            <mat-expansion-panel [expanded]="rule.isExpanded||true">
+            <mat-expansion-panel [expanded]="rule.isExpanded">
                 <mat-expansion-panel-header [ngClass]="titleClass">
                     <mat-panel-title test-id="policy-authn-rule-title">
                         <mat-action-row fxLayoutAlign="start center" class="policy-authn-rule-header-actions">
@@ -63,6 +63,9 @@
                     </p>
                     <p class="explanation-item" *ngIf="rule.profile.times?.length">
                         accessed <span class="explanation-bold">{{getExplanationTimes()}},</span>
+                    </p>
+                    <p class="explanation-item" *ngIf="rule.profile.device?.postures?.length">
+                        and accessed <span class="explanation-bold">{{getExplanationPostures()}},</span>
                     </p>
                     <p class="explanation-item">will be
                         <span class="explanation-bold">allowed</span>
@@ -365,6 +368,47 @@
                                             (add)="addTimeProfile($event)"></app-policy-authn-rule-time-add>
 
                                     </span>
+                                </p>
+                            </div>
+
+
+
+
+                        </mat-tab>
+
+                        <mat-tab label="{{'DevicePosture'|translate}}">
+                            <div test-id="policy-authn-tab-devicepostures" fxFlex fxLayout="column" class="tabpanel">
+                                <p class="policy-authn-rule-column policy-authn-rule-item">
+
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"DevicePostures"|translate}}</mat-label>
+                                        <mat-chip-list #chipListDevicePostures>
+                                            <mat-chip test-id="policy-authn-rule-intel-deviceposture-chip"
+                                                *ngFor="let ug of rule.profile.device?.posturesEx||[]"
+                                                (removed)="removeDevicePosture(ug)">
+                                                {{ug.name}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'Search' |translate}}"
+                                                [matChipInputFor]="chipListDevicePostures"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto5"
+                                                [formControl]="devicePosturesControl">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #auto5="matAutocomplete"
+                                            (optionSelected)="devicePostureSelected($event)"
+                                            [displayWith]="displayDevicePostureFn">
+
+                                            <mat-option *ngFor="let option of filteredDevicePostures" [value]="option">
+                                                {{option.name}}
+                                            </mat-option>
+
+
+
+                                        </mat-autocomplete>
+                                    </mat-form-field>
                                 </p>
                             </div>
 

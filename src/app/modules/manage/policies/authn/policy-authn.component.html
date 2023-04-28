@@ -56,8 +56,8 @@
                                     <app-policy-authn-rule test-id="policy-authn-rule" [networks]="networks"
                                         [users]="users" [groups]="groups" [countryList]="countryList"
                                         [ipIntelligenceLists]="ipIntelligenceList" [timezoneList]="timezoneList"
-                                        [rule]="rule" [dragDisabled]="isDragDisabled(pol)"
-                                        (deleteAuthnRule)="deleteAuthnRule($event)"
+                                        [devicePostures]="devicePostures" [rule]="rule"
+                                        [dragDisabled]="isDragDisabled(pol)" (deleteAuthnRule)="deleteAuthnRule($event)"
                                         (saveAuthnRule)="saveAuthnRule($event)">
                                     </app-policy-authn-rule>
                                 </div>

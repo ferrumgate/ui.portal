@@ -26,6 +26,8 @@ import { DataService } from 'src/app/modules/shared/services/data.service';
 import { TimeZone } from 'src/app/modules/shared/models/timezone';
 import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
+import { DevicePosture } from 'src/app/modules/shared/models/authnProfile';
+import { DeviceService } from 'src/app/modules/shared/services/device.service';
 
 
 
@@ -47,11 +49,12 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   users: User2[] = [];
   groups: Group[] = [];
-
+  devicePostures: DevicePosture[] = [];
   performance: {
     users: Map<string, User2>,
     groups: Map<string, Group>,
-    networks: Map<string, Network>
+    networks: Map<string, Network>,
+    devicePostures: Map<string, DevicePosture>
   } = {
 
   } as any;
@@ -76,7 +79,8 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     private groupService: GroupService,
     private policyAuthnService: PolicyAuthnService,
     private dataService: DataService,
-    private ipIntelligenceService: IpIntelligenceService
+    private ipIntelligenceService: IpIntelligenceService,
+    private deviceService: DeviceService
 
   ) {
 
@@ -238,6 +242,12 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         this.users = z.items;
         this.performance.users = new Map();
         this.users.forEach(x => this.performance.users.set(x.id, x))
+      }),
+      switchMap(y => this.deviceService.getDevicePosture2()),
+      map(z => {
+        this.devicePostures = z.items;
+        this.performance.devicePostures = new Map();
+        this.devicePostures.forEach(x => this.performance.devicePostures.set(x.id, x))
       }),
       switchMap(y => this.policyAuthnService.get()),
       map(z => {

@@ -486,5 +486,6 @@
     "Hostname": "Hostname",
     "DeviceLogsSearchHint": "Search by anything",
     "Device": "Device",
-    "Healthy": "Healthy"
+    "Healthy": "Healthy",
+    "DevicePostures": "Device Postures"
 }

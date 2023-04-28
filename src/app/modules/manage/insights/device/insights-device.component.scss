@@ -1,0 +1,89 @@
+.insights-device-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.insights-device-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 130px;
+
+}
+
+.insights-device .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.insights-device .insights-device-item {
+    padding-left: 10px;
+}
+
+.insights-device .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.insights-device .add {
+    margin-left: 15px;
+}
+
+
+
+
+
+.insights-device .insights-device-users {
+    padding: 10px;
+
+}
+
+.insights-device .insights-device-users {
+    min-width: 300px;
+
+}
+
+.insights-device .insights-device-users mat-card {
+    background-color: #d3d3d3;
+
+}
+
+.theme-dark .insights-device .insights-device-users mat-card {
+    background-color: #383535;
+
+}
+
+
+
+
+
+
+.insights-device-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 130px - 10px);
+    overflow: auto;
+}
+
+.insights-device .content-divider {
+    padding-bottom: 10px;
+}
+
+.insights-device .group-user-item {
+    max-height: 600px;
+    overflow: auto;
+    padding-bottom: 10px;
+
+}
+
+.insights-device .group-user-item mat-list-item {
+
+    font-size: 0.8rem;
+}
+
+.insights-device .tooltip-audit-detail {
+    white-space: pre-line;
+}

@@ -183,6 +183,15 @@ const routes: Routes = [
         loadChildren: () => import('../../manage/insights/activity/insights-activity.module').then(m => m.InsightsActivityModule)
 
       },
+      {
+        path: 'insights/device',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
+        },
+        loadChildren: () => import('../../manage/insights/device/insights-device.module').then(m => m.InsightsDeviceModule)
+
+      },
 
 
     ]

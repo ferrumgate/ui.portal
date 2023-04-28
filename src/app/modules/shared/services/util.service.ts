@@ -37,6 +37,12 @@ export class UtilService {
     static checkUndefinedBoolean(source?: boolean, target?: boolean) {
         return Boolean(source) == Boolean(target) ? false : true;
     }
+    static isUndefinedOrNull(val?: any) {
+        if (val === undefined) return true;
+        if (val === null) return true;
+        return false;
+
+    }
 
     static dateFormatDD(date: Date | number) {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

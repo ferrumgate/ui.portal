@@ -12,7 +12,7 @@ import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
-import { DevicePosture } from '../models/device';
+import { DeviceLog, DevicePosture } from '../models/device';
 
 
 
@@ -23,6 +23,7 @@ export class DeviceService extends BaseService {
 
   private _deviceUrl = this.configService.getApiUrl() + '/device';
   private _devicePostureUrl = this.configService.getApiUrl() + '/device/posture';
+  private _deviceInsightUrl = this.configService.getApiUrl() + '/insight/device';
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
@@ -103,6 +104,38 @@ export class DeviceService extends BaseService {
         return this.httpService.get<{ items: DevicePosture[] }>(url);
       })
     )
+  }
+
+  convertToDeviceOptionToBoolean(val?: string): boolean | undefined {
+    if (!val) return undefined;
+    if (val == 'none') return undefined;
+    if (val == 'yes' || val == 'true') return true;
+    return false;
+  }
+  get(startDate?: string, endDate?: string, page?: number, pageSize?: number, searchIsHealthy?: string, search?: string) {
+
+    const searchParams = new URLSearchParams();
+    if (startDate)
+      searchParams.append('startDate', startDate);
+    if (endDate)
+      searchParams.append('endDate', endDate);
+    if (page)
+      searchParams.append('page', page.toString());
+    if (pageSize)
+      searchParams.append('pageSize', pageSize.toString());
+    if (search)
+      searchParams.append('search', search);
+    let isHealthyParam = this.convertToDeviceOptionToBoolean(searchIsHealthy);
+    if (!UtilService.isUndefinedOrNull(isHealthyParam))
+      searchParams.append('isHealthy', isHealthyParam ? 'true' : 'false');
+
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._deviceInsightUrl, y);
+        return this.httpService.get<{ items: DeviceLog[], total: number }>(url);
+      })
+    )
+
   }
 
 

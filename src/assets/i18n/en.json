@@ -476,5 +476,15 @@
     "Macs": "Macs",
     "DevicePostureMacHints": "Check if any mac is exists",
     "MinClientVersion": "Minimum client version",
-    "DevicePostureMinClientVersion": "Check if client version is bigger or equal"
+    "DevicePostureMinClientVersion": "Check if client version is bigger or equal",
+    "OsFamily": "Os family",
+    "OsName": "Os name",
+    "OsVersion": "Os version",
+    "ClientVersion": "Client version",
+    "HealthStatus": "Healthy status",
+    "WhyNotHealthy": "Why",
+    "Hostname": "Hostname",
+    "DeviceLogsSearchHint": "Search by anything",
+    "Device": "Device",
+    "Healthy": "Healthy"
 }

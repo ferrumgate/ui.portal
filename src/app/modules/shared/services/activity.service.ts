@@ -22,7 +22,7 @@ export class ActivityService extends BaseService {
 
   private _activityUrl = this.configService.getApiUrl() + '/insight/activity';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
-    super('audit', captchaService)
+    super('activity', captchaService)
 
   }
 

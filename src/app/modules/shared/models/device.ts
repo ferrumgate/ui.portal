@@ -1,3 +1,24 @@
+export interface DeviceLog {
+    id: string;
+    hostname: string;
+    osName: string;
+    osVersion: string;
+    macs: string;
+    serial: string;
+    userId: string;
+    username: string;
+    insertDate: string;
+    clientVersion: string;
+    clientSha256: string;
+    platform: string;
+    hasEncryptedDisc: boolean;
+    hasFirewall: boolean;
+    hasAntivirus: boolean;
+    isHealthy: boolean;
+    whyNotHealthy?: string;
+    [key: string]: any;
+}
+
 export type OSType = 'win32' | 'darwin' | 'linux' | 'android' | 'ios';
 
 export interface DevicePosture {

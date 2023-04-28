@@ -19,8 +19,8 @@ import { Service } from '../../../../shared/models/service';
 import { Network } from '../../../../shared/models/network';
 import { NetworkService } from '../../../../shared/services/network.service';
 import { ServiceService } from '../../../../shared/services/service.service';
-import { AuditLog } from 'src/app/modules/shared/models/auditLog';
-import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
+import { DeviceLog } from 'src/app/modules/shared/models/device';
+
 
 
 
@@ -30,26 +30,24 @@ import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
 
 
 @Component({
-  selector: 'app-insights-activity-table',
-  templateUrl: './insights-activity-table.component.html',
-  styleUrls: ['./insights-activity-table.component.scss']
+  selector: 'app-insights-device-table',
+  templateUrl: './insights-device-table.component.html',
+  styleUrls: ['./insights-device-table.component.scss']
 })
-export class InsightsActivityTableComponent implements OnInit, OnDestroy {
+export class InsightsDeviceTableComponent implements OnInit, OnDestroy {
 
   private allSubs = new SSubscription();
   searchForm = new FormControl();
   helpLink = '';
-  displayedColumns: string[] = ['position', 'insertDate', 'type',
-    'source', 'requestId', 'ip', 'username', 'sessionId', 'serviceName',
-    'gatewayName', 'networkName', 'status', 'statusMessage',
-    'authnRule', 'authzRule',
+  displayedColumns: string[] = ['position', 'insertDate', 'platform',
+    'osName', 'osVersion', 'hostname', 'clientVersion', 'username', 'isHealthy', 'whyNotHealthy',
     'detail'];
 
   pageSize = 10;
   page = 0;
   totalLogs = 0;
   @Input()
-  dataSource: ActivityLog[] = [];
+  dataSource: DeviceLog[] = [];
 
 
   @Output() onShowDetail = new EventEmitter();
@@ -71,7 +69,7 @@ export class InsightsActivityTableComponent implements OnInit, OnDestroy {
 
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.helpLink = this.configService.links.insightActivityHelp;
+    this.helpLink = this.configService.links.insightDeviceHelp;
   }
   ngOnInit(): void {
 
@@ -87,7 +85,7 @@ export class InsightsActivityTableComponent implements OnInit, OnDestroy {
 
 
 
-  showDetail(element: ActivityLog) {
+  showDetail(element: DeviceLog) {
     this.onShowDetail.emit(element);
   }
   openHelp() {

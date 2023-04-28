@@ -15,16 +15,14 @@ import { NotificationService } from '../../../shared/services/notification.servi
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, sample } from 'rxjs';
 import { UtilService } from '../../../shared/services/util.service';
-import { Service } from '../../../shared/models/service';
-import { Network } from '../../../shared/models/network';
-import { NetworkService } from '../../../shared/services/network.service';
-import { ServiceService } from '../../../shared/services/service.service';
-import { AuditLog } from 'src/app/modules/shared/models/auditLog';
-import { AuditService } from 'src/app/modules/shared/services/audit.service';
 import { MatDialog } from '@angular/material/dialog';
-import { InsightsActivityDetailComponent, LogActivityDetailDialogModel } from './detail/insights-activity-detail.component';
+
 import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
 import { ActivityService } from 'src/app/modules/shared/services/activity.service';
+import { LogActivityDetailDialogModel } from '../activity/detail/insights-activity-detail.component';
+import { InsightsDeviceDetailComponent, LogDeviceDetailDialogModel } from './detail/insights-device-detail.component';
+import { DeviceLog } from 'src/app/modules/shared/models/device';
+import { DeviceService } from 'src/app/modules/shared/services/device.service';
 
 
 
@@ -34,21 +32,21 @@ import { ActivityService } from 'src/app/modules/shared/services/activity.servic
 
 
 @Component({
-  selector: 'app-insights-activity',
-  templateUrl: './insights-activity.component.html',
-  styleUrls: ['./insights-activity.component.scss']
+  selector: 'app-insights-device',
+  templateUrl: './insights-device.component.html',
+  styleUrls: ['./insights-device.component.scss']
 })
-export class InsightsActivityComponent implements OnInit, OnDestroy {
+export class InsightsDeviceComponent implements OnInit, OnDestroy {
   private allSubs = new SSubscription();
   searchForm = new FormControl();
 
 
-  dataSource: ActivityLog[] = [];
+  dataSource: DeviceLog[] = [];
   pageSize = 10;
   page = 0;
   totalLogs = 0;
 
-
+  searchIsHealthy = 'none';
   startDate: Date = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
   endDate: Date = new Date();
   startDateControl = new FormControl();
@@ -60,7 +58,7 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private confirmService: ConfirmService,
     private configService: ConfigService,
-    private activityService: ActivityService,
+    private deviceService: DeviceService,
     private dialog: MatDialog
 
   ) {
@@ -86,7 +84,9 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
         .pipe(debounceTime(100))
         .subscribe(x => {
           if (this.startDateControl.valid) {
+
             this.startDate = x ? new Date(x) : new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
 
           }
         })
@@ -102,36 +102,37 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit(): void {
-    /*  const sampleData: ActivityLog[] = [
-       {
-         "requestId": "i8oB3eCcFrMrEpK32DAKzOSDz5ck4eq4R69UGYkN3T3kpoDbkewNXHhC37z659Vx",
-         "type": "access token",
-         "username": "hamza@hamzakilic.com",
-         "userId": "97CwQ6gRHPaRHBWH",
-         "user2FA": false,
-         "authSource": "local",
-         "insertDate": "2023-02-12T13:46:34.661Z",
-         "ip": "192.168.88.10",
-         "status": 200,
-         "sessionId": "t87H20P0K2gfqnONAwI1Bxfzm1sLcEfgF3OoqDxtfxtZuez246FAdQggeCgA9zxC",
-         "requestPath": "/api/auth/accesstoken",
-         "assignedIp": 'null',
-         "tunnelId": 'null',
-         "tun": 'null',
-         "tunType": 'null',
-         "trackId": 0,
-         "gatewayId": 'null'
-       },
- 
- 
-     ];
- 
-     //test data
-     this.dataSource = sampleData.map((value, index) => {
-       return this.prepareLog(value, index);
- 
-     }) */
+    /* const sampleData: DeviceLog[] = [
+      {
+        id: '123',
+        clientSha256: '',
+        clientVersion: '1.2.3',
+        hasAntivirus: true,
+        hasEncryptedDisc: true,
+        hasFirewall: false,
+        hostname: 'ferrum notebook',
+        insertDate: new Date().toISOString(),
+        isHealthy: true,
+        macs: '00:11:22:33:44:55',
+        osName: "ubuntu",
+        osVersion: '22.04',
+        platform: 'win32',
+        serial: '231a',
+        userId: 'someid',
+        username: 'someuser',
+        whyNotHealthy: 'errTestData'
 
+      },
+
+
+    ];
+
+    //test data
+    this.dataSource = sampleData.map((value, index) => {
+      return this.prepareLog(value, index);
+
+    })
+ */
 
     this.search()
   }
@@ -142,13 +143,10 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
 
 
   }
-  prepareLog(value: ActivityLog, index: number) {
+  prepareLog(value: DeviceLog, index: number) {
     // these values are also in InsightsActivityDetailComponent class in insights-activity-detail.component.ts
     value.position = (this.page * this.pageSize) + index + 1;
     value.insertDateStr = UtilService.dateFormatToLocale(new Date(value.insertDate))
-    value.sessionIdSub = value.sessionId ? (value.sessionId.substring(0, 6) + '...') : undefined;
-    value.requestIdSub = value.requestId ? (value.requestId.substring(0, 6) + '...') : undefined;
-    value.tunnelIdSub = value.tunnelId ? (value.tunnelId.substring(0, 6) + '...') : undefined;
 
     return value;
   }
@@ -158,7 +156,7 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
 
   search() {
 
-    return this.activityService.get(this.startDate.toISOString(), this.endDate.toISOString(), this.page, this.pageSize, this.searchKey,).pipe(
+    return this.deviceService.get(this.startDate.toISOString(), this.endDate.toISOString(), this.page, this.pageSize, this.searchIsHealthy, this.searchKey,).pipe(
       map(y => {
         this.totalLogs = y.total;
 
@@ -175,10 +173,10 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
     this.search();
 
   }
-  showDetail(element: ActivityLog) {
-    const dialogData = new LogActivityDetailDialogModel(element);
-
-    const dialogRef = this.dialog.open(InsightsActivityDetailComponent, {
+  showDetail(element: DeviceLog) {
+    const dialogData = new LogDeviceDetailDialogModel(element);
+    debugger;
+    const dialogRef = this.dialog.open(InsightsDeviceDetailComponent, {
 
       width: '400',
       height: '600',

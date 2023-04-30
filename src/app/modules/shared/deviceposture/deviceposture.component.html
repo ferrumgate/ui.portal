@@ -128,7 +128,7 @@
                                     </mat-form-field>
 
                                 </p>
-                                <p fxFill class="deviceposture-exp" *ngIf="model.macList">
+                                <p fxFill class="deviceposture-exp" *ngIf="model.macList || model.macAdded">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Macs"|translate}}</mat-label>
                                         <textarea matInput test-id="deviceposture-mac-input" class="deviceposture-multi"
@@ -145,7 +145,7 @@
                                     </mat-form-field>
 
                                 </p>
-                                <p fxFill class="deviceposture-exp" *ngIf="model.serialList">
+                                <p fxFill class="deviceposture-exp" *ngIf="model.serialList || model.serialAdded">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Serials"|translate}}</mat-label>
                                         <textarea matInput test-id="deviceposture-serial-input"
@@ -169,7 +169,7 @@
                                         <mat-label>{{"Path"|translate}}</mat-label>
 
                                         <input matInput test-id="deviceposture-filepath-input"
-                                            placeholder="c:\\Windows\\System32\\etc" [(ngModel)]="item.path"
+                                            placeholder="c:\\Windows\System32\etc" [(ngModel)]="item.path"
                                             [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
 
                                     </mat-form-field>

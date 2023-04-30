@@ -487,5 +487,9 @@
     "DeviceLogsSearchHint": "Search by anything",
     "Device": "Device",
     "Healthy": "Healthy",
-    "DevicePostures": "Device Postures"
+    "DevicePostures": "Device Postures",
+    "MacCheck": "Check Mac",
+    "SerialCheck": "Check Serial",
+    "FileCheck": "Check File",
+    "ProcessCheck": "Check Process"
 }

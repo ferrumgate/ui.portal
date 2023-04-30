@@ -26,6 +26,7 @@ interface Model extends DevicePosture {
   macs?: string;
   serials?: string;
 
+
 }
 @Component({
   selector: 'app-deviceposture',
@@ -94,7 +95,9 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     this._model = {
 
       id: '', insertDate: new Date().toISOString(),
-      isChanged: false, isEnabled: true, labels: [], name: '', os: 'win32', svgIcon: 'windows', updateDate: new Date().toISOString(),
+      isChanged: false, isEnabled: true, labels: [], name: '',
+      os: 'win32', svgIcon: 'windows', updateDate: new Date().toISOString(),
+      isExpanded: true,
       orig: {
         id: '', insertDate: new Date().toISOString(), isEnabled: true, labels: [],
         name: '', os: 'win32', updateDate: new Date().toISOString(),
@@ -164,12 +167,12 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
         value: x
       }
     }) : undefined;
-    this.model.serialList = this.model.serialList ? this.model.serials?.split(',').map(x => x.trim()).filter(y => y).map(x => {
+    this.model.serialList = this.model.serials ? this.model.serials?.split(',').map(x => x.trim()).filter(y => y).map(x => {
       return {
         value: x
       }
     }) : undefined;
-    console.log(this.model);
+    //console.log(this.model);
 
     this.checkFormError();
     if (this.formGroup.valid)
@@ -197,8 +200,23 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
   }
 
   isChanged(a: any, b: any) {
+    const diffFields2 = diff.diff(a || [], b || []);
+    if (a == undefined && b == undefined) return false;
+    if (a == undefined && b && Array.isArray(b) && !b.length) return false;
+    if (a == undefined && b && Array.isArray(b) && b.length) return true;
+    if (b == undefined && a && Array.isArray(a) && !a.length) return false;
+    if (b == undefined && a && Array.isArray(a) && a.length) return true;
+
+
     const diffFields = diff.detailedDiff(a, b);
-    return Object.keys(diffFields.added).length + Object.keys(diffFields.deleted).length + Object.keys(diffFields.updated).length > 0 ? true : false
+    let keyLength = 0;
+    if (diffFields.added)
+      keyLength += Object.keys(diffFields.added).length;
+    if (diffFields.deleted)
+      keyLength += Object.keys(diffFields.deleted).length;
+    if (diffFields.updated)
+      keyLength += Object.keys(diffFields.updated).length
+    return keyLength > 0 ? true : false
   }
 
   checkIfModelChanged() {
@@ -212,25 +230,25 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       model.isChanged = true;
     if (UtilService.checkChanged(original.labels, this.model.labels))
       this.model.isChanged = true
-    if (this.isChanged(original.antivirusList, model.antivirusList))
+    if (this.isChanged(original.antivirusList, model.antivirusList?.filter(x => x.name)))
       this.model.isChanged = true;
-    if (this.isChanged(original.clientVersions, model.clientVersions))
+    if (this.isChanged(original.clientVersions, model.clientVersions?.filter(x => x.version)))
       this.model.isChanged = true;
     if (original.discEncryption != model.discEncryption)
       this.model.isChanged = true;
-    if (this.isChanged(original.filePathList, model.filePathList))
+    if (this.isChanged(original.filePathList, model.filePathList?.filter(y => y.path || y.sha256 || y.fingerprint)))
       this.model.isChanged = true;
-    if (this.isChanged(original.firewallList, model.firewallList))
+    if (this.isChanged(original.firewallList, model.firewallList?.filter(x => x.name)))
       this.model.isChanged = true;
-    if (this.isChanged(original.macList, model.macList))
+    if (this.isChanged(original.macList, model.macList?.filter(y => y.value)))
       this.model.isChanged = true;
-    if (this.isChanged(original.osVersions, model.osVersions))
+    if (this.isChanged(original.osVersions, model.osVersions?.filter(y => y.name || y.release)))
       this.model.isChanged = true;
-    if (this.isChanged(original.processList, model.processList))
+    if (this.isChanged(original.processList, model.processList?.filter(y => y.path || y.fingerprint || y.sha256)))
       this.model.isChanged = true;
-    if (this.isChanged(original.registryList, model.registryList))
+    if (this.isChanged(original.registryList, model.registryList?.filter(x => x.path || x.key || x.value)))
       this.model.isChanged = true;
-    if (this.isChanged(original.serialList, model.serialList))
+    if (this.isChanged(original.serialList, model.serialList?.filter(x => x.value)))
       this.model.isChanged = true;
 
   }
@@ -361,11 +379,13 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       this.model.macList = [];
     this.model.macList.push({ value: '' })
     this.model.macs = '';
-    //    this.modelChanged();
+    this.model.macAdded = true;
+    this.modelChanged();
   }
   removeMac() {
     delete this.model.macList;
     this.model.macs = '';
+    this.model.macAdded = false;
     this.modelChanged();
   }
 
@@ -374,12 +394,14 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       this.model.serialList = [];
     this.model.serialList.push({ value: '' })
     this.model.serials = '';
+    this.model.serialAdded = true;
     this.modelChanged();
   }
   removeSerial() {
     delete this.model.serialList;
     this.model.serials = '';
-    // this.modelChanged();
+    this.model.serialAdded = false;
+    this.modelChanged();
   }
 
   addFileCheck() {

@@ -40,7 +40,7 @@ export class InsightsDeviceTableComponent implements OnInit, OnDestroy {
   searchForm = new FormControl();
   helpLink = '';
   displayedColumns: string[] = ['position', 'insertDate', 'platform',
-    'osName', 'osVersion', 'hostname', 'clientVersion', 'username', 'isHealthy', 'whyNotHealthy',
+    'osName', 'osVersion', 'hostname', 'clientVersion', 'username', 'networkName', 'isHealthy', 'whyNotHealthy',
     'detail'];
 
   pageSize = 10;

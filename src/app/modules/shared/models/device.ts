@@ -16,6 +16,8 @@ export interface DeviceLog {
     hasAntivirus: boolean;
     isHealthy: boolean;
     whyNotHealthy?: string;
+    networkId?: string;
+    networkName?: string;
     [key: string]: any;
 }
 

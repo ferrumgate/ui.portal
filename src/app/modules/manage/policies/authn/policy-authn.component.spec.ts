@@ -115,6 +115,7 @@ describe('PolicyAuthnComponent', () => {
 
       of({ items: groups }),
       of({ items: [] }),
+      of({ items: [] }),
       of(policy)
     )
     //load data 

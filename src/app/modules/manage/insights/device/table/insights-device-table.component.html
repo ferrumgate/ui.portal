@@ -49,7 +49,7 @@
             </td>
         </ng-container>
         <ng-container matColumnDef="clientVersion">
-            <th mat-header-cell *matHeaderCellDef> {{"clientVersion"|translate}} </th>
+            <th mat-header-cell *matHeaderCellDef> {{"ClientVersion"|translate}} </th>
             <td mat-cell *matCellDef="let element" test-id="insights-device-table-row-clientversion">
                 {{element.clientVersion}}
             </td>
@@ -60,6 +60,11 @@
         <ng-container matColumnDef="username">
             <th mat-header-cell *matHeaderCellDef>{{"User"|translate}}</th>
             <td mat-cell *matCellDef="let element" test-id="insights-device-table-row-username"> {{element.username}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="networkName">
+            <th mat-header-cell *matHeaderCellDef>{{"Network"|translate}}</th>
+            <td mat-cell *matCellDef="let element" test-id="insights-device-table-row-network"> {{element.networkName}}
             </td>
         </ng-container>
 

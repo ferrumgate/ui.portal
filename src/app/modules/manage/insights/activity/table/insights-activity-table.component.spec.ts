@@ -76,7 +76,7 @@ describe('InsightsActivitiyTableComponent', () => {
     fixture.detectChanges();
     findEl(fixture, 'insights-activity-table-header');
     findEl(fixture, 'insights-activity-table-row');
-    const dateEl = findEl(fixture, 'insights-activity-table-row-date');
+    //const dateEl = findEl(fixture, 'insights-activity-table-row-date');
     const value = getText(fixture, 'insights-activity-table-row-date');
     expect(value.trim()).toBe('testdate');
 

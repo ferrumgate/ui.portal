@@ -62,6 +62,7 @@ describe('InsightsActivitiyTableComponent', () => {
     component.dataSource = [
       {
         insertDate: new Date().toISOString(),
+        insertDateStr: 'testdate',
         clientSha256: '',
         clientVersion: 'adfa',
         hasAntivirus: true,
@@ -78,10 +79,10 @@ describe('InsightsActivitiyTableComponent', () => {
         userId: 'asdfafa',
         username: 'adfasdfawe',
       }];
+    tick(1000);
     fixture.detectChanges();
     findEl(fixture, 'insights-device-table-header');
     findEl(fixture, 'insights-device-table-row');
-    const dateEl = findEl(fixture, 'insights-device-table-row-date');
     const value = getText(fixture, 'insights-device-table-row-date');
     expect(value.trim()).toBe('testdate');
 

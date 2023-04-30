@@ -81,7 +81,7 @@ export class ConfigDevicePostureComponent implements OnInit {
 
     return this.deviceService.getDevicePosture2().pipe(
       map(z => {
-        this.postures = z.items.map(x => {
+        this.postures = z.items.sort((a, b) => a.name.localeCompare(b.name)).map(x => {
           x.objId = UtilService.randomNumberString();
           return x;
         })
@@ -97,7 +97,7 @@ export class ConfigDevicePostureComponent implements OnInit {
     this.deviceService.getDevicePosture2(search, []).pipe(
 
       map(z => {
-        this.postures = z.items.map(x => {
+        this.postures = z.items.sort((a, b) => a.name.localeCompare(b.name)).map(x => {
           x.objId = UtilService.randomNumberString();
           return x;
         })

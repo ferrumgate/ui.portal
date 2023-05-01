@@ -1,0 +1,58 @@
+.deviceposture {
+    min-width: 400px;
+}
+
+.deviceposture .deviceposture-registry {
+    border-style: groove;
+    padding-bottom: 5px;
+}
+
+.deviceposture .deviceposture-filepath {
+    border-style: groove;
+    padding-bottom: 5px;
+}
+
+.deviceposture .deviceposture-process {
+    border-style: groove;
+    padding-bottom: 5px;
+}
+
+.deviceposture .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.deviceposture .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.deviceposture .row-pad {
+    margin-left: 15px;
+}
+
+.deviceposture .deviceposture-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+}
+
+.deviceposture .deviceposture-title {
+    padding-left: 10px;
+}
+
+.deviceposture .deviceposture-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+
+.deviceposture .deviceposture-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.deviceposture .deviceposture-multi {
+    height: 100px;
+}

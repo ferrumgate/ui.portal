@@ -87,7 +87,7 @@ export class InsightsActivityTableComponent implements OnInit, OnDestroy {
 
 
 
-  showDetail(element: AuditLog) {
+  showDetail(element: ActivityLog) {
     this.onShowDetail.emit(element);
   }
   openHelp() {

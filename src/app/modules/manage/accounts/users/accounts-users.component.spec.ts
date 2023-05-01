@@ -122,6 +122,8 @@ describe('AccountsUsersComponent', () => {
     component.search();
     tick(1000);
     fixture.detectChanges();
+    click(fixture, 'button-add');
+    fixture.detectChanges();
     click(fixture, 'button-apikey');
     fixture.detectChanges();
     const userElements = findEls(fixture, 'accounts-users-user');

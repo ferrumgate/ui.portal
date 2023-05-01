@@ -1,0 +1,49 @@
+<div class="config-deviceposture-container">
+    <div class="config-deviceposture config-deviceposture-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                <span matBadge="{{postures.length}}" matBadgeOverlap="false">{{'DevicePosture'|translate}}</span>
+
+            </div>
+
+            <div class="row" fxLayout="row">
+                <div fxFlex fxLayoutAlign="end center">
+                    <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+
+                        {{"Add"|translate}}
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="addNewDevicePosture('win32')">
+                            <mat-icon svgIcon="windows"></mat-icon>
+                            <span>Windows</span>
+                        </button>
+                        <button mat-menu-item (click)="addNewDevicePosture('darwin')">
+                            <mat-icon svgIcon="apple"></mat-icon>
+                            <span>Mac OS</span>
+                        </button>
+                        <button mat-menu-item (click)="addNewDevicePosture('linux')">
+                            <mat-icon svgIcon="linux"></mat-icon>
+                            <span>Linux</span>
+                        </button>
+
+                    </mat-menu>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <div class="config-deviceposture config-deviceposture-content">
+        <div fxLayout="row wrap">
+            <p class="row services-item" fxLayout="row" *ngFor="let posture of postures">
+
+                <app-deviceposture test-id="config-deviceposture-item" [model]="posture"
+                    (saveDevicePosture)="saveDevicePosture($event)" (deleteDevicePosture)="deleteDevicePosture($event)">
+                </app-deviceposture>
+
+            </p>
+        </div>
+    </div>
+</div>

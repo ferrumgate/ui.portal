@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
 import validator from 'validator';
 import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticationProfile, cloneTimeProfile, IpIntelligenceProfile, IpProfile, TimeProfile } from '../../models/authnProfile';
+import { cloneAuthenticationProfile, cloneTimeProfile, DevicePosture, IpIntelligenceProfile, IpProfile, TimeProfile } from '../../models/authnProfile';
 import { AuthorizationRule } from '../../models/authzPolicy';
 import { Country } from '../../models/country';
 import { Group } from '../../models/group';
@@ -95,6 +95,15 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
   get ipIntelligenceLists() { return this._ipIntelligenceLists; };
 
+  _devicePostures: DevicePosture[] = [];
+  @Input()
+  set devicePostures(val: DevicePosture[]) {
+    this._devicePostures = val;
+    this.prepareAutoCompleteDevicePostures();
+  }
+  get devicePostures() { return this._devicePostures; };
+
+
 
   countryMap = new Map();
   //country list
@@ -140,11 +149,15 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     this._model.profile.ipIntelligence.blackListsEx = this.findIpIntelligenceLists(this._model.profile.ipIntelligence.blackLists);
     this._model.profile.ipIntelligence.whiteListsEx = this.findIpIntelligenceLists(this._model.profile.ipIntelligence.whiteLists);
+    if (!this._model.profile.device)
+      this._model.profile.device = { postures: [] }
+    this._model.profile.device.posturesEx = this.findDevicePostures(this._model.profile.device.postures)
     this.calculatesTimeProfiles(this._model.profile.times);
 
     this.prepareAutoCompletes();
     this.prepareAutoCompleteCountry();
     this.prepareAutoCompleteIpIntelligenceLists();
+    this.prepareAutoCompleteDevicePostures();
     this.formGroup = this.createFormGroup(this._model);
 
   }
@@ -168,6 +181,10 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   ipIntelligenceBlackListControl = new FormControl();
   filteredIpIntelligenceWhiteLists: IpIntelligenceList[] = [];
   filteredIpIntelligenceBlackLists: IpIntelligenceList[] = [];
+
+  devicePosturesControl = new FormControl();
+  filteredDevicePostures: DevicePosture[] = [];
+
 
 
 
@@ -234,6 +251,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.prepareAutoCompletes();
     this.prepareAutoCompleteIpIntelligenceLists();
+    this.prepareAutoCompleteDevicePostures();
 
 
 
@@ -270,6 +288,13 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   findIpIntelligenceLists(ids: string[]) {
 
     const lists = this.ipIntelligenceLists.filter(x => ids.includes(x.id)).map(x => { return { id: x.id, name: x.name } });
+    lists.sort(this.simpleNameSort);
+
+    return lists;
+  }
+  findDevicePostures(ids: string[]) {
+
+    const lists = this.devicePostures.filter(x => ids.includes(x.id)).map(x => { return { id: x.id, name: x.name } });
     lists.sort(this.simpleNameSort);
 
     return lists;
@@ -328,6 +353,28 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
       })
   }
+
+
+
+  prepareAutoCompleteDevicePostures() {
+
+    this.filteredDevicePostures = this.devicePostures.sort(this.simpleNameSort);
+    this.allSub.addThis =
+      this.devicePosturesControl.valueChanges.subscribe(x => {
+        const value = x;
+        const val = typeof (x) === 'string' ? value.toLowerCase() : ''
+        if (val) {
+
+          this.filteredDevicePostures = this.devicePostures.filter(x => x.name.toLowerCase().includes(val)).sort(this.simpleNameSort);
+        } else {
+          this.filteredDevicePostures = this.devicePostures.sort(this.simpleNameSort);
+        }
+
+      })
+
+
+  }
+
   prepareAutoCompleteCountry() {
     // set initial selection
     let selectedCountryList: Country[] = [];
@@ -391,6 +438,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (typeof (net) == 'string') return net;
     return net?.name || '';
   }
+  displayDevicePostureFn(net: User2 | Group | string) {
+    if (typeof (net) == 'string') return net;
+    return net?.name || '';
+  }
+
 
 
   addOnBlur = true;
@@ -487,6 +539,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     if (UtilService.checkChanged(original.profile.ipIntelligence?.blackLists?.map(x => x), this.rule.profile.ipIntelligence?.blackLists?.map(x => x)))
       this.rule.isChanged = true;
     if (UtilService.checkChanged(original.profile.ipIntelligence?.whiteLists?.map(x => x), this.rule.profile.ipIntelligence?.whiteLists?.map(x => x)))
+      this.rule.isChanged = true;
+
+    if (UtilService.checkChanged(original.profile.device?.postures?.map(x => x), this.rule.profile.device?.postures?.map(x => x)))
       this.rule.isChanged = true;
 
     if (UtilService.checkUndefinedBoolean(original.profile.ipIntelligence?.isCrawler, this.rule.profile.ipIntelligence?.isCrawler))
@@ -612,6 +667,12 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       return `time is in ${this.rule.profile.times.slice(0, 3).map(x => x.timezone).join(' or ') + `${this.rule.profile.times.length > 3 ? ' ...' : ''}`}`
     return ``;
   }
+  getExplanationPostures() {
+
+    if (this.rule.profile.device?.postures?.length)
+      return `device is in ${this.rule.profile.device.posturesEx?.slice(0, 3).map(x => x.name).join(' or ') + `${this.rule.profile.device.postures?.length > 3 ? ' ...' : ''}`}`
+    return ``;
+  }
 
 
   getExplanationSummary() {
@@ -627,6 +688,33 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     ${users} 
     ${this.rule.profile.is2FA ? ' {2FA},' : ''} 
     ${ips}`
+  }
+  removeDevicePosture(ug: { id: string }): void {
+    if (this.rule.profile.device?.postures && this.rule.profile.device?.posturesEx) {
+      this.rule.profile.device.postures = this.rule.profile.device.postures.filter(x => x != ug.id);
+      this.rule.profile.device.posturesEx = this.rule.profile.device.posturesEx.filter(x => x.id != ug.id);
+      if (this.formGroup.valid)
+        this.checkIfModelChanged();
+    }
+
+  }
+  devicePostureSelected(event: any) {
+
+    const value = event.option.value;
+    if (value.id) {
+      if (!this.rule.profile.device?.postures.includes(value.id)) {
+
+        this.rule.profile.device?.postures.push(value.id);
+        //
+        const items = this.findDevicePostures([value.id])
+        if (this.rule.profile.device && !this.rule.profile.device?.posturesEx)
+          this.rule.profile.device.posturesEx = [];
+        if (this.rule.profile.device && this.rule.profile.device.posturesEx)
+          this.rule.profile.device.posturesEx = this.rule.profile.device.posturesEx.concat(items);
+
+        this.modelChanged();
+      }
+    }
   }
 
 
@@ -650,6 +738,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
 
   }
+
 
   ipIntelligenceWhiteListSelected(event: any) {
 

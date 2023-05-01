@@ -65,6 +65,9 @@ export class ManageLayoutComponent implements OnInit {
       subItems: [
         {
           icon: 'scatter_plot', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Activity'), subItems: [], navigate: () => { this.router.navigate(['/manage/insights/activity']) }
+        },
+        {
+          icon: 'devices', roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Device'), subItems: [], navigate: () => { this.router.navigate(['/manage/insights/device']) }
         }
       ]
     },
@@ -128,6 +131,9 @@ export class ManageLayoutComponent implements OnInit {
         },
         {
           icon: 'pki', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('PKI'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/pki']) }
+        },
+        {
+          icon: 'devices', roleIds: [RBACDefault.roleAdmin.id], isSVG: false, isClicked: false, isExpanded: false, name: this.translateService.translate('DevicePosture'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/device/posture']) }
         }
       ],
     },

@@ -96,7 +96,7 @@
                                 <p>
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Splitter"|translate}}</mat-label>
-                                        <input matInput test-id="list-splitter-input" placeholder=",:."
+                                        <input matInput test-id="list-splitter-input" placeholder=",:. or any character"
                                             formControlName="splitter">
                                         <mat-error>{{formError.name|translate}}</mat-error>
                                         <mat-hint>{{"SplitterHint"|translate}}</mat-hint>
@@ -107,7 +107,7 @@
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"SplitterIndex"|translate}}</mat-label>
                                         <input type="number" min="0" max="1000" matInput
-                                            test-id="list-http-slitter-index" placeholder=",:. or any character"
+                                            test-id="list-http-slitter-index" placeholder="0"
                                             formControlName="splitterIndex">
                                         <mat-error>{{formError.name|translate}}</mat-error>
                                         <mat-hint>{{"SplitterIndexHint"|translate}}</mat-hint>

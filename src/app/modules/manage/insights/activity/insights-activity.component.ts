@@ -86,7 +86,7 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
         .pipe(debounceTime(100))
         .subscribe(x => {
           if (this.startDateControl.valid) {
-            this.startDate = new Date(x);
+            this.startDate = x ? new Date(x) : new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
 
           }
         })
@@ -95,7 +95,7 @@ export class InsightsActivityComponent implements OnInit, OnDestroy {
         .pipe(debounceTime(100))
         .subscribe(x => {
           if (this.endDateControl.valid) {
-            this.endDate = new Date(x);
+            this.endDate = x ? new Date(x) : new Date()
 
           }
         })

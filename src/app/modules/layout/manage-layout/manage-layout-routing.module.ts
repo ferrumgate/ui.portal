@@ -157,6 +157,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/device/posture',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/deviceposture/config-deviceposture.module').then(m => m.ConfigDevicePostureModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {
@@ -172,6 +181,15 @@ const routes: Routes = [
           roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
         },
         loadChildren: () => import('../../manage/insights/activity/insights-activity.module').then(m => m.InsightsActivityModule)
+
+      },
+      {
+        path: 'insights/device',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id]
+        },
+        loadChildren: () => import('../../manage/insights/device/insights-device.module').then(m => m.InsightsDeviceModule)
 
       },
 

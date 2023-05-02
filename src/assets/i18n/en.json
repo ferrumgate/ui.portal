@@ -208,6 +208,7 @@
     "LdapGroupnameFieldHint": "Ldap object groupname field like memberOf",
     "AllowedGroups": "Allowed groups",
     "LdapAlloweGroupsHint": "If not empty then only these groups members will authenticate",
+    "LdapBindSearchPath": "Ldap search base path",
     "LdapBindSearchPathHint": "User search path",
     "NewGroup": "New group...",
     "BindDNRequired": "Bind DN required",

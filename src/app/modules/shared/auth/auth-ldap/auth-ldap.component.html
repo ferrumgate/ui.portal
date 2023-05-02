@@ -54,8 +54,8 @@
                         <p fxFill class="auth-ldap-explanation ">
                             <mat-form-field appearance="fill" fxFill class="auth-ldap-width">
                                 <mat-label>{{"LdapBindSearchPath"|translate}}</mat-label>
-                                <input matInput test-id="auth-ldap-searchbase-input" placeholder="PasSWord"
-                                    formControlName="searchBase" required>
+                                <input matInput test-id="auth-ldap-searchbase-input"
+                                    placeholder="DC=yourdomain,DC=local" formControlName="searchBase" required>
                                 <mat-hint>{{"LdapBindSearchPathHint"|translate}}</mat-hint>
                                 <mat-error>{{error.searchBase|translate}}</mat-error>
 

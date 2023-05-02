@@ -93,7 +93,7 @@
 
 
                                         <button mat-menu-item
-                                            *ngIf="!model.antivirusList?.length && (model.os=='win32'|| model.os=='darwin')"
+                                            *ngIf="!model.antivirusList?.length && (model.os=='win32')"
                                             (click)="addAntivirusCheck()">
                                             <mat-icon>short_text</mat-icon>
                                             <span>{{"AntivirusCheck"|translate}}</span>

@@ -188,6 +188,7 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
   }
 
   checkIfModelChanged() {
+
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
@@ -202,6 +203,8 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
     if (original.host != model.host)
       model.isChanged = true;
     if (original.port != model.port)
+      model.isChanged = true;
+    if (Boolean(original.isSecure) != model.isSecure)
       model.isChanged = true;
 
   }

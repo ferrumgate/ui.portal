@@ -206,12 +206,13 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
   }
   saveUser($user: User2) {
+    debugger;
     if ($user.id)
       this.updateUser($user);
     else {
       this.confirmService.showSave().pipe(
         takeWhile(x => x),
-        switchMap(y => this.userService.save($user, true, false)),
+        switchMap(y => this.userService.save($user, $user.isNewApiKey ? true : false, false)),
       ).subscribe((item) => {
         //find saved item and replace it
         const index = this.users.findIndex(x => x.objId == $user.objId)
@@ -224,6 +225,8 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
           isExpanded: true,
           isLoginMethodsExpanded: true
         }
+        delete this.users[index].isNewApiKey;
+        delete this.users[index].isNewUser;
         this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
 
       });
@@ -350,9 +353,46 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
       insertDate: new Date().toISOString(),
       updateDate: new Date().toISOString(),
       roleIds: [], labels: [], isVerified: true,
-      isExpanded: true
+      isExpanded: true,
+      isNewApiKey: true
     }
     this.users.unshift(user);
+  }
+
+  addNewUser() {
+    const user: User2 = {
+      id: '',
+      objId: UtilService.randomNumberString(),
+      name: '',
+      groupIds: [], roles: [], source: 'local-local', username: '',
+      insertDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      roleIds: [], labels: [], isVerified: true,
+      isExpanded: true,
+      isNewUser: true
+    }
+    this.users.unshift(user);
+  }
+
+  resetUserPassword($event: { id: string, objId?: string, password: string }) {
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.userService.resetUserPassword($event.id, $event.password)),
+    ).subscribe((data: {}) => {
+      //find saved item and replace it
+      const index = this.users.findIndex(x => x.objId == $event.objId)
+
+      this.users[index] = {
+        ...this.users[index],
+        isExpanded: true,
+      }
+
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
+    })
+
+
+
   }
 
 

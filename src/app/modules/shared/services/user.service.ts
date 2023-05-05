@@ -26,6 +26,7 @@ interface UpdateRequest {
 
 interface SaveRequest {
   name: string;
+  username: string;
   roleIds?: string[];
   labels: string[],
   groupIds?: string[]
@@ -73,7 +74,7 @@ export class UserService extends BaseService {
 
     const saveRequest: SaveRequest = {
       labels: user.labels || [],
-      name: user.name, roleIds: user.roleIds, groupIds: user.groupIds
+      name: user.name, username: user.username, roleIds: user.roleIds, groupIds: user.groupIds
     }
 
     const urlParams = new URLSearchParams();
@@ -274,6 +275,21 @@ export class UserService extends BaseService {
 
       }))
   }
+
+
+  resetUserPassword(id: string, pass: string) {
+
+    let request = {
+      id: id, pass: pass
+    }
+    return this.preExecute(request).pipe(
+      switchMap(y => {
+        let url = this.joinUrl(this._userUrl, `pass`);
+        return this.httpService.put<{}>(url, y, this.jsonHeader)
+
+      }))
+  }
+
 
 
 

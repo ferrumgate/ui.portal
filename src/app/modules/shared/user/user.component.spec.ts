@@ -155,6 +155,29 @@ describe('UserComponent', () => {
     expect(crt).toEqual('acrt');
 
 
+    setFieldValue(fixture, 'user-resetpass-password-input', 'testDeneme12')
+    dispatchFakeEvent(findEl(fixture, 'user-resetpass-password-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    expect(component.resetPasswordForm.invalid).toBeTrue();
+    expect(component.resetPassword.password).toBeTruthy();
+    expect(component.resetPassword.passwordAgain).toBeFalsy();
+
+
+
+    setFieldValue(fixture, 'user-resetpass-password-again-input', 'testDeneme12')
+    dispatchFakeEvent(findEl(fixture, 'user-resetpass-password-again-input').nativeElement, 'blur');
+    fixture.detectChanges();
+    expect(component.resetPasswordForm.valid).toBeTrue();
+    expect(component.resetPassword.password).toBeTruthy();
+    expect(component.resetPassword.passwordAgain).toBeTruthy();
+
+
+
+
+
+
+
+
 
   }));
 });

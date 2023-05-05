@@ -33,7 +33,7 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
     linux: '',
   }
 
-
+  releasePage = 'https://github.com/ferrumgate/secure.client/releases';
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -49,9 +49,9 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isThemeDark = x == 'dark';
 
       })
-    this.help.windows = this.configService.links.installClientWindowsHelp;
-    this.help.debian = this.configService.links.installClientDebianHelp
-    this.help.linux = this.configService.links.installClientLinuxsHelp;
+    this.help.windows = this.releasePage;//this.configService.links.installClientWindowsHelp;
+    this.help.debian = this.releasePage;//this.configService.links.installClientDebianHelp
+    this.help.linux = this.releasePage;//this.configService.links.installClientLinuxsHelp;
 
 
 
@@ -84,7 +84,7 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
         window.open(this.help.windows, '_blank');
         break;
       default:
-        window.open(this.help.linux, '_blank');
+        window.open(this.configService.links.installClientLinuxsHelp, '_blank');
         break;
     }
 

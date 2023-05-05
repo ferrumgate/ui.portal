@@ -14,6 +14,7 @@ import { UtilService } from '../services/util.service';
 import { NotificationService } from '../services/notification.service';
 import { SSLCertificate, SSLCertificateBase, SSLCertificateEx } from '../models/sslCertificate';
 import { Observable, map, of } from 'rxjs';
+import { InputService } from '../services/input.service';
 
 export interface UserExtended extends User2 {
   orig: User2;
@@ -118,12 +119,17 @@ export class UserComponent implements OnInit, OnDestroy {
   @Output()
   deleteUserCert: EventEmitter<User2> = new EventEmitter();
 
+  @Output()
+  resetUserPassword: EventEmitter<{ id: string, objId?: string, password: string }> = new EventEmitter();
+
+
+
 
 
   groupFormControl = new FormControl();
   roleFormControl = new FormControl();
   formGroup: FormGroup = this.createFormGroup(this._model);
-  formError: { name: string, email: string } = { name: '', email: '' }
+  formError: { name: string, username: string } = { name: '', username: '' }
 
   isThemeDark = false;
   constructor(
@@ -225,12 +231,18 @@ export class UserComponent implements OnInit, OnDestroy {
 
   createFormGroup(user: User2) {
     const fmg = new FormGroup({
-      name: new FormControl(user.name, [Validators.required]),
+      //name: new FormControl(user.name, [Validators.required]),
+      //username: new FormControl(user.username, [Validators.required]),
       inCertName: new FormControl(user.inCertName, []),
 
 
 
     });
+    if (user.isNewUser) {
+      fmg.addControl('username', new FormControl(user.username, [Validators.required]))
+    } else {
+      fmg.addControl('name', new FormControl(user.name, [Validators.required]))
+    }
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -268,7 +280,7 @@ export class UserComponent implements OnInit, OnDestroy {
     return fmg;
   }
   createFormError() {
-    return { name: '', email: '' };
+    return { name: '', username: '' };
   }
 
   addOnBlur = true;
@@ -306,6 +318,8 @@ export class UserComponent implements OnInit, OnDestroy {
 
     if (original.name != this.user.name)
       this.user.isChanged = true;
+    if (original.username != this.user.username)
+      this.user.isChanged = true;
     if (original.isLocked != this.user.isLocked)
       this.user.isChanged = true;
     if (original.is2FA != this.user.is2FA)
@@ -324,15 +338,28 @@ export class UserComponent implements OnInit, OnDestroy {
   checkFormError() {
     //check errors 
     let error = this.createFormError();
+    if (this.user.isNewUser) {
+      const usernameError = this.formGroup.controls.name?.errors;
+      if (usernameError) {
+        if (usernameError['required'])
+          error.username = 'EmailOrUsernameRequired';
+        else
+          error.username = 'EmailOrUsernameRequired';
+      }
+    } else {
 
-    const nameError = this.formGroup.controls.name.errors;
 
-    if (nameError) {
-      if (nameError['required'])
-        error.name = 'NameRequired';
-      else
-        error.name = 'NameRequired';
+      const nameError = this.formGroup.controls.name?.errors;
+
+      if (nameError) {
+        if (nameError['required'])
+          error.name = 'NameRequired';
+        else
+          error.name = 'NameRequired';
+      }
     }
+
+
 
 
 
@@ -371,7 +398,9 @@ export class UserComponent implements OnInit, OnDestroy {
       isVerified: this.user.isVerified,
       roleIds: Array.from(this.user.roleIds || []),
       twoFASecret: this.user.twoFASecret,
-      cert: this.user.cert ? { ...this.user.cert } : undefined
+      cert: this.user.cert ? { ...this.user.cert } : undefined,
+      isNewApiKey: this.user.isNewApiKey,
+      isNewUser: this.user.isNewUser
 
     }
   }
@@ -445,6 +474,89 @@ export class UserComponent implements OnInit, OnDestroy {
       this.clipboard.copy(this.user.id);
       this.notificationService.success(this.translateService.translate('Copied'));
     }
+  }
+
+  ///////////////////////////////////////
+  // reset password section
+
+  resetPassword = { password: '', passwordAgain: '' };
+  hideResetPassword = true;
+  hideResetPasswordAgain = true;
+  resetPasswordError = { password: '', passwordAgain: '' }
+  resetPasswordForm = this.createResetPasswordFormGroup();
+  createResetPasswordFormGroup() {
+    const fmg = new FormGroup(
+      {
+        password: new FormControl(this.resetPassword.password, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+        passwordAgain: new FormControl(this.resetPassword.passwordAgain, [Validators.required, Validators.minLength(8), Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}')]),
+      },
+      {
+        validators: Validators.compose([InputService.matchingPasswords('password', 'passwordAgain')])
+      }
+    );
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
+
+      const fm = fmg.controls[iterator] as FormControl;
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+
+          (this.resetPassword as any)[iterator] = x;
+        })
+    }
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.resetPasswordModelChanged();
+
+      })
+    return fmg;
+  }
+
+  checkResetPasswordFormError() {
+    //check errors 
+    this.resetPasswordError = { password: '', passwordAgain: '' }
+
+    const passwordError = this.resetPasswordForm.controls['password'].errors;
+    if (passwordError) {
+
+      if (passwordError['required'])
+        this.resetPasswordError.password = 'PasswordRequired';
+      else if (passwordError['minlength'])
+        this.resetPasswordError.password = 'PasswordMinLength';
+      else if (passwordError['pattern'])
+        this.resetPasswordError.password = 'PasswordPattern';
+      else if (passwordError['mismatchedPasswords'])
+        this.resetPasswordError.password = 'PasswordsMismatch';
+      else
+        this.resetPasswordError.password = 'PasswordInvalid';
+
+    }
+
+    const passwordAgainError = this.resetPasswordForm.controls['passwordAgain'].errors;
+    if (passwordAgainError) {
+
+      if (passwordAgainError['required'])
+        this.resetPasswordError.passwordAgain = 'PasswordAgainRequired';
+      else if (passwordAgainError['minlength'])
+        this.resetPasswordError.passwordAgain = 'PasswordAgainMinLength';
+      else if (passwordAgainError['pattern'])
+        this.resetPasswordError.passwordAgain = 'PasswordAgainPattern';
+      else if (passwordAgainError['mismatchedPasswords'])
+        this.resetPasswordError.passwordAgain = 'PasswordsMismatch';
+      else
+        this.resetPasswordError.passwordAgain = 'PasswordInvalid';
+
+    }
+  }
+
+  resetPasswordModelChanged() {
+
+    this.checkResetPasswordFormError();
+  }
+
+  submitResetPassword() {
+    if (this.user.id && this.resetPassword.password && this.resetPassword.password == this.resetPassword.passwordAgain)
+      this.resetUserPassword.emit({ id: this.user.id, objId: this.user.objId, password: this.resetPassword.password });
   }
 
 

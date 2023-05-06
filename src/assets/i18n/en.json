@@ -212,6 +212,7 @@
     "LdapAlloweGroupsHint": "If not empty then only these groups members will authenticate",
     "LdapBindSearchPath": "Ldap search base path",
     "LdapBindSearchPathHint": "User search path",
+    "SaveNewUserIfAuthenticated": "Save new user if authenticated",
     "NewGroup": "New group...",
     "BindDNRequired": "Bind DN required",
     "BindPassRequired": "Bind password required",
@@ -251,8 +252,7 @@
     "Protocol": "Protocol",
     "ServiceHostHint": "Upstream hostname or ip",
     "ServiceProtocolHint": "Service type",
-    "ServiceTcpPort": "Upstream tcp port, if empty don't use",
-    "ServiceUdpPort": "Upstream udp port, if empty don't use",
+    "ServicePort": "Upstream port",
     "Services": "Services",
     "ServicesSearchHint": "Search by name, labels, host, ports",
     "ServiceName": "Service name",
@@ -494,5 +494,8 @@
     "MacCheck": "Check Mac",
     "SerialCheck": "Check Serial",
     "FileCheck": "Check File",
-    "ProcessCheck": "Check Process"
+    "ProcessCheck": "Check Process",
+    "Tcp": "Tcp",
+    "Udp": "Udp",
+    "EnterAtLeastOnePort": "Enter at least one port"
 }

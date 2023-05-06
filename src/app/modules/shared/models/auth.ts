@@ -23,6 +23,7 @@ export interface AuthLocal extends BaseAuth {
 export interface BaseOAuth extends BaseAuthId, BaseAuth {
     clientId: string,
     clientSecret: string,
+    saveNewUser?: boolean;
 }
 export interface BaseLdap extends BaseAuthId, BaseAuth {
     host: string,
@@ -33,6 +34,7 @@ export interface BaseLdap extends BaseAuthId, BaseAuth {
     usernameField: string;
     groupnameField: string;
     allowedGroups?: string[];
+    saveNewUser?: boolean;
 }
 export interface BaseSaml extends BaseAuthId, BaseAuth {
     issuer: string;
@@ -41,6 +43,7 @@ export interface BaseSaml extends BaseAuthId, BaseAuth {
     loginUrl: string;
     nameField: string;
     usernameField: string;
+    saveNewUser?: boolean;
 }
 export interface BaseLocal extends BaseAuth {
     isForgotPassword?: boolean;

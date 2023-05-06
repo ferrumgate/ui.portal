@@ -40,6 +40,11 @@
                             </mat-form-field>
                         </p>
                         <p>
+                            <mat-checkbox test-id="auth-oauth-checkbox-savenewuser" [(ngModel)]="model.saveNewUser"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"SaveNewUserIfAuthenticated"|translate}}</mat-checkbox>
+                        </p>
+                        <p>
                             <mat-checkbox test-id="auth-oauth-checkbox-enabled" [(ngModel)]="model.isEnabled"
                                 [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
                                 {{"Enabled"|translate}}</mat-checkbox>

@@ -1,13 +1,13 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { map, Observable, of } from 'rxjs';
 import { Group } from '../models/group';
 import { Network } from '../models/network';
-import { Service } from '../models/service';
+import { Service, ServiceHost, ServicePort } from '../models/service';
 import { ConfigService } from '../services/config.service';
 import { InputService } from '../services/input.service';
 import { SSubscription } from '../services/SSubscribtion';
@@ -16,6 +16,7 @@ import { UtilService } from '../services/util.service';
 import { ThemeSelectorComponent } from '../themeselector/themeselector.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { NotificationService } from '../services/notification.service';
+import * as diff from 'deep-object-diff';
 
 
 export interface ServiceExtended extends Service {
@@ -37,10 +38,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
   _model: ServiceExtended =
     {
       id: '', name: '', labels: [], isChanged: false,
-      isEnabled: true, assignedIp: '', host: '', networkId: '', networkName: '', count: 1,
+      isEnabled: true, assignedIp: '', networkId: '', networkName: '', count: 1,
       protocol: '',
+      hosts: [], ports: [],
       orig: {
-        id: '', name: '', labels: [], isEnabled: true, assignedIp: '', host: '', networkId: '', protocol: '', count: 1
+        id: '', name: '', labels: [], isEnabled: true, assignedIp: '', networkId: '', protocol: '', count: 1,
+        hosts: [], ports: []
       }
     };
 
@@ -49,6 +52,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
     return this._model;
   }
 
+
   @Input()
   set service(val: Service) {
     this._model = {
@@ -56,8 +60,9 @@ export class ServiceComponent implements OnInit, OnDestroy {
       isChanged: false,
       orig: val,
       labels: Array.from(val.labels || []),
-      networkName: this.networks.find(x => x.id == val.networkId)?.name || ''
-
+      networkName: this.networks.find(x => x.id == val.networkId)?.name || '',
+      ports: this.clonePorts(val.ports),
+      hosts: this.cloneHosts(val.hosts)
     }
 
     this.formGroup = this.createFormGroup(this._model);
@@ -84,10 +89,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
-    name: string, host: string,
-    tcp: string, udp: string, network: string
+    name: string, hosts: string[],
+    ports: string[], network: string, portNeeds: string
   }
-    = { name: '', host: '', tcp: '', udp: '', network: '' };
+    = { name: '', hosts: [], ports: [], network: '', portNeeds: '' };
 
 
   isThemeDark = false;
@@ -95,7 +100,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute, private clipboard: Clipboard,
     private configService: ConfigService,
     private translateService: TranslationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private fb: FormBuilder
   ) {
 
     this.allSub.addThis =
@@ -157,18 +163,36 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   }
 
+  bindFormGroup(fmg: FormGroup, target: any) {
+    let keys = Object.keys(fmg.controls)
+    for (const iterator of keys) {
 
+      const fm = fmg.controls[iterator] as FormControl;
+      this.allSub.addThis =
+        fm.valueChanges.subscribe(x => {
+          target[iterator] = x;
+
+        })
+    }
+    this.allSub.addThis =
+      fmg.valueChanges.subscribe(x => {
+        this.modelChanged();
+      })
+  }
 
   createFormGroup(service: ServiceExtended) {
     const fmg = new FormGroup({
       name: new FormControl(service.name, [Validators.required]),
       protocol: new FormControl(service.protocol, [Validators.required]),
-      tcp: new FormControl(service.tcp, []),
-      udp: new FormControl(service.udp, []),
-      host: new FormControl(service.host, [Validators.required, InputService.ipOrdomainValidator]),
+      /*  tcp: new FormControl(service.tcp, []),
+       udp: new FormControl(service.udp, []),
+       host: new FormControl(service.host, [Validators.required, InputService.ipOrdomainValidator]), */
       networkId: new FormControl(service.networkId, [Validators.required]),
       networkName: new FormControl(service.networkName, [Validators.required]),
       assignedIp: new FormControl(service.assignedIp, []),
+      ports: new FormArray([]),
+      hosts: new FormArray([]),
+      portNeeds: new FormControl(service.portNeeds, [])
 
     });
     fmg.controls['protocol'].disable();
@@ -179,28 +203,66 @@ export class ServiceComponent implements OnInit, OnDestroy {
       fmg.controls['networkName'].disable();
       fmg.controls['name'].disable();
     }
+    for (const port of service.ports) {
+      (fmg.controls['ports'] as FormArray).push(new FormGroup({
+        port: new FormControl(port.port, [Validators.required, Validators.min(1)])
+      }))
+    }
+    for (const host of service.hosts) {
+      (fmg.controls['hosts'] as FormArray).push(new FormGroup({
+        host: new FormControl(host.host, [Validators.required, InputService.ipOrdomainValidator])
+      }))
+    }
+
     //if (service.isSystem)
     //  fmg.disable();
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
+      if (iterator == 'ports') {
+        const fmarray = fmg.controls['ports'] as FormArray;
+        for (let i = 0; i < fmarray.controls.length; ++i) {
+          const grp = fmarray.controls[i] as FormGroup;
+          this.bindFormGroup(grp, this._model.ports[i]);
 
-      const fm = fmg.controls[iterator] as FormControl;
-      this.allSub.addThis =
-        fm.valueChanges.subscribe(x => {
-          (this._model as any)[iterator] = x;
+        }
 
-        })
+
+      } else
+        if (iterator == 'hosts') {
+          const fmarray = fmg.controls['hosts'] as FormArray;
+          for (let i = 0; i < fmarray.controls.length; ++i) {
+            const grp = fmarray.controls[i] as FormGroup;
+            this.bindFormGroup(grp, this._model.hosts[i]);
+          }
+
+        } else {
+          const fm = fmg.controls[iterator] as FormControl;
+          this.allSub.addThis =
+            fm.valueChanges.subscribe(x => {
+              (this._model as any)[iterator] = x;
+
+            })
+        }
     }
     this.allSub.addThis =
       fmg.valueChanges.subscribe(x => {
+
         this.modelChanged();
       })
     return fmg;
   }
   createFormError() {
-    return { name: '', host: '', tcp: '', udp: '', network: '' };
+    return { name: '', hosts: this.service.hosts.map(x => ''), ports: this.service.ports.map(x => ''), network: '', portNeeds: '' };
   }
+  getHostsFormGroup(index: number) {
+    return (this.formGroup.controls['hosts'] as FormArray).controls[index] as FormGroup
+  }
+
+  getPortsFormGroup(index: number) {
+    return (this.formGroup.controls['ports'] as FormArray).controls[index] as FormGroup
+  }
+
 
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -229,6 +291,27 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
   }
 
+  isChanged(a: any, b: any) {
+    const diffFields2 = diff.diff(a || [], b || []);
+    if (a == undefined && b == undefined) return false;
+    if (a == undefined && b && Array.isArray(b) && !b.length) return false;
+    if (a == undefined && b && Array.isArray(b) && b.length) return true;
+    if (b == undefined && a && Array.isArray(a) && !a.length) return false;
+    if (b == undefined && a && Array.isArray(a) && a.length) return true;
+
+    if (Array.isArray(a) && Array.isArray(b) && a.length != b.length) return true;
+
+    const diffFields = diff.detailedDiff(a, b);
+    let keyLength = 0;
+    if (diffFields.added)
+      keyLength += Object.keys(diffFields.added).length;
+    if (diffFields.deleted)
+      keyLength += Object.keys(diffFields.deleted).length;
+    if (diffFields.updated)
+      keyLength += Object.keys(diffFields.updated).length
+    return keyLength > 0 ? true : false
+  }
+
 
   checkIfModelChanged() {
     this.service.isChanged = false;
@@ -236,17 +319,17 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
     if (original.name != this.service.name)
       this.service.isChanged = true;
-    if (original.host != this.service.host)
-      this.service.isChanged = true;
-    if (original.tcp != this.service.tcp)
-      this.service.isChanged = true;
-    if (original.udp != this.service.udp)
-      this.service.isChanged = true;
+
     if (original.networkId != this.service.networkId)
       this.service.isChanged = true;
     if (UtilService.checkChanged(original.labels, this.service.labels))
       this.service.isChanged = true
     if (original.isEnabled != this.service.isEnabled)
+      this.service.isChanged = true;
+
+    if (this.isChanged(original.hosts, this.service.hosts))
+      this.service.isChanged = true;
+    if (this.isChanged(original.ports, this.service.ports))
       this.service.isChanged = true;
 
   }
@@ -263,40 +346,44 @@ export class ServiceComponent implements OnInit, OnDestroy {
       else
         error.name = 'NameRequired';
     }
-    const hostError = this.formGroup.controls.host.errors;
 
-    if (hostError) {
-      if (hostError['required'])
-        error.host = 'HostRequired';
-      else if (hostError['invalidHost'])
-        error.host = "InvalidHost"
-      else
-        error.host = 'HostRequired';
+    for (let i = 0; i < (this.formGroup.controls['hosts'] as FormArray).controls.length; ++i) {
+      const fmg = (this.formGroup.controls['hosts'] as FormArray).controls[i] as FormGroup;
+      const hostError = fmg.controls.host.errors;
+      if (hostError) {
+        if (hostError['required'])
+          error.hosts[i] = 'HostRequired';
+        else
+          if (hostError['invalidHost'])
+            error.hosts[i] = 'InvalidHost';
+          else
+            error.hosts[i] = 'HostRequired';
+      }
     }
 
-    this.formGroup.controls.tcp.setErrors(null);
-    this.formGroup.controls.udp.setErrors(null);
-    if (!this._model.tcp && !this._model.udp) {
-      error.tcp = "RequiredTcpOrUdpPort";
-      error.udp = "RequiredTcpOrUdpPort";
-    } else
-      if (this._model.tcp && !this._model.udp) {
-        const result = InputService.portValidator(this.formGroup.controls.tcp);
-        error.tcp = result ? 'InvalidPort' : '';
+
+    for (let i = 0; i < (this.formGroup.controls['ports'] as FormArray).controls.length; ++i) {
+      const fmg = (this.formGroup.controls['ports'] as FormArray).controls[i] as FormGroup;
+      const portError = fmg.controls.port.errors;
+      if (portError && Object.keys(portError).length) {
+        if (portError['required'])
+          error.ports[i] = 'InvalidPort';
+        else
+          error.ports[i] = 'InvalidPort';
       } else
-        if (!this._model.tcp && this._model.udp) {
-          const result = InputService.portValidator(this.formGroup.controls.udp);
-          error.udp = result ? 'InvalidPort' : '';
+        if (!this.service.ports[i].isTcp && !this.service.ports[i].isUdp) {
+          error.ports[i] = 'RequiredTcpOrUdpPort';
+          fmg.controls['port'].setErrors({});
+          fmg.markAllAsTouched();
         } else {
-          const result = InputService.portValidator(this.formGroup.controls.tcp);
-          error.tcp = result ? 'InvalidPort' : '';
-          const result2 = InputService.portValidator(this.formGroup.controls.udp);
-          error.udp = result2 ? 'InvalidPort' : '';
+          fmg.controls['port'].setErrors(null);
+          fmg.markAllAsTouched();
         }
-    if (error.tcp)
-      this.formGroup.controls.tcp.setErrors({});
-    if (error.udp)
-      this.formGroup.controls.udp.setErrors({});
+    }
+
+
+
+
 
     const networkError = this.formGroup.controls.networkId.errors;
 
@@ -310,7 +397,16 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
 
     this.formError = error;
-    (this.formGroup as FormGroup).markAllAsTouched();
+
+    if (!this.service.ports.length || !this.service.hosts.length) {
+      this.formGroup.controls['portNeeds'].setErrors({});
+      error.portNeeds = 'EnterAtLeastOnePort';
+    }
+    else {
+      this.formGroup.controls['portNeeds'].setErrors(null);
+    }
+    this.formGroup.markAllAsTouched();
+
 
   }
 
@@ -325,6 +421,27 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
     this.checkIfModelChanged();
   }
+  clonePorts(ports: ServicePort[]): ServicePort[] {
+    return ports.map(x => {
+
+      const a: ServicePort = {
+        port: x.port, isTcp: x.isTcp, isUdp: x.isUdp, protocol: x.protocol
+      }
+      if (a.protocol == undefined)
+        delete a.protocol;
+      return a;
+    })
+  }
+  cloneHosts(hosts: ServiceHost[]): ServiceHost[] {
+    return hosts.map(x => {
+      const b: ServiceHost =
+      {
+        host: x.host
+      }
+      return b;
+    })
+  }
+
   createBaseModel(): Service {
     return {
       id: this._model.id,
@@ -333,14 +450,11 @@ export class ServiceComponent implements OnInit, OnDestroy {
       name: this._model.name,
       isEnabled: this._model.isEnabled,
       assignedIp: this._model.assignedIp,
-      host: this._model.host,
+      hosts: this.cloneHosts(this._model.hosts),
+      ports: this.clonePorts(this._model.ports),
       networkId: this._model.networkId,
       protocol: 'raw',
-      tcp: this._model.tcp,
-      udp: this._model.udp,
       count: this._model.count
-
-
     }
   }
 
@@ -389,6 +503,41 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.clipboard.copy(this.service.id);
       this.notificationService.success(this.translateService.translate('Copied'));
     }
+  }
+
+  removePort(val: ServicePort) {
+    let index = this.service.ports.findIndex(x => x == val)
+    if (index > -1) {
+      this.service.ports.splice(index, 1);
+      (this.formGroup.controls['ports'] as FormArray).removeAt(index);
+    }
+
+    this.modelChanged();
+  }
+  addNewPort() {
+    const data = { port: 80, isTcp: true, isUdp: true };
+    this.service.ports.push(data);
+    (this.formGroup.controls['ports'] as FormArray).push(new FormGroup({
+      port: new FormControl(data.port, [Validators.required, Validators.min(1)])
+    }))
+    this.modelChanged();
+  }
+
+  removeHost(val: ServiceHost) {
+    let index = this.service.hosts.findIndex(x => x == val)
+    if (index > -1) {
+      this.service.hosts.splice(index, 1);
+      (this.formGroup.controls['hosts'] as FormArray).removeAt(index);
+    }
+    this.modelChanged();
+  }
+  addNewHost() {
+    const data = { host: '' };
+    this.service.hosts.push(data);
+    (this.formGroup.controls['hosts'] as FormArray).push(new FormGroup({
+      host: new FormControl(data.host, [Validators.required, InputService.ipOrdomainValidator])
+    }))
+    this.modelChanged();
   }
 
 

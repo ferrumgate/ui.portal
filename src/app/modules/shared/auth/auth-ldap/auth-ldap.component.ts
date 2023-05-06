@@ -241,8 +241,10 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       model.isChanged = true;
     if (original.groupnameField != model.groupnameField)
       model.isChanged = true;
+    if (original.saveNewUser != model.saveNewUser)
+      model.isChanged = true;
 
-    if (original.allowedGroups?.length || 0 != model.allowedGroups?.length || 0)
+    if ((original.allowedGroups?.length || 0) != (model.allowedGroups?.length || 0))
       model.isChanged = true;
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
@@ -286,6 +288,7 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       bindPass: this.model.bindPass,
       allowedGroups: this.model.allowedGroups,
       isEnabled: this.model.isEnabled,
+      saveNewUser: this.model.saveNewUser,
       securityProfile: {
         ...this.model.securityProfile
       }

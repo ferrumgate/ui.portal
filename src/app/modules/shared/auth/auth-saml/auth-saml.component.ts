@@ -201,6 +201,8 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       model.isChanged = true;
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
+    if (original.saveNewUser != model.saveNewUser)
+      model.isChanged = true;
 
   }
 
@@ -230,6 +232,7 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       nameField: this.model.nameField,
       usernameField: this.model.usernameField,
       fingerPrint: this.model.fingerPrint,
+      saveNewUser: this.model.saveNewUser,
       securityProfile: {
         ...this.model.securityProfile
       }

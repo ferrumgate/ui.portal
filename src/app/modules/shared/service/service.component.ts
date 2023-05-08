@@ -517,9 +517,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
   addNewPort() {
     const data = { port: 80, isTcp: true, isUdp: true };
     this.service.ports.push(data);
-    (this.formGroup.controls['ports'] as FormArray).push(new FormGroup({
+    const fmg = new FormGroup({
       port: new FormControl(data.port, [Validators.required, Validators.min(1)])
-    }))
+    });
+    (this.formGroup.controls['ports'] as FormArray).push(fmg);
+    this.bindFormGroup(fmg, data);
+
     this.modelChanged();
   }
 
@@ -534,9 +537,11 @@ export class ServiceComponent implements OnInit, OnDestroy {
   addNewHost() {
     const data = { host: '' };
     this.service.hosts.push(data);
-    (this.formGroup.controls['hosts'] as FormArray).push(new FormGroup({
+    const fmg = new FormGroup({
       host: new FormControl(data.host, [Validators.required, InputService.ipOrdomainValidator])
-    }))
+    });
+    (this.formGroup.controls['hosts'] as FormArray).push(fmg);
+    this.bindFormGroup(fmg, data);
     this.modelChanged();
   }
 

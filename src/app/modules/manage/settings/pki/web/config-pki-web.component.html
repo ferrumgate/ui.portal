@@ -62,8 +62,9 @@
                         <p fxFill class="pem">
                             <mat-form-field appearance="fill" fxFill>
                                 <mat-label>{{"PrivateKey"|translate}}</mat-label>
-                                <textarea class="prv-text" multiple="true" matInput test-id="cert-private-input"
-                                    placeholder="-----BEGIN PRIVATE KEY-----" formControlName="privateKey">
+                                <textarea spellcheck="false" class="prv-text" multiple="true" matInput
+                                    test-id="cert-private-input" placeholder="-----BEGIN PRIVATE KEY-----"
+                                    formControlName="privateKey">
                                             </textarea>
 
                                 <mat-error>
@@ -75,8 +76,9 @@
                         <p fxFill class="pem">
                             <mat-form-field appearance="fill" fxFill>
                                 <mat-label>{{"PEM"|translate}}</mat-label>
-                                <textarea class="pem-text" multiple="true" matInput test-id="cert-pem-input"
-                                    placeholder="-----BEGIN CERTIFICATE-----" formControlName="publicCrt">
+                                <textarea spellcheck="false" class="pem-text" multiple="true" matInput
+                                    test-id="cert-pem-input" placeholder="-----BEGIN CERTIFICATE-----"
+                                    formControlName="publicCrt">
                                             </textarea>
                                 <span fxFlex fxLayout="column" fxLayoutAlign="end end">
 
@@ -89,6 +91,47 @@
                                     {{formError.publicCrt|translate}}</mat-error>
                             </mat-form-field>
                         </p>
+                        <p fxFill class="pem">
+
+                            <mat-icon matSuffix svgIcon="lets-encrypt"></mat-icon>
+                            <mat-label>{{"LetsEncrypt"|translate}}</mat-label>
+                            <mat-label>
+                                <button *ngIf="!_model.letsEncrypt" matSuffix mat-icon-button
+                                    (click)="enableDisableLetsEncrypt(true)">
+                                    <mat-icon matSuffix matTooltip="{{'Enable'|translate}}">{{'power'}}</mat-icon>
+                                </button>
+                                <button *ngIf="_model.letsEncrypt" matSuffix mat-icon-button
+                                    (click)="enableDisableLetsEncrypt(false)">
+                                    <mat-icon matSuffix matTooltip="{{'Disable'|translate}}">{{'power_off'}}</mat-icon>
+                                </button>
+
+                            </mat-label>
+                            <span fxFill>
+                                <span *ngIf="_model.letsEncrypt" fxLayoutAlign="start start" class="lets-encrypt">
+                                    <mat-label>{{"LastUpdate"|translate}}:</mat-label>
+                                    <mat-label style="padding-left:10px">{{_model.updateDateStr}}</mat-label>
+                                </span>
+                                <span *ngIf="_model.letsEncrypt" fxLayoutAlign="start start" class="lets-encrypt">
+                                    <mat-label>{{"Domain"|translate}}:</mat-label>
+                                    <mat-label style="padding-left:10px">{{_model.letsEncrypt?.domain||''}}</mat-label>
+                                </span>
+
+                                <!-- <span fxLayoutAlign="end start">
+                                    <button *ngIf="!_model.letsEncrypt" matSuffix mat-icon-button
+                                        (click)="enableDisableLetsEncrypt(true)">
+                                        <mat-icon matSuffix matTooltip="{{'Enable'|translate}}">{{'power'}}</mat-icon>
+                                    </button>
+                                    <button *ngIf="_model.letsEncrypt" matSuffix mat-icon-button
+                                        (click)="enableDisableLetsEncrypt(false)">
+                                        <mat-icon matSuffix
+                                            matTooltip="{{'Disable'|translate}}">{{'power_off'}}</mat-icon>
+                                    </button>
+                                </span> -->
+                            </span>
+
+                        </p>
+
+
                         <p>
                             <mat-checkbox test-id="cert-checkbox-enabled" [(ngModel)]="cert.isEnabled"
                                 [checked]="cert.isEnabled" [ngModelOptions]="{standalone:true}"

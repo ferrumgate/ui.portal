@@ -103,6 +103,26 @@ export class ConfigPKIComponent implements OnInit, OnDestroy {
     })
   }
 
+  enableLetsEncrypt(ev: SSLCertificate) {
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.pkiService.refreshWebCertLetsEncryt(ev))
+    ).subscribe(y => {
+      this.webCert = y;
+      this.notificationService.success(this.translateService.translate('SuccessfullyActivated'))
+    })
+  }
+
+  disableLetsEncrypt(ev: SSLCertificate) {
+    this.confirmService.showAreYouSure().pipe(
+      takeWhile(x => x),
+      switchMap(y => this.pkiService.deleteWebCertLetsEncryt(ev))
+    ).subscribe(y => {
+      this.webCert = y;
+      this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
+    })
+  }
+
 
 
 

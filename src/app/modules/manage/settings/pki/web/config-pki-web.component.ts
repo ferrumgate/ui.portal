@@ -65,6 +65,11 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
 
 
     }
+    if (val.letsEncrypt)
+      val.letsEncrypt = {
+        ...val.letsEncrypt,
+        updateDateStr: UtilService.dateFormatToLocale(new Date(val.updateDate))
+      }
 
     this.formGroup = this.createFormGroup(this._model);
   }
@@ -73,6 +78,12 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
   saveCert: EventEmitter<SSLCertificate> = new EventEmitter();
   @Output()
   deleteCert: EventEmitter<SSLCertificate> = new EventEmitter();
+
+  @Output()
+  enableLetsEncrypt: EventEmitter<SSLCertificate> = new EventEmitter();
+
+  @Output()
+  disableLetsEncrypt: EventEmitter<SSLCertificate> = new EventEmitter();
 
 
 
@@ -212,6 +223,8 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.cert.isChanged = true
     if (original.publicCrt != this.cert.publicCrt)
       this.cert.isChanged = true;
+    if (original.privateKey != this.cert.privateKey)
+      this.cert.isChanged = true;
 
 
   }
@@ -260,7 +273,7 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       isEnabled: this._model.isEnabled,
       category: this._model.category,
       idEx: this._model.idEx,
-
+      letsEncrypt: this._model.letsEncrypt//we are not touching,we are not sending back
     }
   }
 
@@ -273,7 +286,10 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.deleteCert.emit(this.createBaseModel());
+    if (this._model.letsEncrypt)
+      this.enableLetsEncrypt.emit(this.createBaseModel());
+    else
+      this.deleteCert.emit(this.createBaseModel());
   }
 
   copyCert() {
@@ -282,6 +298,19 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
+
+  isLetsEncryptActive() {
+    return this._model.letsEncrypt ? true : false
+  }
+  enableDisableLetsEncrypt(val: boolean) {
+    if (val)
+      this.enableLetsEncrypt.emit(this.createBaseModel());
+    else
+      this.disableLetsEncrypt.emit(this.createBaseModel());
+  }
+
+
+
 
 
 

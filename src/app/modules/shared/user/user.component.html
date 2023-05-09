@@ -198,8 +198,8 @@
 
                                             <mat-form-field appearance="fill" fxFill>
                                                 <mat-label>{{"Certificate"|translate}}</mat-label>
-                                                <textarea class="user-cert-text" multiple="true" matInput
-                                                    test-id="user-cert-pem-input"
+                                                <textarea spellcheck="false" class="user-cert-text" multiple="true"
+                                                    matInput test-id="user-cert-pem-input"
                                                     placeholder="-----BEGIN CERTIFICATE-----"
                                                     [ngModel]="user.cert?.publicCrt"
                                                     [ngModelOptions]="{standalone:true}" [readonly]="true">

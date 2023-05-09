@@ -25,6 +25,7 @@ export class PKIService extends BaseService {
   private _pkiIntermediateUrl = this.configService.getApiUrl() + '/pki/intermediate';
   private _pkiCAUrl = this.configService.getApiUrl() + '/pki/ca';
   private _pkiWebUrl = this.configService.getApiUrl() + '/pki/cert/web';
+  private _pkiWebLetsEncryptUrl = this.configService.getApiUrl() + '/pki/cert/web/letsencrypt';
 
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('pki', captchaService)
@@ -154,9 +155,29 @@ export class PKIService extends BaseService {
       }))
   }
 
+  deleteWebCertLetsEncryt(item: SSLCertificate) {
+
+    const urlParams = new URLSearchParams();
+    return this.preExecute(urlParams).pipe(
+      switchMap(y => {
+
+        let url = this.joinUrl(this._pkiWebLetsEncryptUrl, y);
+        return this.httpService.delete<SSLCertificate>(url);
+
+      }))
 
 
+  }
+  refreshWebCertLetsEncryt(item: SSLCertificate) {
 
+    return this.preExecute({}).pipe(
+      switchMap(y => {
+        return this.httpService.post<SSLCertificate>(this._pkiWebLetsEncryptUrl, y, this.jsonHeader)
+
+      }))
+
+
+  }
 
 
 }

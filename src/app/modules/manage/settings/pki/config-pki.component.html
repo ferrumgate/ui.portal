@@ -8,7 +8,7 @@
         </div>
     </div>
 
-    <mat-tab-group dynamicHeight>
+    <mat-tab-group dynamicHeight selectedIndex="1">
         <mat-tab label="{{'IntermediateCertificates'|translate}}">
             <div class="tab">
                 <app-config-pki-intermediate-list>list</app-config-pki-intermediate-list>
@@ -18,7 +18,8 @@
         <mat-tab class="tab" label="{{'WebCertificate'|translate}}">
             <div class="tab">
                 <app-config-pki-web [cert]="webCert" (deleteCert)="deleteWebCert($event)"
-                    (saveCert)="saveWebCert($event)"></app-config-pki-web>
+                    (saveCert)="saveWebCert($event)" (enableLetsEncrypt)="enableLetsEncrypt($event)"
+                    (disableLetsEncrypt)="disableLetsEncrypt($event)"></app-config-pki-web>
             </div>
         </mat-tab>
     </mat-tab-group>

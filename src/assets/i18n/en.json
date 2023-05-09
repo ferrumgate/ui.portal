@@ -497,5 +497,8 @@
     "ProcessCheck": "Check Process",
     "Tcp": "Tcp",
     "Udp": "Udp",
-    "EnterAtLeastOnePort": "Enter at least one port"
+    "EnterAtLeastOnePort": "Enter at least one port",
+    "LastUpdate": "Last update",
+    "SuccessfullyActivated": "Successfully activated",
+    "LetsEncrypt": "Let's Encrypt"
 }

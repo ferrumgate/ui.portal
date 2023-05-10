@@ -176,6 +176,8 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
       model.isChanged = true;
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
+    if (original.saveNewUser != model.saveNewUser)
+      model.isChanged = true;
 
   }
 
@@ -201,6 +203,7 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
       name: this.model.name,
       tags: this.model.tags,
       isEnabled: this.model.isEnabled,
+      saveNewUser: this.model.saveNewUser,
       securityProfile: {
         ...this.model.securityProfile
       }

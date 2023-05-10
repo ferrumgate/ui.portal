@@ -75,7 +75,10 @@ describe('PolicyAuthzRuleComponent', () => {
 
     let service: Service = {
       id: 'sv1', name: 'mysql-dev', labels: ['test'], isEnabled: true,
-      host: '10.0.0.1', networkId: 'network1', protocol: 'raw', tcp: 80, udp: 9090, assignedIp: '',
+      hosts: [{ host: '10.0.0.1' }],
+      networkId: 'network1', protocol: 'raw',
+      ports: [{ port: 80, isTcp: true }, { port: 9090, isUdp: true }],
+      assignedIp: '',
       count: 1
     }
 

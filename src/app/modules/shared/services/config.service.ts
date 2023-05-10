@@ -362,7 +362,8 @@ export class ConfigService extends BaseService {
       tags: oauth.tags,
       clientId: oauth.clientId,
       clientSecret: oauth.clientSecret,
-      isEnabled: oauth.isEnabled
+      isEnabled: oauth.isEnabled,
+      saveNewUser: oauth.saveNewUser,
     }
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -410,7 +411,8 @@ export class ConfigService extends BaseService {
       bindPass: auth.bindPass,
       searchFilter: auth.searchFilter,
       securityProfile: auth.securityProfile,
-      isEnabled: auth.isEnabled
+      isEnabled: auth.isEnabled,
+      saveNewUser: auth.saveNewUser,
 
     }
     return this.preExecute(parameter).pipe(
@@ -457,7 +459,8 @@ export class ConfigService extends BaseService {
       loginUrl: auth.loginUrl,
       nameField: auth.nameField,
       usernameField: auth.usernameField,
-      fingerPrint: auth.fingerPrint
+      fingerPrint: auth.fingerPrint,
+      saveNewUser: auth.saveNewUser,
 
     }
     return this.preExecute(parameter).pipe(

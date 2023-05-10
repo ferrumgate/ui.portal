@@ -74,13 +74,17 @@ describe('ServicesComponent', () => {
 
     const services: Service[] = [
       {
-        id: UtilService.randomNumberString(), name: 'mysql-dev', host: '10.0.0.2', assignedIp: '',
-        isEnabled: true, networkId: networks[0].id, protocol: 'raw', tcp: 80, udp: 90,
+        id: UtilService.randomNumberString(), name: 'mysql-dev', hosts: [{ host: '10.0.0.2' }],
+        assignedIp: '',
+        isEnabled: true, networkId: networks[0].id, protocol: 'raw', ports: [{ port: 80, isTcp: true }, { port: 90, isUdp: true }],
         count: 1
       },
       {
-        id: UtilService.randomNumberString(), name: 'mysql2-dev2', host: '10.0.0.2', assignedIp: '',
-        isEnabled: true, networkId: networks[0].id, protocol: 'raw', tcp: 80, udp: 90,
+        id: UtilService.randomNumberString(), name: 'mysql2-dev2',
+        hosts: [{ host: '10.0.0.2' }]
+        , assignedIp: '',
+        isEnabled: true, networkId: networks[0].id,
+        protocol: 'raw', ports: [{ port: 80, isTcp: true }, { port: 90, isUdp: true }],
         count: 1
       }
     ]

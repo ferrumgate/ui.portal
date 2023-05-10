@@ -77,9 +77,9 @@
                                 <p fxFill class="pem" *ngIf="!cert.isNew">
                                     <mat-form-field appearance="fill" fxFill>
                                         <mat-label>{{"PEM"|translate}}</mat-label>
-                                        <textarea class="pem-text" multiple="true" matInput test-id="cert-pem-input"
-                                            placeholder="-----BEGIN CERTIFICATE-----" formControlName="publicCrt"
-                                            [readonly]="cert.isSystem">
+                                        <textarea spellcheck="false" class="pem-text" multiple="true" matInput
+                                            test-id="cert-pem-input" placeholder="-----BEGIN CERTIFICATE-----"
+                                            formControlName="publicCrt" [readonly]="cert.isSystem">
                                             </textarea>
                                         <span fxFlex fxLayout="column" fxLayoutAlign="end end">
 

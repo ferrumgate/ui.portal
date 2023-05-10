@@ -131,7 +131,8 @@
                                 <p fxFill class="deviceposture-exp" *ngIf="model.macList || model.macAdded">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Macs"|translate}}</mat-label>
-                                        <textarea matInput test-id="deviceposture-mac-input" class="deviceposture-multi"
+                                        <textarea spellcheck="false" matInput test-id="deviceposture-mac-input"
+                                            class="deviceposture-multi"
                                             placeholder="00:11:22:33:44:55:66,11:22:33:44:55:66"
                                             [(ngModel)]="model.macs" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()" multiple="true">
@@ -148,7 +149,7 @@
                                 <p fxFill class="deviceposture-exp" *ngIf="model.serialList || model.serialAdded">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">
                                         <mat-label>{{"Serials"|translate}}</mat-label>
-                                        <textarea matInput test-id="deviceposture-serial-input"
+                                        <textarea spellcheck="false" matInput test-id="deviceposture-serial-input"
                                             class="deviceposture-multi" placeholder="0FWeac23-3sksd00, 23sdad232"
                                             [(ngModel)]="model.serials" [ngModelOptions]="{standalone:true}"
                                             (ngModelChange)="modelChanged()" multiple="true">

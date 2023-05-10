@@ -85,6 +85,10 @@
                     </button>
 
                     <mat-menu #menu="matMenu">
+                        <button test-id="button-apikey" mat-menu-item (click)="addNewUser()">
+
+                            <span>{{"User"|translate}}</span>
+                        </button>
                         <button test-id="button-apikey" mat-menu-item (click)="addNewApiKey()">
 
                             <span>{{"ApiKey"|translate}}</span>
@@ -119,7 +123,8 @@
                     [user]="user" (deleteUser)="deleteUser($event)" (saveUser)="saveUser($event)"
                     (getUserSensitiveData)="getUserSensitiveData($event)"
                     (generateUserApiKey)="generateUserApiKey($event)" (deleteUserApiKey)="deleteUserApiKey($event)"
-                    (generateUserCert)="generateUserCert($event)" (deleteUserCert)="deleteUserCert($event)">
+                    (generateUserCert)="generateUserCert($event)" (deleteUserCert)="deleteUserCert($event)"
+                    (resetUserPassword)="resetUserPassword($event)">
                 </app-user>
 
             </p>

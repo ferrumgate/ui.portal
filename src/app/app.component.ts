@@ -122,6 +122,10 @@ export class AppComponent implements OnInit {
       "cert",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/cert.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "lets-encrypt",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/lets-encrypt.svg")
+    );
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

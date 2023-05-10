@@ -22,7 +22,7 @@
 
                     <form test-id="service-form" [formGroup]="formGroup">
                         <mat-accordion class="user-details">
-                            <mat-expansion-panel [expanded]="service.isExpanded">
+                            <mat-expansion-panel [expanded]="service.isExpanded || true">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title test-id="user-username-title">
                                         {{service.name}}
@@ -48,33 +48,69 @@
                                         <mat-hint>{{"ServiceProtocolHint"|translate}}</mat-hint>
                                     </mat-form-field>
                                 </p>
-                                <p>
+
+                                <p fxLayoutAlign="end center">
+                                    <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
+
+                                        {{"Add"|translate}}
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="addNewPort()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"Port"|translate}}</span>
+                                        </button>
+                                    </mat-menu>
+                                </p>
+
+                                <p fxFill class="service-host" fxLayout="row" fxLayoutAlign="start end"
+                                    *ngFor="let item of service.hosts||[];let i =index"
+                                    [formGroup]="getHostsFormGroup(i)">
+
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Host"|translate}}</mat-label>
                                         <input matInput test-id="service-host-input" placeholder="10.0.0.100"
                                             formControlName="host" required>
-                                        <mat-error>{{formError.host|translate}}</mat-error>
+                                        <mat-error>{{formError.hosts[i]|translate}}</mat-error>
                                         <mat-hint>{{"ServiceHostHint"|translate}}</mat-hint>
                                     </mat-form-field>
+                                    <mat-icon class="service-host-each" *ngIf="false" matSuffix style="cursor: pointer;"
+                                        matTooltip="{{'Delete'|translate}}" (click)="removeHost(item)">delete</mat-icon>
                                 </p>
-                                <p>
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"TcpPort"|translate}}</mat-label>
-                                        <input type="number" min="1" max="65535" matInput test-id="service-tcp-input"
-                                            placeholder="8080" formControlName="tcp">
-                                        <mat-error>{{formError.tcp|translate}}</mat-error>
-                                        <mat-hint>{{"ServiceTcpPort"|translate}}</mat-hint>
+
+
+
+                                <p fxFill class="service-port" fxLayout="row" fxLayoutAlign="start end"
+                                    *ngFor="let item of service.ports||[];let i=index"
+                                    [formGroup]="getPortsFormGroup(i)">
+                                    <mat-form-field class="service-port-field" appearance="fill">
+                                        <mat-label>{{"Port"|translate}}</mat-label>
+                                        <input type="number" min="1" max="65535" matInput test-id="service-port-input"
+                                            placeholder="8080" formControlName="port">
+                                        <mat-error>{{formError.ports[i]|translate}}</mat-error>
+                                        <mat-hint>{{"ServicePort"|translate}}</mat-hint>
                                     </mat-form-field>
+
+                                    <mat-checkbox class="service-port-each" test-id="service-port-tcp-enabled"
+                                        [(ngModel)]="item.isTcp" [checked]="item.isTcp"
+                                        [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                        {{"Tcp"|translate}} </mat-checkbox>
+                                    <mat-checkbox class="service-port-each" test-id="service-port-udp-enabled"
+                                        [(ngModel)]="item.isUdp" [checked]="item.isUdp"
+                                        [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                        {{"Udp"|translate}} </mat-checkbox>
+
+                                    <mat-icon class="service-port-each" matSuffix style="cursor: pointer;"
+                                        matTooltip="{{'Delete'|translate}}" (click)="removePort(item)">delete</mat-icon>
+
                                 </p>
-                                <p>
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"UdpPort"|translate}}</mat-label>
-                                        <input type="number" min="1" max="65535" matInput test-id="service-udp-input"
-                                            placeholder="53" formControlName="udp">
-                                        <mat-error>{{formError.udp|translate}}</mat-error>
-                                        <mat-hint>{{"ServiceUdpPort"|translate}}</mat-hint>
-                                    </mat-form-field>
+                                <p fxFill class="" fxLayout="row" *ngIf="formError.portNeeds" fxLayoutAlign="start end">
+
+                                    <mat-error>{{formError.portNeeds|translate}}</mat-error>
                                 </p>
+
+
                                 <p>
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Network"|translate}}</mat-label>

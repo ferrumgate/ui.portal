@@ -30,7 +30,8 @@
                         <p fxFill class="accounts-invite-exp">
                             <mat-form-field appearance="fill" fxFill class="accounts-invite-width">
                                 <mat-label>{{"Emails"|translate}}</mat-label>
-                                <textarea class="emails" multiple="true" matInput test-id="accounts-invite-emails-input"
+                                <textarea spellcheck="false" class="emails" multiple="true" matInput
+                                    test-id="accounts-invite-emails-input"
                                     placeholder="teammate@ferrumgate.com, team@ferrumgate.com" formControlName="emails">
                                     </textarea>
                                 <mat-hint>{{"InvitationEmailsHint"|translate}}

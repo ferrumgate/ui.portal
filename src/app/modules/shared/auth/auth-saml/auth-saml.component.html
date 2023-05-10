@@ -43,8 +43,9 @@
                         <p fxFill class="auth-saml-explanation ">
                             <mat-form-field appearance="fill" fxFill class="auth-saml-width">
                                 <mat-label>{{"Cert"|translate}}</mat-label>
-                                <textarea class="auth-saml-cert" type="text" matInput test-id="auth-saml-cert-input"
-                                    placeholder="-----Begin Certificate ----" formControlName="cert" required>
+                                <textarea spellcheck="false" class="auth-saml-cert" type="text" matInput
+                                    test-id="auth-saml-cert-input" placeholder="-----Begin Certificate ----"
+                                    formControlName="cert" required>
                                 </textarea>
                                 <p fxFlex fxLayout="start start">
                                     <input type="file" hidden #fileUpload (change)="selectCertFile($event)">
@@ -79,6 +80,11 @@
                                 <mat-error>{{error.nameField|translate}}</mat-error>
 
                             </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="auth-saml-checkbox-enabled" [(ngModel)]="model.saveNewUser"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"SaveNewUserIfAuthenticated"|translate}}</mat-checkbox>
                         </p>
                         <p>
                             <mat-checkbox test-id="auth-saml-checkbox-enabled" [(ngModel)]="model.isEnabled"

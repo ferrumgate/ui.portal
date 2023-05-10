@@ -34,13 +34,24 @@
                                     {{user.name}}
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
-                            <p>
+                            <p *ngIf="!user.isNewUser">
                                 <mat-form-field fxFlex appearance="fill">
                                     <mat-label>{{"Name"|translate}}</mat-label>
                                     <input matInput test-id="user-name-input" placeholder="{{'Name'|translate}}"
                                         formControlName="name" required>
                                     <mat-error>{{formError.name|translate}}</mat-error>
                                     <mat-hint>{{"UserNameSurnameHint"|translate}}</mat-hint>
+                                </mat-form-field>
+                            </p>
+
+                            <p *ngIf="user.isNewUser">
+                                <mat-form-field fxFlex appearance="fill">
+                                    <mat-label>{{"Username"|translate}}</mat-label>
+                                    <input matInput test-id="user-username-input"
+                                        placeholder="{{'EmailOrUsernameRequired'|translate}}" formControlName="username"
+                                        required>
+                                    <mat-error>{{formError.name|translate}}</mat-error>
+                                    <mat-hint>{{"UsernameHint"|translate}}</mat-hint>
                                 </mat-form-field>
                             </p>
 
@@ -123,95 +134,162 @@
                                     </mat-chip-list>
                                 </mat-form-field>
                             </p>
-                            <mat-accordion test-id="user-login-method-accordion" class="user-details" *ngIf="user.id">
-                                <mat-expansion-panel [expanded]="user.isLoginMethodsExpanded"
-                                    (expandedChange)="expandLoginMethod($event)" (afterExpand)="getSensitiveData()">
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-title test-id="user-username-title">
-                                            {{"LoginMethods"|translate}}
-                                        </mat-panel-title>
-                                    </mat-expansion-panel-header>
-                                    <p>
-                                        <mat-form-field fxFlex appearance="fill">
+                            <p class="user-login-methods">
+                                <mat-accordion test-id="user-login-method-accordion" *ngIf="user.id">
+                                    <mat-expansion-panel [expanded]="user.isLoginMethodsExpanded"
+                                        (expandedChange)="expandLoginMethod($event)" (afterExpand)="getSensitiveData()">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title test-id="user-username-title">
+                                                {{"LoginMethods"|translate}}
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <p>
+                                            <mat-form-field fxFlex appearance="fill">
 
-                                            <mat-label>{{"ApiKey"|translate}}</mat-label>
+                                                <mat-label>{{"ApiKey"|translate}}</mat-label>
 
-                                            <input matInput test-id="user-apikey-input"
-                                                placeholder="{{'ComplexKey'|translate}}" [ngModel]="user.apiKey?.key"
-                                                [ngModelOptions]="{standalone:true}">
-                                            <button matSuffix mat-icon-button (click)="generateApiKey()">
-                                                <mat-icon matSuffix matTooltip="{{'Refresh'|translate}}">{{'refresh'}}
-                                                </mat-icon>
-                                            </button>
-                                            <button matSuffix mat-icon-button (click)="copyApiKey()"
-                                                [disabled]="!user.apiKey?.key">
-                                                <mat-icon matSuffix
-                                                    matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
-                                            </button>
-                                            <button matSuffix mat-icon-button (click)="deleteApiKey()"
-                                                [disabled]="!user.apiKey?.key">
-                                                <mat-icon matSuffix
-                                                    matTooltip="{{'Delete'|translate}}">{{'delete_outline'}}</mat-icon>
-                                            </button>
-                                        </mat-form-field>
-
-                                    </p>
-
-
-                                    <p>
-
-                                        <mat-form-field fxFlex appearance="fill">
-                                            <mat-label>{{"IntermediateCertificate"|translate}}</mat-label>
-                                            <input type="text" test-id="user-intermediate-cert-input"
-                                                placeholder="{{'SelectAnIntermediateCertificateForSigning'|translate}}"
-                                                matInput formControlName="inCertName" [matAutocomplete]="auto"
-                                                (ngModelChange)="searchCert($event)">
-                                            <mat-autocomplete #auto="matAutocomplete"
-                                                (optionSelected)="certChanged($event)" [displayWith]="displayCertFn">
-                                                <mat-option *ngFor="let option of certfilteredOptions | async"
-                                                    [value]="option">
-                                                    {{option.name}}
-                                                </mat-option>
-                                            </mat-autocomplete>
-
-                                            <mat-error>{{formError.name|translate}}</mat-error>
-                                            <mat-hint>{{"SignCertificateWithThisCertificate"|translate}}</mat-hint>
-                                        </mat-form-field>
-
-                                    </p>
-                                    <p>
-
-
-                                        <mat-form-field appearance="fill" fxFill>
-                                            <mat-label>{{"Certificate"|translate}}</mat-label>
-                                            <textarea class="user-cert-text" multiple="true" matInput
-                                                test-id="user-cert-pem-input" placeholder="-----BEGIN CERTIFICATE-----"
-                                                [ngModel]="user.cert?.publicCrt" [ngModelOptions]="{standalone:true}"
-                                                [readonly]="true">
-                                            </textarea>
-                                            <span fxFlex fxLayout="column" fxLayoutAlign="end end">
-                                                <button matSuffix mat-icon-button (click)="generateCert()">
+                                                <input matInput test-id="user-apikey-input"
+                                                    placeholder="{{'ComplexKey'|translate}}"
+                                                    [ngModel]="user.apiKey?.key" [ngModelOptions]="{standalone:true}">
+                                                <button matSuffix mat-icon-button (click)="generateApiKey()">
                                                     <mat-icon matSuffix
                                                         matTooltip="{{'Refresh'|translate}}">{{'refresh'}}
                                                     </mat-icon>
                                                 </button>
-                                                <button matSuffix mat-icon-button (click)="copyCert()"
-                                                    [disabled]="!user.cert?.publicCrt">
+                                                <button matSuffix mat-icon-button (click)="copyApiKey()"
+                                                    [disabled]="!user.apiKey?.key">
                                                     <mat-icon matSuffix
                                                         matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
                                                 </button>
-                                                <button matSuffix mat-icon-button (click)="deleteCert()"
-                                                    [disabled]="!user.cert?.publicCrt">
+                                                <button matSuffix mat-icon-button (click)="deleteApiKey()"
+                                                    [disabled]="!user.apiKey?.key">
                                                     <mat-icon matSuffix
                                                         matTooltip="{{'Delete'|translate}}">{{'delete_outline'}}</mat-icon>
                                                 </button>
-                                            </span>
+                                            </mat-form-field>
 
-                                        </mat-form-field>
+                                        </p>
 
-                                    </p>
-                                </mat-expansion-panel>
-                            </mat-accordion>
+
+                                        <p>
+
+                                            <mat-form-field fxFlex appearance="fill">
+                                                <mat-label>{{"IntermediateCertificate"|translate}}</mat-label>
+                                                <input type="text" test-id="user-intermediate-cert-input"
+                                                    placeholder="{{'SelectAnIntermediateCertificateForSigning'|translate}}"
+                                                    matInput formControlName="inCertName" [matAutocomplete]="auto"
+                                                    (ngModelChange)="searchCert($event)">
+                                                <mat-autocomplete #auto="matAutocomplete"
+                                                    (optionSelected)="certChanged($event)"
+                                                    [displayWith]="displayCertFn">
+                                                    <mat-option *ngFor="let option of certfilteredOptions | async"
+                                                        [value]="option">
+                                                        {{option.name}}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+
+                                                <mat-error>{{formError.name|translate}}</mat-error>
+                                                <mat-hint>{{"SignCertificateWithThisCertificate"|translate}}</mat-hint>
+                                            </mat-form-field>
+
+                                        </p>
+                                        <p>
+
+
+                                            <mat-form-field appearance="fill" fxFill>
+                                                <mat-label>{{"Certificate"|translate}}</mat-label>
+                                                <textarea spellcheck="false" class="user-cert-text" multiple="true"
+                                                    matInput test-id="user-cert-pem-input"
+                                                    placeholder="-----BEGIN CERTIFICATE-----"
+                                                    [ngModel]="user.cert?.publicCrt"
+                                                    [ngModelOptions]="{standalone:true}" [readonly]="true">
+                                            </textarea>
+                                                <span fxFlex fxLayout="column" fxLayoutAlign="end end">
+                                                    <button matSuffix mat-icon-button (click)="generateCert()">
+                                                        <mat-icon matSuffix
+                                                            matTooltip="{{'Refresh'|translate}}">{{'refresh'}}
+                                                        </mat-icon>
+                                                    </button>
+                                                    <button matSuffix mat-icon-button (click)="copyCert()"
+                                                        [disabled]="!user.cert?.publicCrt">
+                                                        <mat-icon matSuffix
+                                                            matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                                    </button>
+                                                    <button matSuffix mat-icon-button (click)="deleteCert()"
+                                                        [disabled]="!user.cert?.publicCrt">
+                                                        <mat-icon matSuffix
+                                                            matTooltip="{{'Delete'|translate}}">{{'delete_outline'}}</mat-icon>
+                                                    </button>
+                                                </span>
+
+                                            </mat-form-field>
+
+                                        </p>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </p>
+                            <p class="user-reset-password">
+                                <mat-accordion test-id="user-reset-password-accordion" *ngIf="user.id">
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title test-id="user-username-title">
+                                                {{"ResetPassword"|translate}}
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <form test-id="resetpass-form" [formGroup]="resetPasswordForm">
+                                            <p fxFill>
+                                                <mat-form-field class="resetpass-form-field" fxFlex appearance="fill">
+                                                    <input autocomplete="new-password" name="user-resetpassnew1"
+                                                        [type]="hideResetPassword?'password':'text'"
+                                                        test-id="user-resetpass-password-input" matInput
+                                                        placeholder="{{'Password'|translate}}"
+                                                        formControlName="password">
+                                                    <mat-icon matSuffix
+                                                        (click)="hideResetPassword = !hideResetPassword">{{hideResetPassword
+                                                        ?
+                                                        'visibility_off' : 'visibility'}}</mat-icon>
+                                                    <mat-error test-id="user-resetpass-password-error"
+                                                        class="resetpass-error">
+                                                        {{
+                                                        resetPasswordError.password
+                                                        |translate}}</mat-error>
+                                                </mat-form-field>
+
+
+                                            </p>
+                                            <p>
+                                                <mat-form-field class="resetpass-form-field" fxFlex appearance="fill">
+                                                    <input autocomplete="new-password" name="user-resetpassnew2"
+                                                        [type]="hideResetPasswordAgain?'password':'text'"
+                                                        test-id="user-resetpass-password-again-input" matInput
+                                                        placeholder="{{'PasswordAgain'|translate}}"
+                                                        formControlName="passwordAgain">
+                                                    <mat-icon matSuffix
+                                                        (click)="hideResetPasswordAgain = !hideResetPasswordAgain">{{hideResetPasswordAgain
+                                                        ?
+                                                        'visibility_off' : 'visibility'}}</mat-icon>
+
+                                                    <mat-error test-id="resetpass-password-again-error"
+                                                        class="resetpass-error">
+                                                        {{resetPasswordError.passwordAgain | translate }}</mat-error>
+
+                                                </mat-form-field>
+
+                                            </p>
+                                            <div class="button" fxLayout="row" fxLayoutAlign="end">
+                                                <button test-id="user-resetpass-submit-button" type="submit"
+                                                    mat-raised-button [disabled]="!resetPasswordForm.valid"
+                                                    (click)="submitResetPassword()">{{"Change"|translate}}
+                                                </button>
+                                            </div>
+
+
+                                        </form>
+
+
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </p>
 
 
 

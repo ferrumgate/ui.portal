@@ -453,7 +453,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
       hosts: this.cloneHosts(this._model.hosts),
       ports: this.clonePorts(this._model.ports),
       networkId: this._model.networkId,
-      protocol: 'raw',
+      protocol: this._model.protocol,
       count: this._model.count
     }
   }

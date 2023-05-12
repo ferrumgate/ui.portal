@@ -327,11 +327,11 @@ export class AuthenticationService extends BaseService {
     if (!this.currentSession)
       throw new Error('something went wrong');
 
-    const isAdmin = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
-    const isReporter = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
-    const isUser = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
+    //const isAdmin = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
+    //const isReporter = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
+    //const isUser = this.currentSession.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
     this.startIdleWatching();
-    if ((isAdmin || isReporter)) {
+    /*if ((isAdmin || isReporter)) {
       if (isAdmin && !this.configService.isAllReadyConfigured)
         return from(this.router.navigate(['/configure']));
       else
@@ -341,6 +341,8 @@ export class AuthenticationService extends BaseService {
 
       return from(this.router.navigate(['/user/dashboard']));
     }
+    */
+    return from(this.router.navigate(['/screenswitch']));
 
 
   }

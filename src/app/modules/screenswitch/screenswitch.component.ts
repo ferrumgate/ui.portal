@@ -36,15 +36,22 @@ export class ScreenSwitchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.currentSession?.createdWith.includes('exchangeKey')) {
-      this.router.navigate(['/user/closewindow'])
-    } else
-      if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name)) {
-        this.router.navigate(['/manage/dashboard'])
-      } else {
-        this.configService.saveView('low');
-        this.router.navigate(['/user/dashboard'])
-      }
+    const isAdmin = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
+    //const isReporter = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
+    //const isUser = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
+
+    if (isAdmin && !this.configService.isAllReadyConfigured)
+      this.router.navigate(['/configure']);
+    else
+      if (this.authService.currentSession?.createdWith.includes('exchangeKey')) {
+        this.router.navigate(['/user/closewindow'])
+      } else
+        if (this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name || x.name == RBACDefault.roleReporter.name)) {
+          this.router.navigate(['/manage/dashboard'])
+        } else {
+          this.configService.saveView('low');
+          this.router.navigate(['/user/dashboard'])
+        }
   }
 
 

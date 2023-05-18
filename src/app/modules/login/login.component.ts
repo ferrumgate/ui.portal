@@ -191,6 +191,9 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   get samlAuth0AuthenticateUrl() {
     return this.authService.auth0AuthenticateUrl;
   }
+  get samlAzureADAuthenticateUrl() {
+    return this.authService.azureADAuthenticateUrl;
+  }
 
   get isForgotPasswordEnabled() {
 
@@ -209,6 +212,9 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   get isSamlAuth0Enabled() {
     return this.configService.isLoginEnabledSamlAuth0;
   }
+  get isSamlAzureADEnabled() {
+    return this.configService.isLoginEnabledSamlAzure;
+  }
 
   get isGithubEnabled() {
     return false;
@@ -221,7 +227,10 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get isOthersEnabled() {
-    return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled || this.isGithubEnabled || this.isMicrosoftEnabled;
+    return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled ||
+      this.isGithubEnabled || this.isMicrosoftEnabled ||
+      this.isSamlAuth0Enabled ||
+      this.isSamlAzureADEnabled;
   }
 
 }

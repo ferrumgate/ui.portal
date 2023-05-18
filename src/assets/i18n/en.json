@@ -500,5 +500,6 @@
     "EnterAtLeastOnePort": "Enter at least one port",
     "LastUpdate": "Last update",
     "SuccessfullyActivated": "Successfully activated",
-    "LetsEncrypt": "Let's Encrypt"
+    "LetsEncrypt": "Let's Encrypt",
+    "GroupName": "Group Name"
 }

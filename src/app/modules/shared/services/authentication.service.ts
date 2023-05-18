@@ -49,7 +49,8 @@ export class AuthenticationService extends BaseService {
   private _authOAuthLinkedin = this.configService.getApiUrl() + '/auth/oauth/linkedin'
   private _authOAuthLinkedinCallback = this.configService.getApiUrl() + '/auth/oauth/linkedin/callback'
   private _authSamlAuth0 = this.configService.getApiUrl() + '/auth/saml/auth0'
-  //private _authSamlAuth0Callback = this.configService.getApiUrl() + '/auth/saml/auth0/callback'
+  private _authSamlAzureAD = this.configService.getApiUrl() + '/auth/saml/azure'
+
 
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
@@ -284,6 +285,9 @@ export class AuthenticationService extends BaseService {
 
   get auth0AuthenticateUrl() {
     return this._authSamlAuth0;
+  }
+  get azureADAuthenticateUrl() {
+    return this._authSamlAzureAD;
   }
 
   /**

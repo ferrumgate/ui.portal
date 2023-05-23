@@ -367,6 +367,10 @@ export class AuthenticationService extends BaseService {
           //url = this._authSamlAuth0Callback;
           isSaml = true;
         }
+        if (callback.url.includes('azure') && callback.url.includes('saml')) {
+          //url = this._authSamlAuth0Callback;
+          isSaml = true;
+        }
         if (y.captcha)
           callback.params.captcha = y.captcha;
         if (y.action)

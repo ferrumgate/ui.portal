@@ -146,7 +146,7 @@
     "Labels": "Labels",
     "SelectANetwork": "Select a network",
     "BindedNetwork": "Binded network, works only in this network",
-    "GatewayIdHint": "/etc/ferrumgate/conf on gateway",
+    "GatewayIdHint": "/etc/ferrumgate/gateway.$id.yaml",
     "Enabled": "Enabled",
     "Enable": "Enable",
     "Disabled": "Disabled",

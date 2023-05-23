@@ -38,7 +38,6 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   }
   @Input()
   public set model(val: BaseOAuth) {
-    debugger
     this._model = {
       ...val,
       clientId: val.clientId,

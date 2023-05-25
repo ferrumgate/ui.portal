@@ -199,6 +199,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
     return this.configService.isEnabledForgotPassword;
   }
+
   get isRegisterEnabled() {
     return this.configService.isEnabledRegister;
   }
@@ -222,9 +223,10 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   get isMicrosoftEnabled() {
     return false;
   }
-  get isAuth0Enabled() {
+  /* get isAuth0Enabled() {
     return true;
-  }
+  } */
+  // if added something here add also 
 
   get isOthersEnabled() {
     return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled ||

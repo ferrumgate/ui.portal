@@ -124,7 +124,7 @@
     "ServiceIpRange": "Service ip range",
     "ClientNetworkDefinition": "Clients will have ip from this range",
     "ClientIpRange": "Client ip range",
-    "SshHostDefinition": "Every node is listening at port for SSH tunnelling, clients will connect to this host and ip",
+    "SshHostDefinition": "Every node is listening at port for SSH tunnelling, clients will connect to this host and port",
     "Network": "Network",
     "UrlDefinition": "Login web page, our client programs will open this url for login, like https://auth.ferrumgate.com",
     "LoginUrl": "Login url",

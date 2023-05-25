@@ -117,6 +117,13 @@
                             <mat-icon svgIcon="social-auth0"></mat-icon>
                         </a>
                     </div>
+                    <div *ngIf="isSamlAzureADEnabled" class="social">
+                        <a href="{{samlAzureADAuthenticateUrl}}" mat-icon-button aria-label="azuread authentication"
+                            matTooltip="Sign in with Azure AD" matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="social-azure"></mat-icon>
+                        </a>
+                    </div>
                 </div>
 
 

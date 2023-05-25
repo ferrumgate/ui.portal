@@ -175,7 +175,7 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
   }
   showDetail(element: DeviceLog) {
     const dialogData = new LogDeviceDetailDialogModel(element);
-    debugger;
+
     const dialogRef = this.dialog.open(InsightsDeviceDetailComponent, {
 
       width: '400',

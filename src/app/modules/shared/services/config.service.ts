@@ -28,7 +28,8 @@ export class ConfigService extends BaseService {
         local: { isForgotPassword: false, isRegister: false },
         oAuthGoogle: undefined,
         oAuthLinkedin: undefined,
-        samlAuth0: undefined
+        samlAuth0: undefined,
+        samlAzure: undefined,
       }
     };
   }
@@ -176,7 +177,8 @@ export class ConfigService extends BaseService {
       },
       oAuthGoogle: object | undefined,
       oAuthLinkedin: object | undefined,
-      samlAuth0: object | undefined
+      samlAuth0: object | undefined,
+      samlAzure: object | undefined
     }
   };
 
@@ -217,6 +219,9 @@ export class ConfigService extends BaseService {
   }
   get isLoginEnabledSamlAuth0() {
     return this.dynamicConfig.login.samlAuth0;
+  }
+  get isLoginEnabledSamlAzure() {
+    return this.dynamicConfig.login.samlAzure;
   }
 
   get isAllReadyConfigured() {

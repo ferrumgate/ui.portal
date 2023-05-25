@@ -124,7 +124,7 @@
     "ServiceIpRange": "Service ip range",
     "ClientNetworkDefinition": "Clients will have ip from this range",
     "ClientIpRange": "Client ip range",
-    "SshHostDefinition": "Every node is listening at port 9999 for SSH tunnelling, clients will connect to this host and ip",
+    "SshHostDefinition": "Every node is listening at port for SSH tunnelling, clients will connect to this host and port",
     "Network": "Network",
     "UrlDefinition": "Login web page, our client programs will open this url for login, like https://auth.ferrumgate.com",
     "LoginUrl": "Login url",
@@ -146,7 +146,7 @@
     "Labels": "Labels",
     "SelectANetwork": "Select a network",
     "BindedNetwork": "Binded network, works only in this network",
-    "GatewayIdHint": "/etc/ferrumgate/conf on gateway",
+    "GatewayIdHint": "/etc/ferrumgate/gateway.$id.yaml",
     "Enabled": "Enabled",
     "Enable": "Enable",
     "Disabled": "Disabled",
@@ -500,5 +500,6 @@
     "EnterAtLeastOnePort": "Enter at least one port",
     "LastUpdate": "Last update",
     "SuccessfullyActivated": "Successfully activated",
-    "LetsEncrypt": "Let's Encrypt"
+    "LetsEncrypt": "Let's Encrypt",
+    "GroupName": "Group Name"
 }

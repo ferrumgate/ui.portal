@@ -206,7 +206,7 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
   }
   saveUser($user: User2) {
-    debugger;
+
     if ($user.id)
       this.updateUser($user);
     else {

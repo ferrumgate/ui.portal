@@ -67,6 +67,10 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/auth0.svg")
     );
     this.matIconRegistry.addSvgIcon(
+      "social-azure",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/azure.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
       "linux",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/linux.svg")
     );
@@ -126,6 +130,7 @@ export class AppComponent implements OnInit {
       "lets-encrypt",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/lets-encrypt.svg")
     );
+
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

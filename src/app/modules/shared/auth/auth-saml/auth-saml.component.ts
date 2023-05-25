@@ -50,6 +50,8 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       return 'social-linkedin'
     if (val.name.startsWith('Auth0'))
       return 'social-auth0'
+    if (val.name.startsWith('Azure'))
+      return 'social-azure'
     return undefined;
   }
 

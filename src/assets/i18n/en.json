@@ -501,5 +501,7 @@
     "LastUpdate": "Last update",
     "SuccessfullyActivated": "Successfully activated",
     "LetsEncrypt": "Let's Encrypt",
-    "GroupName": "Group Name"
+    "GroupName": "Group Name",
+    "FqdnIntelligence": "Fqdn Intelligence",
+    "FqdnIntelligenceListSearchHint": "Search by name, label, url, fqdn"
 }

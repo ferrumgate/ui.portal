@@ -148,6 +148,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/fqdn/intelligence',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/fqdnintelligence/config-fqdn-intelligence.module').then(m => m.ConfigFqdnIntelligenceModule)
+
+      },
+      {
         path: 'settings/pki',
         canActivate: [RoleGuard],
         data: {

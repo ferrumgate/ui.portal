@@ -130,6 +130,9 @@ export class ManageLayoutComponent implements OnInit {
           icon: 'ip-address', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('IpIntelligence'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/ip/intelligence']) }
         },
         {
+          icon: 'dns', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('FqdnIntelligence'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/fqdn/intelligence']) }
+        },
+        {
           icon: 'pki', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('PKI'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/pki']) }
         },
         {

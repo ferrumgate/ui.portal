@@ -1,13 +1,13 @@
 {
   "name": "ui",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "scripts": {
     "ng": "ng",
     "start": "npx -p @angular/cli@13.3.3 ng serve --disable-host-check --host 0.0.0.0 --open --proxy-config proxy.config.json",
     "build": "npx -p @angular/cli@13.3.3 ng build",
     "buildprod": "npx -p @angular/cli@13.3.3 ng build --optimization",
     "watch": "npx -p @angular/cli@13.3.3 ng build --watch --configuration development",
-    "test": "npx -p @angular/cli@13.3.3 ng test --include='**/**.component.spec.ts'"
+    "test": "npx -p @angular/cli@13.3.3 ng test --include=**/**.spec.ts"
   },
   "private": true,
   "dependencies": {

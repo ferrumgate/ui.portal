@@ -1,0 +1,23 @@
+<div class="config-fqdn-intelligence">
+    <div class="config-fqdn-intelligence-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'FqdnIntelligence'|translate}}
+            </div>
+
+        </div>
+    </div>
+
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="{{'List'|translate}}">
+            <app-config-fqdn-intelligence-list helpLink="{{helpLink}}">list</app-config-fqdn-intelligence-list>
+        </mat-tab>
+
+        <!--  <mat-tab label="{{'Source'|translate}}">
+            <app-config-fqdn-intelligence-source helpLink="{{helpLink}}" [model]="getSource()"
+                (save)="saveSource($event)" (delete)="deleteSource($event)"
+                (check)="checkSource($event)"></app-config-fqdn-intelligence-source>
+        </mat-tab> -->
+    </mat-tab-group>
+
+</div>

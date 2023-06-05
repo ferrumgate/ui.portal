@@ -503,5 +503,15 @@
     "LetsEncrypt": "Let's Encrypt",
     "GroupName": "Group Name",
     "FqdnIntelligence": "Fqdn Intelligence",
-    "FqdnIntelligenceListSearchHint": "Search by name, label, url, fqdn"
+    "FqdnIntelligenceListSearchHint": "Search by name, label, url, fqdn",
+    "FqdnCustomWhiteListHint": "Fqdn's like yahoo.com or com",
+    "FqdnCategoriesIntelligenceLists": "Categories and Fqdn Intelligence lists",
+    "FqdnIntelligenceLists": "Fqdn Intelligence lists",
+    "FqdnAllowImmediatelyHint": "Allow immediatelly if fqdn matches or in list or in categories",
+    "NewFqdn": "New fqdn",
+    "FqdnDenyImmediatelyHint": "Deny immediatelly if fqdn matches or in list or in categories",
+    "FqdnCustomIgnoreList": "Custom ignore list",
+    "IgnoreImmediately": "Ignore Immediately",
+    "FqdnIgnoreImmediatelyHint": "Ignore immediatelly if fqdn matches or in list or in categories",
+    "FqdnCustomIgnoreListHint": "Fqdn's like yahoo.com or com"
 }

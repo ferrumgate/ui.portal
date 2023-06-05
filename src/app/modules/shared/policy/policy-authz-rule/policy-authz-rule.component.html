@@ -1,7 +1,7 @@
 <div [ngClass]="isThemeDark?'theme-dark':''">
     <div class="policy-authz-rule">
         <mat-accordion test-id="policy-authz-rule-accordion">
-            <mat-expansion-panel [expanded]="rule.isExpanded">
+            <mat-expansion-panel [expanded]="rule.isExpanded || true">
                 <mat-expansion-panel-header>
                     <mat-panel-title test-id="policy-authz-rule-title">
                         <mat-action-row fxLayoutAlign="start center" class="policy-authz-rule-header-actions">
@@ -55,83 +55,100 @@
                 </span>
                 <mat-divider></mat-divider>
                 <form test-id="policy-authz-rule-form" [formGroup]="formGroup">
-                    <div fxFlex fxLayout="column">
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Name"|translate}}</mat-label>
-                                <input matInput test-id="policy-authz-rule-name-input"
-                                    placeholder="{{'Name'|translate}}" formControlName="name" required>
-                                <mat-error>{{formError.name|translate}}</mat-error>
-                            </mat-form-field>
+                    <mat-tab-group #tabGroup [(selectedIndex)]="selectedTab">
+                        <mat-tab label="{{'Common'|translate}}">
+                            <div fxFlex fxLayout="column">
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="policy-authz-rule-name-input"
+                                            placeholder="{{'Name'|translate}}" formControlName="name" required>
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                    </mat-form-field>
 
-                        </p>
-                        <p class="policy-authz-rule-column">
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Service"|translate}}</mat-label>
-                                <input type="text" test-id="policy-authz-rule-service-input"
-                                    placeholder="{{'SelectAService'|translate}}" matInput [ngModel]="rule.serviceName"
-                                    [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto1" required>
-                                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="serviceChanged($event)"
-                                    [displayWith]="displayServiceFn">
-                                    <mat-option *ngFor="let option of filteredServices | async" [value]="option">
-                                        {{option.name}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                                <mat-error>{{formError.service|translate}}</mat-error>
-                                <mat-hint>{{"TargetService"|translate}}</mat-hint>
-                            </mat-form-field>
-                        </p>
-                        <p class="policy-authz-rule-column policy-authz-rule-item">
+                                </p>
+                                <p class="policy-authz-rule-column">
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Service"|translate}}</mat-label>
+                                        <input type="text" test-id="policy-authz-rule-service-input"
+                                            placeholder="{{'SelectAService'|translate}}" matInput
+                                            [ngModel]="rule.serviceName" [ngModelOptions]="{standalone:true}"
+                                            [matAutocomplete]="auto1" required>
+                                        <mat-autocomplete #auto1="matAutocomplete"
+                                            (optionSelected)="serviceChanged($event)" [displayWith]="displayServiceFn">
+                                            <mat-option *ngFor="let option of filteredServices | async"
+                                                [value]="option">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error>{{formError.service|translate}}</mat-error>
+                                        <mat-hint>{{"TargetService"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p class="policy-authz-rule-column policy-authz-rule-item">
 
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"UsersOrGroups"|translate}}</mat-label>
-                                <mat-chip-list #chipList>
-                                    <mat-chip test-id="policy-authz-rule-label-chip"
-                                        *ngFor="let ug of rule.userOrGroups||[]" (removed)="removeUserOrGroup(ug)">
-                                        {{ug.name}}
-                                        <button matChipRemove>
-                                            <mat-icon>cancel</mat-icon>
-                                        </button>
-                                    </mat-chip>
-                                    <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipList"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto2"
-                                        [formControl]="userorGroupControl">
-                                </mat-chip-list>
-                                <mat-autocomplete #auto2="matAutocomplete"
-                                    (optionSelected)="userOrGroupSelected($event)" [displayWith]="displayUserOrGroupFn">
-                                    <mat-optgroup *ngIf="filteredGroups.length" label="{{'Groups'|translate}}">
-                                        <mat-option *ngFor="let option of filteredGroups" [value]="option">
-                                            {{option.name}}
-                                        </mat-option>
-                                    </mat-optgroup>
-                                    <mat-optgroup *ngIf="filteredUsers.length" label="{{'Users'|translate}}">
-                                        <mat-option *ngFor="let option of filteredUsers" [value]="option">
-                                            {{option.username}}
-                                        </mat-option>
-                                    </mat-optgroup>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"UsersOrGroups"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="policy-authz-rule-label-chip"
+                                                *ngFor="let ug of rule.userOrGroups||[]"
+                                                (removed)="removeUserOrGroup(ug)">
+                                                {{ug.name}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur" [matAutocomplete]="auto2"
+                                                [formControl]="userorGroupControl">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #auto2="matAutocomplete"
+                                            (optionSelected)="userOrGroupSelected($event)"
+                                            [displayWith]="displayUserOrGroupFn">
+                                            <mat-optgroup *ngIf="filteredGroups.length" label="{{'Groups'|translate}}">
+                                                <mat-option *ngFor="let option of filteredGroups" [value]="option">
+                                                    {{option.name}}
+                                                </mat-option>
+                                            </mat-optgroup>
+                                            <mat-optgroup *ngIf="filteredUsers.length" label="{{'Users'|translate}}">
+                                                <mat-option *ngFor="let option of filteredUsers" [value]="option">
+                                                    {{option.username}}
+                                                </mat-option>
+                                            </mat-optgroup>
 
-                                </mat-autocomplete>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-checkbox test-id="policy-authz-rule-checkbox-2fa" class="policy-authz-rule-checkbox"
-                                [(ngModel)]="rule.profile.is2FA" (ngModelChange)="modelChanged()"
-                                [ngModelOptions]="{standalone:true}">
-                                {{"2FA"|translate}}</mat-checkbox>
-                        </p>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-checkbox test-id="policy-authz-rule-checkbox-2fa"
+                                        class="policy-authz-rule-checkbox" [(ngModel)]="rule.profile.is2FA"
+                                        (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                        {{"2FA"|translate}}</mat-checkbox>
+                                </p>
 
-                        <p>
-                            <mat-checkbox test-id="policy-authz-rule-checkbox-enabled"
-                                class="policy-authz-rule-checkbox" [(ngModel)]="rule.isEnabled"
-                                (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
-                                {{"Enabled"|translate}}</mat-checkbox>
-                        </p>
+                                <p>
+                                    <mat-checkbox test-id="policy-authz-rule-checkbox-enabled"
+                                        class="policy-authz-rule-checkbox" [(ngModel)]="rule.isEnabled"
+                                        (ngModelChange)="modelChanged()" [ngModelOptions]="{standalone:true}">
+                                        {{"Enabled"|translate}}</mat-checkbox>
+                                </p>
 
 
 
-                    </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="{{'Dns'|translate}}" *ngIf="isServiceDns()">
+                            <div fxFlex fxLayout="column">
 
+                                <app-policy-authz-rule-fqdn #fqdnIntelligence [intelligenceList]="fqdnIntelligenceLists"
+                                    [intelligenceCategoryList]="fqdnIntelligenceCategoryLists"
+                                    [model]="rule.profile.fqdnIntelligence||defaultFqdnIntelligence"
+                                    (itemChanged)="handleFqdnIntelligenceChanged($event)">
+                                </app-policy-authz-rule-fqdn>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
 
                 </form>
 

@@ -36,8 +36,7 @@ import { ClipboardModule } from "@angular/cdk/clipboard";
 import { FileUploadComponent } from "./fileupload/fileupload.component";
 import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/policy-authn-rule-time-add/policy-authn-rule-time-add.component";
 import { DevicePostureComponent } from "./deviceposture/deviceposture.component";
-
-
+import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-authz-rule-fqdn/policy-authz-rule-fqdn.component";
 
 
 
@@ -123,6 +122,7 @@ import { DevicePostureComponent } from "./deviceposture/deviceposture.component"
         PolicyAuthzRuleComponent,
         PolicyAuthnRuleComponent,
         PolicyAuthnRuleTimeAddComponent,
+        PolicyAuthzRuleFqdnComponent,
         DashboardStatusComponent,
         DashboardChartComponent,
         T2FAComponent,

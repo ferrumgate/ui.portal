@@ -104,6 +104,8 @@ describe('PolicyAuthzComponent', () => {
 
     spyOn(httpClient, 'get').and.returnValues(
       of({ items: networks }),
+      of({ items: [] }),
+      of({ items: [] }),
       of({ items: services }),
       of({ items: groups }),
       of({ items: [] }),

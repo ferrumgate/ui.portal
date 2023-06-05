@@ -11,7 +11,7 @@ import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
 import { saveAs } from 'file-saver';
-import { FqdnIntelligenceList, FqdnIntelligenceListStatus, FqdnIntelligenceSource } from '../models/fqdnIntelligence';
+import { FqdnIntelligenceCategory, FqdnIntelligenceList, FqdnIntelligenceListStatus, FqdnIntelligenceSource } from '../models/fqdnIntelligence';
 
 
 @Injectable({
@@ -22,16 +22,27 @@ export class FqdnIntelligenceService extends BaseService {
 
   private _fqdnIntelligenceUrl = this.configService.getApiUrl() + '/fqdn/intelligence';
   private _fqdnIntelligenceUrlSource = this.configService.getApiUrl() + '/fqdn/intelligence/source';
+
   private _fqdnIntelligenceUrlSourceCheck = this.configService.getApiUrl() + '/fqdn/intelligence/source/check';
   private _fqdnIntelligenceList = this.configService.getApiUrl() + '/fqdn/intelligence/list';
   private _fqdnIntelligenceListFile = this.configService.getApiUrl() + '/fqdn/intelligence/list/file';
+  private _fqdnIntelligenceCategory = this.configService.getApiUrl() + '/fqdn/intelligence/category';
 
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('fqdnIntelligence', captchaService)
 
   }
 
+  getCategory() {
+    const searchParams = new URLSearchParams();
 
+    return this.preExecute(searchParams).pipe(
+      switchMap(y => {
+        const url = this.joinUrl(this._fqdnIntelligenceCategory, y);
+        return this.httpService.get<{ items: FqdnIntelligenceCategory[] }>(url);
+      })
+    )
+  }
 
   getSource() {
     const searchParams = new URLSearchParams();
@@ -89,7 +100,7 @@ export class FqdnIntelligenceService extends BaseService {
 
 
 
-  getList(search: string) {
+  getList(search?: string) {
     const searchParams = new URLSearchParams();
     if (search)
       searchParams.append('search', search);

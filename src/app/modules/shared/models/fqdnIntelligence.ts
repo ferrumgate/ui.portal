@@ -14,6 +14,7 @@ export interface FqdnIntelligenceSource {
 export interface FqdnIntelligenceCategory {
     id: string;
     name: string;
+    isVisible: boolean;
 }
 
 export interface FqdnIntelligenceSources {
@@ -87,4 +88,24 @@ export interface FqdnIntelligenceItem {
     categoryId: string;
     listId: string;
 }
+
+
+export const fqdnCategories: FqdnIntelligenceCategory[] = [
+    {
+        id: 'w9FTQWw5e56Txcld',
+        name: "Unknown",
+        isVisible: true,
+    },
+    {
+        id: 'cAhXVPaFm1NVSJxF',
+        name: "BlackList",
+        isVisible: false,
+
+    },
+    {
+        id: 'hx396d3DptCY1rCq',
+        name: "WhiteList",
+        isVisible: false
+    },
+]
 

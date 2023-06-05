@@ -1,4 +1,5 @@
 import * as moment from 'moment-timezone';
+import * as validator from 'validator';
 export class UtilService {
     /**
      * creates a random string with 6 length
@@ -82,6 +83,10 @@ export class UtilService {
         }
         return zones;
 
+    }
+
+    static isFqdn(fqdn: string) {
+        return validator.default.isFQDN(fqdn, { require_tld: false });
     }
 
 

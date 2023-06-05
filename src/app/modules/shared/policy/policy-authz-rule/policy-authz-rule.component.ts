@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,10 @@ import { ConfigService } from '../../services/config.service';
 import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
+import { FqdnIntelligence, FqdnIntelligenceCategory, FqdnIntelligenceList } from '../../models/fqdnIntelligence';
+import { FqdnIntelligenceProfile } from '../../models/authzProfile';
+import { ConfigFqdnIntelligenceComponent } from 'src/app/modules/manage/settings/fqdnintelligence/config-fqdn-intelligence.component';
+import { PolicyAuthzRuleFqdnComponent } from './policy-authz-rule-fqdn/policy-authz-rule-fqdn.component';
 
 
 
@@ -66,6 +70,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
   get users() { return this._users };
 
+  // groups
   _groups: Group[] = [];
   @Input()
   set groups(val: Group[]) {
@@ -73,6 +78,27 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     this.prepareAutoCompletes();
   }
   get groups() { return this._groups };
+
+
+  //fqnd list
+  _fqdnIntelligenceLists: FqdnIntelligenceList[] = [];
+  @Input()
+  set fqdnIntelligenceLists(val: FqdnIntelligenceList[]) {
+    this._fqdnIntelligenceLists = val;
+  }
+  get fqdnIntelligenceLists() { return this._fqdnIntelligenceLists };
+
+  //fqdn category list
+  _fqdnIntelligenceCategoryLists: FqdnIntelligenceCategory[] = [];
+  @Input()
+  set fqdnIntelligenceCategoryLists(val: FqdnIntelligenceCategory[]) {
+    this._fqdnIntelligenceCategoryLists = val;
+  }
+  get fqdnIntelligenceCategoryLists() { return this._fqdnIntelligenceCategoryLists };
+
+
+
+
 
   get rule(): AuthorizationRuleExtended {
     return this._model;
@@ -100,6 +126,21 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
     this.prepareAutoCompletes();
     this.formGroup = this.createFormGroup(this._model);
+    this.selectedService = this.services.find(x => x.id == val.serviceId) || null;
+    this.defaultFqdnIntelligence = this.createDefaultFqdnIntelligenceProfile()
+  }
+
+  defaultFqdnIntelligence: FqdnIntelligenceProfile = this.createDefaultFqdnIntelligenceProfile()
+
+  createDefaultFqdnIntelligenceProfile() {
+    return {
+      blackFqdns: [],
+      blackLists: [],
+      ignoreFqdns: [],
+      ignoreLists: [],
+      whiteFqdns: [],
+      whiteLists: [],
+    }
 
   }
 
@@ -120,6 +161,11 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   isThemeDark = false;
   userorGroupControl = new FormControl();
+
+  @ViewChild(PolicyAuthzRuleFqdnComponent) fqdnIntelligenceComponent!: PolicyAuthzRuleFqdnComponent;
+  fqdnIntelligenceChanged = false;
+
+
   constructor(
     private route: ActivatedRoute,
     private configService: ConfigService,
@@ -201,10 +247,13 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
 
   }
+
+  selectedService: Service | null = null;
   serviceChanged(event: any) {
 
     if (event?.option?.value) {
       this.rule.serviceId = event.option.value.id;
+      this.selectedService = this.services.find(x => this.rule.serviceId) || null;
       this.formGroup.controls.serviceId.setValue(this.rule.serviceId);
       if (this.rule.serviceId)
         this.rule.serviceName = event.option.value.name;
@@ -213,6 +262,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       this.modelChanged();
 
     } else {
+      this.selectedService = null;
       this.rule.serviceId = '';
       this.rule.serviceName = '';
       this.formGroup.controls.serviceId.setValue('');
@@ -301,7 +351,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     return { name: '', service: '' };
   }
 
-
+  selectedTab = 1;
 
 
   checkIfModelChanged() {
@@ -317,6 +367,8 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     if (UtilService.checkChanged(original.userOrgroupIds, this.rule.userOrgroupIds))
       this.rule.isChanged = true;
     if (original.isEnabled != this.rule.isEnabled)
+      this.rule.isChanged = true;
+    if (this.fqdnIntelligenceChanged)
       this.rule.isChanged = true;
 
   }
@@ -360,11 +412,11 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
         ...original.profile
       }
     }
-
+    this.fqdnIntelligenceChanged = false;
     this.checkIfModelChanged();
   }
   createBaseModel(): AuthorizationRule {
-    return {
+    let item: AuthorizationRule = {
       id: this._model.id,
       objId: this._model.objId,
       name: this._model.name,
@@ -374,6 +426,11 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       profile: { ...this._model.profile },
       isEnabled: this._model.isEnabled
     }
+
+    if (this.fqdnIntelligenceComponent && this.fqdnIntelligenceChanged)
+      item.profile.fqdnIntelligence = this.fqdnIntelligenceComponent.createBaseModel()
+
+    return item;
   }
 
 
@@ -397,6 +454,18 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   getExplanationSummary() {
     return `${this.rule.name}, ${this.rule.isEnabled ? 'enabled' : 'not enabled'}, ${this.rule.serviceName}, ${this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60)}... ${this.rule.profile.is2FA ? ', 2FA' : ''}`
   }
+
+  isServiceDns() {
+    if (!this.selectedService) return false;
+    return this.selectedService.protocol == 'dns';
+  }
+
+  handleFqdnIntelligenceChanged(ev: boolean) {
+
+    this.fqdnIntelligenceChanged = ev;
+    this.checkIfModelChanged();
+  }
+
 
 
 

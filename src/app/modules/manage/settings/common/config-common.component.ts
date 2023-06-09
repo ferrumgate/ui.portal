@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { delay, switchMap, takeWhile } from 'rxjs';
+import { delay, map, of, switchMap, takeWhile } from 'rxjs';
 import { ConfigCommon } from 'src/app/modules/shared/models/config';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
@@ -31,7 +32,7 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
   allSub = new SSubscription();
 
   isThemeDark = false;
-  private _model: Model = { url: '', domain: '', isChanged: false, orig: { url: '', domain: '' } };
+  private _model: Model = { url: '', domain: '', httpsRedirect: false, isChanged: false, orig: { url: '', domain: '' } };
   public get model() {
     return this._model;
 
@@ -40,6 +41,7 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
     this._model = {
       url: val.url,
       domain: val.domain,
+      httpsRedirect: val.httpsRedirect,
       isChanged: false,
       orig: val
     }
@@ -57,7 +59,8 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private authenticationService: AuthenticationService) {
 
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
@@ -155,6 +158,8 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
       model.isChanged = true;
     if (original.url != model.url)
       model.isChanged = true;
+    if (original.httpsRedirect != model.httpsRedirect)
+      model.isChanged = true;
 
   }
 
@@ -165,6 +170,7 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
   clear() {
     this.model.domain = (this.model as Model).orig.domain;
     this.model.url = (this.model as Model).orig.url;
+    this.model.httpsRedirect = (this.model as Model).orig.httpsRedirect;
     this.model.isChanged = false;
   }
 
@@ -174,9 +180,26 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
       takeWhile(x => x),
       switchMap(y => this.configService.saveCommonConfig(this.model))
     ).subscribe(y => {
+      let refreshPage = false;
+      if ((this.model as any).orig.httpsRedirect != this.model.httpsRedirect && this.model.httpsRedirect && location.protocol != 'https:') {
+
+        refreshPage = true//we need to refresh page if https activated
+      }
+
       (this.model as Model).orig = y;
       this.model.isChanged = false;
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+
+      if (refreshPage) {//reload window
+
+        of('').pipe(
+          delay(2000),
+          map(x => {
+            window.location.reload();
+          })
+        ).subscribe();
+      }
+
     })
   }
 

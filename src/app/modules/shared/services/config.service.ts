@@ -240,7 +240,7 @@ export class ConfigService extends BaseService {
 
   saveCommonConfig(config: ConfigCommon) {
     const parameter: ConfigCommon = {
-      url: config.url, domain: config.domain
+      url: config.url, domain: config.domain, httpsRedirect: config.httpsRedirect
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -544,7 +544,7 @@ export class ConfigService extends BaseService {
   restore(key: string, formData: FormData) {
     return this.preExecute({}).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this.getApiUrl(), '/config/import/', key);
+        const url = this.joinUrl(this.getApiUrl(), '/config/import', key);
         return this.http.post(url, formData, {
           reportProgress: true, observe: 'events'
         })

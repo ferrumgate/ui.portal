@@ -51,6 +51,7 @@
     "ErrCertificateVerifyFailed": "Certificate verify failed",
     "ErrCertificateIsNotValid": "Certificate is not valid",
     "Err2FANeeds": "You need to login with 2FA",
+    "ErrTimeout": "Timeout occured",
     "Test": "Ferrum",
     "Title": "FerrumGate Management",
     "White": "White",
@@ -257,6 +258,7 @@
     "ServicesSearchHint": "Search by name, labels, host, ports",
     "ServiceName": "Service name",
     "InvalidHost": "Host is invalid",
+    "InvalidHostname": "Name is invalid, use lowercase and numbers only [a-z0-9-]",
     "TcpRequired": "Tcp required",
     "UdpRequired": "Udp requred",
     "InvalidPort": "Invalid port",
@@ -513,5 +515,6 @@
     "FqdnCustomIgnoreList": "Custom ignore list",
     "IgnoreImmediately": "Ignore Immediately",
     "FqdnIgnoreImmediatelyHint": "Ignore immediatelly if fqdn matches or in list or in categories",
-    "FqdnCustomIgnoreListHint": "Fqdn's like yahoo.com or com"
+    "FqdnCustomIgnoreListHint": "Fqdn's like yahoo.com or com",
+    "HttpsRedirect": "Redirect Http to Https"
 }

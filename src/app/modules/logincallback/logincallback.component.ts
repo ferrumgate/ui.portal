@@ -14,6 +14,8 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { Login, Login2FA } from '../shared/models/login';
 import { RBACDefault } from '../shared/models/rbac';
+import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 
 @Component({
@@ -31,7 +33,8 @@ export class LoginCallbackComponent implements OnInit {
 
 
   @Output() submitEM = new EventEmitter();
-
+  brand: ConfigBrand = {};
+  private allSubs = new SSubscription();
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
@@ -49,6 +52,11 @@ export class LoginCallbackComponent implements OnInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
+    this.brand = this.configService.brand;
+    this.allSubs.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
     //const queryParams= this.route.snapshot.queryParams;
 
@@ -76,6 +84,10 @@ export class LoginCallbackComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  ngOnDestroy() {
+
+    this.allSubs.unsubscribe();
   }
 
 }

@@ -15,6 +15,7 @@ import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SSubscription } from '../shared/services/SSubscribtion';
+import { ConfigBrand } from '../shared/models/config';
 
 @Component({
   selector: 'app-resetpass',
@@ -38,6 +39,8 @@ export class ResetPassComponent implements OnInit, OnDestroy {
 
   @Output() submitEM = new EventEmitter();
 
+  brand: ConfigBrand = {};
+
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private configService: ConfigService,
@@ -58,6 +61,11 @@ export class ResetPassComponent implements OnInit, OnDestroy {
       this.key = params.key;
     })
 
+    this.brand = this.configService.brand;
+    this.allSub.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
   }
 

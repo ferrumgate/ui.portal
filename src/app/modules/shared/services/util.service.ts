@@ -38,6 +38,17 @@ export class UtilService {
     static checkUndefinedBoolean(source?: boolean, target?: boolean) {
         return Boolean(source) == Boolean(target) ? false : true;
     }
+    static checkUndefinedString(source?: string, target?: string) {
+        if (!Boolean(source) && !Boolean(target))
+            return false;
+        if (!Boolean(source) && Boolean(target))
+            return true
+
+        if (Boolean(source) && !Boolean(target))
+            return true;
+        return source != target;
+
+    }
     static isUndefinedOrNull(val?: any) {
         if (val === undefined) return true;
         if (val === null) return true;

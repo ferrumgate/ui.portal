@@ -16,6 +16,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { RBACDefault } from '../shared/models/rbac';
 import { SSubscription } from '../shared/services/SSubscribtion';
+import { ConfigBrand } from '../shared/models/config';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
   form: FormGroup = this.createFormGroup(this.model);
   hidePassword = true;
-
+  brand: ConfigBrand = {};
 
   @Output() submitEM = new EventEmitter();
 
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     private notificationService: NotificationService,
     private captchaService: CaptchaService) {
     this.title = "Title";
+
     this.error = this.resetErrors();
 
     this.allSub.addThis =
@@ -60,7 +62,13 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-    this.configService.getPublicConfig().subscribe();
+
+    this.brand = this.configService.brand;
+    this.allSub.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
+
 
     this.route.queryParams.subscribe(params => {
 

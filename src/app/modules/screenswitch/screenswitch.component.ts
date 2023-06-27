@@ -36,7 +36,7 @@ export class ScreenSwitchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const isAdmin = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleAdmin.name);
+    const isAdmin = this.authService.currentSession?.currentUser?.roles?.find(x => x.name == RBACDefault.roleAdmin.name);
     //const isReporter = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleReporter.name);
     //const isUser = this.authService.currentSession?.currentUser.roles.find(x => x.name == RBACDefault.roleUser.name);
 

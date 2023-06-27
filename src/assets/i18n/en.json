@@ -516,5 +516,13 @@
     "IgnoreImmediately": "Ignore Immediately",
     "FqdnIgnoreImmediatelyHint": "Ignore immediatelly if fqdn matches or in list or in categories",
     "FqdnCustomIgnoreListHint": "Fqdn's like yahoo.com or com",
-    "HttpsRedirect": "Redirect Http to Https"
+    "HttpsRedirect": "Redirect Http to Https",
+    "Brand": "Brand",
+    "BrandNameHint": "Your brand name",
+    "SelectAFileToUpload": "Select a file to upload",
+    "SelectAWhiteLogoToUpload": "Select a white logo to upload",
+    "SelectABlackLogoToUpload": "Select a black logo to upload",
+    "PleaseSelectAnImageFile": "Please select an image file",
+    "WhiteLogo": "White logo",
+    "BlackLogo": "Black logo"
 }

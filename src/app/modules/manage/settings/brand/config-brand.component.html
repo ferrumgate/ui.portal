@@ -1,0 +1,97 @@
+<div class="config-brand">
+    <div class="config-brand-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                {{'Brand'|translate}}
+            </div>
+
+        </div>
+    </div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Brand"|translate}}'>
+                <mat-icon svgIcon="brand"></mat-icon>
+            </mat-card-title>
+            <mat-action-row class="config-brand-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="config-brand-form" [formGroup]="formGroup">
+                        <p fxFill class="config-brand-exp">
+                            <mat-form-field appearance="fill" fxFill class="config-brand-width">
+                                <mat-label>{{"Name"|translate}}</mat-label>
+                                <input matInput test-id="config-brand-name-input" placeholder="FerrumGate"
+                                    formControlName="name">
+                                <mat-hint>{{"BrandNameHint"|translate}}
+                                </mat-hint>
+                                <mat-error>
+                                    {{error.name|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="config-brand-explanation ">
+
+
+                            <app-fileupload test-id="list-fileupload-whitelogo"
+                                [uploadProgress]="uploadProgressLogoWhite" name="file"
+                                [filename]="this.model.logoWhiteFileName|translate"
+                                [isDelete]="this.model.logoWhite?true:false"
+                                (onFileSelectedEvent)="restoreLogoWhite($event)"
+                                (onFileDeletedEvent)="deleteLogoWhite($event)" #fileuploadWhite>
+
+                            </app-fileupload>
+
+                            <mat-error>{{error.logoWhite|translate}}</mat-error>
+
+                        </p>
+                        <p fxFill class="config-brand-explanation ">
+                            <app-fileupload test-id="list-fileupload-blacklogo"
+                                [uploadProgress]="uploadProgressLogoBlack" name="file"
+                                [filename]="this.model.logoBlackFileName|translate"
+                                [isDelete]="this.model.logoBlack?true:false"
+                                (onFileSelectedEvent)="restoreLogoBlack($event)"
+                                (onFileDeletedEvent)="deleteLogoBlack($event)" #fileuploadBlack></app-fileupload>
+                            <mat-error>{{error.logoBlack|translate}}</mat-error>
+                        </p>
+
+                        <p>
+                            <mat-divider></mat-divider>
+                        </p>
+
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="config-brand-config-brand-actions" fxFlex fxLayoutAlign="start center">
+
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="setttings-config-brand-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

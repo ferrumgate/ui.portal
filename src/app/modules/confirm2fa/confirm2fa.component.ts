@@ -16,6 +16,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { RBACDefault } from '../shared/models/rbac';
 import { SSubscription } from '../shared/services/SSubscribtion';
+import { ConfigBrand } from '../shared/models/config';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
 
   @Output() submitEM = new EventEmitter();
 
-
+  brand: ConfigBrand = {};
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
@@ -64,6 +65,12 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.model2fa.key = params.key;
     })
+
+    this.brand = this.configService.brand;
+    this.allSub.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
   }
 

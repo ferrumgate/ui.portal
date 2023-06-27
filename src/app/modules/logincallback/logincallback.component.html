@@ -3,10 +3,13 @@
         <mat-card class="logincallback-mat-card">
 
             <mat-card-content>
-                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark">
-                <img mat-card-md-image src="/assets/img/logo-black.svg" *ngIf="!isThemeDark">
+                <img mat-card-md-image src="/assets/img/logo-white.svg" *ngIf="isThemeDark && !this.brand.logoWhiteUrl">
+                <img mat-card-md-image src="/assets/img/logo-black.svg"
+                    *ngIf="!isThemeDark && !this.brand.logoBlackUrl">
+                <img mat-card-md-image [src]="this.brand.logoWhiteUrl" *ngIf="isThemeDark && this.brand.logoWhiteUrl">
+                <img mat-card-md-image [src]="this.brand.logoBlackUrl" *ngIf="!isThemeDark && this.brand.logoBlackUrl">
                 <div>
-                    FerrumGate
+                    {{this.brand.name || "FerrumGate"}}
                 </div>
 
 

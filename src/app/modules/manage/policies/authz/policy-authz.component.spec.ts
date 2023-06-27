@@ -1,6 +1,6 @@
 import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -120,7 +120,7 @@ describe('PolicyAuthzComponent', () => {
     expect(policies.length).toEqual(2);
     const serviceElements = findEls(fixture, 'policy-authz-rule');
     expect(serviceElements.length).toBe(3);
-
+    flush();
 
 
 

@@ -27,6 +27,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   @Input()
   name: string = 'file'
 
+  @Input()
+  isDelete: boolean = false;
+
   file: File | null = null;
   @Input()
   uploadProgress: number;
@@ -34,6 +37,8 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   filename: string = '';
   @Output()
   onFileSelectedEvent: EventEmitter<any> = new EventEmitter();
+  @Output()
+  onFileDeletedEvent: EventEmitter<any> = new EventEmitter();
 
   isThemeDark = false;
   constructor(
@@ -79,6 +84,11 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     this.file = null;
     this.uploadProgress = 0;
 
+  }
+  deleteFile() {
+    this.file = null;
+    this.uploadProgress = 0;
+    this.onFileDeletedEvent.emit();
   }
 
 

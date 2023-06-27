@@ -10,6 +10,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { SSubscription } from '../services/SSubscribtion';
 import { RBACDefault } from '../models/rbac';
+import { ConfigBrand } from '../models/config';
 
 @Component({
   selector: 'app-toolbar',
@@ -29,6 +30,7 @@ export class ToolbarComponent implements OnInit {
     map: { low: 'User', high: 'Admin' }
   }
   username = 'unknown';
+  brand: ConfigBrand = {};
 
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
@@ -46,6 +48,14 @@ export class ToolbarComponent implements OnInit {
 
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
+
+
+
+    this.brand = this.configService.brand;
+    this.allSubs.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
     this.allSubs.addThis =
       this.configService.viewChanged.subscribe(x => {

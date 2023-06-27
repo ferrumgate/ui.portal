@@ -144,6 +144,10 @@ export class AppComponent implements OnInit {
       "lets-encrypt",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/lets-encrypt.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "brand",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
+    );
 
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {

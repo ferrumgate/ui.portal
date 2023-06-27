@@ -8,6 +8,8 @@ import { CaptchaService } from 'src/app/modules/shared/services/captcha.service'
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-closewindow',
@@ -21,6 +23,8 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
   model: any = {};
   isConfirmed = false;
   confirmKey: string | null | undefined;
+  private allSubs = new SSubscription();
+  brand: ConfigBrand = {};
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
@@ -40,6 +44,11 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
       this.confirmKey = params.key;
     })
 
+    this.brand = this.configService.brand;
+    this.allSubs.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
 
   }
@@ -50,6 +59,11 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
   }
+
+  ngOnDestroy() {
+    this.allSubs.unsubscribe();
+  }
+
 
 
 

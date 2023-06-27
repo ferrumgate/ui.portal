@@ -76,6 +76,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/brand',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/brand/config-brand.module').then(m => m.ConfigBrandModule)
+
+      },
+      {
         path: 'policies/authn',
         canActivate: [RoleGuard],
         data: {

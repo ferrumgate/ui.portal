@@ -27,6 +27,7 @@
     "@ng-idle/keepalive": "^11.0.3",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
+    "@types/gtag.js": "^0.0.12",
     "angularx-qrcode": "^13.0.15",
     "apexcharts": "^3.36.3",
     "deep-object-diff": "^1.1.9",

@@ -13,7 +13,8 @@
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>
-                <mat-icon matBadge="{{group.usersCount}}" matBadgeColor="warn" matTooltip="{{'Users'|translate}}">
+                <mat-icon matBadge="{{group.usersCount}}" class="stretch-badge" matBadgeColor="warn"
+                    matTooltip="{{'Users'|translate}}">
                     person
                 </mat-icon>
                 <button [disabled]="!group.usersCount" mat-icon-button (click)="openUsersClicked()">

@@ -47,7 +47,7 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-    this.helpLink = this.configService.links.ipIntelligenceHelp;
+    this.helpLink = this.configService.links.fqdnIntelligenceHelp;
 
   }
 

@@ -80,6 +80,7 @@ export class ConfigService extends BaseService {
     installClientDebianHelp: "https://ferrumgate.com/docs/clients",
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
     ipIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/ip-intelligence",
+    fqdnIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/fqdn-intelligence",
     pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
     devicePostureHelp: "https://ferrumgate.com/docs/configuration/settings/deviceposture",
     brandHelp: "https://ferrumgate.com/docs/configuration/settings/brand",

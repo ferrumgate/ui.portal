@@ -155,12 +155,13 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string, service: string } = { name: '', service: '' }
-  filteredServices: Observable<Service[]> = of();
+  filteredServices: Service[] = [];
   filteredGroups: Group[] = [];
   filteredUsers: User2[] = [];
 
   isThemeDark = false;
   userorGroupControl = new FormControl();
+  servicesControl = new FormControl();
 
   @ViewChild(PolicyAuthzRuleFqdnComponent) fqdnIntelligenceComponent!: PolicyAuthzRuleFqdnComponent;
   fqdnIntelligenceChanged = false;
@@ -212,20 +213,8 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
   prepareAutoCompletes() {
 
-    this.filteredServices = of(this.services).pipe(
-      map(data => {
+    this.filteredServices = this.services.filter(x => x.networkId == this.rule.networkId).sort(this.simpleNameSort);
 
-        let abc = data.filter(x => x.networkId == this.rule.networkId)
-        return abc;
-      }),
-      map(data => {
-
-        data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        })
-        return data;
-      })
-    )
 
     this.filteredUsers = this.users.sort(this.simpleUsernameSort)
 
@@ -245,7 +234,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       })
 
 
-
   }
 
   selectedService: Service | null = null;
@@ -253,7 +241,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
     if (event?.option?.value) {
       this.rule.serviceId = event.option.value.id;
-      this.selectedService = this.services.find(x => this.rule.serviceId) || null;
+      this.selectedService = this.services.find(x => x.id == this.rule.serviceId) || null;
       this.formGroup.controls.serviceId.setValue(this.rule.serviceId);
       if (this.rule.serviceId)
         this.rule.serviceName = event.option.value.name;
@@ -269,6 +257,15 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       this.modelChanged();
     }
 
+  }
+  searchService(ev: any) {
+    if (typeof (ev) == 'string') {
+      if (ev) {
+        this.filteredServices = this.services.filter(x => x.networkId == this.rule.networkId).filter(x => x.name.toLowerCase().includes(ev)).sort(this.simpleNameSort);
+      } else {
+        this.filteredServices = this.services.filter(x => x.networkId == this.rule.networkId).sort(this.simpleNameSort);
+      }
+    }
   }
 
 

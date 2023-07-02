@@ -72,12 +72,12 @@
                                         <mat-label>{{"Service"|translate}}</mat-label>
                                         <input type="text" test-id="policy-authz-rule-service-input"
                                             placeholder="{{'SelectAService'|translate}}" matInput
-                                            [ngModel]="rule.serviceName" [ngModelOptions]="{standalone:true}"
-                                            [matAutocomplete]="auto1" required>
+                                            [ngModel]="rule.serviceName" [matAutocomplete]="auto1"
+                                            [ngModelOptions]="{standalone:true}" (ngModelChange)="searchService($event)"
+                                            required>
                                         <mat-autocomplete #auto1="matAutocomplete"
                                             (optionSelected)="serviceChanged($event)" [displayWith]="displayServiceFn">
-                                            <mat-option *ngFor="let option of filteredServices | async"
-                                                [value]="option">
+                                            <mat-option *ngFor="let option of filteredServices" [value]="option">
                                                 {{option.name}}
                                             </mat-option>
                                         </mat-autocomplete>

@@ -204,8 +204,12 @@ export class AppComponent implements OnInit {
 
   getTitle(event: NavigationEnd, state: RouterState, parent: ActivatedRoute): string[] {
     //console.log(event.url);
-    const paths = event.url.split('/').filter(x => x).map(y => { return y.charAt(0).toUpperCase() + y.slice(1); }
-    )
+    const paths = event.url.split('/').filter(x => x).map(y => {
+      let path = y.split('?')[0]
+      if (!path) return '';
+      return path.charAt(0).toUpperCase() + path.slice(1);
+    }
+    ).filter(z => z);
     /*  const data = [];
      if (parent && parent.snapshot.data && parent.snapshot.data['title']) {
        data.push(parent.snapshot.data['title']);

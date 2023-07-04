@@ -1,4 +1,5 @@
 import * as moment from 'moment-timezone';
+import * as validator from 'validator';
 export class UtilService {
     /**
      * creates a random string with 6 length
@@ -36,6 +37,17 @@ export class UtilService {
     }
     static checkUndefinedBoolean(source?: boolean, target?: boolean) {
         return Boolean(source) == Boolean(target) ? false : true;
+    }
+    static checkUndefinedString(source?: string, target?: string) {
+        if (!Boolean(source) && !Boolean(target))
+            return false;
+        if (!Boolean(source) && Boolean(target))
+            return true
+
+        if (Boolean(source) && !Boolean(target))
+            return true;
+        return source != target;
+
     }
     static isUndefinedOrNull(val?: any) {
         if (val === undefined) return true;
@@ -82,6 +94,10 @@ export class UtilService {
         }
         return zones;
 
+    }
+
+    static isFqdn(fqdn: string) {
+        return validator.default.isFQDN(fqdn, { require_tld: false });
     }
 
 

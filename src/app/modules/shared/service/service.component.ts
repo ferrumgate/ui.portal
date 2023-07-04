@@ -182,7 +182,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   createFormGroup(service: ServiceExtended) {
     const fmg = new FormGroup({
-      name: new FormControl(service.name, [Validators.required]),
+      name: new FormControl(service.name, [Validators.required, InputService.hostValidator]),
       protocol: new FormControl(service.protocol, [Validators.required]),
       /*  tcp: new FormControl(service.tcp, []),
        udp: new FormControl(service.udp, []),
@@ -240,14 +240,18 @@ export class ServiceComponent implements OnInit, OnDestroy {
           const fm = fmg.controls[iterator] as FormControl;
           this.allSub.addThis =
             fm.valueChanges.subscribe(x => {
-              (this._model as any)[iterator] = x;
+              if (iterator == 'name')
+                (this._model as any)[iterator] = x.toLowerCase();
+              else
+                (this._model as any)[iterator] = x;
+
+
 
             })
         }
     }
     this.allSub.addThis =
-      fmg.valueChanges.subscribe(x => {
-
+      fmg.valueChanges.subscribe((x) => {
         this.modelChanged();
       })
     return fmg;
@@ -339,12 +343,14 @@ export class ServiceComponent implements OnInit, OnDestroy {
     let error = this.createFormError();
 
     const nameError = this.formGroup.controls.name.errors;
-
     if (nameError) {
       if (nameError['required'])
         error.name = 'NameRequired';
       else
-        error.name = 'NameRequired';
+        if (nameError['invalidHost'])
+          error.name = 'InvalidHostname';
+        else
+          error.name = 'NameRequired';
     }
 
     for (let i = 0; i < (this.formGroup.controls['hosts'] as FormArray).controls.length; ++i) {

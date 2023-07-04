@@ -1,3 +1,5 @@
+import { SafeResourceUrl } from "@angular/platform-browser";
+
 export interface ConfigPublic {
 
 }
@@ -5,6 +7,7 @@ export interface ConfigPublic {
 export interface ConfigCommon {
     url?: string;
     domain?: string;
+    httpsRedirect?: boolean;
 }
 
 export interface ConfigCaptcha {
@@ -27,3 +30,13 @@ export interface ConfigES {
     //delete old records, maximum days
     deleteOldRecordsMaxDays?: number;
 }
+
+export interface ConfigBrand {
+
+    name?: string;
+    logoWhite?: string;
+    logoWhiteUrl?: SafeResourceUrl;
+    logoBlack?: string;
+    logoBlackUrl?: SafeResourceUrl;
+}
+

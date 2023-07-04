@@ -4,7 +4,6 @@ import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { Configure } from '../models/configure';
-import { IpIntelligenceList, IpIntelligenceListStatus, IpIntelligenceSource } from '../models/ipIntelligence';
 import { Network } from '../models/network';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';

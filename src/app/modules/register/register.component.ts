@@ -12,6 +12,7 @@ import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SSubscription } from '../shared/services/SSubscribtion';
+import { ConfigBrand } from '../shared/models/config';
 
 @Component({
   selector: 'app-register',
@@ -34,6 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
 
   @Output() submitEM = new EventEmitter();
+  brand: ConfigBrand = {};
 
   constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
     private router: Router,
@@ -51,6 +53,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
+    this.brand = this.configService.brand;
+    this.allSub.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
   }
 

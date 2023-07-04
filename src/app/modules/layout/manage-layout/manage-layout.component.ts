@@ -112,6 +112,9 @@ export class ManageLayoutComponent implements OnInit {
           icon: 'settings_applications', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Common'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/common']) }
         },
         {
+          icon: 'brand', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Brand'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/brand']) }
+        },
+        {
           icon: 'recaptcha', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Captcha'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/captcha']) }
         },
         {
@@ -128,6 +131,9 @@ export class ManageLayoutComponent implements OnInit {
         },
         {
           icon: 'ip-address', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('IpIntelligence'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/ip/intelligence']) }
+        },
+        {
+          icon: 'dns', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('FqdnIntelligence'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/fqdn/intelligence']) }
         },
         {
           icon: 'pki', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('PKI'), subItems: [], navigate: () => { this.router.navigate(['/manage/settings/pki']) }

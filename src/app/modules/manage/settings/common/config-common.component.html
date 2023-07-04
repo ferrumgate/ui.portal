@@ -47,6 +47,17 @@
 
                             </mat-form-field>
                         </p>
+                        <p xFill class="config-common-explanation ">
+
+                            <mat-checkbox class="redirect" test-id="common-checkbox-httptohttps"
+                                [(ngModel)]="model.httpsRedirect" [checked]="model.httpsRedirect"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="commonModelChanged()">
+                                {{"HttpsRedirect"|translate}} </mat-checkbox>
+
+
+
+
+                        </p>
                     </form>
                 </div>
 

@@ -11,6 +11,11 @@
 
                 </button>
 
+                <button mat-icon-button *ngIf="isDelete" color="primary" matTooltip="{{'Delete'|translate}}"
+                    (click)="deleteFile()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+
             </div>
 
             <div class="progress">

@@ -6,7 +6,7 @@
                     <mat-icon matListIcon test-id="dashboard-status-icon" *ngIf="!isSvg">{{icon}}</mat-icon>
                     <mat-icon matListIcon *ngIf="isSvg" svgIcon="{{icon}}"></mat-icon>
 
-                    <span matBadge=" {{count}}" matBadgeOverlap="false"
+                    <span matBadge=" {{count}}" class="stretch-badge" matBadgeOverlap="false"
                         test-id="dashboard-status-title">{{title}}</span>
 
                 </div>

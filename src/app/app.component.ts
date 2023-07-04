@@ -1,8 +1,11 @@
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterState } from '@angular/router';
 import { delay, filter, of, switchMap, take } from 'rxjs';
 import { fadeAnimation } from './app.animation';
 
@@ -13,6 +16,7 @@ import { LoadingService } from './modules/shared/services/loading.service';
 import { LoggerService } from './modules/shared/services/logger.service';
 import { TranslationService } from './modules/shared/services/translation.service';
 
+declare let gtag: Function;
 
 @Component({
   selector: 'app-root',
@@ -38,9 +42,19 @@ export class AppComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private renderer: Renderer2,
+    private titleService: Title,
     private loadingService: LoadingService,
 
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.injectScripts();
+    }
+    this.handleRouteEvents();
+
+
 
     this.matIconRegistry.addSvgIcon(
       "social-github",
@@ -130,6 +144,10 @@ export class AppComponent implements OnInit {
       "lets-encrypt",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/lets-encrypt.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "brand",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
+    );
 
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
@@ -149,6 +167,58 @@ export class AppComponent implements OnInit {
 
   getState(outlet: any) {
     return outlet.activatedRouteData.state;
+  }
+
+  injectScripts() {
+    const script = this.renderer.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=-ZXZJ9QM2WV';
+    this.renderer.appendChild(this.document.body, script);
+
+    const scriptBody = this.renderer.createElement('script');
+    scriptBody.type = 'text/javascript';
+    scriptBody.text = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZXZJ9QM2WV');
+    `;
+    this.renderer.appendChild(this.document.body, scriptBody);
+  }
+
+  handleRouteEvents() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+
+        const title = this.getTitle(event, this.router.routerState, this.router.routerState.root).join('-');
+        this.titleService.setTitle(title);
+        gtag('event', 'page_view', {
+          page_title: title,
+          page_path: event.urlAfterRedirects,
+          page_location: this.document.location.href
+        })
+      }
+    });
+  }
+
+  getTitle(event: NavigationEnd, state: RouterState, parent: ActivatedRoute): string[] {
+    //console.log(event.url);
+    const paths = event.url.split('/').filter(x => x).map(y => {
+      let path = y.split('?')[0]
+      if (!path) return '';
+      return path.charAt(0).toUpperCase() + path.slice(1);
+    }
+    ).filter(z => z);
+    /*  const data = [];
+     if (parent && parent.snapshot.data && parent.snapshot.data['title']) {
+       data.push(parent.snapshot.data['title']);
+     }
+     if (state && parent && parent.firstChild) {
+       data.push(...this.getTitle(state, parent.firstChild));
+     } */
+    return paths.length ? paths : ["Management"]
+
   }
 
 

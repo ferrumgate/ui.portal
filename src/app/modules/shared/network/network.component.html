@@ -14,7 +14,8 @@
                     (click)="openHelp()">
                     <mat-icon>help_outline</mat-icon>
                 </button>
-                <mat-icon matBadge="{{gatewaysCount}}" matBadgeColor="warn" matTooltip="{{'Gateways'|translate}}">
+                <mat-icon matBadge="{{gatewaysCount}}" class="stretch-badge" matBadgeColor="warn"
+                    matTooltip="{{'Gateways'|translate}}">
                     computer
                 </mat-icon>
                 <button [disabled]="!gatewaysCount" mat-icon-button (click)="openGatewayClicked()">

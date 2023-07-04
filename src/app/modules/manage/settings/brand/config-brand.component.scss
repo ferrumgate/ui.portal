@@ -1,0 +1,35 @@
+.config-brand-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 60px;
+
+}
+
+.config-brand mat-card {
+    min-width: 400px;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.config-brand-explanation {
+    padding-top: 20px;
+}
+
+.config-brand .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.config-brand .title {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+
+.config-brand .config-brand-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

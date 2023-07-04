@@ -17,6 +17,7 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 import { ConfigCommonComponent } from './config-common.component';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 describe('ConfigCommonComponent', () => {
   let component: ConfigCommonComponent;
@@ -27,6 +28,7 @@ describe('ConfigCommonComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ConfigCommonComponent],
       imports: [RouterTestingModule, TranslateModule.forRoot(),
+        NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
         RouterTestingModule.withRoutes([])],
       providers: [

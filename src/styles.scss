@@ -291,3 +291,12 @@ mat-action-row {
     border-top-style: none !important;
     padding: 0px !important;
 }
+
+.stretch-badge>.mat-badge-content {
+    width: auto;
+    border-radius: 13px;
+    right: unset !important;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 12px;
+}

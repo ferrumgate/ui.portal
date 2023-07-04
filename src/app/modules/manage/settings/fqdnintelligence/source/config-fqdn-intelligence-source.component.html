@@ -1,0 +1,84 @@
+<div class="config-fqdn-intelligence-source">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip='{{"Api"|translate}}'>
+                <mat-icon svgIcon="api"></mat-icon>
+
+            </mat-card-title>
+            <mat-action-row class="config-fqdn-intelligence-source-header-actions" fxFlex fxLayoutAlign="end center"
+                *ngIf="helpLink">
+
+
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <form test-id="config-fqdn-intelligence-source-form" [formGroup]="formGroup">
+                    <p>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{"Type"|translate}}</mat-label>
+                            <input type="text" test-id="config-fqdn-intelligence-source-input-type"
+                                placeholder="{{'SelectProvider'|translate}}" matInput [ngModel]="model.type"
+                                [ngModelOptions]="{standalone:true}" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="apiTypeChanged($event)">
+                                <mat-option *ngFor="let option of apiProviders" [value]="option">
+                                    {{option}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>{{"ApiProvider"|translate}}</mat-hint>
+                        </mat-form-field>
+                    </p>
+                    <p *ngIf="model.type" fxFill class="config-fqdn-intelligence-source-explanation">
+                        <mat-form-field appearance="fill" fxFill class="config-fqdn-intelligence-source-width">
+                            <mat-label>{{"ApiKey"|translate}}</mat-label>
+                            <input matInput test-id="config-fqdn-intelligence-source-apikey-input"
+                                placeholder="netpbtj9l8uw" formControlName="apiKey">
+                            <mat-hint>{{"ApiKeyHint"|translate}}</mat-hint>
+
+                            <mat-error>{{error.apiKey|translate}}</mat-error>
+
+                        </mat-form-field>
+                    </p>
+                </form>
+            </div>
+            <div *ngIf="model.type">
+                <mat-divider></mat-divider>
+                <mat-toolbar style="height:40px">
+                    <mat-action-row class="config-fqdn-intelligence-source-actions" fxFlex fxLayoutAlign="start center">
+                        <button *ngIf="canDelete()" test-id="config-fqdn-intelligence-source-delete-button"
+                            mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                            (click)="deleteSource()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button *ngIf="canCheck()" test-id="config-fqdn-intelligence-source-send-button" mat-icon-button
+                            color="primary" matTooltip="{{'Check'|translate}}" (click)="checkSource()">
+                            <mat-icon>send</mat-icon>
+                        </button>
+
+                        <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                            <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                (click)="clear()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <button test-id="setttings-config-fqdn-intelligence-source-ok-button" mat-icon-button
+                                color="warn" matTooltip="{{'SaveChanges'|translate}}" (click)="saveSource()">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                        </span>
+
+
+                    </mat-action-row>
+                </mat-toolbar>
+
+
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -24,6 +24,8 @@ import { ServiceService } from 'src/app/modules/shared/services/service.service'
 import { PolicyAuthzService } from 'src/app/modules/shared/services/policyAuthz.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { fadeInItems } from '@angular/material/menu';
+import { FqdnIntelligence, FqdnIntelligenceCategory, FqdnIntelligenceList } from 'src/app/modules/shared/models/fqdnIntelligence';
+import { FqdnIntelligenceService } from 'src/app/modules/shared/services/fqdnIntelligence.service';
 
 
 interface Policy { network: Network, rules: AuthorizationRule[], isExpanded: boolean }
@@ -44,11 +46,15 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
   networks: Network[] = [];
   users: User2[] = [];
   groups: Group[] = [];
+  fqdnIntelligenceLists: FqdnIntelligenceList[] = [];
+  fqdnIntelligenceCategoryLists: FqdnIntelligenceCategory[] = [];
   performance: {
     users: Map<string, User2>,
     groups: Map<string, Group>,
     networks: Map<string, Network>
     services: Map<string, Service>
+    fqdnIntelligenceLists: Map<string, FqdnIntelligenceList>
+    fqdnIntelligenceCategoryLists: Map<string, FqdnIntelligenceCategory>
   } = {} as any;
 
   policies: Policy[] = [{
@@ -67,7 +73,8 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private groupService: GroupService,
     private serviceService: ServiceService,
-    private policyAuthzService: PolicyAuthzService
+    private policyAuthzService: PolicyAuthzService,
+    private fqdnIntelligenceService: FqdnIntelligenceService
 
   ) {
 
@@ -202,6 +209,19 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
         this.networks = y.items as any;
         this.performance.networks = new Map();
         this.networks.forEach(x => this.performance.networks.set(x.id, x))
+      }),
+      switchMap(k => this.fqdnIntelligenceService.getList()),
+      map(t => {
+
+        this.fqdnIntelligenceLists = t.items;
+        this.performance.fqdnIntelligenceLists = new Map();
+        this.fqdnIntelligenceLists.forEach(x => this.performance.fqdnIntelligenceLists.set(x.id, x))
+      }),
+      switchMap(k => this.fqdnIntelligenceService.getCategory()),
+      map(t => {
+        this.fqdnIntelligenceCategoryLists = t.items;
+        this.performance.fqdnIntelligenceCategoryLists = new Map();
+        this.fqdnIntelligenceCategoryLists.forEach(x => this.performance.fqdnIntelligenceCategoryLists.set(x.id, x))
       }),
       switchMap(y => this.serviceService.get2()),
       map(z => {

@@ -1,0 +1,206 @@
+<div test-id="policy-authz-tab-dns" fxFlex fxLayout="row wrap" class="tabpanel policy-authz-rule-fqdn">
+    <div class="ignorelist policy-authz-rule-fqdn-group policy-authz-fqdn-direct-allow">
+        <div class="policy-authz-rule-fqdn-header">
+            <mat-label matBadge="1" class="stretch-badge"
+                matBadgeOverlap="false">{{'IgnoreImmediately'|translate|titlecase}}</mat-label>
+            <div></div>
+            <mat-hint class="policy-authz-rule-fqdn-header-hint">{{'FqdnIgnoreImmediatelyHint'|translate}}</mat-hint>
+        </div>
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"FqdnCustomIgnoreList"|translate}}</mat-label>
+                <mat-chip-list #chipListIgnoreListFqdn>
+                    <mat-chip test-id="policy-authz-rule-fqdn-ignore-fqdn-chip"
+                        *ngFor="let fqdn of model.ignoreFqdns || []" (removed)="removeIgnoreFqdn(fqdn)">
+                        {{fqdn.fqdn}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input test-id="policy-authz-rule-fqdn-ignore-fqdn-input" placeholder="{{'NewFqdn' |translate}}"
+                        [matChipInputFor]="chipListIgnoreListFqdn" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addIgnoreFqdn($event)">
+                </mat-chip-list>
+                <mat-hint>{{"FqdnCustomIgnoreListHint"|translate}}</mat-hint>
+            </mat-form-field>
+        </p>
+
+
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"FqdnCategoriesIntelligenceLists"|translate}}</mat-label>
+                <mat-chip-list #chipListIgnoreList>
+                    <mat-chip test-id="policy-authz-rule-fqdn-ignore-list-chip"
+                        *ngFor="let ug of this.model.ignoreListsEx||[]" (removed)="removeIgnoreList(ug)">
+                        {{ug.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipListIgnoreList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        [matAutocomplete]="auto1" [formControl]="ignoreListControl">
+                </mat-chip-list>
+                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="ignoreListSelected($event)"
+                    [displayWith]="displayNameFn">
+
+                    <mat-optgroup *ngIf="filteredIgnoreCategoryList.length" label="{{'Categories'|translate}}">
+                        <mat-option *ngFor="let option of filteredIgnoreCategoryList" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+                    <mat-optgroup *ngIf="filteredIgnoreLists.length" label="{{'Lists'|translate}}">
+                        <mat-option *ngFor="let option of filteredIgnoreLists" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+
+
+
+                </mat-autocomplete>
+            </mat-form-field>
+        </p>
+
+
+
+    </div>
+    <div class="whitelist policy-authz-rule-fqdn-group policy-authz-fqdn-direct-allow">
+        <div class="policy-authz-rule-fqdn-header">
+            <mat-label matBadge="2" class="stretch-badge"
+                matBadgeOverlap="false">{{'AllowImmediately'|translate|titlecase}}</mat-label>
+            <div></div>
+            <mat-hint class="policy-authz-rule-fqdn-header-hint">{{'FqdnAllowImmediatelyHint'|translate}}</mat-hint>
+        </div>
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"CustomWhiteList"|translate}}</mat-label>
+                <mat-chip-list #chipListWhiteListFqdn>
+                    <mat-chip test-id="policy-authz-rule-fqdn-white-fqdn-chip"
+                        *ngFor="let fqdn of model.whiteFqdns || []" (removed)="removeWhiteFqdn(fqdn)">
+                        {{fqdn.fqdn}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input test-id="policy-authz-rule-fqdn-white-fqdn-input" placeholder="{{'NewFqdn' |translate}}"
+                        [matChipInputFor]="chipListWhiteListFqdn" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addWhiteFqdn($event)">
+                </mat-chip-list>
+                <mat-hint>{{"FqdnCustomWhiteListHint"|translate}}</mat-hint>
+            </mat-form-field>
+        </p>
+
+
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"FqdnCategoriesIntelligenceLists"|translate}}</mat-label>
+                <mat-chip-list #chipListWhiteList>
+                    <mat-chip test-id="policy-authz-rule-fqdn-white-list-chip"
+                        *ngFor="let ug of this.model.whiteListsEx||[]" (removed)="removeWhiteList(ug)">
+                        {{ug.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipListWhiteList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        [matAutocomplete]="auto3" [formControl]="allowListControl">
+                </mat-chip-list>
+                <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="whiteListSelected($event)"
+                    [displayWith]="displayNameFn">
+
+                    <mat-optgroup *ngIf="filteredAllowCategoryList.length" label="{{'Categories'|translate}}">
+                        <mat-option *ngFor="let option of filteredAllowCategoryList" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+                    <mat-optgroup *ngIf="filteredAllowLists.length" label="{{'Lists'|translate}}">
+                        <mat-option *ngFor="let option of filteredAllowLists" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+
+
+
+                </mat-autocomplete>
+            </mat-form-field>
+        </p>
+
+
+
+    </div>
+
+    <div class="blacklist policy-authz-rule-fqdn-group policy-authz-fqdn-direct-allow">
+        <div class="policy-authz-rule-fqdn-header">
+            <mat-label matBadge="3" class="stretch-badge"
+                matBadgeOverlap="false">{{'DenyImmediately'|translate|titlecase}}</mat-label>
+            <div></div>
+            <mat-hint class="policy-authz-rule-fqdn-header-hint">{{'FqdnDenyImmediatelyHint'|translate}}</mat-hint>
+        </div>
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"CustomBlackList"|translate}}</mat-label>
+                <mat-chip-list #chipListBlackListFqdn>
+                    <mat-chip test-id="policy-authz-rule-fqdn-black-fqdn-chip"
+                        *ngFor="let fqdn of model.blackFqdns || []" (removed)="removeBlackFqdn(fqdn)">
+                        {{fqdn.fqdn}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input test-id="policy-authz-rule-fqdn-black-fqdn-input" placeholder="{{'NewFqdn' |translate}}"
+                        [matChipInputFor]="chipListBlackListFqdn" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addBlackFqdn($event)">
+                </mat-chip-list>
+                <mat-hint>{{"FqdnCustomBlackListHint"|translate}}</mat-hint>
+            </mat-form-field>
+        </p>
+
+
+        <p class="policy-authz-rule-column policy-authz-rule-item policy-authz-rule-fqdn-list">
+
+            <mat-form-field fxFlex appearance="fill">
+                <mat-label>{{"FqdnCategoriesIntelligenceLists"|translate}}</mat-label>
+                <mat-chip-list #chipListBlackList>
+                    <mat-chip test-id="policy-authz-rule-fqdn-black-list-chip"
+                        *ngFor="let ug of this.model.blackListsEx||[]" (removed)="removeBlackList(ug)">
+                        {{ug.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input placeholder="{{'Search' |translate}}" [matChipInputFor]="chipListBlackList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                        [matAutocomplete]="auto4" [formControl]="denyListControl">
+                </mat-chip-list>
+                <mat-autocomplete #auto4="matAutocomplete" (optionSelected)="blackListSelected($event)"
+                    [displayWith]="displayNameFn">
+
+                    <mat-optgroup *ngIf="filteredDenyCategoryList.length" label="{{'Categories'|translate}}">
+                        <mat-option *ngFor="let option of filteredDenyCategoryList" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+                    <mat-optgroup *ngIf="filteredDenyLists.length" label="{{'Lists'|translate}}">
+                        <mat-option *ngFor="let option of filteredDenyLists" [value]="option">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-optgroup>
+
+
+
+                </mat-autocomplete>
+            </mat-form-field>
+        </p>
+
+
+
+    </div>
+
+
+</div>

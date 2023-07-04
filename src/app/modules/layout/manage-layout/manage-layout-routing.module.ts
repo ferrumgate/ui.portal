@@ -76,6 +76,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/brand',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/brand/config-brand.module').then(m => m.ConfigBrandModule)
+
+      },
+      {
         path: 'policies/authn',
         canActivate: [RoleGuard],
         data: {
@@ -145,6 +154,15 @@ const routes: Routes = [
           roleIds: [RBACDefault.roleAdmin.id]
         },
         loadChildren: () => import('../../manage/settings/ipintelligence/config-ip-intelligence.module').then(m => m.ConfigIpIntelligenceModule)
+
+      },
+      {
+        path: 'settings/fqdn/intelligence',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/fqdnintelligence/config-fqdn-intelligence.module').then(m => m.ConfigFqdnIntelligenceModule)
 
       },
       {

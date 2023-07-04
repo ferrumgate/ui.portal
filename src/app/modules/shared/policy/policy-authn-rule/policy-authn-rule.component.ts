@@ -336,8 +336,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         } else {
           this.filteredIpIntelligenceWhiteLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
         }
+        this.filteredIpIntelligenceWhiteLists = this.filteredIpIntelligenceWhiteLists.filter(x => !this._model.profile.ipIntelligence?.whiteLists.includes(x.id))
 
       })
+
+    this.filteredIpIntelligenceWhiteLists = this.filteredIpIntelligenceWhiteLists.filter(x => !this._model.profile.ipIntelligence?.whiteLists.includes(x.id))
 
     this.filteredIpIntelligenceBlackLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
     this.allSub.addThis =
@@ -350,8 +353,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         } else {
           this.filteredIpIntelligenceBlackLists = this.ipIntelligenceLists.sort(this.simpleNameSort);
         }
+        this.filteredIpIntelligenceBlackLists = this.filteredIpIntelligenceBlackLists.filter(x => !this._model.profile.ipIntelligence?.blackLists.includes(x.id))
 
       })
+
+    this.filteredIpIntelligenceBlackLists = this.filteredIpIntelligenceBlackLists.filter(x => !this._model.profile.ipIntelligence?.blackLists.includes(x.id))
   }
 
 
@@ -755,6 +761,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
           this.rule.profile.ipIntelligence.whiteListsEx = this.rule.profile.ipIntelligence.whiteListsEx.concat(items);
 
         this.modelChanged();
+        this.prepareAutoCompleteIpIntelligenceLists();
       }
     }
   }
@@ -774,6 +781,7 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
           this.rule.profile.ipIntelligence.blackListsEx = this.rule.profile.ipIntelligence.blackListsEx.concat(items);
 
         this.modelChanged();
+        this.prepareAutoCompleteIpIntelligenceLists();
       }
     }
   }
@@ -788,16 +796,17 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     // Add our fruit
     if (value) {
+      if (validator.isIP(value)) {
+        if (validator.isIP(value, 4))
+          value += '/32';
+        else
+          value += '/128';
+      }
       const isExits = this.rule.profile.whiteListIps?.find(x => x.ip == value);
       if (!isExits) {
         if (!this.rule.profile.whiteListIps)
           this.rule.profile.whiteListIps = [];
-        if (validator.isIP(value)) {
-          if (validator.isIP(value, 4))
-            value += '/32';
-          else
-            value += '/128';
-        }
+
         if (validator.isIPRange(value))
           this.rule.profile.whiteListIps.push({ ip: value });
       }
@@ -815,16 +824,16 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     // Add our fruit
     if (value) {
+      if (validator.isIP(value)) {
+        if (validator.isIP(value, 4))
+          value += '/32';
+        else
+          value += '/128';
+      }
       const isExits = this.rule.profile.blackListIps?.find(x => x.ip == value);
       if (!isExits) {
         if (!this.rule.profile.blackListIps)
           this.rule.profile.blackListIps = [];
-        if (validator.isIP(value)) {
-          if (validator.isIP(value, 4))
-            value += '/32';
-          else
-            value += '/128';
-        }
         if (validator.isIPRange(value))
           this.rule.profile.blackListIps.push({ ip: value });
       }

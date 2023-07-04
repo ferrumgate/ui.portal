@@ -4,11 +4,13 @@ import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap
 import { environment } from 'src/environments/environment';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
 
-import { ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
+import { ConfigBrand, ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 
 import { TranslationService } from './translation.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 
 
@@ -19,7 +21,7 @@ export class ConfigService extends BaseService {
 
   userId = 'empty';
   constructor(private translationservice: TranslationService, private http: HttpClient,
-    private captchaService: CaptchaService) {
+    private captchaService: CaptchaService, private sanitizer: DomSanitizer) {
     super('config', captchaService)
     //set default zero config
     this.dynamicConfig = {
@@ -30,6 +32,9 @@ export class ConfigService extends BaseService {
         oAuthLinkedin: undefined,
         samlAuth0: undefined,
         samlAzure: undefined,
+      },
+      brand: {
+
       }
     };
   }
@@ -75,10 +80,10 @@ export class ConfigService extends BaseService {
     installClientDebianHelp: "https://ferrumgate.com/docs/clients",
     installClientLinuxsHelp: "https://ferrumgate.com/docs/clients",
     ipIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/ip-intelligence",
+    fqdnIntelligenceHelp: "https://ferrumgate.com/docs/configuration/settings/fqdn-intelligence",
     pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
     devicePostureHelp: "https://ferrumgate.com/docs/configuration/settings/deviceposture",
-
-
+    brandHelp: "https://ferrumgate.com/docs/configuration/settings/brand",
 
 
 
@@ -165,7 +170,7 @@ export class ConfigService extends BaseService {
     return view || 'Low';
 
   }
-
+  dynamicConfigChanged: EventEmitter<string> = new EventEmitter();
 
   dynamicConfig: {
     captchaSiteKey: string,
@@ -179,6 +184,13 @@ export class ConfigService extends BaseService {
       oAuthLinkedin: object | undefined,
       samlAuth0: object | undefined,
       samlAzure: object | undefined
+    },
+    brand: {
+      name?: string,
+      logoWhite?: string;
+      logoWhiteUrl?: SafeResourceUrl;
+      logoBlack?: string;
+      logoBlackUrl?: SafeResourceUrl;
     }
   };
 
@@ -192,8 +204,18 @@ export class ConfigService extends BaseService {
       ),
       map((x: any) => {
         this.dynamicConfig = x;
+        this.prepareBrandData();
+        this.dynamicConfigChanged.emit('changed');
         return x;
       }))
+  }
+  prepareBrandData() {
+    if (this.dynamicConfig.brand.logoBlack) {
+      this.dynamicConfig.brand.logoBlackUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dynamicConfig.brand.logoBlack)
+    }
+    if (this.dynamicConfig.brand.logoWhite) {
+      this.dynamicConfig.brand.logoWhiteUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dynamicConfig.brand.logoWhite)
+    }
   }
 
 
@@ -201,6 +223,7 @@ export class ConfigService extends BaseService {
     return this.dynamicConfig.captchaSiteKey;
 
   }
+
   get isEnabledForgotPassword() {
 
     return this.dynamicConfig.login.local.isForgotPassword;
@@ -228,6 +251,12 @@ export class ConfigService extends BaseService {
     return this.dynamicConfig.isConfigured;
   }
 
+  get brand() {
+    return this.dynamicConfig.brand;
+  }
+
+
+
 
   getCommonConfig() {
     const urlSearchParams = new URLSearchParams();
@@ -240,7 +269,7 @@ export class ConfigService extends BaseService {
 
   saveCommonConfig(config: ConfigCommon) {
     const parameter: ConfigCommon = {
-      url: config.url, domain: config.domain
+      url: config.url, domain: config.domain, httpsRedirect: config.httpsRedirect
     };
     return this.preExecute(parameter).pipe(
       switchMap(x => {
@@ -544,12 +573,40 @@ export class ConfigService extends BaseService {
   restore(key: string, formData: FormData) {
     return this.preExecute({}).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this.getApiUrl(), '/config/import/', key);
+        const url = this.joinUrl(this.getApiUrl(), '/config/import', key);
         return this.http.post(url, formData, {
           reportProgress: true, observe: 'events'
         })
       })
     )
+  }
+
+
+  getBrand() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/brand', x);
+        return this.http.get<ConfigBrand>(url);
+      }))
+  }
+
+  saveBrand(config: ConfigBrand) {
+    const parameter: ConfigBrand = {
+      name: config.name, logoBlack: config.logoBlack, logoWhite: config.logoWhite
+    };
+    return this.preExecute(parameter).
+      pipe(
+        switchMap(x => {
+          return this.http.put<ConfigBrand>(this.getApiUrl() + `/config/brand`, x, this.jsonHeader);
+        }),
+        map(y => {
+          this.dynamicConfig.brand = y;
+          this.prepareBrandData();
+          this.dynamicConfigChanged.emit('changed');
+          return y;
+        })
+      )
   }
 
 

@@ -12,6 +12,7 @@ import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SSubscription } from '../shared/services/SSubscribtion';
+import { ConfigBrand } from '../shared/models/config';
 
 @Component({
   selector: 'app-forgotpass',
@@ -33,7 +34,7 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
   form: FormGroup = this.createFormGroup(this.model);
 
   @Output() submitEM = new EventEmitter();
-
+  brand: ConfigBrand = {};
   constructor(private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private configService: ConfigService,
@@ -48,6 +49,12 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
+
+    this.brand = this.configService.brand;
+    this.allSub.addThis =
+      this.configService.dynamicConfigChanged.subscribe(x => {
+        this.brand = this.configService.brand;
+      })
 
 
   }

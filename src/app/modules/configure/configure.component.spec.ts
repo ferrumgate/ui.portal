@@ -25,6 +25,7 @@ describe('ConfigureComponent', () => {
   let fixture: ComponentFixture<ConfigureComponent>;
   let authService: AuthenticationService;
   let configureService: ConfigureService;
+  let configService: ConfigService;
   let router: Router;
   let captchaService: CaptchaService;
   const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
@@ -58,6 +59,7 @@ describe('ConfigureComponent', () => {
     component = fixture.componentInstance;
     authService = TestBed.inject(AuthenticationService);
     configureService = TestBed.inject(ConfigureService);
+    configService = TestBed.inject(ConfigService);
     router = TestBed.inject(Router);
     captchaService = TestBed.inject(CaptchaService);
     httpClientSpy.post.and.returnValue(of({}));
@@ -164,7 +166,7 @@ describe('ConfigureComponent', () => {
 
 
 
-
+    flush();
 
 
   }));
@@ -216,7 +218,7 @@ describe('ConfigureComponent', () => {
         expect(component.commonError.url).toBe('UrlInvalid'); */
 
 
-
+    flush();
 
 
   }));
@@ -274,7 +276,7 @@ describe('ConfigureComponent', () => {
         tick(1000);
         fixture.detectChanges();
         expect(component.networkError.sshHost).toBe('SshHostInvalid'); */
-
+    flush();
 
   }));
 
@@ -300,7 +302,7 @@ describe('ConfigureComponent', () => {
     // at last step we need to check it
     //component.save();
     //expect(component.checkAllError).toBeTruthy();
-
+    flush();
   }));
 
   it('save', fakeAsync(async () => {
@@ -309,6 +311,7 @@ describe('ConfigureComponent', () => {
     tick();
     fixture.detectChanges();
     spyOn(configureService, 'configure').and.returnValue(of({}));
+    spyOn(configService, 'getPublicConfig').and.returnValue(of({}));
     spyOn(router, 'navigate').and.resolveTo();
     component.save();
     tick();
@@ -317,7 +320,7 @@ describe('ConfigureComponent', () => {
     expect(configureService.configure).toHaveBeenCalled();
     tick(5000);
     fixture.detectChanges();
-
+    flush();
   }));
 
 

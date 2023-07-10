@@ -193,10 +193,11 @@ export class AppComponent implements OnInit {
 
         const title = this.getTitle(event, this.router.routerState, this.router.routerState.root).join('-');
         this.titleService.setTitle(title);
+
         gtag('event', 'page_view', {
           page_title: title,
-          page_path: event.urlAfterRedirects,
-          page_location: this.document.location.href
+          page_path: event.urlAfterRedirects?.split('?')[0],
+          page_location: this.document.location.href.split('?')[0]
         })
       }
     });

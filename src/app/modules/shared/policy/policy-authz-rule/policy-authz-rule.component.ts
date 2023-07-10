@@ -348,7 +348,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     return { name: '', service: '' };
   }
 
-  selectedTab = 1;
+  selectedTab = 0;
 
 
   checkIfModelChanged() {

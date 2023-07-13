@@ -129,7 +129,7 @@ const routes: Routes = [
         loadChildren: () => import('../../manage/settings/auth/config-auth.module').then(m => m.ConfigAuthModule)
 
       },
-      {
+      /* {
         path: 'settings/es',
         canActivate: [RoleGuard],
         data: {
@@ -137,7 +137,7 @@ const routes: Routes = [
         },
         loadChildren: () => import('../../manage/settings/es/config-es.module').then(m => m.ConfigESModule)
 
-      },
+      }, */
       {
         path: 'settings/backup',
         canActivate: [RoleGuard],

@@ -76,29 +76,50 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       this.tunnelSessionKey = params.tunnel;
       this.exchangeKey = params.exchange;
       let reload = params.reload == 'true';
-      if (reload) {
-        const parameters = JSON.parse(JSON.stringify(params));
-        delete parameters.reload;
-        this.router.navigate(['login'], { queryParams: parameters });
-      }
-      //if tunnel key exits save first
-      if (this.tunnelSessionKey)
-        this.authService.setSessionTunnelKey(this.tunnelSessionKey);
-      else
-        if (this.exchangeKey)
-          this.authService.setSessionExchangeKey(this.exchangeKey);
-        else {
-          //check storage if exits
-          const tunnelSessionKey = this.authService.getSessionTunnelKey();
-          if (tunnelSessionKey)
-            this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+      const sreload = sessionStorage.getItem("reload");
+      if (sreload) {
+        sessionStorage.removeItem("reload");
+        setTimeout(function () {
+          window.location.reload();
+        }, 500);
 
-          const exchangeSessionKey = this.authService.getSessionExchangeKey();
-          if (exchangeSessionKey)
-            this.router.navigate(['/login'], { queryParams: { exchange: exchangeSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+      } else
+        if (reload) {
+          sessionStorage.setItem("reload", "true");
+          const parameters = JSON.parse(JSON.stringify(params));
+          delete parameters.reload;
+          const queryString = window.location.search;
+          if (queryString) {
+            const urlParams = new URLSearchParams(queryString);
+            urlParams.delete('reload');
+            let paramvalues = urlParams.toString();
+            if (paramvalues.length)
+              paramvalues = '?' + paramvalues;
+            window.location.href = window.location.href.split("?")[0] + `${paramvalues}`;
+            // do something with the value.
+          } else
+            window.location.href = window.location.href.split("?")[0];
 
 
-        }
+        } else
+          //if tunnel key exits save first
+          if (this.tunnelSessionKey)
+            this.authService.setSessionTunnelKey(this.tunnelSessionKey);
+          else
+            if (this.exchangeKey)
+              this.authService.setSessionExchangeKey(this.exchangeKey);
+            else {
+              //check storage if exits
+              const tunnelSessionKey = this.authService.getSessionTunnelKey();
+              if (tunnelSessionKey)
+                this.router.navigate(['/login'], { queryParams: { tunnel: tunnelSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+
+              const exchangeSessionKey = this.authService.getSessionExchangeKey();
+              if (exchangeSessionKey)
+                this.router.navigate(['/login'], { queryParams: { exchange: exchangeSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
+
+
+            }
 
 
     })

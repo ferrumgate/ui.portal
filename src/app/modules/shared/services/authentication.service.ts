@@ -99,7 +99,7 @@ export class AuthenticationService extends BaseService {
 
     this.idle.onTimeout.subscribe(() => {
       if (this.currentSession) {
-        this.logout();
+        this.logout(true, true);
         console.log('session expired');
       }
     });
@@ -230,12 +230,17 @@ export class AuthenticationService extends BaseService {
   }
 
 
-  logout(navigate = true) {
+  logout(navigate = true, reload = false) {
     sessionStorage.clear();
     this._currentSession = null;
     this.idle.stop();
-    if (navigate)
+    if (navigate && !reload)
       this.router.navigate(['/login']);
+    else
+      if (navigate && reload)
+        this.router.navigate(['/login'],
+          { queryParams: { "reload": 'true' } }
+        );
   }
   confirmUserEmail(key: string) {
     let data = { key: key };

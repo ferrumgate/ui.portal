@@ -75,6 +75,12 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       let isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
       this.tunnelSessionKey = params.tunnel;
       this.exchangeKey = params.exchange;
+      let reload = params.reload == 'true';
+      if (reload) {
+        const parameters = JSON.parse(JSON.stringify(params));
+        delete parameters.reload;
+        this.router.navigate(['login'], { queryParams: parameters });
+      }
       //if tunnel key exits save first
       if (this.tunnelSessionKey)
         this.authService.setSessionTunnelKey(this.tunnelSessionKey);

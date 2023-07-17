@@ -335,7 +335,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       })
     ).subscribe(x => {
       this.notificationService.info(this.translateService.translate('SuccessfullyConfigured'))
-      this.authService.logout();
+      this.authService.logout(true, true);
     })
 
   }

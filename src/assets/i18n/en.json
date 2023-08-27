@@ -524,5 +524,6 @@
     "SelectABlackLogoToUpload": "Select a black logo to upload",
     "PleaseSelectAnImageFile": "Please select an image file",
     "WhiteLogo": "White logo",
-    "BlackLogo": "Black logo"
+    "BlackLogo": "Black logo",
+    "WaitForReload": "Wait for reloading of system"
 }

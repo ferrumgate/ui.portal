@@ -17,6 +17,7 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { RBACDefault } from '../shared/models/rbac';
 import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
+import { LoadingService } from '../shared/services/loading.service';
 
 
 @Component({
@@ -50,6 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     private configService: ConfigService,
     private translateService: TranslationService,
     private authService: AuthenticationService,
+    private loadingService: LoadingService,
     private notificationService: NotificationService,
     private captchaService: CaptchaService) {
     this.title = "Title";
@@ -79,9 +81,13 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       const sreload = sessionStorage.getItem("reload");
       if (sreload) {
         sessionStorage.removeItem("reload");
+        notificationService.info(translateService.translate("WaitForReload"));
+
+        loadingService.show();
         setTimeout(function () {
+          loadingService.hide();
           window.location.reload();
-        }, 500);
+        }, 3000);
 
       } else
         if (reload) {

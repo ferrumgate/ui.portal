@@ -112,11 +112,11 @@
     "ClientNetworkInvalid": "Client network is invalid",
     "ServiceNetworkRequired": "Service network required",
     "ServiceNetworkInvalid": "Service network is invalid",
-    "SshHostRequired": "SSH Tunnel server required",
-    "SshHostInvalid": "SSH Tunnel server is invalid",
+    "SshHostRequired": "Tunnel server required",
+    "SshHostInvalid": "Tunnel server is invalid",
     "ServiceNetwork": "Service network",
     "ClientNetwork": "Client network",
-    "SshHost": "SSH Tunnel Server",
+    "SshHost": "Tunnel Server",
     "Url": "Url",
     "Domain": "Domain",
     "Summary": "Summary",
@@ -125,7 +125,7 @@
     "ServiceIpRange": "Service ip range",
     "ClientNetworkDefinition": "Clients will have ip from this range",
     "ClientIpRange": "Client ip range",
-    "SshHostDefinition": "Every node is listening at port for SSH tunnelling, clients will connect to this host and port",
+    "SshHostDefinition": "Every node is listening at port for tunnelling, clients will connect to this host and port",
     "Network": "Network",
     "UrlDefinition": "Login web page, our client programs will open this url for login, like https://auth.ferrumgate.com",
     "LoginUrl": "Login url",
@@ -524,5 +524,6 @@
     "SelectABlackLogoToUpload": "Select a black logo to upload",
     "PleaseSelectAnImageFile": "Please select an image file",
     "WhiteLogo": "White logo",
-    "BlackLogo": "Black logo"
+    "BlackLogo": "Black logo",
+    "WaitForReload": "Wait for reloading of system"
 }

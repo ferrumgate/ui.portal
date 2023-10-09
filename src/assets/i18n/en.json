@@ -525,5 +525,12 @@
     "PleaseSelectAnImageFile": "Please select an image file",
     "WhiteLogo": "White logo",
     "BlackLogo": "Black logo",
-    "WaitForReload": "Wait for reloading of system"
+    "WaitForReload": "Wait for reloading of system",
+    "NameHint": "Name of record",
+    "ShortName": "Short name",
+    "ShortNameHint": "A short host name for use in callbacks like google, auth0, must be lowercase and includes only ascii characters",
+    "DiscoveryUrl": "Discovery url",
+    "DiscoveryUrlHint": "Other information will get from this url",
+    "ClientIdHint": "Client id from provider",
+    "ClientSecretHint": "Client secret from provides"
 }

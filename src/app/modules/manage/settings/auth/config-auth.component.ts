@@ -1,7 +1,7 @@
 import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, takeWhile } from 'rxjs';
-import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth, BaseSaml } from 'src/app/modules/shared/models/auth';
+import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth, BaseOpenId, BaseSaml } from 'src/app/modules/shared/models/auth';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -41,9 +41,10 @@ export class ConfigAuthComponent implements OnInit {
   ngOnInit(): void {
     this.getAuthCommon().pipe(
       switchMap(y => this.getAuthLocal()),
-      switchMap(y => this.getAuthOAuthProvides()),
-      switchMap(y => this.getAuthLdapProvides()),
-      switchMap(y => this.getAuthSamlProvides()),
+      switchMap(y => this.getAuthOAuthProviders()),
+      switchMap(y => this.getAuthLdapProviders()),
+      switchMap(y => this.getAuthSamlProviders()),
+      switchMap(y => this.getAuthOpenIdProviders()),
     ).subscribe(x => {
 
     });
@@ -55,18 +56,6 @@ export class ConfigAuthComponent implements OnInit {
       click: () => { this.addActiveDirectory(); }
     },
     {
-      name: 'Google/OAuth2', type: 'oauth', isVisible: true, svg: 'social-google', icon: undefined,
-      click: () => { this.addGoogleOAuth(); }
-    },
-    {
-      name: 'Linkedin/OAuth2', type: 'oauth', isVisible: true, svg: 'social-linkedin', icon: undefined,
-      click: () => { this.addLinkedinOAuth() }
-    },
-    /* {
-      name: 'Google Workspace/SAML', type: 'saml', isVisible: true, svg: 'social-google', icon: undefined,
-      click: () => { this.addGoogleWorkspace() }
-    }, */
-    {
       name: 'Auth0/SAML', type: 'saml', isVisible: true, svg: 'social-auth0', icon: undefined,
       click: () => { this.addAuth0Saml() }
     },
@@ -74,6 +63,20 @@ export class ConfigAuthComponent implements OnInit {
       name: 'Azure AD/SAML', type: 'saml', isVisible: true, svg: 'social-azure', icon: undefined,
       click: () => { this.addAzureADSaml() }
     },
+    {
+      name: 'Google/OAuth2', type: 'oauth', isVisible: true, svg: 'social-google', icon: undefined,
+      click: () => { this.addGoogleOAuth(); }
+    },
+    {
+      name: 'Generic/OpenID', type: 'openid', isVisible: true, svg: 'social-openid', icon: undefined,
+      click: () => { this.addGenericOpenId(); }
+    },
+    {
+      name: 'Linkedin/OAuth2', type: 'oauth', isVisible: true, svg: 'social-linkedin', icon: undefined,
+      click: () => { this.addLinkedinOAuth() }
+    },
+
+
   ]
 
   getAuthCommon() {
@@ -89,7 +92,7 @@ export class ConfigAuthComponent implements OnInit {
       })
     )
   }
-  getAuthOAuthProvides() {
+  getAuthOAuthProviders() {
     return this.configService.getAuthOAuthProviders().pipe(
       map(x => {
         this.model.oauth = {
@@ -100,7 +103,7 @@ export class ConfigAuthComponent implements OnInit {
     )
   }
 
-  getAuthLdapProvides() {
+  getAuthLdapProviders() {
     return this.configService.getAuthLdapProviders().pipe(
       map(x => {
         this.model.ldap = {
@@ -111,13 +114,24 @@ export class ConfigAuthComponent implements OnInit {
     )
   }
 
-  getAuthSamlProvides() {
+  getAuthSamlProviders() {
     return this.configService.getAuthSamlProviders().pipe(
       map(x => {
         this.model.saml = {
           providers: x.items
         }
         this.model.saml.providers.forEach(x => x.objId = UtilService.randomNumberString())
+      })
+    )
+  }
+
+  getAuthOpenIdProviders() {
+    return this.configService.getAuthOpenIdProviders().pipe(
+      map(x => {
+        this.model.openId = {
+          providers: x.items
+        }
+        this.model.openId.providers.forEach(x => x.objId = UtilService.randomNumberString())
       })
     )
   }
@@ -256,6 +270,9 @@ export class ConfigAuthComponent implements OnInit {
 
 
 
+
+
+
   addActiveDirectory() {
     const activeDirectory = this.model.ldap?.providers.find(x => x.baseType == 'ldap' && x.type == 'activedirectory');
     if (activeDirectory) {
@@ -328,6 +345,9 @@ export class ConfigAuthComponent implements OnInit {
       this.model.saml = { providers: [] };
     this.model.saml.providers.push(saml);
   }
+
+
+
   addAzureADSaml() {
     const auth = this.model.saml?.providers.find(x => x.baseType == 'saml' && x.type == 'azure');
     if (auth) {
@@ -351,6 +371,63 @@ export class ConfigAuthComponent implements OnInit {
       + (this.model.ldap?.providers?.length || 0)
       + (this.model.saml?.providers?.length || 0)
       + (this.model.oauth?.providers?.length || 0)
+      + (this.model.openId?.providers?.length || 0)
+  }
+
+
+  addGenericOpenId() {
+    const auth = this.model.openId?.providers.find(x => x.baseType == 'openId' && x.type == 'generic' && x.authName == 'generic');
+    if (auth) {
+      this.notificationService.error(`Generic/OpenID  ${this.translateService.translate('AllreadyExists')}`);
+      return;
+    }
+    const openId: BaseOpenId = {
+      baseType: 'openId', type: 'generic', objId: UtilService.randomNumberString(), name: 'Generic/OpenID', authName: 'generic', tags: [],
+      id: '', isEnabled: true,
+      discoveryUrl: '', clientId: '', clientSecret: '',
+
+
+    }
+    if (!this.model.openId)
+      this.model.openId = { providers: [] };
+    this.model.openId.providers.push(openId);
+  }
+
+  saveOpenId($event: BaseOpenId) {
+    this.confirmService.showSave().pipe(
+      takeWhile(x => x),
+      switchMap(x =>
+        this.configService.saveAuthOpenIdProvider($event))
+    ).subscribe(x => {
+      if (!this.model.openId)
+        this.model.openId = { providers: [] };
+      //set a follow id
+      x.objId = UtilService.randomNumberString();
+      const index = this.model.openId.providers.findIndex(x => x.id == $event.id);
+      if (Number(index) >= 0)
+        this.model.openId.providers[Number(index)] = { ...x };
+      else
+        this.model.openId.providers.push(x);
+      this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
+    })
+  }
+  deleteOpenId($event: BaseOpenId) {
+    if (!$event.id) {//not saved before
+      const index = this.model.openId?.providers.findIndex(x => x.objId == $event.objId)
+      if (Number(index) >= 0)
+        this.model.openId?.providers.splice(Number(index), 1);
+    } else {
+      this.confirmService.showDelete().pipe(
+        takeWhile(x => x),
+        switchMap(x => this.configService.deleteAuthOpenIdProvider($event))
+      ).subscribe(x => {
+
+        const index = this.model.openId?.providers.findIndex(x => x.objId == $event.objId)
+        if (Number(index) >= 0)
+          this.model.openId?.providers.splice(Number(index), 1);
+        this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'));
+      })
+    }
   }
 
 

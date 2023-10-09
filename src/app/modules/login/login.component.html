@@ -127,6 +127,14 @@
                             <mat-icon svgIcon="social-azure"></mat-icon>
                         </a>
                     </div>
+                    <div *ngFor="let openid of openIds" class="social">
+                        <a href="{{getOpenIdAuthenticateUrl(openid)}}" mat-icon-button
+                            aria-label="openid authentication" matTooltip={{loginMessage(openid)}}
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="social-openid"></mat-icon>
+                        </a>
+                    </div>
                 </div>
 
 

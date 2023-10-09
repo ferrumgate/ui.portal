@@ -85,6 +85,14 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/azure.svg")
     );
     this.matIconRegistry.addSvgIcon(
+      "social-openid",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/openid.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "social-authentication",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/authentication.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
       "linux",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/linux.svg")
     );

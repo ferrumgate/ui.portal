@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseSaml } from '../models/auth';
+import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseOpenId, BaseSaml } from '../models/auth';
 
 import { ConfigBrand, ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
 import { BaseService } from './base.service';
@@ -32,6 +32,7 @@ export class ConfigService extends BaseService {
         oAuthLinkedin: undefined,
         samlAuth0: undefined,
         samlAzure: undefined,
+        openId: []
       },
       brand: {
 
@@ -183,7 +184,8 @@ export class ConfigService extends BaseService {
       oAuthGoogle: object | undefined,
       oAuthLinkedin: object | undefined,
       samlAuth0: object | undefined,
-      samlAzure: object | undefined
+      samlAzure: object | undefined,
+      openId: { name: string, authName: string }[]
     },
     brand: {
       name?: string,
@@ -245,6 +247,9 @@ export class ConfigService extends BaseService {
   }
   get isLoginEnabledSamlAzure() {
     return this.dynamicConfig.login.samlAzure;
+  }
+  get loginOpenId() {
+    return this.dynamicConfig.login.openId;
   }
 
   get isAllReadyConfigured() {
@@ -514,6 +519,56 @@ export class ConfigService extends BaseService {
         return this.http.delete<{}>(url);
       }))
   }
+
+  // openid provider
+
+
+  getAuthOpenIdProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/openid/providers', x);
+        return this.http.get<{ items: BaseOpenId[] }>(url);
+      }))
+  }
+
+
+  saveAuthOpenIdProvider(auth: BaseOpenId) {
+
+    const parameter: BaseOpenId = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled,
+      discoveryUrl: auth.discoveryUrl,
+      clientId: auth.clientId,
+      clientSecret: auth.clientSecret,
+      authName: auth.authName,
+      icon: auth.icon,
+      saveNewUser: auth.saveNewUser,
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseOpenId>(this.getApiUrl() + `/config/auth/openid/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseOpenId>(this.getApiUrl() + `/config/auth/openid/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthOpenIdProvider(oauth: BaseOpenId) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/openid/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
 
 
 

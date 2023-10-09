@@ -361,6 +361,7 @@ export class AuthenticationService extends BaseService {
     return this.preExecute({} as any).pipe(
       switchMap(y => {
         let isSaml = false;
+        let isOpenId = false;
         let url = '';
         if (callback.url.includes('google') && callback.url.includes('oauth')) {
           url = this._authOAuthGoogleCallback;
@@ -376,6 +377,17 @@ export class AuthenticationService extends BaseService {
           //url = this._authSamlAuth0Callback;
           isSaml = true;
         }
+        if (callback.url.includes('openid')) {
+          isOpenId = true;
+
+          let urlReal = callback.url.substring(0, callback.url.indexOf('?'));
+          let parts = urlReal.split('/').filter(y => y);
+          let authname = parts[parts.length - 1];
+          url = this.configService.getApiUrl() + `/auth/openid/${authname}/callback`
+
+        }
+
+
         if (y.captcha)
           callback.params.captcha = y.captcha;
         if (y.action)
@@ -434,6 +446,12 @@ export class AuthenticationService extends BaseService {
     else sessionStorage.removeItem(AuthenticationService.StorageExchangeSessionKey);
 
   }
+
+
+  getOpenIdAuthenticateUrl(openid: { authName: string }) {
+    return this.configService.getApiUrl() + '/auth/openid/' + openid.authName;
+  }
+
 
 
 

@@ -236,6 +236,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.authService.azureADAuthenticateUrl;
   }
 
+
   get isForgotPasswordEnabled() {
 
     return this.configService.isEnabledForgotPassword;
@@ -258,6 +259,16 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.configService.isLoginEnabledSamlAzure;
   }
 
+  getOpenIdAuthenticateUrl(openId: { name: string, authName: string }) {
+    return this.authService.getOpenIdAuthenticateUrl(openId);
+  }
+
+  get openIds() {
+    return this.configService.loginOpenId;
+  }
+
+
+
   get isGithubEnabled() {
     return false;
   }
@@ -270,10 +281,18 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   // if added something here add also 
 
   get isOthersEnabled() {
-    return this.isOAuthGoogleEnabled || this.isOAuthLinkedInEnabled ||
-      this.isGithubEnabled || this.isMicrosoftEnabled ||
-      this.isSamlAuth0Enabled ||
-      this.isSamlAzureADEnabled;
+    return this.isOAuthGoogleEnabled
+      || this.isOAuthLinkedInEnabled
+      || this.isGithubEnabled
+      || this.isMicrosoftEnabled
+      || this.isSamlAuth0Enabled
+      || this.isSamlAzureADEnabled
+      || this.openIds?.length > 0;
   }
+
+  loginMessage(openId: { name: string, authName: string }) {
+    return "Sign in with " + openId.name;
+  }
+
 
 }

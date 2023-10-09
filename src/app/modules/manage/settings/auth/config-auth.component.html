@@ -57,6 +57,13 @@
                 </app-auth-saml>
 
             </p>
+            <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.openId?.providers||[]">
+
+                <app-auth-openid test-id="config-auth-openid" [model]="provider" (saveOpenId)="saveOpenId($event)"
+                    (deleteOpenId)="deleteOpenId($event)">
+                </app-auth-openid>
+
+            </p>
         </div>
     </div>
 </div>

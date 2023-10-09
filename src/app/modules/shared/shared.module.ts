@@ -37,6 +37,7 @@ import { FileUploadComponent } from "./fileupload/fileupload.component";
 import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/policy-authn-rule-time-add/policy-authn-rule-time-add.component";
 import { DevicePostureComponent } from "./deviceposture/deviceposture.component";
 import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-authz-rule-fqdn/policy-authz-rule-fqdn.component";
+import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
 
 
 
@@ -67,6 +68,7 @@ import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-
         AuthLdapComponent,
         AuthLocalComponent,
         AuthSamlComponent,
+        AuthOpenIdComponent,
         GroupComponent,
         UserComponent,
         ServiceComponent,
@@ -116,6 +118,7 @@ import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-
         AuthSamlComponent,
         AuthOauthComponent,
         AuthLocalComponent,
+        AuthOpenIdComponent,
         GroupComponent,
         UserComponent,
         ServiceComponent,

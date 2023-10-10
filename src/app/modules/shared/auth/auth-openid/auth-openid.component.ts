@@ -27,7 +27,7 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
 
-
+  hidePassword = true;
   isThemeDark = false;
   private _model: Model;
   public get model(): Model {

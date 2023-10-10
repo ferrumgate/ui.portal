@@ -64,6 +64,13 @@
                 </app-auth-openid>
 
             </p>
+            <p class="config-auth-item" fxLayout="row" *ngFor="let provider of model.radius?.providers||[]">
+
+                <app-auth-radius test-id="config-auth-radius" [model]="provider"
+                    (saveRadius)="saveGenericRadius($event)" (deleteRadius)="deleteGenericRadius($event)">
+                </app-auth-radius>
+
+            </p>
         </div>
     </div>
 </div>

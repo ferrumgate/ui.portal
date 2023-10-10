@@ -48,7 +48,7 @@
                                 <input matInput test-id="auth-openid-discoveryurl-input"
                                     placeholder="https://dev-24wm8m7g.us.auth0.com/.well-known/openid-configuration"
                                     formControlName="discoveryUrl" required>
-                                <mat-hint>{{"DiscoveryHint"|translate}}</mat-hint>
+                                <mat-hint>{{"DiscoveryUrlHint"|translate}}</mat-hint>
                                 <mat-error>{{error.discoveryUrl|translate}}</mat-error>
 
                             </mat-form-field>
@@ -66,8 +66,11 @@
                         <p fxFill class="auth-openid-explanation ">
                             <mat-form-field appearance="fill" fxFill class="auth-openid-width">
                                 <mat-label>{{"ClientSecret"|translate}}</mat-label>
-                                <input matInput test-id="auth-openid-clientsecret-input" placeholder="3lsSWs!"
+                                <input matInput [type]="hidePassword?'password':'text'"
+                                    test-id="auth-openid-clientsecret-input" placeholder="3lsSWs!"
                                     formControlName="clientSecret" required>
+                                <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
                                 <mat-hint>{{"ClientSecretHint"|translate}}</mat-hint>
                                 <mat-error>{{error.clientSecret|translate}}</mat-error>
 

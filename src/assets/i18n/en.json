@@ -532,5 +532,7 @@
     "DiscoveryUrl": "Discovery url",
     "DiscoveryUrlHint": "Other information will get from this url",
     "ClientIdHint": "Client id from provider",
-    "ClientSecretHint": "Client secret from provides"
+    "ClientSecretHint": "Client secret from provides",
+    "SecretKey": "Secret key",
+    "SecretKeyHint": "Secret key"
 }

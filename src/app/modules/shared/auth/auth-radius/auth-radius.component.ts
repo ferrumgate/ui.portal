@@ -7,29 +7,30 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { BaseOAuth } from '../../models/auth';
+import { BaseRadius } from '../../models/auth';
 import { SSubscription } from '../../services/SSubscribtion';
+import { InputService } from '../../services/input.service';
 
 
-interface BaseModel extends BaseOAuth {
+interface BaseModel extends BaseRadius {
 
 }
 interface Model extends BaseModel {
   isChanged: boolean
-  orig: BaseOAuth
+  orig: BaseRadius
   svgIcon?: string
 }
 
 @Component({
-  selector: 'app-auth-oauth',
-  templateUrl: './auth-oauth.component.html',
-  styleUrls: ['./auth-oauth.component.scss']
+  selector: 'app-auth-radius',
+  templateUrl: './auth-radius.component.html',
+  styleUrls: ['./auth-radius.component.scss']
 })
-export class AuthOauthComponent implements OnInit, OnDestroy {
+export class AuthRadiusComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-  hidePassword = true;
 
+  hidePassword = true;
   isThemeDark = false;
   private _model: Model;
   public get model(): Model {
@@ -37,35 +38,32 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
 
   }
   @Input()
-  public set model(val: BaseOAuth) {
+  public set model(val: BaseRadius) {
     this._model = {
       ...val,
-      clientId: val.clientId,
-      clientSecret: val.clientSecret,
+      host: val.host,
+      secret: val.secret,
       isChanged: false,
       orig: val,
       svgIcon: this.findIconName(val)
     }
     this.formGroup = this.createFormGroup(this._model);
   }
-  findIconName(val: BaseOAuth) {
-    if (val.name.startsWith('Google'))
-      return 'social-google';
-    if (val.name.startsWith('Linkedin'))
-      return 'social-linkedin'
-    return undefined;
+  findIconName(val: BaseRadius) {
+
+    return "radius";
   }
 
   @Output()
-  saveOAuth: EventEmitter<BaseOAuth> = new EventEmitter();
+  saveRadius: EventEmitter<BaseRadius> = new EventEmitter();
   @Output()
-  deleteOAuth: EventEmitter<BaseOAuth> = new EventEmitter();
+  deleteRadius: EventEmitter<BaseRadius> = new EventEmitter();
 
 
 
   //captcha settings
   formGroup: FormGroup;
-  error = { clientId: '', clientSecret: '' };
+  error = { host: '', };
   captchaError: { server: string, client: string } = { server: '', client: '' };
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -74,13 +72,13 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService) {
 
     this._model = {
-      clientId: '', clientSecret: '',
-      baseType: 'oauth', type: 'google', id: '', name: 'OAuth',
-      isChanged: false, isEnabled: true,
+      host: '', secret: '',
+      baseType: 'radius', type: 'generic', id: '', name: 'Radius',
+      isChanged: false, isEnabled: true, saveNewUser: true,
       orig:
       {
-        clientId: '', clientSecret: '',
-        baseType: 'oauth', type: 'google', id: '', name: 'OAuth',
+        host: '', secret: '',
+        baseType: 'radius', type: 'generic', id: '', name: 'Radius',
         isEnabled: true
 
       }
@@ -111,8 +109,8 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
-        clientId: new FormControl(model.clientId, [Validators.required]),
-        clientSecret: new FormControl(model.clientSecret, [Validators.required]),
+        host: new FormControl(model.host, [Validators.required, InputService.hostValidator]),
+        secret: new FormControl(model.secret),
       });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -132,7 +130,7 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   resetErrors() {
 
     return {
-      clientId: '', clientSecret: ''
+      host: '', secret: ''
     }
   }
 
@@ -147,32 +145,25 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   checkFormError() {
     //check errors 
     this.error = this.resetErrors();
-    const clientIdError = this.formGroup.controls['clientId'].errors;
+    const hostError = this.formGroup.controls.host.errors;
 
-    if (clientIdError) {
-      if (clientIdError['required'])
-        this.error.clientId = 'ClientIdRequired';
+    if (hostError) {
+      if (hostError['required'])
+        this.error.host = 'HostRequired';
       else
-        this.error.clientId = 'ClientIdRequired';
+        this.error.host = 'HostRequired';
     }
 
-    const clientSecretError = this.formGroup.controls['clientSecret'].errors;
 
-    if (clientSecretError) {
-      if (clientSecretError['required'])
-        this.error.clientSecret = 'ClientSecretRequired';
-      else
-        this.error.clientSecret = 'ClientSecretRequired';
-    }
   }
 
   checkIfModelChanged() {
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
-    if (original.clientId != model.clientId)
+    if (original.host != model.host)
       model.isChanged = true;
-    if (original.clientSecret != model.clientSecret)
+    if (original.secret != model.secret)
       model.isChanged = true;
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
@@ -192,14 +183,14 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
     this.formGroup.markAsUntouched();
   }
 
-  createBaseModel(): BaseOAuth {
+  createBaseModel(): BaseRadius {
     return {
       objId: this.model.objId,
       id: this.model.id,
       baseType: this.model.baseType,
       type: this.model.type,
-      clientId: this.model.clientId,
-      clientSecret: this.model.clientSecret,
+      host: this.model.host,
+      secret: this.model.secret,
       name: this.model.name,
       tags: this.model.tags,
       isEnabled: this.model.isEnabled,
@@ -212,12 +203,12 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   }
   saveOrUpdate() {
     if (this.formGroup.valid)
-      this.saveOAuth.emit(this.createBaseModel())
+      this.saveRadius.emit(this.createBaseModel())
   }
 
 
   delete() {
-    this.deleteOAuth.emit(this.createBaseModel());
+    this.deleteRadius.emit(this.createBaseModel());
   }
 
 }

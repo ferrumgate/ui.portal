@@ -38,6 +38,7 @@ import { PolicyAuthnRuleTimeAddComponent } from "./policy/policy-authn-rule/poli
 import { DevicePostureComponent } from "./deviceposture/deviceposture.component";
 import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-authz-rule-fqdn/policy-authz-rule-fqdn.component";
 import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
+import { AuthRadiusComponent } from "./auth/auth-radius/auth-radius.component";
 
 
 
@@ -69,6 +70,7 @@ import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
         AuthLocalComponent,
         AuthSamlComponent,
         AuthOpenIdComponent,
+        AuthRadiusComponent,
         GroupComponent,
         UserComponent,
         ServiceComponent,
@@ -119,6 +121,7 @@ import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
         AuthOauthComponent,
         AuthLocalComponent,
         AuthOpenIdComponent,
+        AuthRadiusComponent,
         GroupComponent,
         UserComponent,
         ServiceComponent,

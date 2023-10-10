@@ -157,6 +157,11 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
     );
 
+    this.matIconRegistry.addSvgIcon(
+      "radius",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/radius.svg")
+    );
+
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';

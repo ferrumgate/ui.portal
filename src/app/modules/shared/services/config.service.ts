@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseOpenId, BaseSaml } from '../models/auth';
+import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseOpenId, BaseRadius, BaseSaml } from '../models/auth';
 
 import { ConfigBrand, ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
 import { BaseService } from './base.service';
@@ -565,6 +565,54 @@ export class ConfigService extends BaseService {
     return this.preExecute(urlSearchParams).pipe(
       switchMap(x => {
         const url = this.joinUrl(this.getApiUrl(), '/config/auth/openid/providers', oauth.id, x);
+        return this.http.delete<{}>(url);
+      }))
+  }
+
+
+
+  // radius provider
+
+
+  getAuthRadiusProviders() {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/radius/providers', x);
+        return this.http.get<{ items: BaseRadius[] }>(url);
+      }))
+  }
+
+
+  saveAuthRadiusProvider(auth: BaseRadius) {
+
+    const parameter: BaseRadius = {
+      id: auth.id,
+      baseType: auth.baseType,
+      name: auth.name,
+      type: auth.type,
+      tags: auth.tags,
+      securityProfile: auth.securityProfile,
+      isEnabled: auth.isEnabled,
+      host: auth.host,
+      secret: auth.secret,
+      saveNewUser: auth.saveNewUser,
+
+    }
+    return this.preExecute(parameter).pipe(
+      switchMap(x => {
+        if (x.id)
+          return this.http.put<BaseRadius>(this.getApiUrl() + `/config/auth/radius/providers`, x, this.jsonHeader);
+        else
+          return this.http.post<BaseRadius>(this.getApiUrl() + `/config/auth/radius/providers`, x, this.jsonHeader);
+      }))
+  }
+
+  deleteAuthRadiusProvider(oauth: BaseRadius) {
+    const urlSearchParams = new URLSearchParams();
+    return this.preExecute(urlSearchParams).pipe(
+      switchMap(x => {
+        const url = this.joinUrl(this.getApiUrl(), '/config/auth/radius/providers', oauth.id, x);
         return this.http.delete<{}>(url);
       }))
   }

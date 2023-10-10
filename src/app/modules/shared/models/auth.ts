@@ -59,6 +59,14 @@ export interface BaseLocal extends BaseAuth {
     isRegister?: boolean;
 }
 
+export interface BaseRadius extends BaseAuthId, BaseAuth {
+    host: string;
+    secret?: string;
+    //this is a security flag, be carefull
+    saveNewUser?: boolean;
+}
+
+
 
 
 export interface AuthLocal extends BaseLocal {
@@ -84,7 +92,9 @@ export interface AuthOpenId {
     providers: BaseOpenId[];
 }
 
-
+export interface AuthRadius {
+    providers: BaseRadius[];
+}
 
 export interface AuthSettings {
     common: AuthCommon;
@@ -93,5 +103,5 @@ export interface AuthSettings {
     ldap?: AuthLdap;
     saml?: AuthSaml;
     openId?: AuthOpenId
-
+    radius?: AuthRadius
 }

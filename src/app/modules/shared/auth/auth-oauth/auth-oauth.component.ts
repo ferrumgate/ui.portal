@@ -53,7 +53,11 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
       return 'social-google';
     if (val.name.startsWith('Linkedin'))
       return 'social-linkedin'
-    return undefined;
+    if (val.name.startsWith('Auth0'))
+      return 'social-auth0'
+    if (val.name.startsWith('Azure'))
+      return 'social-azure'
+    return "social-oauth2";
   }
 
   @Output()

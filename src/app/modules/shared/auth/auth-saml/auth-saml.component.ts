@@ -52,7 +52,7 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       return 'social-auth0'
     if (val.name.startsWith('Azure'))
       return 'social-azure'
-    return undefined;
+    return "social-saml";
   }
 
   @Output()

@@ -267,6 +267,20 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.configService.loginOpenId;
   }
 
+  get oAuths() {
+    return this.configService.loginOAuth;
+  }
+  getOAuthAuthenticateUrl(openId: { name: string, authName: string }) {
+    return this.authService.getOAuthAuthenticateUrl(openId);
+  }
+
+  get samls() {
+    return this.configService.loginSaml;
+  }
+  getSamlAuthenticateUrl(openId: { name: string, authName: string }) {
+    return this.authService.getSamlAuthenticateUrl(openId);
+  }
+
 
 
   get isGithubEnabled() {
@@ -287,11 +301,32 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       || this.isMicrosoftEnabled
       || this.isSamlAuth0Enabled
       || this.isSamlAzureADEnabled
-      || this.openIds?.length > 0;
+      || this.openIds?.length > 0
+      || this.oAuths?.length > 0
+      || this.samls?.length > 0;
   }
 
-  loginMessage(openId: { name: string, authName: string }) {
-    return "Sign in with " + openId.name;
+  loginMessage(auth: { name: string, authName: string }) {
+    return "Sign in with " + auth.name;
+  }
+  loginIcon(auth: { name: string, authName: string }, def: string) {
+    if (auth.name.toLowerCase().includes('google'))
+      return 'social-google';
+    if (auth.name.toLowerCase().includes('azure'))
+      return 'social-azure';
+    if (auth.name.toLowerCase().includes('auth0'))
+      return 'social-auth0';
+    if (auth.name.toLowerCase().includes('linkedin'))
+      return 'social-linkedin';
+    if (auth.name.toLowerCase().includes('onelogin'))
+      return 'social-onelogin';
+    if (auth.name.toLowerCase().includes('okta'))
+      return 'social-okta';
+    if (auth.name.toLowerCase().includes('google'))
+      return 'social-google';
+
+    return def;
+
   }
 
 

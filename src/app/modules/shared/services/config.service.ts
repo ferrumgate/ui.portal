@@ -32,7 +32,9 @@ export class ConfigService extends BaseService {
         oAuthLinkedin: undefined,
         samlAuth0: undefined,
         samlAzure: undefined,
-        openId: []
+        openId: [],
+        oauth: [],
+        saml: []
       },
       brand: {
 
@@ -185,7 +187,9 @@ export class ConfigService extends BaseService {
       oAuthLinkedin: object | undefined,
       samlAuth0: object | undefined,
       samlAzure: object | undefined,
-      openId: { name: string, authName: string }[]
+      openId: { name: string, authName: string }[],
+      oauth: { name: string, authName: string }[],
+      saml: { name: string, authName: string }[],
     },
     brand: {
       name?: string,
@@ -251,6 +255,16 @@ export class ConfigService extends BaseService {
   get loginOpenId() {
     return this.dynamicConfig.login.openId;
   }
+
+  get loginOAuth() {
+    return this.dynamicConfig.login.oauth;
+  }
+
+
+  get loginSaml() {
+    return this.dynamicConfig.login.saml;
+  }
+
 
   get isAllReadyConfigured() {
     return this.dynamicConfig.isConfigured;
@@ -402,6 +416,9 @@ export class ConfigService extends BaseService {
       clientId: oauth.clientId,
       clientSecret: oauth.clientSecret,
       isEnabled: oauth.isEnabled,
+      authName: oauth.authName,
+      authorizationUrl: oauth.authorizationUrl,
+      tokenUrl: oauth.tokenUrl,
       saveNewUser: oauth.saveNewUser,
     }
     return this.preExecute(parameter).pipe(

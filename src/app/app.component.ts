@@ -92,6 +92,30 @@ export class AppComponent implements OnInit {
       "social-authentication",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/authentication.svg")
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "social-radius",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/radius.svg")
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "social-oauth2",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/oauth2.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "social-saml",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/saml.svg")
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "social-okta",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/okta.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "social-onelogin",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/social/onelogin.svg")
+    );
+
     this.matIconRegistry.addSvgIcon(
       "linux",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/linux.svg")
@@ -157,10 +181,7 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
     );
 
-    this.matIconRegistry.addSvgIcon(
-      "radius",
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/radius.svg")
-    );
+
 
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {

@@ -53,8 +53,7 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
       return 'social-auth0'
     if (val.name.startsWith('Azure'))
       return 'social-azure'
-
-    return 'social-openid';
+    return "social-openid";
   }
 
   @Output()

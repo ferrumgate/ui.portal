@@ -25,6 +25,8 @@ export interface AuthLocal extends BaseAuth {
 export interface BaseOAuth extends BaseAuthId, BaseAuth {
     clientId: string,
     clientSecret: string,
+    authorizationUrl?: string;
+    tokenUrl?: string;
     saveNewUser?: boolean;
 }
 export interface BaseLdap extends BaseAuthId, BaseAuth {

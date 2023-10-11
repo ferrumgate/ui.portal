@@ -386,6 +386,13 @@ export class AuthenticationService extends BaseService {
           url = this.configService.getApiUrl() + `/auth/openid/${authname}/callback`
 
         }
+        /* if (callback.url.includes('oauth')) {
+          let urlReal = callback.url.substring(0, callback.url.indexOf('?'));
+          let parts = urlReal.split('/').filter(y => y);
+          let authname = parts[parts.length - 1];
+          url = this.configService.getApiUrl() + `/auth/oauth/${authname}/callback`
+
+        } */
 
 
         if (y.captcha)
@@ -448,9 +455,18 @@ export class AuthenticationService extends BaseService {
   }
 
 
-  getOpenIdAuthenticateUrl(openid: { authName: string }) {
-    return this.configService.getApiUrl() + '/auth/openid/' + openid.authName;
+  getOpenIdAuthenticateUrl(auth: { authName: string }) {
+    return this.configService.getApiUrl() + '/auth/openid/' + auth.authName;
   }
+  getOAuthAuthenticateUrl(auth: { authName: string }) {
+    return this.configService.getApiUrl() + '/auth/oauth/' + auth.authName;
+  }
+
+  getSamlAuthenticateUrl(auth: { authName: string }) {
+    return this.configService.getApiUrl() + '/auth/saml/' + auth.authName;
+  }
+
+
 
 
 

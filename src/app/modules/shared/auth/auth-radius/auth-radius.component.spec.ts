@@ -55,7 +55,7 @@ describe('AuthRadiusComponent', () => {
     const testIdSecret = 'auth-radius-secret-input';
     const testIdSaveButton = 'auth-radius-ok-button';
     //check value binding
-    expectValue(fixture, testIdHost, '192.168.88.1');
+    expectValue(fixture, testIdHost, '192.168.1.1');
     expectValue(fixture, testIdSecret, 'somesecret');
     expect(component.error.host).toBeFalsy();
     const buttonSave = findEl(fixture, testIdSaveButton, false);

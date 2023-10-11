@@ -68,12 +68,16 @@ export class ConfigAuthComponent implements OnInit {
       name: 'Google/OAuth2', type: 'oauth', isVisible: true, svg: 'social-google', icon: undefined,
       click: () => { this.addGoogleOAuth(); }
     },
+    /*  {
+       name: 'Generic/OAuth2', type: 'oauth', isVisible: true, svg: 'social-oauth2', icon: undefined,
+       click: () => { this.addGenericOAuth(); }
+     }, */
     {
       name: 'Generic/OpenID', type: 'openid', isVisible: true, svg: 'social-openid', icon: undefined,
       click: () => { this.addGenericOpenId(); }
     },
     {
-      name: 'Generic/Radius', type: 'radius', isVisible: true, svg: 'radius', icon: undefined,
+      name: 'Generic/Radius', type: 'radius', isVisible: true, svg: 'social-radius', icon: undefined,
       click: () => { this.addGenericRadius() }
     },
 
@@ -501,6 +505,31 @@ export class ConfigAuthComponent implements OnInit {
       })
     }
   }
+
+
+  addGenericOAuth() {
+    const googleOAuth = this.model.oauth?.providers.find(x => x.baseType == 'oauth' && x.type == 'generic' && x.authName == 'generic');
+    if (googleOAuth) {
+      this.notificationService.error(`Google/OAuth2  ${this.translateService.translate('AllreadyExists')}`);
+      return;
+    }
+    const oauth: BaseOAuth = {
+      baseType: 'oauth', type: 'generic', authName: 'generic',
+      objId: UtilService.randomNumberString(),
+      name: 'OAuth2', tags: [],
+      authorizationUrl: '', tokenUrl: '',
+      id: '', clientId: '', clientSecret: '',
+
+      isEnabled: true, saveNewUser: true
+    }
+    if (!this.model.oauth)
+      this.model.oauth = { providers: [] };
+    this.model.oauth.providers.push(oauth);
+
+  }
+
+
+
 
 
 

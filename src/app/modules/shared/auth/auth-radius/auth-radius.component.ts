@@ -51,7 +51,7 @@ export class AuthRadiusComponent implements OnInit, OnDestroy {
   }
   findIconName(val: BaseRadius) {
 
-    return "radius";
+    return "social-radius";
   }
 
   @Output()

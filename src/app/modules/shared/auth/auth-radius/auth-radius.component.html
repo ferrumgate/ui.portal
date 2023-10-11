@@ -1,4 +1,4 @@
-<div class="auth-oauth">
+<div class="auth-radius">
 
     <mat-card>
         <mat-card-header>
@@ -18,37 +18,37 @@
         <mat-card-content>
             <div>
                 <div>
-                    <form test-id="auth-oauth-form" [formGroup]="formGroup">
-                        <p fxFill class="auth-oauth-exp">
-                            <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
-                                <mat-label>{{"ClientId"|translate}}</mat-label>
-                                <input matInput test-id="auth-oauth-clientid-input" placeholder="scfAAAAAFKwZu"
-                                    formControlName="clientId" required>
-                                <mat-hint>{{"OAuthClientIdHint"|translate}}
+                    <form test-id="auth-radius-form" [formGroup]="formGroup">
+                        <p fxFill class="auth-radius-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-radius-width">
+                                <mat-label>{{"Host"|translate}}</mat-label>
+                                <input matInput test-id="auth-radius-host-input" placeholder="192.168.100.10"
+                                    formControlName="host" required autocomplete="new-password">
+                                <mat-hint>{{"HostHint"|translate}}
                                 </mat-hint>
-                                <mat-error>{{error.clientId|translate}}</mat-error>
+                                <mat-error>{{error.host|translate}}</mat-error>
                             </mat-form-field>
                         </p>
-                        <p fxFill class="auth-oauth-explanation ">
-                            <mat-form-field appearance="fill" fxFill class="auth-oauth-width">
-                                <mat-label>{{"ClientKey"|translate}}</mat-label>
-                                <input matInput [type]="hidePassword?'password':'text'"
-                                    test-id="auth-oauth-clientkey-input" placeholder="LeAscfAAAAA"
-                                    formControlName="clientSecret" required>
+                        <p fxFill class="auth-radius-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-radius-width">
+                                <mat-label>{{"SecretKey"|translate}}</mat-label>
+                                <input matInput test-id="auth-radius-secret-input"
+                                    [type]="hidePassword?'password':'text'" placeholder="LeAscfAAAAA"
+                                    formControlName="secret" autocomplete="new-password">
                                 <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
                                     'visibility_off' : 'visibility'}}</mat-icon>
-                                <mat-hint>{{"OAuthClientKeyHint"|translate}}</mat-hint>
-                                <mat-error>{{error.clientSecret|translate}}</mat-error>
+                                <mat-hint>{{"SecretKeyHint"|translate}}</mat-hint>
+
 
                             </mat-form-field>
                         </p>
                         <p>
-                            <mat-checkbox test-id="auth-oauth-checkbox-savenewuser" [(ngModel)]="model.saveNewUser"
+                            <mat-checkbox test-id="auth-radius-checkbox-savenewuser" [(ngModel)]="model.saveNewUser"
                                 [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
                                 {{"SaveNewUserIfAuthenticated"|translate}}</mat-checkbox>
                         </p>
                         <p>
-                            <mat-checkbox test-id="auth-oauth-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                            <mat-checkbox test-id="auth-radius-checkbox-enabled" [(ngModel)]="model.isEnabled"
                                 [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
                                 {{"Enabled"|translate}}</mat-checkbox>
                         </p>
@@ -58,7 +58,7 @@
                 <div>
                     <mat-divider></mat-divider>
                     <mat-toolbar style="height:35px">
-                        <mat-action-row class="auth-oauth-actions" fxFlex fxLayoutAlign="start center">
+                        <mat-action-row class="auth-radius-actions" fxFlex fxLayoutAlign="start center">
                             <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
                                 (click)="delete()">
                                 <mat-icon>delete</mat-icon>
@@ -68,7 +68,7 @@
                                     (click)="clear()">
                                     <mat-icon>close</mat-icon>
                                 </button>
-                                <button test-id="auth-oauth-ok-button" mat-icon-button color="warn"
+                                <button test-id="auth-radius-ok-button" mat-icon-button color="warn"
                                     matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
                                     <mat-icon>check</mat-icon>
                                 </button>

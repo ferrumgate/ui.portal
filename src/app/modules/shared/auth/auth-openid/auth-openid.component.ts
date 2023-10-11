@@ -1,32 +1,33 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BaseOAuth, BaseSaml } from '../../models/auth';
+import { BaseOAuth, BaseOpenId } from '../../models/auth';
 import { ConfigService } from '../../services/config.service';
 import { ConfirmService } from '../../services/confirm.service';
 import { NotificationService } from '../../services/notification.service';
 import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
+import { InputService } from '../../services/input.service';
 
 
-interface BaseModel extends BaseSaml {
+interface BaseModel extends BaseOpenId {
 
 }
 interface Model extends BaseModel {
   isChanged: boolean
-  orig: BaseSaml
+  orig: BaseOpenId
   svgIcon?: string
 }
 @Component({
-  selector: 'app-auth-saml',
-  templateUrl: './auth-saml.component.html',
-  styleUrls: ['./auth-saml.component.scss']
+  selector: 'app-auth-openid',
+  templateUrl: './auth-openid.component.html',
+  styleUrls: ['./auth-openid.component.scss']
 })
-export class AuthSamlComponent implements OnInit, OnDestroy {
+export class AuthOpenIdComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
 
-
+  hidePassword = true;
   isThemeDark = false;
   private _model: Model;
   public get model(): Model {
@@ -34,7 +35,7 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
 
   }
   @Input()
-  public set model(val: BaseSaml) {
+  public set model(val: BaseOpenId) {
     this._model = {
       ...val,
       isChanged: false,
@@ -43,7 +44,7 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
     }
     this.formGroup = this.createFormGroup(this._model);
   }
-  findIconName(val: BaseSaml) {
+  findIconName(val: BaseOpenId) {
     if (val.name.startsWith('Google'))
       return 'social-google';
     if (val.name.startsWith('Linkedin'))
@@ -52,34 +53,42 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       return 'social-auth0'
     if (val.name.startsWith('Azure'))
       return 'social-azure'
-    return "social-saml";
+    return "social-openid";
   }
 
   @Output()
-  saveSaml: EventEmitter<BaseSaml> = new EventEmitter();
+  saveOpenId: EventEmitter<BaseOpenId> = new EventEmitter();
   @Output()
-  deleteSaml: EventEmitter<BaseSaml> = new EventEmitter();
+  deleteOpenId: EventEmitter<BaseOpenId> = new EventEmitter();
 
 
 
   //captcha settings
   formGroup: FormGroup;
-  error = { issuer: '', cert: '', loginUrl: '', nameField: '', usernameField: '' };
+  error = {
+    name: '', shortName: '', discoveryUrl: '',
+    clientId: '', clientSecret: '',
+  };
 
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private inputService: InputService) {
 
     this._model = {
-      issuer: '', cert: '', loginUrl: '', nameField: '', usernameField: '',
-      baseType: 'saml', type: 'auth0', id: '', name: 'Saml',
-      isChanged: false, isEnabled: true,
+      discoveryUrl: '',
+      baseType: 'openId', type: 'generic', id: '', name: 'Generic', authName: 'generic',
+      clientId: '', clientSecret: '',
+      isChanged: false, isEnabled: true, saveNewUser: true,
       orig:
       {
-        issuer: '', cert: '', loginUrl: '', nameField: '', usernameField: '',
-        baseType: 'saml', type: 'auth0', id: '', name: 'Saml',
+        discoveryUrl: '',
+        baseType: 'openId', type: 'generic', id: '', name: 'Generic', authName: 'generic',
+        clientId: '', clientSecret: '',
+        icon: '', tags: [],
+        saveNewUser: false,
         isEnabled: true
 
       }
@@ -107,14 +116,16 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
+
+
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
-        loginUrl: new FormControl(model.loginUrl, [Validators.required]),
-        issuer: new FormControl(model.issuer, [Validators.required]),
-        cert: new FormControl(model.cert, [Validators.required]),
-        nameField: new FormControl(model.nameField, [Validators.required]),
-        usernameField: new FormControl(model.usernameField, [Validators.required]),
+        name: new FormControl(model.name, [Validators.required]),
+        authName: new FormControl(model.authName, [Validators.required, InputService.hostValidator]),
+        discoveryUrl: new FormControl(model.discoveryUrl, [Validators.required, InputService.urlValidator]),
+        clientId: new FormControl(model.clientId, [Validators.required]),
+        clientSecret: new FormControl(model.clientSecret, [Validators.required]),
       });
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -133,7 +144,11 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
   }
   resetErrors() {
 
-    return { issuer: '', cert: '', loginUrl: '', nameField: '', usernameField: '' };
+    return {
+      name: '', shortName: '', discoveryUrl: '',
+      clientId: '', clientSecret: '',
+
+    };
   }
 
   modelChanged() {
@@ -144,63 +159,80 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
 
   }
 
+
+
   checkFormError() {
     //check errors 
     this.error = this.resetErrors();
 
-    const issuerError = this.formGroup.controls.issuer.errors;
 
-    if (issuerError) {
-      if (issuerError['required'])
-        this.error.issuer = 'IssuerRequired';
+    const nameError = this.formGroup.controls.name.errors;
+
+    if (nameError) {
+      if (nameError['required'])
+        this.error.name = 'NameRequired';
       else
-        this.error.issuer = 'IssuerRequired';
+        this.error.name = 'NameRequired';
     }
 
-    const certError = this.formGroup.controls.cert.errors;
-    if (certError) {
-      if (certError['required'])
-        this.error.cert = 'CertRequired';
+    const shortNameError = this.formGroup.controls.authName.errors;
+
+    if (shortNameError) {
+      if (shortNameError['required'])
+        this.error.shortName = 'ShortNameRequired';
+      else if (shortNameError['invalidHost'])
+        this.error.shortName = 'InvalidShortName';
       else
-        this.error.cert = 'CertRequired';
+        this.error.shortName = 'ShortNameRequired';
     }
-    const loginUrlError = this.formGroup.controls.loginUrl.errors;
-    if (loginUrlError) {
-      if (loginUrlError['required'])
-        this.error.loginUrl = 'LoginUrlRequired';
+
+
+    const discoveryUrlError = this.formGroup.controls.discoveryUrl.errors;
+
+    if (discoveryUrlError) {
+      if (discoveryUrlError['required'])
+        this.error.discoveryUrl = 'DiscoveryUrlRequired';
       else
-        this.error.loginUrl = 'LoginUrlRequired';
+        this.error.discoveryUrl = 'DiscoveryUrlRequired';
     }
-    const nameFieldError = this.formGroup.controls.nameField.errors;
-    if (nameFieldError) {
-      if (nameFieldError['required'])
-        this.error.nameField = 'NameFieldRequired';
+
+    const clientIdError = this.formGroup.controls.clientId.errors;
+    if (clientIdError) {
+      if (clientIdError['required'])
+        this.error.clientId = 'ClientIdRequired';
       else
-        this.error.nameField = 'NameFieldRequired';
+        this.error.clientId = 'ClientIdRequired';
     }
-    const usernameFieldError = this.formGroup.controls.usernameField.errors;
-    if (usernameFieldError) {
-      if (usernameFieldError['required'])
-        this.error.usernameField = 'UsernameFieldRequired';
+    const clientSecretError = this.formGroup.controls.clientSecret.errors;
+    if (clientSecretError) {
+      if (clientSecretError['required'])
+        this.error.clientSecret = 'ClientSecretRequired';
       else
-        this.error.usernameField = 'UsernameFieldRequired';
+        this.error.clientSecret = 'ClientSecretRequired';
     }
+
+
+
   }
 
   checkIfModelChanged() {
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
-    if (original.loginUrl != model.loginUrl)
+    if (original.authName != model.authName)
       model.isChanged = true;
-    if (original.issuer != model.issuer)
+    if (original.name != model.name)
       model.isChanged = true;
-    if (original.cert != model.cert)
+
+    if (original.discoveryUrl != model.discoveryUrl)
       model.isChanged = true;
-    if (original.usernameField != model.usernameField)
+    if (original.clientId != model.clientId)
       model.isChanged = true;
-    if (original.nameField != model.nameField)
+    if (original.clientSecret != model.clientSecret)
       model.isChanged = true;
+    if (original.icon != model.icon)
+      model.isChanged = true;
+
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
     if (original.saveNewUser != model.saveNewUser)
@@ -219,7 +251,7 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
     this.formGroup.markAsUntouched();
   }
 
-  createBaseModel(): BaseSaml {
+  createBaseModel(): BaseOpenId {
     return {
       objId: this.model.objId,
       id: this.model.id,
@@ -228,12 +260,11 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
       name: this.model.name,
       tags: this.model.tags,
       isEnabled: this.model.isEnabled,
-      cert: this.model.cert,
-      issuer: this.model.issuer,
-      loginUrl: this.model.loginUrl,
-      nameField: this.model.nameField,
-      usernameField: this.model.usernameField,
-      fingerPrint: this.model.fingerPrint,
+      discoveryUrl: this.model.discoveryUrl,
+      clientId: this.model.clientId,
+      clientSecret: this.model.clientSecret,
+      authName: this.model.authName?.toLowerCase().replace(/[^[a-z0-0]]/g, ''),
+      icon: this.model.icon,
       saveNewUser: this.model.saveNewUser,
       securityProfile: {
         ...this.model.securityProfile
@@ -243,12 +274,12 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
   }
   saveOrUpdate() {
     if (this.formGroup.valid)
-      this.saveSaml.emit(this.createBaseModel())
+      this.saveOpenId.emit(this.createBaseModel())
   }
 
 
   delete() {
-    this.deleteSaml.emit(this.createBaseModel());
+    this.deleteOpenId.emit(this.createBaseModel());
   }
 
   selectCertFile(event: any) {

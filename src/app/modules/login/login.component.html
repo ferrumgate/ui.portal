@@ -127,6 +127,28 @@
                             <mat-icon svgIcon="social-azure"></mat-icon>
                         </a>
                     </div>
+                    <div *ngFor="let openid of openIds" class="social">
+                        <a href="{{getOpenIdAuthenticateUrl(openid)}}" mat-icon-button
+                            aria-label="openid authentication" matTooltip={{loginMessage(openid)}}
+                            matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="{{loginIcon(openid,'social-openid')}}"></mat-icon>
+                        </a>
+                    </div>
+                    <div *ngFor="let oauth of oAuths" class="social">
+                        <a href="{{getOAuthAuthenticateUrl(oauth)}}" mat-icon-button aria-label="oauth authentication"
+                            matTooltip={{loginMessage(oauth)}} matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="{{loginIcon(oauth,'social-oauth2')}}"></mat-icon>
+                        </a>
+                    </div>
+                    <div *ngFor="let saml of samls" class="social">
+                        <a href="{{getSamlAuthenticateUrl(saml)}}" mat-icon-button aria-label="saml authentication"
+                            matTooltip={{loginMessage(saml)}} matTooltipShowDelay="100" matTooltipHideDelay="200">
+
+                            <mat-icon svgIcon="{{loginIcon(saml,'social-saml')}}"></mat-icon>
+                        </a>
+                    </div>
                 </div>
 
 

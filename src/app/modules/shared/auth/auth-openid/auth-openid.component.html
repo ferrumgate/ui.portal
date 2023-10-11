@@ -1,0 +1,120 @@
+<div class="auth-openid">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{model.name}}">
+                <mat-icon *ngIf="model.svgIcon" [svgIcon]="model.svgIcon"></mat-icon>
+                <mat-icon *ngIf="!model.svgIcon">local_library</mat-icon>
+            </mat-card-title>
+            <h3>{{model.name}}</h3>
+            <mat-action-row fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+                    <form test-id="auth-openid-form" [formGroup]="formGroup">
+
+                        <p fxFill class="auth-openid-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-openid-width">
+                                <mat-label>{{"Name"|translate}}</mat-label>
+                                <input matInput test-id="auth-openid-name-input" placeholder="Fill with a name"
+                                    formControlName="name" required>
+                                <mat-hint>{{"NameHint"|translate}}
+                                </mat-hint>
+                                <mat-error>{{error.name|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+
+
+                        <p fxFill class="auth-openid-exp">
+                            <mat-form-field appearance="fill" fxFill class="auth-openid-width">
+                                <mat-label>{{"ShortName"|translate}}</mat-label>
+                                <input matInput test-id="auth-openid-shortname-input" placeholder="auth0"
+                                    formControlName="authName" required>
+                                <mat-hint>{{"ShortNameHint"|translate}}
+                                </mat-hint>
+                                <mat-error>{{error.shortName|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-openid-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-openid-width">
+                                <mat-label>{{"DiscoveryUrl"|translate}}</mat-label>
+                                <input matInput test-id="auth-openid-discoveryurl-input"
+                                    placeholder="https://dev-24wm8m7g.us.auth0.com/.well-known/openid-configuration"
+                                    formControlName="discoveryUrl" required>
+                                <mat-hint>{{"DiscoveryUrlHint"|translate}}</mat-hint>
+                                <mat-error>{{error.discoveryUrl|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-openid-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-openid-width">
+                                <mat-label>{{"ClientId"|translate}}</mat-label>
+                                <input matInput test-id="auth-openid-clientid-input" placeholder="a3xEErs"
+                                    formControlName="clientId" required>
+                                <mat-hint>{{"ClientIdHint"|translate}}</mat-hint>
+                                <mat-error>{{error.clientId|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+                        <p fxFill class="auth-openid-explanation ">
+                            <mat-form-field appearance="fill" fxFill class="auth-openid-width">
+                                <mat-label>{{"ClientSecret"|translate}}</mat-label>
+                                <input matInput [type]="hidePassword?'password':'text'"
+                                    test-id="auth-openid-clientsecret-input" placeholder="3lsSWs!"
+                                    formControlName="clientSecret" required>
+                                <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ?
+                                    'visibility_off' : 'visibility'}}</mat-icon>
+                                <mat-hint>{{"ClientSecretHint"|translate}}</mat-hint>
+                                <mat-error>{{error.clientSecret|translate}}</mat-error>
+
+                            </mat-form-field>
+                        </p>
+
+                        <p>
+                            <mat-checkbox test-id="auth-openid-checkbox-enabled" [(ngModel)]="model.saveNewUser"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"SaveNewUserIfAuthenticated"|translate}}</mat-checkbox>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="auth-openid-checkbox-enabled" [(ngModel)]="model.isEnabled"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="auth-openid-actions" fxFlex fxLayoutAlign="start center">
+                            <button mat-icon-button color="primary" matTooltip="{{'Delete'|translate}}"
+                                (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}"
+                                    (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="auth-openid-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

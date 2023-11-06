@@ -206,7 +206,7 @@ export class AppComponent implements OnInit {
   injectScripts() {
     const script = this.renderer.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=-ZXZJ9QM2WV';
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZXZJ9QM2WV';
     this.renderer.appendChild(this.document.body, script);
 
     const scriptBody = this.renderer.createElement('script');

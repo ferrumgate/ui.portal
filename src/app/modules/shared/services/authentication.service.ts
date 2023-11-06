@@ -89,9 +89,9 @@ export class AuthenticationService extends BaseService {
 
 
   initIdleWatching() {
-    //idle timeout of 10 minutes
-    this.idle.setIdle(10 * 60);
-    //a timeout period of 5 minutes. after 10 minutes of inactivity, the user will be considered timed out.
+    //idle timeout of 60 minutes
+    this.idle.setIdle(60 * 60);
+    //a timeout period of 5 minutes. after 60 minutes of inactivity, the user will be considered timed out.
     this.idle.setTimeout(5 * 60);
     //the default interrupts, in this case, things like clicks, scrolls, touches to the document
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);

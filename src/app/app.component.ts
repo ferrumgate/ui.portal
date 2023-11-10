@@ -180,6 +180,10 @@ export class AppComponent implements OnInit {
       "brand",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
     );
+    this.matIconRegistry.addSvgIcon(
+      "a",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/a.svg")
+    );
 
 
 

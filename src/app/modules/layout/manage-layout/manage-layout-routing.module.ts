@@ -184,6 +184,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'settings/dns',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/settings/dns/config-dns.module').then(m => m.ConfigDnsModule)
+
+      },
+      {
         path: 'logs/audit',
         canActivate: [RoleGuard],
         data: {

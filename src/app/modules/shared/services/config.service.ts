@@ -87,6 +87,7 @@ export class ConfigService extends BaseService {
     pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
     devicePostureHelp: "https://ferrumgate.com/docs/configuration/settings/deviceposture",
     brandHelp: "https://ferrumgate.com/docs/configuration/settings/brand",
+    dnsHelp: "https://ferrumgate.com/docs/configuration/settings/dns",
 
 
 

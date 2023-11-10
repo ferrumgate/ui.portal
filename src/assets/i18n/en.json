@@ -534,5 +534,10 @@
     "ClientIdHint": "Client id from provider",
     "ClientSecretHint": "Client secret from provides",
     "SecretKey": "Secret key",
-    "SecretKeyHint": "Secret key"
+    "SecretKeyHint": "Secret key",
+    "Fqdn": "Fqdn",
+    "ARecord": "A Record",
+    "FqdnRequired": "Fqdn required",
+    "Dns": "Dns",
+    "IpRequired": "Ip required"
 }

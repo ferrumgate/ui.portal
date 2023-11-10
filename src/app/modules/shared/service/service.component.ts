@@ -460,7 +460,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
       ports: this.clonePorts(this._model.ports),
       networkId: this._model.networkId,
       protocol: this._model.protocol,
-      count: this._model.count
+      count: this._model.count,
+
     }
   }
 

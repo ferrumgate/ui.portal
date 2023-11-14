@@ -40,7 +40,8 @@ export class ServiceService extends BaseService {
       assignedIp: '',
       count: service.count,
       hosts: UtilService.clone(service.hosts),
-      ports: UtilService.clone(service.ports)
+      ports: UtilService.clone(service.ports),
+      aliases: UtilService.clone(service.aliases || [])
     }
 
     return this.preExecute(srv).pipe(

@@ -13,6 +13,10 @@ export interface ServiceHost {
 
 }
 
+export interface ServiceAlias {
+    host: string;
+}
+
 export interface Service {
     objId?: string
     id: string;
@@ -29,5 +33,6 @@ export interface Service {
     assignedIp: string;
     isSystem?: boolean;
     count: number;
+    aliases?: ServiceAlias[];
     [key: string]: any;
 }

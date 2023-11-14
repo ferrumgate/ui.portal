@@ -539,5 +539,7 @@
     "ARecord": "A Record",
     "FqdnRequired": "Fqdn required",
     "Dns": "Dns",
-    "IpRequired": "Ip required"
+    "IpRequired": "Ip required",
+    "Alias": "Alias",
+    "ServiceAliasHint": "Dns alias name"
 }

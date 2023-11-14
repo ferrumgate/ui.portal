@@ -61,6 +61,10 @@
                                             <mat-icon>short_text</mat-icon>
                                             <span>{{"Port"|translate}}</span>
                                         </button>
+                                        <button mat-menu-item (click)="addNewAlias()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"Alias"|translate}}</span>
+                                        </button>
                                     </mat-menu>
                                 </p>
 
@@ -108,6 +112,22 @@
                                 <p fxFill class="" fxLayout="row" *ngIf="formError.portNeeds" fxLayoutAlign="start end">
 
                                     <mat-error>{{formError.portNeeds|translate}}</mat-error>
+                                </p>
+
+                                <p fxFill class="service-alias" fxLayout="row" fxLayoutAlign="start center"
+                                    *ngFor="let item of service.aliases||[];let i=index"
+                                    [formGroup]="getAliasesFormGroup(i)">
+                                    <mat-form-field class="service-alias-host-field" fxFlex appearance="fill">
+                                        <mat-label>{{"Alias"|translate}}</mat-label>
+                                        <input matInput test-id="service-alias-host-input"
+                                            placeholder="dev.mysql.server" formControlName="host" required>
+                                        <mat-error>{{formError.aliases[i]|translate}}</mat-error>
+                                        <mat-hint>{{"ServiceAliasHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                    <mat-icon class="service-alias-host-each" matSuffix style="cursor: pointer;"
+                                        matTooltip="{{'Delete'|translate}}"
+                                        (click)="removeAlias(item)">delete</mat-icon>
+
                                 </p>
 
 

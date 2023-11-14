@@ -49,6 +49,20 @@
     padding-bottom: 5px;
 }
 
+.service .service-alias {
+    border-style: groove;
+    padding-bottom: 5px;
+}
+
 .service .service-port-field {
     width: 120px;
+}
+
+.service .service-alias-host-field {
+
+    padding-right: 10px;
+}
+
+.service .service-alias-host-each {
+    padding-right: 10px;
 }

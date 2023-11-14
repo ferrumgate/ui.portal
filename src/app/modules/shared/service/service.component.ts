@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, of } from 'rxjs';
 import { Group } from '../models/group';
 import { Network } from '../models/network';
-import { Service, ServiceHost, ServicePort } from '../models/service';
+import { Service, ServiceAlias, ServiceHost, ServicePort } from '../models/service';
 import { ConfigService } from '../services/config.service';
 import { InputService } from '../services/input.service';
 import { SSubscription } from '../services/SSubscribtion';
@@ -40,9 +40,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
       id: '', name: '', labels: [], isChanged: false,
       isEnabled: true, assignedIp: '', networkId: '', networkName: '', count: 1,
       protocol: '',
-      hosts: [], ports: [],
+      hosts: [], ports: [], aliases: [],
       orig: {
         id: '', name: '', labels: [], isEnabled: true, assignedIp: '', networkId: '', protocol: '', count: 1,
+        aliases: [],
         hosts: [], ports: []
       }
     };
@@ -62,7 +63,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
       labels: Array.from(val.labels || []),
       networkName: this.networks.find(x => x.id == val.networkId)?.name || '',
       ports: this.clonePorts(val.ports),
-      hosts: this.cloneHosts(val.hosts)
+      hosts: this.cloneHosts(val.hosts),
+      aliases: this.cloneAliases(val.aliases || [])
     }
 
     this.formGroup = this.createFormGroup(this._model);
@@ -90,9 +92,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, hosts: string[],
-    ports: string[], network: string, portNeeds: string
+    ports: string[],
+    aliases: string[], network: string, portNeeds: string
   }
-    = { name: '', hosts: [], ports: [], network: '', portNeeds: '' };
+    = { name: '', hosts: [], ports: [], aliases: [], network: '', portNeeds: '' };
 
 
   isThemeDark = false;
@@ -192,6 +195,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
       assignedIp: new FormControl(service.assignedIp, []),
       ports: new FormArray([]),
       hosts: new FormArray([]),
+      aliases: new FormArray([]),
       portNeeds: new FormControl(service.portNeeds, [])
 
     });
@@ -211,6 +215,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
     for (const host of service.hosts) {
       (fmg.controls['hosts'] as FormArray).push(new FormGroup({
         host: new FormControl(host.host, [Validators.required, InputService.ipOrdomainValidator])
+      }))
+    }
+
+    for (const host of service.aliases || []) {
+      (fmg.controls['aliases'] as FormArray).push(new FormGroup({
+        host: new FormControl(host.host, [Validators.required, InputService.domainValidator])
       }))
     }
 
@@ -236,19 +246,29 @@ export class ServiceComponent implements OnInit, OnDestroy {
             this.bindFormGroup(grp, this._model.hosts[i]);
           }
 
-        } else {
-          const fm = fmg.controls[iterator] as FormControl;
-          this.allSub.addThis =
-            fm.valueChanges.subscribe(x => {
-              if (iterator == 'name')
-                (this._model as any)[iterator] = x.toLowerCase();
-              else
-                (this._model as any)[iterator] = x;
+        } else
+          if (iterator == 'aliases') {
+            const fmarray = fmg.controls['aliases'] as FormArray;
+            if (!this._model.aliases)
+              this._model.aliases = [];
+            for (let i = 0; i < fmarray.controls.length; ++i) {
+              const grp = fmarray.controls[i] as FormGroup;
+              this.bindFormGroup(grp, this._model.aliases[i]);
+            }
+
+          } else {
+            const fm = fmg.controls[iterator] as FormControl;
+            this.allSub.addThis =
+              fm.valueChanges.subscribe(x => {
+                if (iterator == 'name')
+                  (this._model as any)[iterator] = x.toLowerCase();
+                else
+                  (this._model as any)[iterator] = x;
 
 
 
-            })
-        }
+              })
+          }
     }
     this.allSub.addThis =
       fmg.valueChanges.subscribe((x) => {
@@ -257,7 +277,12 @@ export class ServiceComponent implements OnInit, OnDestroy {
     return fmg;
   }
   createFormError() {
-    return { name: '', hosts: this.service.hosts.map(x => ''), ports: this.service.ports.map(x => ''), network: '', portNeeds: '' };
+    return {
+      name: '', hosts: this.service.hosts.map(x => ''),
+      ports: this.service.ports.map(x => ''),
+      aliases: this.service.aliases?.map(x => '') || [],
+      network: '', portNeeds: ''
+    };
   }
   getHostsFormGroup(index: number) {
     return (this.formGroup.controls['hosts'] as FormArray).controls[index] as FormGroup
@@ -265,6 +290,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
   getPortsFormGroup(index: number) {
     return (this.formGroup.controls['ports'] as FormArray).controls[index] as FormGroup
+  }
+
+  getAliasesFormGroup(index: number) {
+    return (this.formGroup.controls['aliases'] as FormArray).controls[index] as FormGroup
   }
 
 
@@ -335,6 +364,8 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.service.isChanged = true;
     if (this.isChanged(original.ports, this.service.ports))
       this.service.isChanged = true;
+    if (this.isChanged(original.aliases, this.service.aliases))
+      this.service.isChanged = true;
 
   }
 
@@ -364,6 +395,20 @@ export class ServiceComponent implements OnInit, OnDestroy {
             error.hosts[i] = 'InvalidHost';
           else
             error.hosts[i] = 'HostRequired';
+      }
+    }
+
+    for (let i = 0; i < (this.formGroup.controls['aliases'] as FormArray).controls.length; ++i) {
+      const fmg = (this.formGroup.controls['aliases'] as FormArray).controls[i] as FormGroup;
+      const hostError = fmg.controls.host.errors;
+      if (hostError) {
+        if (hostError['required'])
+          error.aliases[i] = 'HostRequired';
+        else
+          if (hostError['invalidHost'])
+            error.aliases[i] = 'InvalidHost';
+          else
+            error.aliases[i] = 'HostRequired';
       }
     }
 
@@ -447,6 +492,15 @@ export class ServiceComponent implements OnInit, OnDestroy {
       return b;
     })
   }
+  cloneAliases(hosts: ServiceAlias[]): ServiceAlias[] {
+    return hosts.map(x => {
+      const b: ServiceAlias =
+      {
+        host: x.host
+      }
+      return b;
+    })
+  }
 
   createBaseModel(): Service {
     return {
@@ -461,6 +515,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
       networkId: this._model.networkId,
       protocol: this._model.protocol,
       count: this._model.count,
+      aliases: this.cloneAliases(this._model.aliases || [])
 
     }
   }
@@ -552,6 +607,31 @@ export class ServiceComponent implements OnInit, OnDestroy {
     this.modelChanged();
   }
 
+
+  removeAlias(val: ServiceAlias) {
+    if (!this.service.aliases)
+      this.service.aliases = [];
+    let index = this.service.aliases.findIndex(x => x == val)
+    if (index > -1) {
+      this.service.aliases.splice(index, 1);
+      (this.formGroup.controls['aliases'] as FormArray).removeAt(index);
+    }
+
+    this.modelChanged();
+  }
+  addNewAlias() {
+    if (!this.service.aliases)
+      this.service.aliases = [];
+    const data = { host: '' };
+    this.service.aliases.push(data);
+    const fmg = new FormGroup({
+      host: new FormControl(data.host, [Validators.required, InputService.domainValidator])
+    });
+    (this.formGroup.controls['aliases'] as FormArray).push(fmg);
+    this.bindFormGroup(fmg, data);
+
+    this.modelChanged();
+  }
 
 
 

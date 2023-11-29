@@ -42,6 +42,8 @@ export class ConfigService extends BaseService {
     };
   }
 
+  VERSION = "1.15.0";
+
   links = {
     documents: 'https://ferrumgate.com/docs/getting-started',
     support: "https://ferrumgate.com/#support",
@@ -729,6 +731,8 @@ export class ConfigService extends BaseService {
         })
       )
   }
+
+
 
 
 }

@@ -26,6 +26,7 @@ export interface SSLCertificateBase {
     parentId?: string;
     category?: SSLCertificateCategory;
     letsEncrypt?: LetsEncrypt;
+    chainCrt?: string;
 }
 
 export interface SSLCertificate extends SSLCertificateBase {

@@ -97,8 +97,12 @@ export class ToolbarComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-  /*  userSettings() {
-     this.router.navigate(['/user/settings']);
-   }
-  */
+  userSettings() {
+    this.view.isAdmin = false;
+    this.view.isReporter = false;
+
+    this.configService.saveView('low');
+    this.router.navigate(['/user/settings/profile']);
+  }
+
 }

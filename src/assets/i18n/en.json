@@ -541,5 +541,9 @@
     "Dns": "Dns",
     "IpRequired": "Ip required",
     "Alias": "Alias",
-    "ServiceAliasHint": "Dns alias name"
+    "ServiceAliasHint": "Dns alias name",
+    "ChainPEM": "Chain PEM",
+    "Version": "Version",
+    "BrowserIdleTimeoutMinute": "Browser Idle Timeout(minute)",
+    "BrowserIdleTimeoutHint": "Auto logout time, after idle. Stored on browser"
 }

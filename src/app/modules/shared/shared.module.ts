@@ -40,6 +40,7 @@ import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-
 import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
 import { AuthRadiusComponent } from "./auth/auth-radius/auth-radius.component";
 import { DnsRecordComponent } from "./dns/dns-record.component";
+import { UProfileComponent } from "./uprofile/uprofile.component";
 
 
 
@@ -83,7 +84,8 @@ import { DnsRecordComponent } from "./dns/dns-record.component";
         ChangePassComponent,
         FileUploadComponent,
         DevicePostureComponent,
-        DnsRecordComponent
+        DnsRecordComponent,
+        UProfileComponent
 
     ],
     imports: [
@@ -137,7 +139,8 @@ import { DnsRecordComponent } from "./dns/dns-record.component";
         ChangePassComponent,
         FileUploadComponent,
         DevicePostureComponent,
-        DnsRecordComponent
+        DnsRecordComponent,
+        UProfileComponent
     ],
     providers: [
         {

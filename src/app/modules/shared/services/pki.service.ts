@@ -130,6 +130,7 @@ export class PKIService extends BaseService {
 
     const cert: SSLCertificate = {
       id: item.id, insertDate: item.insertDate, isEnabled: item.isEnabled, labels: item.labels, name: item.name,
+      chainCrt: item.chainCrt,
       updateDate: item.updateDate, category: item.category, idEx: item.idEx, isIntermediate: item.isIntermediate, parentId: item.parentId,
       privateKey: item.privateKey, publicCrt: item.publicCrt,
       usages: item.usages

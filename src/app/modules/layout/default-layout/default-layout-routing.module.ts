@@ -43,6 +43,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'user/settings/profile',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id, RBACDefault.roleReporter.id, RBACDefault.roleUser.id],
+        },
+        loadChildren: () => import('../../default/settings/profile/dsetting-profile.module').then(m => m.DSettingProfileModule)
+
+      },
+      {
         path: 'user/downloads',
         canActivate: [RoleGuard],
         data: {

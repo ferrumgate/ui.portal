@@ -77,6 +77,12 @@ export class DefaultLayoutComponent {
           navigate: () => {
             this.router.navigate(['/user/settings/password'])
           }
+        },
+        {
+          icon: 'person_pin', authSourcePattern: '*', isClicked: false, isExpanded: false, name: this.translateService.translate('Profile'), subItems: [],
+          navigate: () => {
+            this.router.navigate(['/user/settings/profile'])
+          }
         }
 
       ]

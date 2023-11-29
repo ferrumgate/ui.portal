@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams, JsonpInterceptor } from '@angular/common/http';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
@@ -12,6 +12,7 @@ import { User } from '../models/user';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
+import { UserService } from './user.service';
 
 
 export interface Session {
@@ -56,6 +57,7 @@ export class AuthenticationService extends BaseService {
   protected refreshTokenTimer: any | null = null;
   protected lastExecutionRefreshToken = new Date(0);
   private lastPing = new Date();
+  authenticated: EventEmitter<Session> = new EventEmitter();
 
   constructor(
     private router: Router,
@@ -83,17 +85,34 @@ export class AuthenticationService extends BaseService {
         ).subscribe();
       }
     });
+
     this.initIdleWatching();
+
+
+  }
+  configureIdle(time: number) {
+    if (this.idle.isRunning()) {
+
+      this.idle.stop();
+    }
+    if (this.keepalive.isRunning())
+      this.keepalive.stop();
+    //idle timeout of 15 minutes
+    this.idle.setIdle(time || 15 * 60);
+    //a timeout period of 5 minutes. after 15 minutes of inactivity, the user will be considered timed out.
+    this.idle.setTimeout(time ? time / 5 : 5 * 60);
+    //the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    if (this.currentSession) {
+
+      this.keepalive.start();
+      this.idle.watch();
+    }
+    console.log(`idle configured again ${new Date().toISOString()}`)
 
   }
 
-
   initIdleWatching() {
-    //idle timeout of 60 minutes
-    this.idle.setIdle(60 * 60);
-    //a timeout period of 5 minutes. after 60 minutes of inactivity, the user will be considered timed out.
-    this.idle.setTimeout(5 * 60);
-    //the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    this.configureIdle(15);//15 minutes
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
 
@@ -106,6 +125,7 @@ export class AuthenticationService extends BaseService {
 
     //the ping interval to 15 seconds
     this.keepalive.interval(15);
+
 
     this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
 
@@ -183,6 +203,7 @@ export class AuthenticationService extends BaseService {
         //this.saveSession();
         sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
         sessionStorage.removeItem(AuthenticationService.StorageExchangeSessionKey);
+        this.authenticated.emit(this._currentSession);
 
         return this._currentSession;
       }))

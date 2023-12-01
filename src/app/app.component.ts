@@ -15,6 +15,7 @@ import { ConfigService } from './modules/shared/services/config.service';
 import { LoadingService } from './modules/shared/services/loading.service';
 import { LoggerService } from './modules/shared/services/logger.service';
 import { TranslationService } from './modules/shared/services/translation.service';
+import { UserService } from './modules/shared/services/user.service';
 
 declare let gtag: Function;
 
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
     private renderer: Renderer2,
     private titleService: Title,
     private loadingService: LoadingService,
+    private userService: UserService,
 
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -179,6 +181,10 @@ export class AppComponent implements OnInit {
     this.matIconRegistry.addSvgIcon(
       "brand",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/b-letter.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "a",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/a.svg")
     );
 
 

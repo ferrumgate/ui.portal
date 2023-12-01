@@ -151,6 +151,7 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       updateDateStr: new FormControl(cert.updateDateStr, []),
       publicCrt: new FormControl(cert.publicCrt, []),
       privateKey: new FormControl(cert.privateKey, []),
+      chainCrt: new FormControl(cert.chainCrt, []),
 
     });
     fmg.controls['updateDateStr'].disable();
@@ -225,6 +226,8 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.cert.isChanged = true;
     if (original.privateKey != this.cert.privateKey)
       this.cert.isChanged = true;
+    if (original.chainCrt != this.cert.chainCrt)
+      this.cert.isChanged = true;
 
 
   }
@@ -295,6 +298,12 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
   copyCert() {
     if (this.cert.publicCrt) {
       this.clipboard.copy(this.cert.publicCrt);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
+  }
+  copyChainCert() {
+    if (this.cert.chainCrt) {
+      this.clipboard.copy(this.cert.chainCrt);
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }

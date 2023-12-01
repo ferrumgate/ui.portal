@@ -1,0 +1,19 @@
+<div class="dsetting-profile-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="dsetting-profile dsetting-profile-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row dsetting-profile-title">
+                <span>{{'Profile'|translate}}</span>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="dsetting-profile dsetting-profile-content">
+
+        <div class="row">
+            <app-uprofile test-id="dsetting-uprofile" [model]="model" (saveUserProfile)="saveProfile($event)">
+
+            </app-uprofile>
+        </div>
+    </div>
+</div>

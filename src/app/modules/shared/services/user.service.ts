@@ -14,6 +14,8 @@ import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
 import { SSLCertificate } from '../models/sslCertificate';
 import { userInfo } from 'os';
+import { AuthenticationService } from './authentication.service';
+import { UserProfile } from '../models/userProfile';
 interface UpdateRequest {
   id: string;
   name?: string;
@@ -45,12 +47,19 @@ export class UserService extends BaseService {
   private _userCurrentPasswordUrl = this.configService.getApiUrl() + '/user/current/pass';
   private _userInviteUrl = this.configService.getApiUrl() + '/user/invite';
 
-
+  userProfileChanged: EventEmitter<UserProfile> = new EventEmitter();
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
-    private captchaService: CaptchaService) {
+    private captchaService: CaptchaService,
+    private authService: AuthenticationService) {
     super('user', captchaService)
+
+    this.authService.authenticated.subscribe(x => {
+      const profile = this.getUserProfile(x?.currentUser?.id);
+      this.authService.configureIdle(profile.browserTimeout * 60);
+    })
+
 
   }
 
@@ -292,9 +301,38 @@ export class UserService extends BaseService {
 
 
 
+  defaultProfile() {
+    return {
+      browserTimeout: 15
+    }
+  }
+
+  saveCurrentUserProfile(profile: { browserTimeout: number }) {
+
+    return of('').pipe(
+      switchMap(x => this.authService.getUserCurrent()),
+      map(x => {
 
 
+        localStorage.setItem(`profile_for_user_${x.id || 'anonymous'}`, JSON.stringify(profile));
+        this.userProfileChanged.emit(profile);
+        this.authService.configureIdle(profile.browserTimeout * 60);
+      }))
+  }
 
+  getCurrentUserProfile() {
+    return of('').pipe(
+      switchMap(x => this.authService.getUserCurrent()),
+      map(x => {
+        return this.getUserProfile(x.id || 'anonymous')
+      }))
+
+  }
+  getUserProfile(id: string) {
+    let value = localStorage.getItem(`profile_for_user_${id}`);
+    if (value) return JSON.parse(value) as UserProfile;
+    return this.defaultProfile();
+  }
 
 
 }

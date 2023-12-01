@@ -5,95 +5,88 @@ import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs'
 import { environment } from 'src/environments/environment';
 import { Configure } from '../models/configure';
 import { Group } from '../models/group';
-import { Service } from '../models/service';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
 import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
+import { DnsRecord } from '../models/dns';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceService extends BaseService {
+export class DnsService extends BaseService {
 
-  private _serviceUrl = this.configService.getApiUrl() + '/service';
+  private _dnsUrl = this.configService.getApiUrl() + '/dns';
+  private _dnsRecordUrl = this.configService.getApiUrl() + '/dns/record';
 
   constructor(private httpService: HttpClient,
     private configService: ConfigService,
     private captchaService: CaptchaService) {
-    super('service', captchaService)
+    super('dns', captchaService)
 
   }
 
 
 
-  saveOrupdate(service: Service) {
-    const srv: Service = {
-      id: service.id, labels: service.labels,
-      name: service.name,
-      isEnabled: service.isEnabled,
-      networkId: service.networkId, protocol: service.protocol,
-      assignedIp: '',
-      count: service.count,
-      hosts: UtilService.clone(service.hosts),
-      ports: UtilService.clone(service.ports),
-      aliases: UtilService.clone(service.aliases || [])
+  saveOrupdateRecord(item: DnsRecord) {
+    const record: DnsRecord = {
+      id: item.id,
+      labels: item.labels,
+      fqdn: item.fqdn,
+      isEnabled: item.isEnabled,
+      ip: item.ip,
+
     }
 
-    return this.preExecute(srv).pipe(
+    return this.preExecute(record).pipe(
       switchMap(y => {
-        if (srv.id)
-          return this.httpService.put<Service>(this._serviceUrl, y, this.jsonHeader)
-        else return this.httpService.post<Service>(this._serviceUrl, y, this.jsonHeader)
+        if (record.id)
+          return this.httpService.put<DnsRecord>(this._dnsRecordUrl, y, this.jsonHeader)
+        else return this.httpService.post<DnsRecord>(this._dnsRecordUrl, y, this.jsonHeader)
       }))
 
   }
 
-  delete(service: Service) {
+  deleteRecord(record: DnsRecord) {
 
 
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
 
-        let url = this.joinUrl(this._serviceUrl, `${service.id}`, y);
+        let url = this.joinUrl(this._dnsRecordUrl, `${record.id}`, y);
         return this.httpService.delete(url);
 
       }))
   }
 
-  get(id: string) {
+  getRecord(id: string) {
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
-
-        let url = this.joinUrl(this._serviceUrl, `${id}`, urlParams);
-        return this.httpService.get<Service>(url);
-
+        let url = this.joinUrl(this._dnsRecordUrl, `${id}`, urlParams);
+        return this.httpService.get<Group>(url);
       }))
   }
 
-  get2(search?: string, ids?: string[], networkIds?: string[]) {
+  getRecord2(search?: string, ids?: string[]) {
 
     const searchParams = new URLSearchParams();
     if (search)
       searchParams.append('search', search);
     if (ids)
       searchParams.append('ids', ids.join(','));
-    if (networkIds && networkIds.length)
-      searchParams.append('networkIds', networkIds.join(','));
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this._serviceUrl, y);
-        return this.httpService.get<{ items: Service[] }>(url);
+        const url = this.joinUrl(this._dnsRecordUrl, y);
+        return this.httpService.get<{ items: DnsRecord[] }>(url);
       })
     )
   }
-
 
 
 }

@@ -6,7 +6,7 @@ import { ConfigEmailComponent } from './config-email.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigEmailExternalComponent } from './custom/config-email-external.component';
 import { ConfigEmailSmtpComponent } from './smtp/config-email-smtp.component';
-
+import { ConfigEmailAWSComponent } from './aws/config-email-aws.component';
 
 
 
@@ -14,7 +14,8 @@ import { ConfigEmailSmtpComponent } from './smtp/config-email-smtp.component';
   declarations: [
     ConfigEmailComponent,
     ConfigEmailExternalComponent,
-    ConfigEmailSmtpComponent
+    ConfigEmailSmtpComponent,
+    ConfigEmailAWSComponent
   ],
   imports: [
     CommonModule,

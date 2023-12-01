@@ -54,6 +54,9 @@
                 <app-config-email-smtp *ngIf="model.type=='smtp'" [model]="model" (saveEmail)="saveEmail($event)"
                     (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
                 </app-config-email-smtp>
+                <app-config-email-aws *ngIf="model.type=='aws'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-aws>
 
             </div>
         </mat-card-content>

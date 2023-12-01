@@ -16,7 +16,7 @@ export interface ConfigCaptcha {
 }
 
 export interface ConfigEmail {
-    type: 'google' | 'office365' | 'smtp' | 'empty',
+    type: 'google' | 'office365' | 'smtp' | 'aws' | 'empty',
     fromname: string,
     user: string,
     pass: string,

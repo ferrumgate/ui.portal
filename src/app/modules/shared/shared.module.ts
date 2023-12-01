@@ -39,6 +39,8 @@ import { DevicePostureComponent } from "./deviceposture/deviceposture.component"
 import { PolicyAuthzRuleFqdnComponent } from "./policy/policy-authz-rule/policy-authz-rule-fqdn/policy-authz-rule-fqdn.component";
 import { AuthOpenIdComponent } from "./auth/auth-openid/auth-openid.component";
 import { AuthRadiusComponent } from "./auth/auth-radius/auth-radius.component";
+import { DnsRecordComponent } from "./dns/dns-record.component";
+import { UProfileComponent } from "./uprofile/uprofile.component";
 
 
 
@@ -81,7 +83,9 @@ import { AuthRadiusComponent } from "./auth/auth-radius/auth-radius.component";
         T2FAComponent,
         ChangePassComponent,
         FileUploadComponent,
-        DevicePostureComponent
+        DevicePostureComponent,
+        DnsRecordComponent,
+        UProfileComponent
 
     ],
     imports: [
@@ -134,7 +138,9 @@ import { AuthRadiusComponent } from "./auth/auth-radius/auth-radius.component";
         T2FAComponent,
         ChangePassComponent,
         FileUploadComponent,
-        DevicePostureComponent
+        DevicePostureComponent,
+        DnsRecordComponent,
+        UProfileComponent
     ],
     providers: [
         {

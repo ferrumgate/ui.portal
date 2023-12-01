@@ -1,0 +1,95 @@
+<div class="dns-record">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Group'|translate}} {{dnsRecord.fqdn}}">
+                <mat-icon svgIcon="dns">
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="dns-record-header-actions" fxFlex fxLayoutAlign="end center" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyDnsRecordId()" [disabled]="!dnsRecord.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
+                <button style="padding-right:10px" mat-icon-button matTooltip="{{'Help'|translate}}"
+                    (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="dns-record-form" [formGroup]="formGroup">
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Fqdn"|translate}}</mat-label>
+                                <input matInput test-id="dns-record-fqdn-input" placeholder="www.ferrumgate.com"
+                                    formControlName="fqdn" required>
+                                <mat-error>{{formError.fqdn|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Ip"|translate}}</mat-label>
+                                <input matInput test-id="dns-record-ip-input" placeholder="192.168.28.150"
+                                    formControlName="ip" required>
+                                <mat-error>{{formError.ip|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Labels"|translate}}</mat-label>
+                                <mat-chip-list #chipList>
+                                    <mat-chip test-id="dns-record-label-chip" *ngFor="let label of dnsRecord.labels||[]"
+                                        (removed)="removeLabel(label)">
+                                        {{label}}
+                                        <button matChipRemove>
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                    <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
+                                </mat-chip-list>
+                            </mat-form-field>
+                        </p>
+                        <p>
+                            <mat-checkbox test-id="dsn-record-checkbox-enabled" [(ngModel)]="dnsRecord.isEnabled"
+                                [checked]="dnsRecord.isEnabled" [ngModelOptions]="{standalone:true}"
+                                (ngModelChange)="modelChanged()">
+                                {{"Enabled"|translate}}</mat-checkbox>
+                        </p>
+                    </form>
+
+
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="dnsrecord-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="dns-record-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="dnsRecord.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="dns-record-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="dns-record-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

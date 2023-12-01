@@ -1,0 +1,40 @@
+.dns-record {
+    min-width: 300px;
+}
+
+.dns-record .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.dns-record .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.dns-record .row-pad {
+    margin-left: 15px;
+}
+
+.dns-record .dns-record-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+
+}
+
+.dns-record .dns-record-title {
+    padding-left: 10px;
+}
+
+.dns-record .dns-record-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+
+.dns-record .dns-record-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

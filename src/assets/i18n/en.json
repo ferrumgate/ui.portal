@@ -534,5 +534,16 @@
     "ClientIdHint": "Client id from provider",
     "ClientSecretHint": "Client secret from provides",
     "SecretKey": "Secret key",
-    "SecretKeyHint": "Secret key"
+    "SecretKeyHint": "Secret key",
+    "Fqdn": "Fqdn",
+    "ARecord": "A Record",
+    "FqdnRequired": "Fqdn required",
+    "Dns": "Dns",
+    "IpRequired": "Ip required",
+    "Alias": "Alias",
+    "ServiceAliasHint": "Dns alias name",
+    "ChainPEM": "Chain PEM",
+    "Version": "Version",
+    "BrowserIdleTimeoutMinute": "Browser Idle Timeout(minute)",
+    "BrowserIdleTimeoutHint": "Auto logout time, after idle. Stored on browser"
 }

@@ -42,6 +42,8 @@ export class ConfigService extends BaseService {
     };
   }
 
+  VERSION = "1.15.0";
+
   links = {
     documents: 'https://ferrumgate.com/docs/getting-started',
     support: "https://ferrumgate.com/#support",
@@ -87,6 +89,7 @@ export class ConfigService extends BaseService {
     pkiHelp: "https://ferrumgate.com/docs/configuration/settings/pki",
     devicePostureHelp: "https://ferrumgate.com/docs/configuration/settings/deviceposture",
     brandHelp: "https://ferrumgate.com/docs/configuration/settings/brand",
+    dnsHelp: "https://ferrumgate.com/docs/configuration/settings/dns",
 
 
 
@@ -728,6 +731,8 @@ export class ConfigService extends BaseService {
         })
       )
   }
+
+
 
 
 }

@@ -41,7 +41,7 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
 
   helpLink = '';
 
-  emailProviders = ['google', 'office365', 'smtp'];
+  emailProviders = ['google', 'office365', 'smtp', 'aws'];
   isThemeDark = false;
   private _model: Model = { fromname: '', type: 'empty', pass: '', user: '', isChanged: false, orig: { fromname: '', type: 'empty', pass: '', user: '' } };
   public get model() {

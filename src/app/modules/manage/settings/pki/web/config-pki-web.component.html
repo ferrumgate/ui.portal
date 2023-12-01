@@ -91,6 +91,27 @@
                                     {{formError.publicCrt|translate}}</mat-error>
                             </mat-form-field>
                         </p>
+
+                        <p fxFill class="pem">
+                            <mat-form-field appearance="fill" fxFill>
+                                <mat-label>{{"ChainPEM"|translate}}</mat-label>
+                                <textarea spellcheck="false" class="pem-text" multiple="true" matInput
+                                    test-id="cert-chain-pem-input" placeholder="-----BEGIN CERTIFICATE-----"
+                                    formControlName="chainCrt">
+                                            </textarea>
+                                <span fxFlex fxLayout="column" fxLayoutAlign="end end">
+
+                                    <button matSuffix mat-icon-button (click)="copyChainCert()"
+                                        [disabled]="!cert.chainCrt">
+                                        <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                                    </button>
+
+                                </span>
+                                <mat-error>
+                                    {{formError.publicCrt|translate}}</mat-error>
+                            </mat-form-field>
+                        </p>
+
                         <p fxFill class="pem">
 
                             <mat-icon matSuffix svgIcon="lets-encrypt"></mat-icon>

@@ -1,0 +1,79 @@
+<div>
+    <div>
+        <form test-id="config-email-aws-form" [formGroup]="formGroup">
+            <p fxFill class="config-email-aws-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-aws-width">
+                    <mat-label>{{"Email"|translate}}</mat-label>
+                    <input matInput test-id="config-email-aws-user-input" placeholder="no-reply@ferrumgate.com"
+                        formControlName="user" required>
+                    <mat-hint>{{"EmailEmailHint"|translate}}</mat-hint>
+                    <mat-error>{{error.user|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-aws-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-aws-width">
+                    <mat-label>{{"Region"|translate}}</mat-label>
+                    <input matInput test-id="config-email-aws-region-input" placeholder="eu-north-1"
+                        formControlName="region" required>
+                    <mat-hint>{{"RegionHint"|translate}}</mat-hint>
+                    <mat-error>{{error.pass|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-external-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-external-width">
+                    <mat-label>{{"AccessKey"|translate}}</mat-label>
+                    <input matInput test-id="config-email-aws-accesskey-input" placeholder="AcCessKey"
+                        formControlName="accessKey" required>
+                    <mat-hint>{{"AccessKeyHint"|translate}}</mat-hint>
+                    <mat-error>{{error.accessKey|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-external-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-external-width">
+                    <mat-label>{{"SecretKey"|translate}}</mat-label>
+                    <input matInput test-id="config-email-aws-secretkey-input" placeholder="SecREtKEy"
+                        formControlName="secretKey" required>
+                    <mat-hint>{{"SecretKeyHint"|translate}}</mat-hint>
+                    <mat-error>{{error.secretKey|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+
+
+        </form>
+    </div>
+
+    <div>
+        <mat-divider></mat-divider>
+        <mat-toolbar style="height:40px">
+            <mat-action-row class="config-email-aws-actions" fxFlex fxLayoutAlign="start center">
+                <button *ngIf="canDelete()" test-id="config-email-aws-delete-button" mat-icon-button color="primary"
+                    matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button *ngIf="canSend()" test-id="config-email-aws-send-button" mat-icon-button color="primary"
+                    matTooltip="{{'Check'|translate}}" (click)="check()">
+                    <mat-icon>send</mat-icon>
+                </button>
+
+                <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                    <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <button test-id="setttings-config-email-aws-ok-button" mat-icon-button color="warn"
+                        matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </span>
+
+
+            </mat-action-row>
+        </mat-toolbar>
+
+
+    </div>
+
+</div>

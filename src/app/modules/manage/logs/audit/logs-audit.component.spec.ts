@@ -20,9 +20,7 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { Network } from '../../../shared/models/network';
 import { Service } from '../../../shared/models/service';
 import { UtilService } from '../../../shared/services/util.service';
-
-
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { LogsAuditComponent } from './logs-audit.component';
 
 describe('LogsAuditComponent', () => {
@@ -34,7 +32,7 @@ describe('LogsAuditComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LogsAuditComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         { provide: AuditService, useValue: auditSpy },

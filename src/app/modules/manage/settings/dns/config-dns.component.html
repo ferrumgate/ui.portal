@@ -8,13 +8,15 @@
             </div>
 
             <div class="row" fxLayout="row">
-                <div fxFlex fxLayoutAlign="end center">
+                <mat-form-field fxFlex>
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"DnsSearchHint"|translate}}</mat-hint>
+                </mat-form-field>
+                <div fxLayoutAlign="center center">
                     <button mat-raised-button color="primary" class="add" [matMenuTriggerFor]="menu">
-
                         {{"Add"|translate}}
                         <mat-icon>keyboard_arrow_down</mat-icon>
                     </button>
-
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="addNewRecord()">
                             <!-- <mat-icon>a</mat-icon> -->
@@ -30,6 +32,11 @@
     </div>
 
     <div class="config-dns config-dns-content">
+        <div class="dns-users-paginator" fxLayoutAlign="end center">
+            <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[1,5, 10, 25, 100]"
+                aria-label="Select page" (page)="pageChanged($event)" size>
+            </mat-paginator>
+        </div>
         <div fxLayout="row wrap">
             <p class="row services-item" fxLayout="row" *ngFor="let record of records">
 

@@ -10,9 +10,7 @@ import { MaterialModule } from 'src/app/modules/shared/material-module';
 import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { InsightsActivityDetailComponent } from './insights-activity-detail.component';
 
 describe('InsightsActivityDetailComponent', () => {
@@ -22,7 +20,7 @@ describe('InsightsActivityDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InsightsActivityDetailComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         HttpClientModule, MaterialModule,
         NoopAnimationsModule, SharedModule
       ],

@@ -105,6 +105,11 @@
                                 {{"SaveNewUserIfAuthenticated"|translate}}</mat-checkbox>
                         </p>
                         <p>
+                            <mat-checkbox test-id="auth-ldap-checkbox-syncgroups" [(ngModel)]="model.syncGroups"
+                                [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                {{"SyncUserADGroups"|translate}}</mat-checkbox>
+                        </p>
+                        <p>
                             <mat-checkbox test-id="auth-ldap-checkbox-enabled" [(ngModel)]="model.isEnabled"
                                 [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
                                 {{"Enabled"|translate}}</mat-checkbox>

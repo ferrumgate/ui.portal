@@ -20,9 +20,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PolicyAuthnComponent } from './policy-authn.component';
 
 describe('PolicyAuthnComponent', () => {
@@ -32,7 +30,7 @@ describe('PolicyAuthnComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PolicyAuthnComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,

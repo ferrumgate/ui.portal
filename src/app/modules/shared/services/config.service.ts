@@ -472,6 +472,7 @@ export class ConfigService extends BaseService {
       securityProfile: auth.securityProfile,
       isEnabled: auth.isEnabled,
       saveNewUser: auth.saveNewUser,
+      syncGroups: auth.syncGroups
 
     }
     return this.preExecute(parameter).pipe(

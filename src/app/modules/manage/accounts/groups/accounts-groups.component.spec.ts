@@ -15,9 +15,7 @@ import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { AccountsGroupsComponent } from './accounts-groups.component';
 
 describe('GroupsComponent', () => {
@@ -27,7 +25,7 @@ describe('GroupsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AccountsGroupsComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,

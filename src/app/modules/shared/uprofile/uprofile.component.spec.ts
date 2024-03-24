@@ -14,7 +14,7 @@ import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
 import { UProfileComponent } from './uprofile.component';
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -25,7 +25,7 @@ describe('UProfileComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UProfileComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,

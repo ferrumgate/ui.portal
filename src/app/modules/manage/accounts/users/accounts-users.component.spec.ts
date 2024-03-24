@@ -16,9 +16,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { AccountsUsersComponent } from './accounts-users.component';
 
 describe('AccountsUsersComponent', () => {
@@ -28,7 +26,7 @@ describe('AccountsUsersComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AccountsUsersComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,

@@ -88,11 +88,13 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       searchFilter: '',
       isEnabled: true,
       isChanged: false,
+      syncGroups: false,
       orig: {
         baseType: 'ldap', type: 'activedirectory', id: '', name: 'Active Directory',
         host: '', groupnameField: '', searchBase: '', usernameField: '', bindDN: '', bindPass: '',
         searchFilter: '',
-        isEnabled: true
+        isEnabled: true,
+        syncGroups: false
       }
 
     };
@@ -244,6 +246,9 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
     if (original.saveNewUser != model.saveNewUser)
       model.isChanged = true;
 
+    if (original.syncGroups != model.syncGroups)
+      model.isChanged = true;
+
     if ((original.allowedGroups?.length || 0) != (model.allowedGroups?.length || 0))
       model.isChanged = true;
     if (original.isEnabled != model.isEnabled)
@@ -289,6 +294,7 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       allowedGroups: this.model.allowedGroups,
       isEnabled: this.model.isEnabled,
       saveNewUser: this.model.saveNewUser,
+      syncGroups: this.model.syncGroups,
       securityProfile: {
         ...this.model.securityProfile
       }

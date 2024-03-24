@@ -39,6 +39,7 @@ export interface BaseLdap extends BaseAuthId, BaseAuth {
     groupnameField: string;
     allowedGroups?: string[];
     saveNewUser?: boolean;
+    syncGroups?: boolean;
 }
 export interface BaseSaml extends BaseAuthId, BaseAuth {
     issuer: string;

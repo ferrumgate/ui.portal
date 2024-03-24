@@ -73,17 +73,19 @@ export class DnsService extends BaseService {
       }))
   }
 
-  getRecord2(search?: string, ids?: string[]) {
+  getRecord2(page: number, pageSize: number, search?: string, ids?: string[]) {
 
     const searchParams = new URLSearchParams();
     if (search)
       searchParams.append('search', search);
     if (ids)
       searchParams.append('ids', ids.join(','));
+    searchParams.append("page", page.toString());
+    searchParams.append("pageSize", pageSize.toString());
     return this.preExecute(searchParams).pipe(
       switchMap(y => {
         const url = this.joinUrl(this._dnsRecordUrl, y);
-        return this.httpService.get<{ items: DnsRecord[] }>(url);
+        return this.httpService.get<{ items: DnsRecord[], total: number }>(url);
       })
     )
   }

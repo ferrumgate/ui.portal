@@ -214,6 +214,7 @@
     "LdapBindSearchPath": "Ldap search base path",
     "LdapBindSearchPathHint": "User search path",
     "SaveNewUserIfAuthenticated": "Save new user if authenticated",
+    "SyncUserADGroups": "Sync User AD Groups",
     "NewGroup": "New group...",
     "BindDNRequired": "Bind DN required",
     "BindPassRequired": "Bind password required",
@@ -545,5 +546,6 @@
     "ChainPEM": "Chain PEM",
     "Version": "Version",
     "BrowserIdleTimeoutMinute": "Browser Idle Timeout(minute)",
-    "BrowserIdleTimeoutHint": "Auto logout time, after idle. Stored on browser"
+    "BrowserIdleTimeoutHint": "Auto logout time, after idle. Stored on browser",
+    "DnsSearchHint": "Search by fqdn, ip"
 }

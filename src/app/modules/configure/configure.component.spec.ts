@@ -8,7 +8,6 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { of } from 'rxjs';
-
 import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { CaptchaService } from '../shared/services/captcha.service';

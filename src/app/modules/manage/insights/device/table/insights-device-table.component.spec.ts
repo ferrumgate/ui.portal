@@ -16,7 +16,7 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { InsightsDeviceTableComponent } from './insights-device-table.component';
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -27,7 +27,7 @@ describe('InsightsActivitiyTableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InsightsDeviceTableComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
         ConfigService,

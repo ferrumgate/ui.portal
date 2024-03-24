@@ -252,6 +252,7 @@ export class AuthenticationService extends BaseService {
 
 
   logout(navigate = true, reload = false) {
+    debugger;
     sessionStorage.clear();
     this._currentSession = null;
     this.idle.stop();

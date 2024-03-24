@@ -28,6 +28,9 @@ export class ConfigDnsComponent implements OnInit {
   isThemeDark = false;
   searchKey = '';
   records: DnsRecord[] = [];
+  totalRecords = 0;
+  pageSize = 10;
+  page = 0;
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -79,7 +82,7 @@ export class ConfigDnsComponent implements OnInit {
 
   getAllData() {
 
-    return this.dnsService.getRecord2().pipe(
+    return this.dnsService.getRecord2(this.page, this.pageSize,).pipe(
       map(z => {
         this.records = z.items.sort((a, b) => a.fqdn.localeCompare(b.fqdn)).map(x => {
           x.objId = UtilService.randomNumberString();
@@ -94,9 +97,9 @@ export class ConfigDnsComponent implements OnInit {
   search() {
     let search = this.searchKey.length > 1 ? this.searchKey : '';
 
-    this.dnsService.getRecord2(search).pipe(
-
+    this.dnsService.getRecord2(this.page, this.pageSize, search).pipe(
       map(z => {
+        this.totalRecords = z.total;
         this.records = z.items.sort((a, b) => a.fqdn.localeCompare(b.fqdn)).map(x => {
           x.objId = UtilService.randomNumberString();
           return x;
@@ -151,5 +154,11 @@ export class ConfigDnsComponent implements OnInit {
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
     }
+
+  }
+  pageChanged($event: any) {
+    this.pageSize = $event.pageSize;
+    this.page = $event.pageIndex;
+    this.search();
   }
 }

@@ -22,45 +22,57 @@
                 <div>
 
                     <form test-id="dns-record-form" [formGroup]="formGroup">
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Fqdn"|translate}}</mat-label>
-                                <input matInput test-id="dns-record-fqdn-input" placeholder="www.ferrumgate.com"
-                                    formControlName="fqdn" required>
-                                <mat-error>{{formError.fqdn|translate}}</mat-error>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Ip"|translate}}</mat-label>
-                                <input matInput test-id="dns-record-ip-input" placeholder="192.168.28.150"
-                                    formControlName="ip" required>
-                                <mat-error>{{formError.ip|translate}}</mat-error>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-form-field fxFlex appearance="fill">
-                                <mat-label>{{"Labels"|translate}}</mat-label>
-                                <mat-chip-list #chipList>
-                                    <mat-chip test-id="dns-record-label-chip" *ngFor="let label of dnsRecord.labels||[]"
-                                        (removed)="removeLabel(label)">
-                                        {{label}}
-                                        <button matChipRemove>
-                                            <mat-icon>cancel</mat-icon>
-                                        </button>
-                                    </mat-chip>
-                                    <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addLabel($event)">
-                                </mat-chip-list>
-                            </mat-form-field>
-                        </p>
-                        <p>
-                            <mat-checkbox test-id="dsn-record-checkbox-enabled" [(ngModel)]="dnsRecord.isEnabled"
-                                [checked]="dnsRecord.isEnabled" [ngModelOptions]="{standalone:true}"
-                                (ngModelChange)="modelChanged()">
-                                {{"Enabled"|translate}}</mat-checkbox>
-                        </p>
+                        <mat-accordion class="service-details">
+                            <mat-expansion-panel [expanded]="dnsRecord.isExpanded">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title test-id="service-fqdn-title">
+                                        {{dnsRecord.fqdn}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Fqdn"|translate}}</mat-label>
+                                        <input matInput test-id="dns-record-fqdn-input" placeholder="www.ferrumgate.com"
+                                            formControlName="fqdn" required>
+                                        <mat-error>{{formError.fqdn|translate}}</mat-error>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Ip"|translate}}</mat-label>
+                                        <input matInput test-id="dns-record-ip-input" placeholder="192.168.28.150"
+                                            formControlName="ip" required>
+                                        <mat-error>{{formError.ip|translate}}</mat-error>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="dns-record-label-chip"
+                                                *ngFor="let label of dnsRecord.labels||[]"
+                                                (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-checkbox test-id="dsn-record-checkbox-enabled"
+                                        [(ngModel)]="dnsRecord.isEnabled" [checked]="dnsRecord.isEnabled"
+                                        [ngModelOptions]="{standalone:true}" (ngModelChange)="modelChanged()">
+                                        {{"Enabled"|translate}}</mat-checkbox>
+                                </p>
+                            </mat-expansion-panel>
+                        </mat-accordion>
                     </form>
 
 

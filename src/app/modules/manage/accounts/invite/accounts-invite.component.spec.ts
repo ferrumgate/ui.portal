@@ -16,7 +16,7 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { AccountsInviteComponent } from './accounts-invite.component';
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 
 
@@ -29,7 +29,7 @@ describe('AccountsInviteComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AccountsInviteComponent],
-      imports: [RouterTestingModule, TranslateModule.forRoot(),
+      imports: [RouterTestingModule, TranslateModule.forRoot(), NgIdleKeepaliveModule.forRoot(),
         NoopAnimationsModule, SharedModule, RecaptchaV3Module, MatIconTestingModule,
         RouterTestingModule.withRoutes([])],
       providers: [

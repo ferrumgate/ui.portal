@@ -1,15 +1,10 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Group } from '../models/group';
+import { ActivatedRoute } from '@angular/router';
+import { SSubscription } from '../services/SSubscribtion';
 import { ConfigService } from '../services/config.service';
 import { InputService } from '../services/input.service';
-import { SSubscription } from '../services/SSubscribtion';
 import { TranslationService } from '../services/translation.service';
-import { UtilService } from '../services/util.service';
-
 
 export interface ChangePass {
   oldPass: string;
@@ -20,7 +15,6 @@ export interface ChangePassExtended extends ChangePass {
   newPassAgain: string;
   isChanged: boolean;
 }
-
 
 @Component({
   selector: 'app-changepass',
@@ -33,7 +27,6 @@ export class ChangePassComponent implements OnInit, OnDestroy {
 
   hideOldPass = true;
   hidenewPass = true;
-
 
   _model: ChangePassExtended = { oldPass: '', newPass: '', newPassAgain: '', isChanged: false };
 
@@ -49,13 +42,11 @@ export class ChangePassComponent implements OnInit, OnDestroy {
     return this._model;
   }
 
-
   @Output()
   changePass: EventEmitter<ChangePass> = new EventEmitter();
 
   formGroup: FormGroup = this.createFormGroup(this.model);
   formError = this.createFormError();
-
 
   isThemeDark = false;
   constructor(
@@ -92,10 +83,7 @@ export class ChangePassComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.model.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(model: ChangePassExtended) {
     const fmg = new FormGroup({
@@ -125,11 +113,6 @@ export class ChangePassComponent implements OnInit, OnDestroy {
   createFormError() {
     return { oldPass: '', newPass: '', newPassAgain: '', };
   }
-
-
-
-
-
 
   checkIfModelChanged() {
     this.model.isChanged = false;
@@ -217,7 +200,5 @@ export class ChangePassComponent implements OnInit, OnDestroy {
 
     this.changePass.emit(this.createBaseModel());
   }
-
-
 
 }

@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigEmail, ConfigES } from 'src/app/modules/shared/models/config';
 import { FqdnIntelligenceSource } from 'src/app/modules/shared/models/fqdnIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
@@ -10,7 +8,6 @@ import { FqdnIntelligenceService } from 'src/app/modules/shared/services/fqdnInt
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-
 
 interface BaseModel extends FqdnIntelligenceSource {
   apiKey?: string;
@@ -73,7 +70,6 @@ export class ConfigFqdnIntelligenceSourceComponent implements OnInit, OnDestroy 
   error = { type: '', apiKey: '' };
   formGroup = this.createFormGroup(this.model);
 
-
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
@@ -87,8 +83,6 @@ export class ConfigFqdnIntelligenceSourceComponent implements OnInit, OnDestroy 
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
-
     this.helpLink = this.configService.links.ipIntelligenceHelp;
 
   }
@@ -99,7 +93,6 @@ export class ConfigFqdnIntelligenceSourceComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit(): void {
-
 
   }
   ngAfterViewInit(): void {
@@ -169,12 +162,10 @@ export class ConfigFqdnIntelligenceSourceComponent implements OnInit, OnDestroy 
 
   }
 
-
   apiTypeChanged($event: any) {
 
     this.model.type = $event.option.value;
   }
-
 
   checkSource() {
 
@@ -204,7 +195,5 @@ export class ConfigFqdnIntelligenceSourceComponent implements OnInit, OnDestroy 
       apiKey: ''
     }
   }
-
-
 
 }

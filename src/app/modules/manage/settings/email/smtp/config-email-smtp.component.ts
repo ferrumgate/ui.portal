@@ -4,14 +4,9 @@ import { Router } from '@angular/router';
 import { ConfigEmail } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
-
-
-
 
 interface SmtpModel extends ConfigEmail {
   host: string;
@@ -23,11 +18,6 @@ interface Model extends SmtpModel {
   orig: ConfigEmail
 }
 
-
-
-
-
-
 @Component({
   selector: 'app-config-email-smtp',
   templateUrl: './config-email-smtp.component.html',
@@ -36,7 +26,6 @@ interface Model extends SmtpModel {
 export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
-
 
   isThemeDark = false;
   private _model: Model = {
@@ -67,11 +56,7 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
   @Output()
   public checkEmail: EventEmitter<ConfigEmail> = new EventEmitter();
 
-
-
-
   formGroup: FormGroup = this.createFormGroup(this.model);
-
 
   error: { user: string, pass: string, host: string, port: string } = {
     user: '', pass: '', host: '', port: ''
@@ -89,7 +74,6 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
   }
   ngOnInit(): void {
 
@@ -97,7 +81,6 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
-
 
   ngAfterViewInit(): void {
 
@@ -146,7 +129,6 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
     //check errors 
     this.error = this.resetFormErrors();
 
-
     const userError = this.formGroup.controls['user'].errors;
 
     if (userError) {
@@ -183,8 +165,6 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
         this.error.port = 'PortRequired';
     }
 
-
-
   }
 
   checkIfModelChanged() {
@@ -208,11 +188,6 @@ export class ConfigEmailSmtpComponent implements OnInit, OnDestroy {
       model.isChanged = true;
 
   }
-
-
-
-
-
 
   clear() {
     const orig = this.model.orig;

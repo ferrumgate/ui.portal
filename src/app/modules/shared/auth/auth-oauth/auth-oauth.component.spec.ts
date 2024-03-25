@@ -3,15 +3,13 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RecaptchaV3Module } from 'ng-recaptcha';
 import { dispatchFakeEvent, expectValue, findEl, setFieldValue } from '../../helper.spec';
 import { BaseOAuth } from '../../models/auth';
-import { CaptchaService } from '../../services/captcha.service';
 import { ConfigService } from '../../services/config.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
-
 import { AuthOauthComponent } from './auth-oauth.component';
 
 describe('AuthOauthComponent', () => {
@@ -67,7 +65,6 @@ describe('AuthOauthComponent', () => {
     fixture.detectChanges();
     expect(component.error.clientId).toBeTruthy();
     expect(component.formGroup.invalid).toBeTrue();
-
 
   }));
 });

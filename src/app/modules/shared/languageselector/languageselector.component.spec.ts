@@ -1,20 +1,15 @@
 import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { MatSelectModule } from '@angular/material/select';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { click, queryAllByCss, queryByCss } from '../helper.spec';
+import { queryAllByCss, queryByCss } from '../helper.spec';
 import { MaterialModule } from '../material-module';
 import { CaptchaService } from '../services/captcha.service';
-import { SharedModule } from '../shared.module';
-
 import { LanguageSelectorComponent } from './languageselector.component';
-
 
 describe('LanguageSelectorComponent', () => {
   let component: LanguageSelectorComponent;
@@ -22,7 +17,6 @@ describe('LanguageSelectorComponent', () => {
 
   const translationService = jasmine.createSpyObj('TranslationService', ['getAllLanguages', 'getCurrentLang']);
   beforeEach(async () => {
-
 
     await TestBed.configureTestingModule({
       declarations: [LanguageSelectorComponent],

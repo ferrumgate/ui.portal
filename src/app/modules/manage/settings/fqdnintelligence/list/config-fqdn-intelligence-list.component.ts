@@ -1,9 +1,6 @@
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } from 'rxjs';
-import { ConfigES } from 'src/app/modules/shared/models/config';
 import { FqdnIntelligenceList, FqdnIntelligenceListStatus } from 'src/app/modules/shared/models/fqdnIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
@@ -12,11 +9,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import validator from 'validator';
-
-
-
-
 
 @Component({
   selector: 'app-config-fqdn-intelligence-list',
@@ -40,7 +32,6 @@ export class ConfigFqdnIntelligenceListComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private fqdnIntelligenceService: FqdnIntelligenceService) {
 
-
     this.allSubs.addThis =
       this.allSubs.addThis = this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
@@ -57,7 +48,6 @@ export class ConfigFqdnIntelligenceListComponent implements OnInit, OnDestroy {
         this.search();
       })
 
-
   }
   ngOnInit(): void {
 
@@ -69,14 +59,12 @@ export class ConfigFqdnIntelligenceListComponent implements OnInit, OnDestroy {
 
     this.allSubs.unsubscribe();
 
-
   }
 
   openHelp() {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');
   }
-
 
   getAllData() {
     //test data
@@ -90,7 +78,6 @@ export class ConfigFqdnIntelligenceListComponent implements OnInit, OnDestroy {
               url: 'https://ferrumgate.com', checkFrequency: 60
             }
           },
-
 
           {
             id: '2', insertDate: new Date().toString(), name: 'file list', updateDate: new Date().toString(), labels: ['test'],
@@ -245,7 +232,5 @@ export class ConfigFqdnIntelligenceListComponent implements OnInit, OnDestroy {
       });
 
   }
-
-
 
 }

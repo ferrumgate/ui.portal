@@ -1,9 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, of, switchMap } from 'rxjs';
 import { Register, RegisterInvite } from 'src/app/modules/shared/models/register';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
@@ -11,8 +9,8 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-registerinvite',
@@ -30,9 +28,7 @@ export class RegisterInviteComponent implements OnInit, OnDestroy {
   key: string = '';
   form: FormGroup = this.createFormGroup(this.model);
 
-
   error: { password: string, passwordAgain: string, save: string };
-
 
   @Output() submitEM = new EventEmitter();
   brand: ConfigBrand = {};
@@ -63,7 +59,6 @@ export class RegisterInviteComponent implements OnInit, OnDestroy {
         this.brand = this.configService.brand;
       })
   }
-
 
   ngOnInit(): void {
 
@@ -111,13 +106,11 @@ export class RegisterInviteComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     this.authService.registerInvite(this.key, this.model.password).subscribe(x => {
 
       this.isRegistered = true;
       this.error = this.resetErrrors();
     })
-
 
   }
   checkFormError() {
@@ -157,7 +150,6 @@ export class RegisterInviteComponent implements OnInit, OnDestroy {
 
     }
 
-
   }
   modelChanged() {
 
@@ -167,7 +159,5 @@ export class RegisterInviteComponent implements OnInit, OnDestroy {
   login() {
     this.router.navigate(['/login']);
   }
-
-
 
 }

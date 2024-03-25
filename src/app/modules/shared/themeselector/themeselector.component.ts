@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SSubscription } from '../services/SSubscribtion';
 
 @Component({

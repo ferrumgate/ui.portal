@@ -3,15 +3,14 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, queryByCss, setFieldValue } from '../helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from '../helper.spec';
 import { Gateway, Network } from '../models/network';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
-
 import { GatewayComponent } from './gateway.component';
 
 describe('GatewayComponent', () => {
@@ -96,10 +95,6 @@ describe('GatewayComponent', () => {
     const button2 = findEl(fixture, 'gateway-ok-button', false);
     expect(button2).toBeTruthy();
 
-
   }));
-
-
-
 
 });

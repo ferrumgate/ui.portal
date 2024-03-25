@@ -1,22 +1,9 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as ApexCharts from 'apexcharts';
-
-import { map, Observable, of } from 'rxjs';
-import { ConfigService } from '../../services/config.service';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ApexAnnotations, ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexLegend, ApexNonAxisChartSeries, ApexPlotOptions, ApexResponsive, ApexStates, ApexStroke, ApexTheme, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from "ng-apexcharts";
 import { SSubscription } from '../../services/SSubscribtion';
+import { ConfigService } from '../../services/config.service';
 import { TranslationService } from '../../services/translation.service';
-import {
-  ChartComponent,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexTitleSubtitle
-} from "ng-apexcharts"
-
 
 export interface ChartOptions {
   chart: ApexChart;
@@ -57,8 +44,6 @@ export class DashboardChartComponent implements OnInit, OnDestroy, AfterViewInit
   @Input()
   icon = 'link'
 
-
-
   constructor(
     private route: ActivatedRoute,
     private translateService: TranslationService,
@@ -83,7 +68,6 @@ export class DashboardChartComponent implements OnInit, OnDestroy, AfterViewInit
   }
   ngAfterViewInit(): void {
 
-
   }
 
   openHelp() {
@@ -91,6 +75,5 @@ export class DashboardChartComponent implements OnInit, OnDestroy, AfterViewInit
       window.open(this.helpLink, '_blank');
     }
   }
-
 
 }

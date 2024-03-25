@@ -1,23 +1,20 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { delay, map, of, switchMap, takeWhile } from 'rxjs';
 import { ConfigCommon } from 'src/app/modules/shared/models/config';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
-
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
 
 interface BaseModel extends ConfigCommon {
   isChanged: boolean
 }
 interface Model extends BaseModel {
-
 
   orig: ConfigCommon
 }
@@ -68,12 +65,9 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
     this.helpLink = this.configService.links.commonHelp;
 
   }
-
-
 
   ngOnInit(): void {
     this.configService.getCommonConfig().pipe().subscribe(x => {
@@ -163,17 +157,12 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-
-
-
-
   clear() {
     this.model.domain = (this.model as Model).orig.domain;
     this.model.url = (this.model as Model).orig.url;
     this.model.httpsRedirect = (this.model as Model).orig.httpsRedirect;
     this.model.isChanged = false;
   }
-
 
   saveOrUpdate() {
     this.confirmService.showSave().pipe(
@@ -208,7 +197,5 @@ export class ConfigCommonComponent implements OnInit, OnDestroy, AfterViewInit {
       window.open(this.helpLink, '_blank');
     }
   }
-
-
 
 }

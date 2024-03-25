@@ -1,8 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, delay, map, of, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
@@ -38,7 +36,6 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
     })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
     this.route.queryParams.subscribe(params => {
 
       this.confirmKey = params.key;
@@ -49,7 +46,6 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
       this.configService.dynamicConfigChanged.subscribe(x => {
         this.brand = this.configService.brand;
       })
-
 
   }
   ngAfterViewInit(): void {
@@ -63,9 +59,5 @@ export class CloseWindowComponent implements OnInit, AfterViewInit {
   ngOnDestroy() {
     this.allSubs.unsubscribe();
   }
-
-
-
-
 
 }

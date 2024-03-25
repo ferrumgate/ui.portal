@@ -1,5 +1,5 @@
-import { Injectable, Injector } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationService } from '../../modules/shared/services/authentication.service';
 import { LoggerService } from '../../modules/shared/services/logger.service';
 
@@ -10,7 +10,6 @@ export class AuthenticationGuard implements CanActivate {
         private authService: AuthenticationService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
 
         if (this.authService.currentSession) {
             // logged in so return true

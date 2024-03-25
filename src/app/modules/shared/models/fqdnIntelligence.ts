@@ -1,6 +1,3 @@
-import { Country } from "./country";
-
-
 export interface FqdnIntelligenceSource {
     id: string;
     objId?: string;
@@ -21,8 +18,6 @@ export interface FqdnIntelligenceSources {
     items: FqdnIntelligenceSource[];
 }
 
-
-
 export interface FqdnIntelligence {
 
     //intelligence sources
@@ -30,7 +25,6 @@ export interface FqdnIntelligence {
     lists: FqdnIntelligenceList[];
 
 }
-
 
 export interface FqdnIntelligenceList {
     // for using in ui
@@ -45,7 +39,6 @@ export interface FqdnIntelligenceList {
     file?: {
         source?: string;
         key?: string;
-
 
     };
     splitter?: string;
@@ -80,15 +73,11 @@ export interface FqdnIntelligenceListItem {
 
 }
 
-
-
-
 export interface FqdnIntelligenceItem {
     fqdn: string;
     categoryId: string;
     listId: string;
 }
-
 
 export const fqdnCategories: FqdnIntelligenceCategory[] = [
     {

@@ -1,24 +1,16 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ThisReceiver } from '@angular/compiler';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { delay, map, shareReplay, switchMap } from 'rxjs/operators';
-import { RunHelpers } from 'rxjs/testing';
-import { Login, Login2FA } from 'src/app/modules/shared/models/login';
+import { Login } from 'src/app/modules/shared/models/login';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
-import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { RBACDefault } from '../shared/models/rbac';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 import { LoadingService } from '../shared/services/loading.service';
-
 
 @Component({
   selector: 'app-login',
@@ -71,7 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
         this.brand = this.configService.brand;
       })
 
-
     this.route.queryParams.subscribe(params => {
 
       let isCaptchaEnabled = (params.isCaptchaEnabled == 'true');
@@ -106,7 +97,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
           } else
             window.location.href = window.location.href.split("?")[0];
 
-
         } else
           //if tunnel key exits save first
           if (this.tunnelSessionKey)
@@ -124,9 +114,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
               if (exchangeSessionKey)
                 this.router.navigate(['/login'], { queryParams: { exchange: exchangeSessionKey, isCaptchaEnabled: isCaptchaEnabled } })
 
-
             }
-
 
     })
   }
@@ -137,10 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-
-
   ngOnInit(): void {
-
 
   }
   ngOnDestroy(): void {
@@ -177,7 +162,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.authService.loginLocal(this.model.email || '', this.model.password || '');
   }
 
-
   submit() {
 
     if (!this.form?.valid || !this.model.email || !this.model.password) {
@@ -186,7 +170,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.loginLocal().subscribe();
-
 
   }
   checkFormError() {
@@ -200,7 +183,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       else
         this.error.email = 'EmailOrUsernameInvalid';
 
-
     }
 
     const passwordError = this.form.controls['password'].errors;
@@ -211,7 +193,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       else
         this.error.password = 'PasswordRequired';
 
-
     }
 
   }
@@ -219,8 +200,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.checkFormError();
   }
-
-
 
   get oAuthGoogleAuthenticateUrl() {
     return this.authService.googleAuthenticateUrl;
@@ -235,7 +214,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   get samlAzureADAuthenticateUrl() {
     return this.authService.azureADAuthenticateUrl;
   }
-
 
   get isForgotPasswordEnabled() {
 
@@ -280,8 +258,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   getSamlAuthenticateUrl(openId: { name: string, authName: string }) {
     return this.authService.getSamlAuthenticateUrl(openId);
   }
-
-
 
   get isGithubEnabled() {
     return false;
@@ -328,6 +304,5 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     return def;
 
   }
-
 
 }

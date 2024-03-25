@@ -1,6 +1,5 @@
 import { Country } from "./country";
 
-
 export interface IpIntelligenceSource {
     id: string;
     objId?: string;
@@ -19,7 +18,6 @@ export interface IpIntelligenceFilterCategory {
     crawler?: boolean,
 }
 
-
 export interface IpIntelligenceCountryList {
     items: Country[];
 }
@@ -36,7 +34,6 @@ export interface IpIntelligence {
 
 }
 
-
 export interface IpIntelligenceList {
     // for using in ui
     objId?: string;
@@ -50,7 +47,6 @@ export interface IpIntelligenceList {
     file?: {
         source?: string;
         key?: string;
-
 
     };
     splitter?: string;
@@ -80,9 +76,6 @@ export interface IpIntelligenceListItem {
     cidr: string;
     listId: string;
 }
-
-
-
 
 export interface IpIntelligenceItem {
     ip: string;

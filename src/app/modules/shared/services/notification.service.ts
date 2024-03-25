@@ -1,21 +1,16 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-
 
   constructor(private snackBar: MatSnackBar, private zone: NgZone,) {
 
   }
   showSnackbarTopPosition(content: any, action: any, type: string, duration?: any) {
     this.zone.run(() => {
-
 
       let sb = this.snackBar.open(content, action, {
         duration: duration || 2000,
@@ -29,15 +24,10 @@ export class NotificationService {
     });
   }
 
-
-
-
-
   error(msg: string) {
     this.showSnackbarTopPosition(msg, '', 'snack-error');
 
   }
-
 
   info(msg: string) {
     this.showSnackbarTopPosition(msg, '', 'mat-primary');

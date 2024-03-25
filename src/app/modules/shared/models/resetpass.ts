@@ -3,6 +3,3 @@ export interface ResetPass {
     passwordAgain?: string;
 }
 
-
-
-

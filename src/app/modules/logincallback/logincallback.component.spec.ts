@@ -1,29 +1,18 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { AppModule } from 'src/app/app.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service, RecaptchaV3Module } from 'ng-recaptcha';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { FooterComponent } from '../shared/footer/footer.component';
-import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
-import { MaterialModule } from '../shared/material-module';
 import { SharedModule } from '../shared/shared.module';
-import { ThemeSelectorComponent } from '../shared/themeselector/themeselector.component';
-
 import { LoginCallbackComponent } from './logincallback.component';
-import { LoginCallbackModule } from './logincallback.module';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-
-
 
 describe('LoginCallbackComponent', () => {
   let component: LoginCallbackComponent;
@@ -71,6 +60,5 @@ describe('LoginCallbackComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('.logincallback > [fxLayout="row"]').length).toBe(1);
 
   });
-
 
 });

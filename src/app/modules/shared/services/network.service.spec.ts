@@ -2,15 +2,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
 import { NetworkService } from './network.service';
-
-
 
 describe('NetworkService', () => {
   let service: NetworkService;
@@ -41,9 +36,5 @@ describe('NetworkService', () => {
     //spyOn(httpClient, 'post').and.returnValue(of({}));
     //service.configure({} as any).subscribe();
   });
-
-
-
-
 
 });

@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, NgZone, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { catchError, concat, delay, flatMap, map, merge, mergeAll, mergeMap, Observable, of, Subject, Subscription, switchMap, take, tap, throwError } from 'rxjs';
-
-
-import { ConfigService } from './config.service';
-
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
+import { Subject, catchError, map, merge, of, switchMap, throwError } from 'rxjs';
 
 /**
  * a little bit force ng-recaptcha library to load site key late
@@ -39,7 +35,6 @@ export class ReCaptchaV3ServiceCustom extends (ReCaptchaV3Service as any) {
     this.onLoad.next(true);
   }
 }
-
 
 @Injectable({
   providedIn: 'root'

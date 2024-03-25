@@ -15,12 +15,10 @@ export interface BaseAuth {
     isEnabled: boolean;
 }
 
-
 export interface AuthLocal extends BaseAuth {
     isForgotPassword?: boolean;
     isRegister?: boolean;
 }
-
 
 export interface BaseOAuth extends BaseAuthId, BaseAuth {
     clientId: string,
@@ -69,14 +67,9 @@ export interface BaseRadius extends BaseAuthId, BaseAuth {
     saveNewUser?: boolean;
 }
 
-
-
-
 export interface AuthLocal extends BaseLocal {
 
 }
-
-
 
 export interface AuthOAuth {
     providers: BaseOAuth[];

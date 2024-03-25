@@ -19,7 +19,6 @@ export interface FqdnIntelligenceProfile {
     blackLists: string[];
     blackListsEx?: { id: string, name: string }[];
 
-
 }
 export function cloneFqdnIntelligenceProfile(p: FqdnIntelligenceProfile): FqdnIntelligenceProfile {
     return {
@@ -36,7 +35,6 @@ export function cloneFqdnIntelligenceProfile(p: FqdnIntelligenceProfile): FqdnIn
 export interface AuthorizationProfile {
     is2FA: boolean;
     fqdnIntelligence?: FqdnIntelligenceProfile;
-
 
 }
 

@@ -3,10 +3,11 @@ import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { click, dispatchFakeEvent, expectValue, findEl, findEls, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { click, dispatchFakeEvent, findEl, findEls, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -16,9 +17,6 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { AccountsInviteComponent } from './accounts-invite.component';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
-
-
 
 describe('AccountsInviteComponent', () => {
   let component: AccountsInviteComponent;
@@ -128,12 +126,8 @@ describe('AccountsInviteComponent', () => {
     const viewResults3 = findEl(fixture, 'accounts-invite-view-results', false);
     expect(viewResults3).toBeFalsy();
 
-
     flush();
-
 
   }));
 });
-
-
 

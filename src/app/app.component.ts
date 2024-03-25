@@ -1,20 +1,13 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterState } from '@angular/router';
-import { delay, filter, of, switchMap, take } from 'rxjs';
+import { DomSanitizer, Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router, RouterState } from '@angular/router';
 import { fadeAnimation } from './app.animation';
-
-
 import { AuthenticationService } from './modules/shared/services/authentication.service';
 import { ConfigService } from './modules/shared/services/config.service';
 import { LoadingService } from './modules/shared/services/loading.service';
 import { LoggerService } from './modules/shared/services/logger.service';
-import { TranslationService } from './modules/shared/services/translation.service';
 import { UserService } from './modules/shared/services/user.service';
 
 declare let gtag: Function;
@@ -55,8 +48,6 @@ export class AppComponent implements OnInit {
       this.injectScripts();
     }
     this.handleRouteEvents();
-
-
 
     this.matIconRegistry.addSvgIcon(
       "social-github",
@@ -187,8 +178,6 @@ export class AppComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/img/a.svg")
     );
 
-
-
     // subsribe to theme changes
     this.configService.themeChanged.subscribe(x => {
       this.isDark = x == 'dark';
@@ -196,7 +185,6 @@ export class AppComponent implements OnInit {
 
     const user = this.authenticationService.currentSession?.currentUser;
     this.configService.init(user?.id || 'empty');
-
 
   }
   ngOnInit(): void {
@@ -261,7 +249,5 @@ export class AppComponent implements OnInit {
     return paths.length ? paths : ["Management"]
 
   }
-
-
 
 }

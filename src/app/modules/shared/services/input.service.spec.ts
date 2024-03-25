@@ -1,9 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-
 import { InputService } from './input.service';
 
 describe('InputService', () => {
-
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

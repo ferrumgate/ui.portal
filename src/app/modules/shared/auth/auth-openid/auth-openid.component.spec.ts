@@ -3,17 +3,14 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RecaptchaV3Module } from 'ng-recaptcha';
 import { dispatchFakeEvent, expectValue, findEl, setFieldValue } from '../../helper.spec';
-import { BaseOAuth, BaseOpenId, BaseSaml } from '../../models/auth';
-import { CaptchaService } from '../../services/captcha.service';
+import { BaseOpenId } from '../../models/auth';
 import { ConfigService } from '../../services/config.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
 import { AuthOpenIdComponent } from './auth-openid.component';
-
-
 
 describe('AuthOpenIdComponent', () => {
   let component: AuthOpenIdComponent;
@@ -86,7 +83,6 @@ describe('AuthOpenIdComponent', () => {
     expect(component.error.discoveryUrl).toBeTruthy();
     expect(component.formGroup.invalid).toBeTrue();
 
-
     //save changes button must be visible
     setFieldValue(fixture, testIdDiscoveryUrl, 'https://test.ferrumgate.com');
     dispatchFakeEvent(findEl(fixture, testIdDiscoveryUrl).nativeElement, 'blur');
@@ -95,7 +91,6 @@ describe('AuthOpenIdComponent', () => {
     expect(component.error.discoveryUrl).toBeFalsy();
     expect(component.formGroup.valid).toBeTrue();
     findEl(fixture, testIdSaveButton);
-
 
   }));
 });

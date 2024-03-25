@@ -1,20 +1,10 @@
-import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Group } from 'src/app/modules/shared/models/group';
-import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { map, of, switchMap, takeWhile } from 'rxjs';
-
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { UserService } from 'src/app/modules/shared/services/user.service';
 
 @Component({
   selector: 'app-downloads',
@@ -25,7 +15,6 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
   private allSubs = new SSubscription();
 
   isThemeDark = false;
-
 
   help = {
     windows: '',
@@ -53,11 +42,8 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.help.debian = this.releasePage;//this.configService.links.installClientDebianHelp
     this.help.linux = this.releasePage;//this.configService.links.installClientLinuxsHelp;
 
-
-
   }
   ngOnInit(): void {
-
 
   }
   ngAfterViewInit() {
@@ -89,19 +75,5 @@ export class DownloadsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

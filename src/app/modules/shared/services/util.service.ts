@@ -6,7 +6,6 @@ export class UtilService {
      */
     static randomNumberString(string_length: number = 16) {
 
-
         var chars = "0123456789abcdefghiklmnopqrstuvwxyzABCDEFGHIKLMNOPQRSTUVWXYZ";
 
         var randomstring = '';
@@ -99,7 +98,5 @@ export class UtilService {
     static isFqdn(fqdn: string) {
         return validator.default.isFQDN(fqdn, { require_tld: false });
     }
-
-
 
 }

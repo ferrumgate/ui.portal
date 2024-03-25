@@ -6,20 +6,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module } from 'ng-recaptcha';
-import { findEl } from '../shared/helper.spec';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { ConfigService } from '../shared/services/config.service';
 import { NotificationService } from '../shared/services/notification.service';
 import { TranslationService } from '../shared/services/translation.service';
 import { SharedModule } from '../shared/shared.module';
-
 import { ScreenSwitchComponent } from './screenswitch.component';
 
 describe('ScreenSwitchComponent', () => {
   let component: ScreenSwitchComponent;
   let fixture: ComponentFixture<ScreenSwitchComponent>;
   let authServiceSpy: AuthenticationService;
-
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -45,13 +42,5 @@ describe('ScreenSwitchComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
-
-
-
-
-
-
 
 });

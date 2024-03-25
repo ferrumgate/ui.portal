@@ -3,16 +3,14 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectValue, findEl, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
 import { ConfigIpIntelligenceListItemComponent } from './config-ip-intelligence-list-item.component';
 
 describe('ConfigIpIntelligenceListItemComponent', () => {
@@ -92,7 +90,6 @@ describe('ConfigIpIntelligenceListItemComponent', () => {
     fixture.detectChanges();
     expect(component.formGroup.valid).toBeTrue();
 
-
     //set url invalid
     setFieldValue(fixture, 'list-http-url-input', 'abcd')
     dispatchFakeEvent(findEl(fixture, 'list-http-url-input').nativeElement, 'blur');
@@ -100,8 +97,6 @@ describe('ConfigIpIntelligenceListItemComponent', () => {
     expect(component.formGroup.invalid).toBeTrue();
 
     //set file option again
-
-
 
     item.http = undefined;
     item.file = { source: 'abc.txt' }
@@ -132,13 +127,11 @@ describe('ConfigIpIntelligenceListItemComponent', () => {
     tick(1000);
     fixture.detectChanges();
 
-
     expectValue(fixture, 'list-status-check-input', '01.01.01');
     expectValue(fixture, 'list-status-input', 'an error');
 
     const downloadEl = findEl(fixture, 'download-button', false);
     expect(downloadEl).toBeTruthy();
-
 
   }));
 });

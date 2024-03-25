@@ -4,9 +4,8 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { dispatchFakeEvent, expectText, expectValue, findEl, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, findEl, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -15,9 +14,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigFqdnIntelligenceSourceComponent } from './config-fqdn-intelligence-source.component';
-
-
-
 
 describe('ConfigFqdnIntelligenceSourceComponent', () => {
   let component: ConfigFqdnIntelligenceSourceComponent;
@@ -67,16 +63,11 @@ describe('ConfigFqdnIntelligenceSourceComponent', () => {
     const apiKeyInput = findEl(fixture, 'config-fqdn-intelligence-source-apikey-input', false);
     expect(apiKeyInput).toBeFalsy();
 
-
-
-
-
     component.model = {
       type: 'test', name: 'test', id: '', insertDate: '', updateDate: 'a'
     }
     tick(1000);
     fixture.detectChanges();
-
 
     const apiKeyInput2 = findEl(fixture, 'config-fqdn-intelligence-source-apikey-input', false);
     expect(apiKeyInput2).toBeTruthy();
@@ -84,7 +75,6 @@ describe('ConfigFqdnIntelligenceSourceComponent', () => {
     expect(component.formGroup.invalid).toBeTrue();
     setFieldValue(fixture, 'config-fqdn-intelligence-source-apikey-input', 'newpass');
     dispatchFakeEvent(findEl(fixture, 'config-fqdn-intelligence-source-apikey-input').nativeElement, 'blur');
-
 
     expect(component.formGroup.valid).toBeTrue();
 
@@ -95,9 +85,6 @@ describe('ConfigFqdnIntelligenceSourceComponent', () => {
 
     flush();
 
-
   }));
 });
-
-
 

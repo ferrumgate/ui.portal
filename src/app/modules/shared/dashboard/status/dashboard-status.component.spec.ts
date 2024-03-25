@@ -1,18 +1,13 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, queryByCss, setFieldValue } from '../../helper.spec';
-import { CaptchaService } from '../../services/captcha.service';
+import { expectText, findEl } from '../../helper.spec';
 import { ConfigService } from '../../services/config.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
-
-
-
 import { DashboardStatusComponent } from './dashboard-status.component';
 
 describe('DashboardStatusComponent', () => {
@@ -57,8 +52,6 @@ describe('DashboardStatusComponent', () => {
 
     expectText(fixture, 'dashboard-status-title', 'test5');
     expectText(fixture, 'dashboard-status-detail', 'some detail');
-
-
 
   }));
 });

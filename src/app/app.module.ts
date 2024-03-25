@@ -1,34 +1,25 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { AuthenticationService } from './modules/shared/services/authentication.service';
 import { NotificationService } from './modules/shared/services/notification.service';
 import { JwtInterceptor } from './core/interceptors/jwtInterceptor';
 import { HttpErrorInterceptor } from './core/interceptors/httpErrorInterceptor';
 import { ErrorInterceptor } from './core/interceptors/errorInterceptor';
-
 import { AuthenticationGuard } from './core/guards/authenticationGuard';
 import { MaterialModule } from './modules/shared/material-module';
-
-
 import { translationHttpLoaderFactory, TranslationService } from './modules/shared/services/translation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ZeroLayoutModule } from './modules/layout/zero-layout/zero-layout.module';
 import { DefaultLayoutModule } from './modules/layout/default-layout/default-layout.module';
-
 import { LayoutModule } from '@angular/cdk/layout';
 import { ConfigService } from './modules/shared/services/config.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 import { CaptchaService } from './modules/shared/services/captcha.service';
 import { SharedModule } from './modules/shared/shared.module';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -46,18 +37,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
-
-
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
-
-
 
   ],
   imports: [

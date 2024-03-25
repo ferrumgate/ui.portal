@@ -27,7 +27,6 @@ export function cloneIpIntelligenceProfile(p: IpIntelligenceProfile): IpIntellig
     }
 }
 
-
 export interface TimeProfile {
     timezone: string;
     days: number[],
@@ -53,8 +52,6 @@ export function cloneLocationProfile(p: LocationProfile): LocationProfile {
         countryCode: p.countryCode
     }
 }
-
-
 
 export interface AppVersion {
     version?: string;
@@ -105,7 +102,6 @@ export function cloneDevicePosture(val: DevicePosture): DevicePosture {
     };
 }
 
-
 export interface DeviceProfile {
     //devicepostureprofile ids
     postures: string[];
@@ -116,11 +112,6 @@ export function cloneDeviceProfile(p: DeviceProfile): DeviceProfile {
         postures: Array.from(p.postures)
     }
 }
-
-
-
-
-
 
 /**
  * base authentication profile for users

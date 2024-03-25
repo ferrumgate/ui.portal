@@ -2,11 +2,10 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, queryByCss, setFieldValue } from '../helper.spec';
-import { Group } from '../models/group';
-import { Gateway, Network } from '../models/network';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, findEl, setFieldValue } from '../helper.spec';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
 import { GroupService } from '../services/group.service';
@@ -14,9 +13,6 @@ import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
 import { UProfileComponent } from './uprofile.component';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
-
-
 
 describe('UProfileComponent', () => {
   let component: UProfileComponent;
@@ -70,8 +66,6 @@ describe('UProfileComponent', () => {
     let okButton = findEl(fixture, testOkButtonId, false);
     expect(okButton).toBeFalsy();
 
-
-
     setFieldValue(fixture, 'browser-idle-timeout', '23')
     dispatchFakeEvent(findEl(fixture, 'browser-idle-timeout').nativeElement, 'blur');
     fixture.detectChanges();
@@ -79,7 +73,6 @@ describe('UProfileComponent', () => {
     expect(component.error.browserTimeout).toBeFalsy();
     okButton = findEl(fixture, testOkButtonId, false);
     expect(okButton).toBeTruthy();
-
 
   }));
 });

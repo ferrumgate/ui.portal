@@ -3,17 +3,12 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { BaseLdap, BaseOAuth } from '../../models/auth';
-import { InputService } from '../../services/input.service';
+import { BaseLdap } from '../../models/auth';
 import { SSubscription } from '../../services/SSubscribtion';
-
-
 
 interface BaseModel extends BaseLdap {
 
@@ -31,7 +26,6 @@ interface Model extends BaseModel {
 export class AuthLdapComponent implements OnInit, OnDestroy {
   allSubs = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model;
@@ -64,15 +58,12 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
   @Output()
   deleteLdap: EventEmitter<BaseLdap> = new EventEmitter();
 
-
-
   //captcha settings
   formGroup: FormGroup;
   error = {
     host: '', bindDN: '', bindPass: '',
     searchBase: '', searchFilter: '', usernameField: '', groupnameField: ''
   };
-
 
   hidePassword = true;
   constructor(private router: Router,
@@ -121,7 +112,6 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSubs.unsubscribe();
   }
-
 
   createFormGroup(model: any) {
     const fmg = new FormGroup(
@@ -221,7 +211,6 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
         this.error.groupnameField = 'GroupnameFieldRequired';
     }
 
-
   }
 
   checkIfModelChanged() {
@@ -266,7 +255,6 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
 
   }
 
-
   clear() {
 
     this.model = {
@@ -305,7 +293,6 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.saveLdap.emit(this.createBaseModel())
   }
-
 
   delete() {
     this.deleteLdap.emit(this.createBaseModel());

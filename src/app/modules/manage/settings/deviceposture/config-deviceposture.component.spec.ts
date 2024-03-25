@@ -5,14 +5,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module } from 'ng-recaptcha';
 import { findEls } from 'src/app/modules/shared/helper.spec';
-import { AuthSettings } from 'src/app/modules/shared/models/auth';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-import { ConfigDevicePostureComponent } from './config-deviceposture.component';
 import { DevicePosture } from 'src/app/modules/shared/models/device';
+import { ConfigDevicePostureComponent } from './config-deviceposture.component';
 
 describe('ConfigDevicePostureComponent', () => {
   let component: ConfigDevicePostureComponent;
@@ -71,8 +69,6 @@ describe('ConfigDevicePostureComponent', () => {
     fixture.detectChanges();
     const locals = findEls(fixture, 'config-deviceposture-item');
     expect(locals.length).toEqual(1);
-
-
 
   }));
 });

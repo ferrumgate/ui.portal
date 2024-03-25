@@ -1,7 +1,5 @@
 import { AuthenticationProfile, cloneAuthenticationProfile } from "./authnProfile";
 
-
-
 export interface AuthenticationRule {
     objId?: string;
     id: string;
@@ -11,7 +9,6 @@ export interface AuthenticationRule {
     profile: AuthenticationProfile;
     isEnabled: boolean;
     [key: string]: any;
-
 
 }
 export function cloneAuthenticationRule(val: AuthenticationRule): AuthenticationRule {
@@ -24,7 +21,6 @@ export function cloneAuthenticationRule(val: AuthenticationRule): Authentication
         isEnabled: val.isEnabled
     }
 }
-
 
 export interface AuthenticationPolicy {
     rules: AuthenticationRule[];

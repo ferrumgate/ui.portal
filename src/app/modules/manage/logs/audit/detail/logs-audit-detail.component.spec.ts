@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { By } from '@angular/platform-browser';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -9,9 +8,6 @@ import { findEls } from 'src/app/modules/shared/helper.spec';
 import { MaterialModule } from 'src/app/modules/shared/material-module';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
-
 import { LogsAuditDetailComponent } from './logs-audit-detail.component';
 
 describe('LogsAuditDetailComponent', () => {
@@ -59,8 +55,5 @@ describe('LogsAuditDetailComponent', () => {
     expect(els.length).toBe(2);
 
   }));
-
-
-
 
 });

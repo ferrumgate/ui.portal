@@ -3,11 +3,10 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { map, Observable, of, switchMap, takeWhile } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { map, of, switchMap, takeWhile } from 'rxjs';
 import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
-import { IpIntelligence, IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
+import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
@@ -17,13 +16,10 @@ import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 
-
-
 export interface IpIntelligenceListExtended extends IpIntelligenceList {
   orig: IpIntelligenceList;
   isChanged: boolean;
   insertDateStr: string;
-
 
 }
 
@@ -43,7 +39,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
         id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 60, url: 'https://ferrumgate.com' }
       }
     };
-
 
   get list(): IpIntelligenceListExtended {
     return this._model;
@@ -74,15 +69,12 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   @Output()
   resetIpIntelligenceList: EventEmitter<IpIntelligenceList> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, httpUrl: string,
     fileSource: string,
   }
     = { name: '', httpUrl: '', fileSource: '' };
-
 
   isThemeDark = false;
 
@@ -132,10 +124,7 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       this.checkIfModelChanged();
     else this.list.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(list: IpIntelligenceListExtended) {
     const fmg = new FormGroup({
@@ -143,8 +132,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       insertDateStr: new FormControl(list.insertDateStr, []),
       splitter: new FormControl(list.splitter, []),
       splitterIndex: new FormControl(list.splitterIndex, []),
-
-
 
     });
     fmg.controls['insertDateStr'].disable();
@@ -166,7 +153,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       fmg.controls['statusLastError'].disable();
 
     }
-
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -227,7 +213,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       this.checkIfModelChanged();
   }
 
-
   checkIfModelChanged() {
     this.list.isChanged = false;
     const original = this._model.orig as IpIntelligenceList;
@@ -278,9 +263,7 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
 
       }
 
-
     }
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -317,7 +300,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
     }
   }
 
-
   saveOrUpdate() {
     if (this.uploadFile) {
 
@@ -345,8 +327,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
     }
   }
 
-
-
   delete() {
     this.deleteIpIntelligenceList.emit(this.createBaseModel());
   }
@@ -361,7 +341,6 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
       this.modelChanged();
     }
 
-
   }
 
   download() {
@@ -371,7 +350,5 @@ export class ConfigIpIntelligenceListItemComponent implements OnInit, OnDestroy 
   reset() {
     this.resetIpIntelligenceList.emit(this.createBaseModel());
   }
-
-
 
 }

@@ -1,33 +1,26 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { map, Observable, of, switchMap, takeWhile } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { SSLCertificate, SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
-import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { PKIService } from 'src/app/modules/shared/services/pki.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 export interface KeyValue {
   id: string; value: string
 }
 
-
 interface SSLCertificateExExtended extends SSLCertificateEx {
   orig: SSLCertificateEx;
   isChanged: boolean;
   insertDateStr: string;
-
 
 }
 
@@ -51,7 +44,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       }
     };
 
-
   get cert(): SSLCertificateExExtended {
     return this._model;
   }
@@ -68,8 +60,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       orig: val,
       labels: Array.from(val.labels || []),
       insertDateStr: UtilService.dateFormatToLocale(new Date(val.insertDate)),
-
-
 
     }
     if (val.category == 'tls')
@@ -91,8 +81,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
   @Output()
   exportCACert: EventEmitter<SSLCertificate> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, publicCrt: string;
@@ -100,8 +88,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
     = { name: '', publicCrt: '' };
 
   formGroupPassword: FormGroup = this.createFormGroupPassword();
-
-
 
   isThemeDark = false;
 
@@ -150,7 +136,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.cert.isChanged = false;
 
-
   }
   downloadButtonDisabled = true;
   modelChangedPassword() {
@@ -160,10 +145,7 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       this.downloadButtonDisabled = false;
     else this.downloadButtonDisabled = true;
 
-
   }
-
-
 
   createFormGroup(cert: SSLCertificateExExtended) {
     const fmg = new FormGroup({
@@ -172,11 +154,8 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       publicCrt: new FormControl(cert.publicCrt, []),
       privateKey: new FormControl(cert.privateKey, []),
 
-
     });
     fmg.controls['insertDateStr'].disable();
-
-
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -204,15 +183,12 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
 
       })
 
-
     return fmg;
   }
   password = '';
   createFormGroupPassword() {
     const fmg = new FormGroup({
       password: new FormControl(this.password, [Validators.required]),
-
-
 
     });
     let keys = Object.keys(fmg.controls)
@@ -262,14 +238,11 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
   }
 
-
   removeLabel(label: string): void {
     this._model.labels = this._model.labels?.filter(x => x != label);
     if (this.checkFormIsValid())
       this.checkIfModelChanged();
   }
-
-
 
   checkIfModelChanged() {
     this.cert.isChanged = false;
@@ -283,7 +256,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       this.cert.isChanged = true
     if (UtilService.checkChanged(original.usages, this.cert.usages))
       this.cert.isChanged = true
-
 
   }
 
@@ -299,8 +271,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       else
         error.name = 'NameRequired';
     }
-
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -320,11 +290,9 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
         this.formErrorPassword.password = 'PasswordRequired';
     }
 
-
     (this.formGroupPassword as FormGroup).markAllAsTouched();
 
   }
-
 
   clear() {
     this._model.isChanged = false;
@@ -334,7 +302,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       labels: Array.from(original.labels || []),
 
     }
-
 
     this.checkIfModelChanged();
   }
@@ -353,7 +320,6 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
 
     }
   }
-
 
   saveOrUpdate() {
     this.saveCert.emit(this.createBaseModel());
@@ -382,6 +348,5 @@ export class ConfigPKIIntermediateCertComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
-
 
 }

@@ -1,14 +1,12 @@
-import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { map, of } from 'rxjs';
-import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
-import { Group } from 'src/app/modules/shared/models/group';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { of } from 'rxjs';
+import { findEls } from 'src/app/modules/shared/helper.spec';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
@@ -18,9 +16,6 @@ import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { Network } from '../../shared/models/network';
 import { Service } from '../../shared/models/service';
 import { UtilService } from '../../shared/services/util.service';
-
-
-
 import { ServicesComponent } from './services.component';
 
 describe('ServicesComponent', () => {
@@ -100,9 +95,6 @@ describe('ServicesComponent', () => {
 
     const serviceElements = findEls(fixture, 'services-service');
     expect(serviceElements.length).toBe(2);
-
-
-
 
   }));
 });

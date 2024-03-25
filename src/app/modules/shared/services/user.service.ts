@@ -1,21 +1,14 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Configure } from '../models/configure';
-import { Group } from '../models/group';
+import { HttpClient } from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
+import { map, of, switchMap } from 'rxjs';
+import { SSLCertificate } from '../models/sslCertificate';
 import { ApiKey, User2 } from '../models/user';
+import { UserProfile } from '../models/userProfile';
+import { AuthenticationService } from './authentication.service';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 
-import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-import { SSLCertificate } from '../models/sslCertificate';
-import { userInfo } from 'os';
-import { AuthenticationService } from './authentication.service';
-import { UserProfile } from '../models/userProfile';
 interface UpdateRequest {
   id: string;
   name?: string;
@@ -33,8 +26,6 @@ interface SaveRequest {
   labels: string[],
   groupIds?: string[]
 }
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -60,9 +51,7 @@ export class UserService extends BaseService {
       this.authService.configureIdle(profile.browserTimeout * 60);
     })
 
-
   }
-
 
   update(user: User2) {
     //only these fields updates
@@ -70,7 +59,6 @@ export class UserService extends BaseService {
       id: user.id, labels: user.labels, name: user.name,
       is2FA: user.is2FA, isLocked: user.isLocked, roleIds: user.roleIds, groupIds: user.groupIds
     }
-
 
     return this.preExecute(updateRequest).pipe(
       switchMap(y => {
@@ -92,7 +80,6 @@ export class UserService extends BaseService {
     if (createCert)
       urlParams.append('cert', 'true');
 
-
     return this.preExecute(saveRequest).pipe(
       switchMap(y => {
         let url = this.joinUrl(this._userUrl, urlParams);
@@ -104,9 +91,7 @@ export class UserService extends BaseService {
       }))
   }
 
-
   delete(user: User2) {
-
 
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
@@ -128,7 +113,6 @@ export class UserService extends BaseService {
 
       }))
   }
-
 
   get2(
     page: number = 0, pageSize: number = 0,
@@ -176,11 +160,6 @@ export class UserService extends BaseService {
     )
   }
 
-
-
-
-
-
   getCurrentUser2FA() {
     const searchParams = new URLSearchParams();
     return this.preExecute(searchParams).pipe(
@@ -212,7 +191,6 @@ export class UserService extends BaseService {
 
       }))
   }
-
 
   updateCurrentUserPass(req: { oldPass: string, newPass: string }) {
 
@@ -267,10 +245,7 @@ export class UserService extends BaseService {
       }))
   }
 
-
-
   deleteUserSensitiveData(id: string, isApiKey: boolean, isCert: boolean) {
-
 
     const urlParams = new URLSearchParams();
     if (isApiKey)
@@ -285,7 +260,6 @@ export class UserService extends BaseService {
       }))
   }
 
-
   resetUserPassword(id: string, pass: string) {
 
     let request = {
@@ -299,8 +273,6 @@ export class UserService extends BaseService {
       }))
   }
 
-
-
   defaultProfile() {
     return {
       browserTimeout: 15
@@ -312,7 +284,6 @@ export class UserService extends BaseService {
     return of('').pipe(
       switchMap(x => this.authService.getUserCurrent()),
       map(x => {
-
 
         localStorage.setItem(`profile_for_user_${x.id || 'anonymous'}`, JSON.stringify(profile));
         this.userProfileChanged.emit(profile);
@@ -333,6 +304,5 @@ export class UserService extends BaseService {
     if (value) return JSON.parse(value) as UserProfile;
     return this.defaultProfile();
   }
-
 
 }

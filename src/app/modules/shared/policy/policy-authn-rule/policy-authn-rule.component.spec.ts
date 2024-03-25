@@ -1,34 +1,24 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatTabGroupHarness } from '@angular/material/tabs/testing'
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatTabGroup } from '@angular/material/tabs';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { GroupComponent } from '../../group/group.component';
-import { click, dispatchFakeEvent, expectValue, findEl, findEls, getCheckValue, queryAllByCss, queryByCss, setFieldValue } from '../../helper.spec';
-import { AuthenticationPolicy, AuthenticationRule } from '../../models/authnPolicy';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { click, dispatchFakeEvent, expectValue, findEl, findEls, getCheckValue, setFieldValue } from '../../helper.spec';
+import { AuthenticationRule } from '../../models/authnPolicy';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
-import { Service } from '../../models/service';
 import { CaptchaService } from '../../services/captcha.service';
 import { ConfigService } from '../../services/config.service';
 import { GroupService } from '../../services/group.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
-
-
-
-
-import { PolicyAuthnRuleComponent } from './policy-authn-rule.component';
-import { By } from '@angular/platform-browser';
+import { IpIntelligenceList } from '../../models/ipIntelligence';
 import { UtilService } from '../../services/util.service';
-import { IpIntelligence, IpIntelligenceList } from '../../models/ipIntelligence';
+import { PolicyAuthnRuleComponent } from './policy-authn-rule.component';
 
 describe('PolicyAuthnRuleComponent', () => {
   let component: PolicyAuthnRuleComponent;
@@ -68,11 +58,9 @@ describe('PolicyAuthnRuleComponent', () => {
     flush();
   }))
 
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 
   let group: Group = {
     id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
@@ -82,7 +70,6 @@ describe('PolicyAuthnRuleComponent', () => {
   let network: Network = {
     id: 'network1', name: 'networkname'
   } as Network;
-
 
   let network2: Network = {
     id: 'network12', name: 'networkname2'
@@ -119,13 +106,11 @@ describe('PolicyAuthnRuleComponent', () => {
   it('data binding first tab', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
-
     const rule: AuthenticationRule = {
       id: 'somid', isEnabled: true, name: 'only north group can access',
       networkId: network.id,
       profile: { is2FA: true, whiteListIps: [{ ip: '1.2.3.4' }] },
       userOrgroupIds: [group.id], isExpanded: true,
-
 
     }
 
@@ -162,8 +147,6 @@ describe('PolicyAuthnRuleComponent', () => {
     const testEnabledId = 'policy-authn-rule-checkbox-enabled';
     findEl(fixture, testEnabledId);
 
-
-
     const testIpsTabId = 'policy-authn-tab-ips';
 
     const testIpsId = 'policy-authn-rule-ip-chip';
@@ -178,7 +161,6 @@ describe('PolicyAuthnRuleComponent', () => {
     const button = findEl(fixture, testOkButtonId, false);
     expect(button).toBeUndefined;
 
-
     setFieldValue(fixture, testNameId, 'adfasdfa')
     dispatchFakeEvent(findEl(fixture, testNameId).nativeElement, 'blur');
     fixture.detectChanges();
@@ -188,20 +170,15 @@ describe('PolicyAuthnRuleComponent', () => {
     expect(button2).toBeUndefined;
     expect(component.rule.isChanged).toBeTrue;
 
-
-
   }));
 
   it('data binding second tab first ipIntelligence null', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
-
     //component.tabs.selectedIndex = 1;
     component.selectedTab = 1;
     tick(1000);
     fixture.detectChanges();
-
-
 
     const rule: AuthenticationRule = {
       id: 'somid', isEnabled: true, name: 'only north group can access',
@@ -231,21 +208,17 @@ describe('PolicyAuthnRuleComponent', () => {
 
     expect(ipTab).toBeTruthy();
 
-
     const customWhiteList = findEls(fixture, 'policy-authn-rule-whitelist-chip');
     expect(customWhiteList.length).toEqual(1);
 
     const customBlackList = findEls(fixture, 'policy-authn-rule-blacklist-chip');
     expect(customBlackList.length).toEqual(2);
 
-
     const ipIntelligenceWhiteList = findEls(fixture, 'policy-authn-rule-intel-whitelist-chip');
     expect(ipIntelligenceWhiteList.length).toEqual(0);
 
     const ipIntelligenceBlackList = findEls(fixture, 'policy-authn-rule-intel-blacklist-chip');
     expect(ipIntelligenceBlackList.length).toEqual(0);
-
-
 
     const isProxyEl = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
     expect(isProxyEl).toBeFalse();
@@ -259,18 +232,15 @@ describe('PolicyAuthnRuleComponent', () => {
     const selectedCountryList = findEls(fixture, 'policy-authn-rule-ip-country');
     expect(selectedCountryList.length).toEqual(0);
 
-
   }));
 
   it('data binding second tab first ipIntelligence not null', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
-
     //component.tabs.selectedIndex = 1;
     component.selectedTab = 1;
     tick(1000);
     fixture.detectChanges();
-
 
     const rule2: AuthenticationRule = {
       id: 'somid', isEnabled: true, name: 'only north group can access',
@@ -295,15 +265,9 @@ describe('PolicyAuthnRuleComponent', () => {
 
     component.rule = rule2
 
-
-
-
-
     tick(1000);
     fixture.detectChanges();
     await fixture.whenStable();
-
-
 
     const customWhiteList = findEls(fixture, 'policy-authn-rule-whitelist-chip');
     expect(customWhiteList.length).toEqual(1);
@@ -311,13 +275,11 @@ describe('PolicyAuthnRuleComponent', () => {
     const customBlackList = findEls(fixture, 'policy-authn-rule-blacklist-chip');
     expect(customBlackList.length).toEqual(2);
 
-
     const ipIntelligenceWhiteList = findEls(fixture, 'policy-authn-rule-intel-whitelist-chip');
     expect(ipIntelligenceWhiteList.length).toEqual(2);
 
     const ipIntelligenceBlackList = findEls(fixture, 'policy-authn-rule-intel-blacklist-chip');
     expect(ipIntelligenceBlackList.length).toEqual(1);
-
 
     const isProxyEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-isproxy-enabled')
     expect(isProxyEl2).toBeTrue();
@@ -328,17 +290,12 @@ describe('PolicyAuthnRuleComponent', () => {
     const isCrawlerEl2 = getCheckValue(fixture, 'policy-authn-rule-ip-iscrawler-enabled')
     expect(isCrawlerEl2).toBeTrue();
 
-
     const testOkButtonId = 'policy-authn-rule-ok-button';
-
-
 
   }));
 
-
   it('data binding country list', fakeAsync(async () => {
     expect(component).toBeTruthy();
-
 
     //component.tabs.selectedIndex = 1;
     component.selectedTab = 1;
@@ -358,9 +315,6 @@ describe('PolicyAuthnRuleComponent', () => {
       },
       userOrgroupIds: [group.id], isExpanded: true,
 
-
-
-
     }
 
     component.users = [];
@@ -378,14 +332,10 @@ describe('PolicyAuthnRuleComponent', () => {
     //expect(selectedCountryList.length).toEqual(1);
     expect(component.countryMultiCtrl.value.length).toEqual(1);
 
-
   }));
-
-
 
   it('data binding time tab', fakeAsync(async () => {
     expect(component).toBeTruthy();
-
 
     //component.tabs.selectedIndex = 1;
     component.selectedTab = 2;
@@ -407,9 +357,6 @@ describe('PolicyAuthnRuleComponent', () => {
         ]
       },
       userOrgroupIds: [group.id], isExpanded: true,
-
-
-
 
     }
 
@@ -449,11 +396,7 @@ describe('PolicyAuthnRuleComponent', () => {
     const selectedTimeProfiles2 = findEls(fixture, 'policy-authn-rule-time-chip');
     expect(selectedTimeProfiles2.length).toEqual(2);
 
-
-
-
   }));
-
 
 });
 

@@ -9,9 +9,6 @@ export class InputService {
 
   constructor() { }
 
-
-
-
   static emailValidator(control: any) {
     // RFC 2822 compliant regex
     if (control == null || control.value == null || control.value === '' || control.value == 'admin') {
@@ -24,8 +21,6 @@ export class InputService {
       return { 'invalidEmail': true };
     }
   }
-
-
 
   static captchaValidator(control: any) {
     // RFC 2822 compliant regex
@@ -99,7 +94,6 @@ export class InputService {
     if (control == null || control.value == null) {
       return null;
     } else
-
 
       if ((control.value.startsWith('http://') || control.value.startsWith('https://')) && (validator.isURL(control.value) || control.value.includes('localhost'))) {
         return null;

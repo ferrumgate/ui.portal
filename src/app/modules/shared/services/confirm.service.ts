@@ -1,20 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { ConfirmComponent, ConfirmDialogModel } from '../confirm/confirm.component';
-import { Configure } from '../models/configure';
-import { Gateway } from '../models/network';
-import { BaseService } from './base.service';
-import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
 import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-
-
 
 @Injectable({
     providedIn: 'root'
@@ -37,7 +25,6 @@ export class ConfirmService {
             width: width,
             data: dialogData,
             panelClass: 'confirm-background',
-
 
         });
         return dialogRef.afterClosed();

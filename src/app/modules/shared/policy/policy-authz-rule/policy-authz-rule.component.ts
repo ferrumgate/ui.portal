@@ -1,26 +1,19 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of } from 'rxjs';
-import { AuthenticationRule } from '../../models/authnPolicy';
+import { ActivatedRoute } from '@angular/router';
 import { AuthorizationRule } from '../../models/authzPolicy';
+import { FqdnIntelligenceProfile } from '../../models/authzProfile';
+import { FqdnIntelligenceCategory, FqdnIntelligenceList } from '../../models/fqdnIntelligence';
 import { Group } from '../../models/group';
 import { Network } from '../../models/network';
 import { Service } from '../../models/service';
 import { User2 } from '../../models/user';
-import { ConfigService } from '../../services/config.service';
 import { SSubscription } from '../../services/SSubscribtion';
+import { ConfigService } from '../../services/config.service';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
-import { FqdnIntelligence, FqdnIntelligenceCategory, FqdnIntelligenceList } from '../../models/fqdnIntelligence';
-import { FqdnIntelligenceProfile } from '../../models/authzProfile';
-import { ConfigFqdnIntelligenceComponent } from 'src/app/modules/manage/settings/fqdnintelligence/config-fqdn-intelligence.component';
 import { PolicyAuthzRuleFqdnComponent } from './policy-authz-rule-fqdn/policy-authz-rule-fqdn.component';
-
-
-
 
 export interface AuthorizationRuleExtended extends AuthorizationRule {
   orig: AuthorizationRule;
@@ -79,7 +72,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
   get groups() { return this._groups };
 
-
   //fqnd list
   _fqdnIntelligenceLists: FqdnIntelligenceList[] = [];
   @Input()
@@ -95,10 +87,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     this._fqdnIntelligenceCategoryLists = val;
   }
   get fqdnIntelligenceCategoryLists() { return this._fqdnIntelligenceCategoryLists };
-
-
-
-
 
   get rule(): AuthorizationRuleExtended {
     return this._model;
@@ -144,14 +132,10 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   }
 
-
   @Output()
   saveAuthzRule: EventEmitter<AuthorizationRule> = new EventEmitter();
   @Output()
   deleteAuthzRule: EventEmitter<AuthorizationRule> = new EventEmitter();
-
-
-
 
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string, service: string } = { name: '', service: '' }
@@ -165,7 +149,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   @ViewChild(PolicyAuthzRuleFqdnComponent) fqdnIntelligenceComponent!: PolicyAuthzRuleFqdnComponent;
   fqdnIntelligenceChanged = false;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -186,7 +169,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.prepareAutoCompletes();
-
 
   }
   ngOnDestroy(): void {
@@ -215,7 +197,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
 
     this.filteredServices = this.services.filter(x => x.networkId == this.rule.networkId).sort(this.simpleNameSort);
 
-
     this.filteredUsers = this.users.sort(this.simpleUsernameSort)
 
     this.filteredGroups = this.groups.sort(this.simpleNameSort);
@@ -232,7 +213,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
           this.filteredGroups = this.groups.sort(this.simpleNameSort);
         }
       })
-
 
   }
 
@@ -268,23 +248,18 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     }
   }
 
-
   displayServiceFn(net: Service | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || '';
   }
-
-
 
   displayUserOrGroupFn(net: User2 | Group | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || net?.username || '';
   }
 
-
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
 
   removeUserOrGroup(ug: { id: string }): void {
     this.rule.userOrgroupIds = this.rule.userOrgroupIds.filter(x => x != ug.id);
@@ -307,9 +282,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-
   modelChanged() {
 
     this.checkFormError();
@@ -317,10 +289,7 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.rule.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(rule: AuthorizationRule) {
     const fmg = new FormGroup({
@@ -349,7 +318,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
   }
 
   selectedTab = 0;
-
 
   checkIfModelChanged() {
     this.rule.isChanged = false;
@@ -383,7 +351,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
         error.name = 'NameRequired';
     }
 
-
     const serviceError = this.formGroup.controls.serviceId.errors;
 
     if (serviceError) {
@@ -392,7 +359,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       else
         error.service = 'ServiceRequired';
     }
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -430,12 +396,9 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     return item;
   }
 
-
   saveOrUpdate() {
     this.saveAuthzRule.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteAuthzRule.emit(this.createBaseModel());
@@ -446,7 +409,6 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
       return `${this.rule.userOrGroups.map(x => x.name).join(', ')}`;
     else return `all`
   }
-
 
   getExplanationSummary() {
     return `${this.rule.name}, ${this.rule.isEnabled ? 'enabled' : 'not enabled'}, ${this.rule.serviceName}, ${this.rule.userOrGroups.map(x => x.name).join(', ').substring(0, 60)}... ${this.rule.profile.is2FA ? ', 2FA' : ''}`
@@ -462,11 +424,5 @@ export class PolicyAuthzRuleComponent implements OnInit, OnDestroy {
     this.fqdnIntelligenceChanged = ev;
     this.checkIfModelChanged();
   }
-
-
-
-
-
-
 
 }

@@ -1,4 +1,3 @@
-import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, takeWhile } from 'rxjs';
 import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth, BaseOpenId, BaseRadius, BaseSaml } from 'src/app/modules/shared/models/auth';
@@ -7,9 +6,6 @@ import { ConfirmService } from 'src/app/modules/shared/services/confirm.service'
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-
-
-
 
 @Component({
   selector: 'app-config-auth',
@@ -26,8 +22,6 @@ export class ConfigAuthComponent implements OnInit {
 
   ) {
 
-
-
   }
   model: AuthSettings = {
     common: {},
@@ -36,7 +30,6 @@ export class ConfigAuthComponent implements OnInit {
       name: 'local', tags: [], isEnabled: true
     }
   }
-
 
   ngOnInit(): void {
     this.getAuthCommon().pipe(
@@ -85,7 +78,6 @@ export class ConfigAuthComponent implements OnInit {
       name: 'Linkedin/OAuth2', type: 'oauth', isVisible: true, svg: 'social-linkedin', icon: undefined,
       click: () => { this.addLinkedinOAuth() }
     },
-
 
   ]
 
@@ -156,7 +148,6 @@ export class ConfigAuthComponent implements OnInit {
     )
   }
 
-
   saveAuthLocal($event: AuthLocal) {
     this.confirmService.showSave().pipe(
       takeWhile(x => x),
@@ -207,8 +198,6 @@ export class ConfigAuthComponent implements OnInit {
       })
     }
   }
-
-
 
   saveLdap($event: BaseLdap) {
     this.confirmService.showSave().pipe(
@@ -285,14 +274,6 @@ export class ConfigAuthComponent implements OnInit {
     }
   }
 
-
-
-
-
-
-
-
-
   addActiveDirectory() {
     const activeDirectory = this.model.ldap?.providers.find(x => x.baseType == 'ldap' && x.type == 'activedirectory');
     if (activeDirectory) {
@@ -309,7 +290,6 @@ export class ConfigAuthComponent implements OnInit {
     if (!this.model.ldap)
       this.model.ldap = { providers: [] };
     this.model.ldap.providers.push(ldap);
-
 
   }
 
@@ -367,8 +347,6 @@ export class ConfigAuthComponent implements OnInit {
     this.model.saml.providers.push(saml);
   }
 
-
-
   addAzureADSaml() {
     const auth = this.model.saml?.providers.find(x => x.baseType == 'saml' && x.type == 'azure');
     if (auth) {
@@ -387,12 +365,6 @@ export class ConfigAuthComponent implements OnInit {
     this.model.saml.providers.push(saml);
   }
 
-
-
-
-
-
-
   addGenericOpenId() {
     const auth = this.model.openId?.providers.find(x => x.baseType == 'openId' && x.type == 'generic' && x.authName == 'generic');
     if (auth) {
@@ -403,7 +375,6 @@ export class ConfigAuthComponent implements OnInit {
       baseType: 'openId', type: 'generic', objId: UtilService.randomNumberString(), name: 'Generic/OpenID', authName: 'generic', tags: [],
       id: '', isEnabled: true,
       discoveryUrl: '', clientId: '', clientSecret: '', saveNewUser: true,
-
 
     }
     if (!this.model.openId)
@@ -448,8 +419,6 @@ export class ConfigAuthComponent implements OnInit {
     }
   }
 
-
-
   addGenericRadius() {
     const auth = this.model.openId?.providers.find(x => x.baseType == 'radius' && x.type == 'generic');
     if (auth) {
@@ -461,7 +430,6 @@ export class ConfigAuthComponent implements OnInit {
       objId: UtilService.randomNumberString(), name: 'Generic/Radius', tags: [],
       id: '', isEnabled: true,
       host: '', secret: '', saveNewUser: true
-
 
     }
     if (!this.model.radius)
@@ -506,7 +474,6 @@ export class ConfigAuthComponent implements OnInit {
     }
   }
 
-
   addGenericOAuth() {
     const googleOAuth = this.model.oauth?.providers.find(x => x.baseType == 'oauth' && x.type == 'generic' && x.authName == 'generic');
     if (googleOAuth) {
@@ -528,11 +495,6 @@ export class ConfigAuthComponent implements OnInit {
 
   }
 
-
-
-
-
-
   get totalCount() {
     return 1
       + (this.model.ldap?.providers?.length || 0)
@@ -541,9 +503,6 @@ export class ConfigAuthComponent implements OnInit {
       + (this.model.openId?.providers?.length || 0)
       + (this.model.radius?.providers?.length || 0)
   }
-
-
-
 
 }
 

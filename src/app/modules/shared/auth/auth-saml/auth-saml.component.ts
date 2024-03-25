@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BaseOAuth, BaseSaml } from '../../models/auth';
+import { BaseSaml } from '../../models/auth';
+import { SSubscription } from '../../services/SSubscribtion';
 import { ConfigService } from '../../services/config.service';
 import { ConfirmService } from '../../services/confirm.service';
 import { NotificationService } from '../../services/notification.service';
-import { SSubscription } from '../../services/SSubscribtion';
 import { TranslationService } from '../../services/translation.service';
-
 
 interface BaseModel extends BaseSaml {
 
@@ -25,7 +24,6 @@ interface Model extends BaseModel {
 export class AuthSamlComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model;
@@ -59,8 +57,6 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
   saveSaml: EventEmitter<BaseSaml> = new EventEmitter();
   @Output()
   deleteSaml: EventEmitter<BaseSaml> = new EventEmitter();
-
-
 
   //captcha settings
   formGroup: FormGroup;
@@ -208,7 +204,6 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
 
   }
 
-
   clear() {
 
     this.model = {
@@ -245,7 +240,6 @@ export class AuthSamlComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.saveSaml.emit(this.createBaseModel())
   }
-
 
   delete() {
     this.deleteSaml.emit(this.createBaseModel());

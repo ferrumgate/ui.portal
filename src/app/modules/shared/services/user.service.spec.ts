@@ -1,19 +1,12 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
 import { GroupService } from './group.service';
-
 
 describe('GroupService', () => {
   let service: GroupService;
@@ -39,12 +32,6 @@ describe('GroupService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-
-
-
-
-
 
 });
 

@@ -4,20 +4,17 @@ import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import validator from 'validator';
 
-
 interface BaseModel {
   emails: string;
   isChanged: boolean
 }
 interface Model extends BaseModel {
-
 
 }
 
@@ -29,7 +26,6 @@ interface Model extends BaseModel {
 export class AccountsInviteComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model = { emails: '', isChanged: false };
@@ -46,7 +42,6 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
     this.inviteFormGroup = this.createFormGroup(this._model);
   }
 
-
   //invite settings
   inviteFormGroup: FormGroup = this.createFormGroup(this.model);
 
@@ -60,14 +55,11 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private userService: UserService) {
 
-
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.accountInviteHelp;
     this.results.push({ email: 'test@abc.ocmo', errMsg: 'error sfasdfafawasdfaw adfasdfasdfa' });
@@ -80,7 +72,6 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
 
   }
   ngOnDestroy(): void {
@@ -138,7 +129,6 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
         this.inviteError.emails = 'EnterAtLeastOneEmail';
     }
 
-
   }
   splitEmails(str: String) {
     return str.split(/[!\s,_+;:]+/).map(x => x.trim()).filter(y => y);
@@ -150,7 +140,6 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
     if (this.splitEmails(this.model.emails))
       this._model.isChanged = true;
     else this._model.isChanged = false;
-
 
   }
 
@@ -184,11 +173,9 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate("SuccessfullyInvited"))
     })
 
-
   }
   back() {
     this.viewInvite = true;
   }
-
 
 }

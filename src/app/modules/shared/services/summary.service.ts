@@ -1,20 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { AuditLog } from '../models/auditLog';
-
-import { Configure } from '../models/configure';
-import { Network } from '../models/network';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { SummaryActive, SummaryAgg, SummaryConfig } from '../models/summary';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +85,6 @@ export class SummaryService extends BaseService {
     )
   }
 
-
   get2FACheck(startDate?: string, endDate?: string) {
     const searchParams = new URLSearchParams();
     if (startDate)
@@ -168,9 +157,5 @@ export class SummaryService extends BaseService {
       })
     )
   }
-
-
-
-
 
 }

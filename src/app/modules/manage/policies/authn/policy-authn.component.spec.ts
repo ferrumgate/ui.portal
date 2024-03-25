@@ -1,26 +1,21 @@
-import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { map, of } from 'rxjs';
-import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { of } from 'rxjs';
+import { findEls } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
-import { AuthorizationPolicy } from 'src/app/modules/shared/models/authzPolicy';
 import { Group } from 'src/app/modules/shared/models/group';
 import { Network } from 'src/app/modules/shared/models/network';
-import { Service } from 'src/app/modules/shared/models/service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PolicyAuthnComponent } from './policy-authn.component';
 
 describe('PolicyAuthnComponent', () => {
@@ -63,7 +58,6 @@ describe('PolicyAuthnComponent', () => {
     expect(component).toBeTruthy();
     let requestCounter = 0;
 
-
     let group: Group = {
       id: 'groupid', name: 'north', labels: ['test'], isEnabled: true,
     }
@@ -73,15 +67,11 @@ describe('PolicyAuthnComponent', () => {
       id: 'network1', name: 'networkname'
     } as Network;
 
-
     let network2: Network = {
       id: 'network12', name: 'networkname2'
     } as Network;
 
     const networks = [network, network2];
-
-
-
 
     const rule1: AuthenticationRule = {
       id: 'somid1', isEnabled: true, name: 'mysql',
@@ -99,7 +89,6 @@ describe('PolicyAuthnComponent', () => {
       userOrgroupIds: [group.id], isExpanded: true
     }
     let policy: AuthenticationPolicy = {
-
 
       rules: [rule1, rule2, rule3],
       rulesOrder: [rule1.id, rule2.id, rule3.id]
@@ -133,9 +122,6 @@ describe('PolicyAuthnComponent', () => {
     const serviceElements2 = findEls(fixture, 'policy-authn-rule');
     expect(serviceElements2.length).toBe(2);
     flush();
-
-
-
 
   }));
 });

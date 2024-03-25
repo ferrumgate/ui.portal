@@ -4,7 +4,7 @@ import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } fro
 import { Group } from 'src/app/modules/shared/models/group';
 import { RBACDefault, Role } from 'src/app/modules/shared/models/rbac';
 import { SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
-import { User, User2 } from 'src/app/modules/shared/models/user';
+import { User2 } from 'src/app/modules/shared/models/user';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
@@ -14,7 +14,6 @@ import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
 
 @Component({
   selector: 'app-accounts-users',
@@ -22,7 +21,6 @@ import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/the
   styleUrls: ['./accounts-users.component.scss']
 })
 export class AccountsUsersComponent implements OnInit, OnDestroy {
-
 
   private allSubs = new SSubscription();
   searchForm = new FormControl();
@@ -41,7 +39,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
   //everyone has password
   loginMethods: { id: string, name: string }[] = [{ id: "password", name: 'Password' }, { id: 'apikey', name: "ApiKey" }, { id: 'certificate', name: 'Certificate' }];
   inCerts: SSLCertificateEx[] = [];
-
 
   users: User2[] = [];
   isThemeDark = false;
@@ -73,8 +70,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
         this.searchKey = newMessage;
         this.search();
       })
-
-
 
   }
 
@@ -173,7 +168,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
             return x;
           })
 
-
         })).subscribe();
   }
 
@@ -246,7 +240,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
     });
   }
 
-
   getUserSensitiveData($user: User2) {
     this.userService.getSensitiveData($user.id, true, true)
       .subscribe((item) => {
@@ -260,7 +253,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
           isExpanded: true,
           isLoginMethodsExpanded: true
         }
-
 
       });
   }
@@ -391,12 +383,6 @@ export class AccountsUsersComponent implements OnInit, OnDestroy {
 
     })
 
-
-
   }
-
-
-
-
 
 }

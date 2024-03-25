@@ -1,6 +1,5 @@
 import { Role } from "./rbac";
-import { SSLCertificate, SSLCertificateBase } from "./sslCertificate";
-
+import { SSLCertificateBase } from "./sslCertificate";
 
 export interface User {
     id: string;
@@ -11,7 +10,6 @@ export interface User {
     source: string;
 
 }
-
 
 export interface User2 {
     // object id for finding objects in lists or comparing if they are same object

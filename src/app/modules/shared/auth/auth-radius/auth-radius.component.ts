@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
@@ -10,7 +8,6 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 import { BaseRadius } from '../../models/auth';
 import { SSubscription } from '../../services/SSubscribtion';
 import { InputService } from '../../services/input.service';
-
 
 interface BaseModel extends BaseRadius {
 
@@ -58,8 +55,6 @@ export class AuthRadiusComponent implements OnInit, OnDestroy {
   saveRadius: EventEmitter<BaseRadius> = new EventEmitter();
   @Output()
   deleteRadius: EventEmitter<BaseRadius> = new EventEmitter();
-
-
 
   //captcha settings
   formGroup: FormGroup;
@@ -154,7 +149,6 @@ export class AuthRadiusComponent implements OnInit, OnDestroy {
         this.error.host = 'HostRequired';
     }
 
-
   }
 
   checkIfModelChanged() {
@@ -171,7 +165,6 @@ export class AuthRadiusComponent implements OnInit, OnDestroy {
       model.isChanged = true;
 
   }
-
 
   clear() {
 
@@ -205,7 +198,6 @@ export class AuthRadiusComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.saveRadius.emit(this.createBaseModel())
   }
-
 
   delete() {
     this.deleteRadius.emit(this.createBaseModel());

@@ -1,17 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-
-import { Configure } from '../models/configure';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { Network } from '../models/network';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +16,6 @@ export class NetworkService extends BaseService {
     super('network', captchaService)
 
   }
-
 
   get(id: string) {
     const urlParams = new URLSearchParams();
@@ -45,7 +37,6 @@ export class NetworkService extends BaseService {
     )
 
   }
-
 
   saveOrupdate(net: Network) {
     const network: Network = {
@@ -74,6 +65,5 @@ export class NetworkService extends BaseService {
 
       }))
   }
-
 
 }

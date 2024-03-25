@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { delay, map, of, switchMap, takeWhile } from 'rxjs';
+import { switchMap, takeWhile } from 'rxjs';
 import { ConfigEmail } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
@@ -9,12 +9,10 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
-
 interface BaseModel extends ConfigEmail {
   isChanged: boolean
 }
 interface Model extends BaseModel {
-
 
   orig: ConfigEmail
 }
@@ -29,7 +27,6 @@ interface SmtpModel extends Model {
   port: number,
   isSecure: boolean
 }
-
 
 @Component({
   selector: 'app-config-email',
@@ -60,7 +57,6 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
   error = { type: '' };
   formGroup = this.createFormGroup(this.model);
 
-
   constructor(private router: Router,
     private translateService: TranslationService,
     private configService: ConfigService,
@@ -72,8 +68,6 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.emailHelp;
 
@@ -113,7 +107,6 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
       //check errors 
       this.error = this.resetFormErrors();
   
-  
       const userError = this.formGroup.controls['user'].errors;
   
       if (userError) {
@@ -145,7 +138,6 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
 
     this.model.type = $event.option.value;
   }
-
 
   checkEmail($event: ConfigEmail) {
     this.confirmService.show(
@@ -185,9 +177,5 @@ export class ConfigEmailComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'));
     })
   }
-
-
-
-
 
 }

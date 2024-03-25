@@ -1,18 +1,15 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
 import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
 import { ConfigBrand } from 'src/app/modules/shared/models/config';
-
-
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-
 
 interface BaseModel extends ConfigBrand {
   isChanged: boolean,
@@ -53,10 +50,8 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
       logoWhiteFileName: this.calculateFilenameWhite(val)
     }
 
-
     this.formGroup = this.createFormGroup(this._model);
   }
-
 
   //settings
   formGroup: FormGroup = this.createFormGroup(this.model);
@@ -69,14 +64,11 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.brandHelp;
 
@@ -151,8 +143,6 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
     //check errors 
     this.error = this.resetErrors();
 
-
-
   }
 
   checkIfModelChanged() {
@@ -167,13 +157,7 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
     if (UtilService.checkUndefinedString(original.logoWhite, model.logoWhite))
       model.isChanged = true;
 
-
-
   }
-
-
-
-
 
   clear() {
     this.model.name = (this.model as Model).orig.name;
@@ -188,7 +172,6 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
 
     this.formGroup = this.createFormGroup(this.model);
   }
-
 
   saveOrUpdate() {
     this.confirmService.showSave().pipe(
@@ -249,8 +232,6 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
     }
     reader.readAsDataURL(file);
 
-
-
   }
   deleteLogoWhite(ev: any) {
 
@@ -259,7 +240,6 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
 
     this.modelChanged();
   }
-
 
   @Input()
   uploadProgressLogoBlack = 0;
@@ -281,8 +261,6 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
     }
     reader.readAsDataURL(file);
 
-
-
   }
   deleteLogoBlack(ev: any) {
 
@@ -291,7 +269,5 @@ export class ConfigBrandComponent implements OnInit, OnDestroy {
 
     this.modelChanged();
   }
-
-
 
 }

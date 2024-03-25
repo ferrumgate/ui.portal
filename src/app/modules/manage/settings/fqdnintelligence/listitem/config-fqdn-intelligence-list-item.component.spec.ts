@@ -11,8 +11,6 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
 import { ConfigFqdnIntelligenceListItemComponent } from './config-fqdn-intelligence-list-item.component';
 
 describe('ConfigFqdnIntelligenceListItemComponent', () => {
@@ -92,7 +90,6 @@ describe('ConfigFqdnIntelligenceListItemComponent', () => {
     fixture.detectChanges();
     expect(component.formGroup.valid).toBeTrue();
 
-
     //set url invalid
     setFieldValue(fixture, 'list-http-url-input', 'abcd')
     dispatchFakeEvent(findEl(fixture, 'list-http-url-input').nativeElement, 'blur');
@@ -100,8 +97,6 @@ describe('ConfigFqdnIntelligenceListItemComponent', () => {
     expect(component.formGroup.invalid).toBeTrue();
 
     //set file option again
-
-
 
     item.http = undefined;
     item.file = { source: 'abc.txt' }
@@ -132,13 +127,11 @@ describe('ConfigFqdnIntelligenceListItemComponent', () => {
     tick(1000);
     fixture.detectChanges();
 
-
     expectValue(fixture, 'list-status-check-input', '01.01.01');
     expectValue(fixture, 'list-status-input', 'an error');
 
     const downloadEl = findEl(fixture, 'download-button', false);
     expect(downloadEl).toBeTruthy();
-
 
   }));
 });

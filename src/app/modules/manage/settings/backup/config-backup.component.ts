@@ -1,16 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { HttpEventType } from '@angular/common/http';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigES } from 'src/app/modules/shared/models/config';
+import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
-import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
-import { HttpEventType } from '@angular/common/http';
 
 export interface UploadModel {
   key: string
@@ -24,7 +22,6 @@ export interface UploadModel {
 export class ConfigBackupComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: UploadModel = { key: '' };
@@ -43,7 +40,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
   }
   @ViewChild(FileUploadComponent) fileupload!: FileUploadComponent;
 
-
   //es settings
   uploadFormGroup: FormGroup = this.createFormGroup(this.model);
 
@@ -55,14 +51,11 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.backupHelp;
 
@@ -74,7 +67,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
 
   }
   ngOnDestroy(): void {
@@ -111,7 +103,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     }
   }
 
-
   checkUploadFormError() {
     //check errors 
     this.uploadError = this.resetUploadErrors();
@@ -122,10 +113,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     let model = this.model as UploadModel;
 
   }
-
-
-
-
 
   clear() {
 
@@ -154,7 +141,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
     this.exportKey = '';
     this.importActivated = true;
 
-
   }
   uploadProgress = 0;
   restore(file: File) {
@@ -174,10 +160,6 @@ export class ConfigBackupComponent implements OnInit, OnDestroy {
           this.notificationService.success(this.translateService.translate('ConfigRestoredSuccessfuly'))
     })
 
-
-
   }
-
-
 
 }

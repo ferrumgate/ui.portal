@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FixedTileStyler } from '@angular/material/grid-list/tile-styler';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,7 +7,6 @@ import { AuthenticationService } from 'src/app/modules/shared/services/authentic
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from '../shared.module';
-
 import { ViewSelectorComponent } from './viewselector.component';
 
 describe('ViewSelectorComponent', () => {

@@ -1,20 +1,16 @@
-import { Component, EventEmitter, HostBinding, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Gateway, Network } from '../models/network';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputService } from '../services/input.service';
-import { map, Observable, of, startWith, takeWhile } from 'rxjs';
-import { MatOptionSelectionChange } from '@angular/material/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from '../services/config.service';
-import { TranslationService } from '../services/translation.service';
-import { SSubscription } from '../services/SSubscribtion';
-import { UtilService } from '../services/util.service';
-import { NotificationService } from '../services/notification.service';
 import { Clipboard } from '@angular/cdk/clipboard';
-
-
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, map, of } from 'rxjs';
+import { Gateway, Network } from '../models/network';
+import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
+import { NotificationService } from '../services/notification.service';
+import { TranslationService } from '../services/translation.service';
+import { UtilService } from '../services/util.service';
 
 export interface GatewayExtended extends Gateway {
   orig: Gateway;
@@ -35,7 +31,6 @@ export class GatewayComponent implements OnInit, OnDestroy {
     {
       id: '', name: '', labels: []
     };
-
 
   get gateway() {
     return this._gateway;
@@ -136,14 +131,11 @@ export class GatewayComponent implements OnInit, OnDestroy {
 
   }
 
-
   /*   prepareModel(gate: Gateway) {
       let extended: GatewayExtended = {
         orig: JSON.parse(JSON.stringify(gate)),
         isChanged: false,
         networkName: '',
-  
-  
   
       }
   
@@ -241,8 +233,6 @@ export class GatewayComponent implements OnInit, OnDestroy {
         error.name = 'NameRequired';
     }
 
-
-
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
 
@@ -261,7 +251,6 @@ export class GatewayComponent implements OnInit, OnDestroy {
     this.checkIfModelChanged();
   }
 
-
   saveOrUpdate() {
 
     this.saveGateway.emit(this.gateway);
@@ -275,7 +264,6 @@ export class GatewayComponent implements OnInit, OnDestroy {
   delete() {
     this.deleteGateway.emit(this.gateway);
   }
-
 
   private filter(name: string) {
     const filterValue = name.toLowerCase();
@@ -309,9 +297,5 @@ export class GatewayComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
-
-
-
-
 
 }

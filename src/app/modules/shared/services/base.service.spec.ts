@@ -1,8 +1,5 @@
-import { TestBed } from "@angular/core/testing";
 import { of } from "rxjs";
-
 import { BaseService } from "./base.service";
-import { CaptchaService } from "./captcha.service";
 
 describe('BaseService', () => {
 

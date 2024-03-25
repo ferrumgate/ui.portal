@@ -1,20 +1,16 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, getText, getValue, queryByCss, setFieldValue } from '../helper.spec';
-import { Group } from '../models/group';
-import { Gateway, Network } from '../models/network';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { findEl, getText } from '../helper.spec';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
 import { GroupService } from '../services/group.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
-
 
 import { FileUploadComponent } from './fileupload.component';
 
@@ -55,7 +51,6 @@ describe('FileUploadComponent', () => {
   it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
-
     tick(1000);
     fixture.detectChanges();
     const buf = new ArrayBuffer(5);
@@ -74,8 +69,6 @@ describe('FileUploadComponent', () => {
     fixture.detectChanges();
     const el = findEl(fixture, 'fileupload-progress');
     expect(el.componentInstance.value).toEqual(10);
-
-
 
   }));
 });

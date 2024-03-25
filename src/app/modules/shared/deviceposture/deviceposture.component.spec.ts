@@ -4,15 +4,13 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module } from 'ng-recaptcha';
-
-import { DevicePostureComponent } from './deviceposture.component';
-import { SharedModule } from '../shared.module';
-import { TranslationService } from '../services/translation.service';
+import { expectValue, findEls } from '../helper.spec';
+import { DevicePosture } from '../models/device';
 import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
-import { DevicePosture } from '../models/device';
-import { dispatchFakeEvent, expectValue, findEl, findEls } from '../helper.spec';
-
+import { TranslationService } from '../services/translation.service';
+import { SharedModule } from '../shared.module';
+import { DevicePostureComponent } from './deviceposture.component';
 
 describe('DevicePostureComponent', () => {
   let component: DevicePostureComponent;
@@ -67,15 +65,12 @@ describe('DevicePostureComponent', () => {
     }
     component.model = model;
 
-
-
     tick(100);
     fixture.detectChanges();
     await fixture.whenStable();
 
     const nameinput = 'deviceposture-name-input';
     expectValue(fixture, nameinput, 'window 10');
-
 
     const labels = 'deviceposture-label-chip';
     const labelEls = findEls(fixture, labels);
@@ -96,8 +91,6 @@ describe('DevicePostureComponent', () => {
 
     const discEncryptionEls = findEls(fixture, 'deviceposture-discencryption-input');
     expect(discEncryptionEls.length > 0).toBeTrue;
-
-
 
   }))
 

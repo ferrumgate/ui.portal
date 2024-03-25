@@ -1,6 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { NavMenuItem } from './navmenuitem';
 
 @Component({
@@ -21,7 +20,6 @@ export class NavMenuComponent implements OnInit {
 
   @Input('items')
   items: NavMenuItem[] = []
-
 
   constructor() {
 

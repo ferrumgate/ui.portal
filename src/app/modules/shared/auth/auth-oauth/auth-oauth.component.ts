@@ -1,15 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { BaseOAuth } from '../../models/auth';
 import { SSubscription } from '../../services/SSubscribtion';
-
 
 interface BaseModel extends BaseOAuth {
 
@@ -64,8 +61,6 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
   saveOAuth: EventEmitter<BaseOAuth> = new EventEmitter();
   @Output()
   deleteOAuth: EventEmitter<BaseOAuth> = new EventEmitter();
-
-
 
   //captcha settings
   formGroup: FormGroup;
@@ -185,7 +180,6 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
 
   }
 
-
   clear() {
 
     this.model = {
@@ -218,7 +212,6 @@ export class AuthOauthComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.saveOAuth.emit(this.createBaseModel())
   }
-
 
   delete() {
     this.deleteOAuth.emit(this.createBaseModel());

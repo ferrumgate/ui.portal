@@ -1,21 +1,19 @@
-import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { map, of } from 'rxjs';
-import { findEl, findEls } from 'src/app/modules/shared/helper.spec';
-import { Group } from 'src/app/modules/shared/models/group';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { of } from 'rxjs';
+import { findEls } from 'src/app/modules/shared/helper.spec';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { DSetting2FAComponent } from './dsetting-2fa.component';
 
 describe('DSetting2FAComponent', () => {
@@ -58,7 +56,6 @@ describe('DSetting2FAComponent', () => {
   it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
 
-
     spyOn(httpClient, 'get').and.returnValues(
       of({
         is2FA: true, t2FAKey: 'ababab', key: 'blb'
@@ -80,9 +77,6 @@ describe('DSetting2FAComponent', () => {
     tick(1000);
     fixture.detectChanges();
     expect(component.t2faRefresh.t2FAKey).toBe('abaddbab');
-
-
-
 
   }));
 });

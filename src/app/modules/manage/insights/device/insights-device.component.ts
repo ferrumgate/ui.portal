@@ -1,35 +1,16 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Group } from 'src/app/modules/shared/models/group';
-import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { TranslationService } from '../../../shared/services/translation.service';
-import { NotificationService } from '../../../shared/services/notification.service';
-import { ConfirmService } from '../../../shared/services/confirm.service';
-import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, sample } from 'rxjs';
-import { UtilService } from '../../../shared/services/util.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-
-import { ActivityLog } from 'src/app/modules/shared/models/activityLog';
-import { ActivityService } from 'src/app/modules/shared/services/activity.service';
-import { LogActivityDetailDialogModel } from '../activity/detail/insights-activity-detail.component';
-import { InsightsDeviceDetailComponent, LogDeviceDetailDialogModel } from './detail/insights-device-detail.component';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { ConfirmService } from '../../../shared/services/confirm.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { TranslationService } from '../../../shared/services/translation.service';
+import { UtilService } from '../../../shared/services/util.service';
 import { DeviceLog } from 'src/app/modules/shared/models/device';
 import { DeviceService } from 'src/app/modules/shared/services/device.service';
-
-
-
-
-
-
-
+import { InsightsDeviceDetailComponent, LogDeviceDetailDialogModel } from './detail/insights-device-detail.component';
 
 @Component({
   selector: 'app-insights-device',
@@ -39,7 +20,6 @@ import { DeviceService } from 'src/app/modules/shared/services/device.service';
 export class InsightsDeviceComponent implements OnInit, OnDestroy {
   private allSubs = new SSubscription();
   searchForm = new FormControl();
-
 
   dataSource: DeviceLog[] = [];
   pageSize = 10;
@@ -87,7 +67,6 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
 
             this.startDate = x ? new Date(x) : new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
 
-
           }
         })
     this.allSubs.addThis =
@@ -124,7 +103,6 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
 
       },
 
-
     ];
 
     //test data
@@ -141,7 +119,6 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
 
     this.allSubs.unsubscribe();
 
-
   }
   prepareLog(value: DeviceLog, index: number) {
     // these values are also in InsightsActivityDetailComponent class in insights-activity-detail.component.ts
@@ -150,9 +127,6 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
 
     return value;
   }
-
-
-
 
   search() {
 
@@ -182,7 +156,6 @@ export class InsightsDeviceComponent implements OnInit, OnDestroy {
       height: '600',
       data: dialogData,
       panelClass: 'confirm-background',
-
 
     });
     return dialogRef.afterClosed();

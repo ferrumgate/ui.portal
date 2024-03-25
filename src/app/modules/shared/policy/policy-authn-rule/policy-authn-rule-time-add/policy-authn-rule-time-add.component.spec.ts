@@ -1,28 +1,18 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatTabGroupHarness } from '@angular/material/tabs/testing'
-import { ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { MatTabGroup } from '@angular/material/tabs';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-
-
-
-
-
-
-import { PolicyAuthnRuleTimeAddComponent } from './policy-authn-rule-time-add.component';
-import { SharedModule } from '../../../shared.module';
-import { ConfigService } from '../../../services/config.service';
-import { TranslationService } from '../../../services/translation.service';
-import { NotificationService } from '../../../services/notification.service';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { clickByQuery, dispatchFakeEvent, findEl, getValue, setFieldValue } from '../../../helper.spec';
 import { CaptchaService } from '../../../services/captcha.service';
-import { click, clickByQuery, dispatchFakeEvent, findEl, getValue, queryByCss, setFieldValue } from '../../../helper.spec';
-
+import { ConfigService } from '../../../services/config.service';
+import { NotificationService } from '../../../services/notification.service';
+import { TranslationService } from '../../../services/translation.service';
+import { SharedModule } from '../../../shared.module';
+import { PolicyAuthnRuleTimeAddComponent } from './policy-authn-rule-time-add.component';
 
 describe('PolicyAuthnRuleTimeAddComponent', () => {
   let component: PolicyAuthnRuleTimeAddComponent;
@@ -61,12 +51,9 @@ describe('PolicyAuthnRuleTimeAddComponent', () => {
     flush();
   }))
 
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-
 
   it('data binding first tab', fakeAsync(async () => {
     expect(component).toBeTruthy();
@@ -94,7 +81,6 @@ describe('PolicyAuthnRuleTimeAddComponent', () => {
 
     expect(component.model.startTime).toEqual(600);
 
-
     setFieldValue(fixture, 'policy-authn-rule-timeadd-end-input', '22:00');
     dispatchFakeEvent(findEl(fixture, 'policy-authn-rule-timeadd-end-input').nativeElement, 'blur');
     tick();
@@ -110,11 +96,7 @@ describe('PolicyAuthnRuleTimeAddComponent', () => {
 
     expect(component.formGroup.invalid).toBeFalse();
 
-
   }));
-
-
-
 
 });
 

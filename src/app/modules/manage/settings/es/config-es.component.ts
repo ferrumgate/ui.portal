@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
 import { ConfigES } from 'src/app/modules/shared/models/config';
@@ -9,12 +9,10 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
-
 interface BaseModel extends ConfigES {
   isChanged: boolean
 }
 interface Model extends BaseModel {
-
 
   orig: ConfigES
 }
@@ -27,7 +25,6 @@ interface Model extends BaseModel {
 export class ConfigESComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model = { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0, isChanged: false, orig: { host: '', user: '', pass: '', deleteOldRecordsMaxDays: 0 } };
@@ -48,7 +45,6 @@ export class ConfigESComponent implements OnInit, OnDestroy {
     this.esFormGroup = this.createFormGroup(this._model);
   }
 
-
   //es settings
   esFormGroup: FormGroup = this.createFormGroup(this.model);
 
@@ -60,14 +56,11 @@ export class ConfigESComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.esHelp;
 
@@ -134,8 +127,6 @@ export class ConfigESComponent implements OnInit, OnDestroy {
     //check errors 
     this.esError = this.resetESErrors();
 
-
-
   }
 
   checkIfModelChanged() {
@@ -152,12 +143,7 @@ export class ConfigESComponent implements OnInit, OnDestroy {
     if (original.deleteOldRecordsMaxDays != model.deleteOldRecordsMaxDays)
       model.isChanged = true;
 
-
   }
-
-
-
-
 
   clear() {
     this.model.host = (this.model as Model).orig.host;
@@ -167,7 +153,6 @@ export class ConfigESComponent implements OnInit, OnDestroy {
     this.model.isChanged = false;
     this.esFormGroup = this.createFormGroup(this.model);
   }
-
 
   saveOrUpdate() {
     this.confirmService.showSave().pipe(

@@ -1,14 +1,13 @@
-import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-
-import { catchError, map, of, throwError } from 'rxjs';
+import { RecaptchaV3Module } from 'ng-recaptcha';
+import { of, throwError } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
-import { CaptchaService, ReCaptchaV3ServiceCustom } from './captcha.service';
+import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 import { TranslationService } from './translation.service';
 
@@ -32,7 +31,6 @@ describe('AuthenticationService', () => {
         TranslateService,
         ConfigService,
 
-
       ]
     });
 
@@ -40,8 +38,6 @@ describe('AuthenticationService', () => {
     //captchaService.setIsEnabled(false);
     service = TestBed.inject(AuthenticationService);
     captchaServiceSpy.executeIfEnabled.and.returnValue(of(false));
-
-
 
   });
 
@@ -62,14 +58,12 @@ describe('AuthenticationService', () => {
     httpClientSpy.post.and.returnValue(of({ key: 'bla', is2FA: true }));
     routerSpy.navigate.and.returnValue(of(''));
 
-
     service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe(x => {
       expect(service.currentSession).toBeFalsy();
       expect(routerSpy.navigate).toHaveBeenCalled();
 
       done();
     });
-
 
   }));
   it('loginLocal success without 2FA', ((done) => {
@@ -78,9 +72,7 @@ describe('AuthenticationService', () => {
       of({ accessToken: 'bla', refreshToken: "token", user: {} }));
     httpClientSpy.get.and.returnValue(of({ id: 'bla', roles: [] }));
 
-
     routerSpy.navigate.and.returnValue(of(''));
-
 
     service.loginLocal('someone@ferrumgate.com', 'somepass').subscribe(x => {
       expect(service.currentSession).toBeTruthy();
@@ -89,9 +81,7 @@ describe('AuthenticationService', () => {
       done();
     });
 
-
   }));
-
 
   it('loginLocal failure', (done) => {
     //mock service
@@ -115,7 +105,6 @@ describe('AuthenticationService', () => {
     expect(item).toBeFalsy();
     expect(routerSpy.navigate).toHaveBeenCalled();
     done();
-
 
   });
 
@@ -144,7 +133,6 @@ describe('AuthenticationService', () => {
     })
   });
 
-
   it('getUserCurrent', (done) => {
 
     //mock service
@@ -171,13 +159,11 @@ describe('AuthenticationService', () => {
 
     service.getRefreshToken().subscribe(x => {
 
-
       expect(x).toBeTruthy();
 
       expect(service.currentSession?.accessToken).toBeTruthy();
       expect(service.currentSession?.refreshToken).toBeTruthy();
       done();
-
 
     })
 

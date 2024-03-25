@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
@@ -12,7 +12,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { findEl } from '../shared/helper.spec';
 import { SharedModule } from '../shared/shared.module';
-
 import { ConfirmEmailComponent } from './confirmemail.component';
 
 describe('ConfirmEmailComponent', () => {
@@ -71,7 +70,6 @@ describe('ConfirmEmailComponent', () => {
     const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeTruthy();
 
-
   }));
 
   it('email confirm will start confirm after 1000 ms', fakeAsync(async () => {
@@ -97,14 +95,11 @@ describe('ConfirmEmailComponent', () => {
     expect(component.isConfirmed).toBeTrue();
     expect(authServiceSpy.confirmUserEmail).toHaveBeenCalled();
 
-
     const confirmed = findEl(fixture, 'confirmemail-confirmed', false);
     expect(confirmed).toBeTruthy();
 
     const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeFalsy();
-
-
 
   }));
 

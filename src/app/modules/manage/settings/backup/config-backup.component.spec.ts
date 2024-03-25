@@ -4,9 +4,9 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { click, dispatchFakeEvent, expectValue, findEl, getValue, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { click, dispatchFakeEvent, findEl, getValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -15,8 +15,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigBackupComponent } from './config-backup.component';
-
-
 
 describe('ConfigBackupComponent', () => {
   let component: ConfigBackupComponent;
@@ -100,12 +98,8 @@ describe('ConfigBackupComponent', () => {
     const fileupload = findEl(fixture, 'backup-import-fileupload', false);
     expect(fileupload).toBeTruthy();
 
-
     flush();
-
 
   }));
 });
-
-
 

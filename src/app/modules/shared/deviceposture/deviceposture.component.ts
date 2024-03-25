@@ -3,20 +3,14 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
+import * as diff from 'deep-object-diff';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-
-
-import * as diff from 'deep-object-diff';
 import { DevicePosture } from '../models/device';
 import { SSubscription } from '../services/SSubscribtion';
 import { UtilService } from '../services/util.service';
-
-
 
 interface Model extends DevicePosture {
   isChanged: boolean
@@ -25,7 +19,6 @@ interface Model extends DevicePosture {
   objId?: string;
   macs?: string;
   serials?: string;
-
 
 }
 @Component({
@@ -36,7 +29,6 @@ interface Model extends DevicePosture {
 export class DevicePostureComponent implements OnInit, OnDestroy {
   allSubs = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model;
@@ -76,14 +68,11 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
   @Output()
   deleteDevicePosture: EventEmitter<DevicePosture> = new EventEmitter();
 
-
-
   //captcha settings
   formGroup: FormGroup;
   error = {
     name: '',
   };
-
 
   hidePassword = true;
   constructor(private router: Router,
@@ -128,9 +117,7 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     this.allSubs.unsubscribe();
   }
 
-
   createFormGroup(model: Model) {
-
 
     const fmg = new FormGroup(
       {
@@ -179,7 +166,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.model.isChanged = false;
 
-
   }
 
   checkFormError() {
@@ -195,8 +181,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
         this.error.name = 'NameRequired';
     }
 
-
-
   }
 
   isChanged(a: any, b: any) {
@@ -206,7 +190,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     if (a == undefined && b && Array.isArray(b) && b.length) return true;
     if (b == undefined && a && Array.isArray(a) && !a.length) return false;
     if (b == undefined && a && Array.isArray(a) && a.length) return true;
-
 
     const diffFields = diff.detailedDiff(a, b);
     let keyLength = 0;
@@ -253,7 +236,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
 
   }
 
-
   clear() {
 
     this.model = {
@@ -262,7 +244,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     this.model.isChanged = false;
     this.formGroup.markAsUntouched();
   }
-
 
   createDevicePosture(): DevicePosture {
     return {
@@ -285,16 +266,13 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       registryList: this._model.registryList?.map(x => { return { path: x.path?.trim(), key: x.key, value: x.value } }).filter(x => x.path),
       serialList: this._model.serialList?.map(x => { return { value: x.value?.trim() } }).filter(y => y.value),
 
-
     }
-
 
   }
   saveOrUpdate() {
     if (this.formGroup.valid)
       this.saveDevicePosture.emit(this.createDevicePosture())
   }
-
 
   delete() {
     this.deleteDevicePosture.emit(this.createDevicePosture());
@@ -338,7 +316,6 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     delete this.model.antivirusList;
     this.modelChanged();
   }
-
 
   addFirewallCheck() {
     if (this.model.firewallList?.length) return;
@@ -443,8 +420,5 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
       this.model.registryList?.splice(index, 1);
     this.modelChanged();
   }
-
-
-
 
 }

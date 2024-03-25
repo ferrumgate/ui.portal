@@ -1,18 +1,9 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, Observable, of, Subscription, switchMap } from 'rxjs';
-import { Group } from '../models/group';
-import { ConfigService } from '../services/config.service';
-import { InputService } from '../services/input.service';
+import { ActivatedRoute } from '@angular/router';
 import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
-import { UtilService } from '../services/util.service';
-
-
 
 @Component({
   selector: 'app-fileupload',
@@ -56,7 +47,6 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     this.isThemeDark = this.configService.getTheme() == 'dark';
     this.uploadProgress = 0;
 
-
   }
 
   ngOnInit(): void {
@@ -90,6 +80,5 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     this.uploadProgress = 0;
     this.onFileDeletedEvent.emit();
   }
-
 
 }

@@ -1,16 +1,14 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { By } from '@angular/platform-browser';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { expectContent, expectText, findEl } from '../helper.spec';
+import { expectText } from '../helper.spec';
 import { MaterialModule } from '../material-module';
 import { ConfirmService } from '../services/confirm.service';
 import { SharedModule } from '../shared.module';
-
 import { ConfirmComponent } from './confirm.component';
 
 describe('ConfirmComponent', () => {

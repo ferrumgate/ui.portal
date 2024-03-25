@@ -1,20 +1,11 @@
-import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Group } from 'src/app/modules/shared/models/group';
-import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { map, switchMap, takeWhile } from 'rxjs';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { map, of, switchMap, takeWhile } from 'rxjs';
-
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { UserService } from 'src/app/modules/shared/services/user.service';
 
 @Component({
   selector: 'app-dsetting-2fa',
@@ -25,7 +16,6 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
   private allSubs = new SSubscription();
 
   isThemeDark = false;
-
 
   help = {
 
@@ -38,16 +28,10 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
     token: '',
   }
 
-
   t2faRefresh = {
     t2FAKey: '',
     key: ''
   }
-
-
-
-
-
 
   constructor(
     private translateService: TranslationService,
@@ -57,8 +41,6 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
     private userService: UserService
   ) {
 
-
-
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.allSubs.addThis =
@@ -66,7 +48,6 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isThemeDark = x == 'dark';
 
       })
-
 
   }
   ngOnInit(): void {
@@ -86,13 +67,10 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.userService.getCurrentUser2FA()
       .pipe(map(x => {
 
-
         this.t2fa = { ...x, token: '' }
-
 
       }))
   }
-
 
   refreshT2FA(ev: any) {
     this.userService.getCurrentUserRefresh2FA().pipe(map(x => {
@@ -117,16 +95,5 @@ export class DSetting2FAComponent implements OnInit, OnDestroy, AfterViewInit {
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })
   }
-
-
-
-
-
-
-
-
-
-
-
 
 }

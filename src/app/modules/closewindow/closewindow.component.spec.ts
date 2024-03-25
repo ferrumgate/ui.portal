@@ -71,7 +71,6 @@ describe('ConfirmEmailComponent', () => {
     const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeTruthy();
 
-
   }));
 
   it('email confirm will start confirm after 1000 ms', fakeAsync(async () => {
@@ -97,14 +96,11 @@ describe('ConfirmEmailComponent', () => {
     expect(component.isConfirmed).toBeTrue();
     expect(authServiceSpy.confirmUserEmail).toHaveBeenCalled();
 
-
     const confirmed = findEl(fixture, 'confirmemail-confirmed', false);
     expect(confirmed).toBeTruthy();
 
     const notconfirmed = findEl(fixture, 'confirmemail-not-confirmed', false);
     expect(notconfirmed).toBeFalsy();
-
-
 
   }));
 

@@ -1,37 +1,26 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { ConfigService } from '../../../../../app/modules/shared/services/config.service';
-import { SSubscription } from '../../../../../app/modules/shared/services/SSubscribtion';
-
-
-import { TranslationService } from '../../../shared/services/translation.service';
-import { NotificationService } from '../../../shared/services/notification.service';
-import { ConfirmService } from '../../../shared/services/confirm.service';
-import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, catchError, throwError } from 'rxjs';
-import { Service } from '../../../../../app/modules/shared/models/service';
-import { Network } from '../../../../../app/modules/shared/models/network';
-import { AuthorizationPolicy, AuthorizationRule } from '../../../../../app/modules/shared/models/authzPolicy';
-import { User, User2 } from 'src/app/modules/shared/models/user';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeWhile, throwError } from 'rxjs';
+import { FqdnIntelligenceCategory, FqdnIntelligenceList } from 'src/app/modules/shared/models/fqdnIntelligence';
 import { Group } from 'src/app/modules/shared/models/group';
-import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { NetworkService } from 'src/app/modules/shared/services/network.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { ServiceService } from 'src/app/modules/shared/services/service.service';
-import { PolicyAuthzService } from 'src/app/modules/shared/services/policyAuthz.service';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { fadeInItems } from '@angular/material/menu';
-import { FqdnIntelligence, FqdnIntelligenceCategory, FqdnIntelligenceList } from 'src/app/modules/shared/models/fqdnIntelligence';
+import { User2 } from 'src/app/modules/shared/models/user';
 import { FqdnIntelligenceService } from 'src/app/modules/shared/services/fqdnIntelligence.service';
-
+import { GroupService } from 'src/app/modules/shared/services/group.service';
+import { NetworkService } from 'src/app/modules/shared/services/network.service';
+import { PolicyAuthzService } from 'src/app/modules/shared/services/policyAuthz.service';
+import { ServiceService } from 'src/app/modules/shared/services/service.service';
+import { UserService } from 'src/app/modules/shared/services/user.service';
+import { UtilService } from 'src/app/modules/shared/services/util.service';
+import { AuthorizationPolicy, AuthorizationRule } from '../../../../../app/modules/shared/models/authzPolicy';
+import { Network } from '../../../../../app/modules/shared/models/network';
+import { Service } from '../../../../../app/modules/shared/models/service';
+import { SSubscription } from '../../../../../app/modules/shared/services/SSubscribtion';
+import { ConfigService } from '../../../../../app/modules/shared/services/config.service';
+import { ConfirmService } from '../../../shared/services/confirm.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { TranslationService } from '../../../shared/services/translation.service';
 
 interface Policy { network: Network, rules: AuthorizationRule[], isExpanded: boolean }
-
-
-
 
 @Component({
   selector: 'app-policy-authz',
@@ -94,8 +83,6 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
         this.searchKey = newMessage;
         this.search();
       })
-
-
 
   }
   ngOnInit(): void {
@@ -194,14 +181,12 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
 
     this.allSubs.unsubscribe();
 
-
   }
 
   openHelp() {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');
   }
-
 
   getAllData() {
     return this.networkService.get2().pipe(
@@ -246,7 +231,6 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
         this.policyAuthz = z;
         this.fillPolicy('');
       })
-
 
     )
 
@@ -304,13 +288,10 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
     }
   }
 
-
   search() {
     let search = this.searchKey.length > 1 ? this.searchKey : '';
     this.fillPolicy(search.toLowerCase());
   }
-
-
 
   addNewRule(net: Network) {
 
@@ -414,6 +395,5 @@ export class PolicyAuthzComponent implements OnInit, OnDestroy {
     if (this.searchKey) return true;
     return pol.rules.find(x => !x.id) ? true : false;
   }
-
 
 }

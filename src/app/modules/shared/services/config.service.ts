@@ -1,18 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, concat, concatMap, map, merge, mergeMap, of, switchMap, tap, windowToggle } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { EventEmitter, Injectable } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { AuthCommon, AuthLocal, BaseLdap, BaseOAuth, BaseOpenId, BaseRadius, BaseSaml } from '../models/auth';
-
-import { ConfigBrand, ConfigCaptcha, ConfigCommon, ConfigEmail, ConfigES } from '../models/config';
+import { ConfigBrand, ConfigCaptcha, ConfigCommon, ConfigES, ConfigEmail } from '../models/config';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
-
 import { TranslationService } from './translation.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -91,16 +85,12 @@ export class ConfigService extends BaseService {
     brandHelp: "https://ferrumgate.com/docs/configuration/settings/brand",
     dnsHelp: "https://ferrumgate.com/docs/configuration/settings/dns",
 
-
-
-
   }
   changeUser(userId: string) {
     this.userId = userId;
     const theme = this.getTheme();
     this.themeChanged.emit(theme);
   }
-
 
   init(userId?: string) {
     this.changeUser(userId || 'empty');
@@ -119,7 +109,6 @@ export class ConfigService extends BaseService {
 
   }
 
-
   getApiUrl(): string {
     return this.getUrl() + '/api';
   }
@@ -133,7 +122,6 @@ export class ConfigService extends BaseService {
       // tslint:disable-next-line: triple-equals
       + (window.location.port != '' ? (':' + window.location.port) : '');
   }
-
 
   langChanged: EventEmitter<string> = new EventEmitter();
 
@@ -227,7 +215,6 @@ export class ConfigService extends BaseService {
     }
   }
 
-
   get captchaKey() {
     return this.dynamicConfig.captchaSiteKey;
 
@@ -263,11 +250,9 @@ export class ConfigService extends BaseService {
     return this.dynamicConfig.login.oauth;
   }
 
-
   get loginSaml() {
     return this.dynamicConfig.login.saml;
   }
-
 
   get isAllReadyConfigured() {
     return this.dynamicConfig.isConfigured;
@@ -276,9 +261,6 @@ export class ConfigService extends BaseService {
   get brand() {
     return this.dynamicConfig.brand;
   }
-
-
-
 
   getCommonConfig() {
     const urlSearchParams = new URLSearchParams();
@@ -319,7 +301,6 @@ export class ConfigService extends BaseService {
       })
     )
   }
-
 
   getEmailSettings() {
     const urlSearchParams = new URLSearchParams();
@@ -362,7 +343,6 @@ export class ConfigService extends BaseService {
     )
   }
 
-
   getAuthCommon() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
@@ -398,7 +378,6 @@ export class ConfigService extends BaseService {
     )
   }
 
-
   getAuthOAuthProviders() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
@@ -407,7 +386,6 @@ export class ConfigService extends BaseService {
         return this.http.get<{ items: BaseOAuth[] }>(url);
       }))
   }
-
 
   saveAuthOAuthProvider(oauth: BaseOAuth) {
     const parameter: BaseOAuth = {
@@ -452,7 +430,6 @@ export class ConfigService extends BaseService {
         return this.http.get<{ items: BaseLdap[] }>(url);
       }))
   }
-
 
   saveAuthLdapProvider(auth: BaseLdap) {
     const parameter: BaseLdap = {
@@ -504,7 +481,6 @@ export class ConfigService extends BaseService {
       }))
   }
 
-
   saveAuthSamlProvider(auth: BaseSaml) {
     const parameter: BaseSaml = {
       id: auth.id,
@@ -543,7 +519,6 @@ export class ConfigService extends BaseService {
 
   // openid provider
 
-
   getAuthOpenIdProviders() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
@@ -552,7 +527,6 @@ export class ConfigService extends BaseService {
         return this.http.get<{ items: BaseOpenId[] }>(url);
       }))
   }
-
 
   saveAuthOpenIdProvider(auth: BaseOpenId) {
 
@@ -590,10 +564,7 @@ export class ConfigService extends BaseService {
       }))
   }
 
-
-
   // radius provider
-
 
   getAuthRadiusProviders() {
     const urlSearchParams = new URLSearchParams();
@@ -603,7 +574,6 @@ export class ConfigService extends BaseService {
         return this.http.get<{ items: BaseRadius[] }>(url);
       }))
   }
-
 
   saveAuthRadiusProvider(auth: BaseRadius) {
 
@@ -637,9 +607,6 @@ export class ConfigService extends BaseService {
         return this.http.delete<{}>(url);
       }))
   }
-
-
-
 
   getES() {
     const urlSearchParams = new URLSearchParams();
@@ -705,7 +672,6 @@ export class ConfigService extends BaseService {
     )
   }
 
-
   getBrand() {
     const urlSearchParams = new URLSearchParams();
     return this.preExecute(urlSearchParams).pipe(
@@ -732,8 +698,5 @@ export class ConfigService extends BaseService {
         })
       )
   }
-
-
-
 
 }

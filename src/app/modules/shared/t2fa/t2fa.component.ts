@@ -1,13 +1,9 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Group } from '../models/group';
-import { ConfigService } from '../services/config.service';
+import { ActivatedRoute } from '@angular/router';
 import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
-import { UtilService } from '../services/util.service';
 
 export interface T2FA {
   is2FA: boolean;
@@ -21,7 +17,6 @@ export interface T2FAExtended extends T2FA {
   token: string;
   orig: T2FA;
 }
-
 
 @Component({
   selector: 'app-t2fa',
@@ -48,7 +43,6 @@ export class T2FAComponent implements OnInit, OnDestroy {
       },
 
     };
-
 
   get t2fa(): T2FAExtended {
     return this._model;
@@ -89,15 +83,11 @@ export class T2FAComponent implements OnInit, OnDestroy {
     return this._model.is2FA && (!this._model.orig.is2FA || this._model.t2FAKey != this._model.orig.t2FAKey);
   }
 
-
   @Output()
   saveT2FA: EventEmitter<T2FA> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { token: string } = { token: '' }
-
 
   isThemeDark = false;
   constructor(
@@ -134,10 +124,7 @@ export class T2FAComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.t2fa.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(model: T2FAExtended) {
     const fmg = new FormGroup({
@@ -163,11 +150,6 @@ export class T2FAComponent implements OnInit, OnDestroy {
     return { token: '' };
   }
 
-
-
-
-
-
   checkIfModelChanged() {
     this.t2fa.isChanged = false;
     const original = this._model.orig as T2FA;
@@ -175,7 +157,6 @@ export class T2FAComponent implements OnInit, OnDestroy {
       this.t2fa.isChanged = true;
     if (original.t2FAKey != this.t2fa.t2FAKey)
       this.t2fa.isChanged = true;
-
 
   }
 
@@ -216,7 +197,6 @@ export class T2FAComponent implements OnInit, OnDestroy {
     }
   }
 
-
   saveOrUpdate() {
 
     this.saveT2FA.emit(this.createBaseModel());
@@ -224,8 +204,6 @@ export class T2FAComponent implements OnInit, OnDestroy {
   refresh2FASecret() {
     this.refreshT2FA.emit(this.createBaseModel());
 
-
   }
-
 
 }

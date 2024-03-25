@@ -3,8 +3,9 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { click, findEls } from 'src/app/modules/shared/helper.spec';
 import { RBACDefault } from 'src/app/modules/shared/models/rbac';
@@ -16,7 +17,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { AccountsUsersComponent } from './accounts-users.component';
 
 describe('AccountsUsersComponent', () => {

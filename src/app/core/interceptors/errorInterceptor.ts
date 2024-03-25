@@ -1,9 +1,8 @@
-import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NotificationService } from '../../modules/shared/services/notification.service';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { LoggerService } from '../../modules/shared/services/logger.service';
+import { NotificationService } from '../../modules/shared/services/notification.service';
 import { TranslationService } from '../../modules/shared/services/translation.service';
-
 
 @Injectable()
 export class ErrorInterceptor implements ErrorHandler {
@@ -57,7 +56,6 @@ export class ErrorInterceptor implements ErrorHandler {
       throw error;
 
     }
-
 
     // Log the error anyway
     if (error && error.name)

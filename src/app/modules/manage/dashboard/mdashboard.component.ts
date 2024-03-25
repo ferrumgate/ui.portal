@@ -1,28 +1,15 @@
-import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Group } from 'src/app/modules/shared/models/group';
-import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { TranslationService } from '../../shared/services/translation.service';
-import { NotificationService } from '../../shared/services/notification.service';
-import { ConfirmService } from '../../shared/services/confirm.service';
-import { debounceTime, of, distinctUntilChanged, map, switchMap, takeWhile, delay } from 'rxjs';
-import { UtilService } from '../../shared/services/util.service';
-import { Service } from '../../shared/models/service';
-import { Network } from '../../shared/models/network';
-import { NetworkService } from '../../shared/services/network.service';
-import { ServiceService } from '../../shared/services/service.service';
-import { SummaryService } from '../../shared/services/summary.service';
-import { SummaryActive, SummaryAgg, SummaryConfig } from '../../shared/models/summary';
-import { ChartOptions } from '../../shared/dashboard/chart/dashboard-chart.component';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChartComponent } from 'ng-apexcharts';
+import { delay, map, of, switchMap } from 'rxjs';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { ChartOptions } from '../../shared/dashboard/chart/dashboard-chart.component';
+import { SummaryActive, SummaryAgg, SummaryConfig } from '../../shared/models/summary';
+import { ConfirmService } from '../../shared/services/confirm.service';
+import { NotificationService } from '../../shared/services/notification.service';
+import { SummaryService } from '../../shared/services/summary.service';
+import { TranslationService } from '../../shared/services/translation.service';
+import { UtilService } from '../../shared/services/util.service';
 
 @Component({
   selector: 'app-mdashboard',
@@ -77,7 +64,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.isThemeDark ? '#d1d1d1' : '#1e1e1e';
   }
 
-
   loginTryData: ChartOptions =
     {
       title: { text: this.translateService.translate("LoginTry") },
@@ -109,7 +95,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     } as ChartOptions;
 
-
   createTunnelData: ChartOptions =
     {
       title: { text: this.translateService.translate("CreatedTunnel") },
@@ -135,7 +120,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     } as ChartOptions;
-
 
   t2faCheckData: ChartOptions =
     {
@@ -167,7 +151,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     } as ChartOptions;
-
 
   userLoginSuccess: ChartOptions =
     {
@@ -221,8 +204,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     } as ChartOptions;
 
-
-
   constructor(
     private translateService: TranslationService,
     private notificationService: NotificationService,
@@ -230,8 +211,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     private configService: ConfigService,
     private summaryService: SummaryService
   ) {
-
-
 
     this.isThemeDark = this.configService.getTheme() == 'dark';
     this.help.network = this.configService.links.networkHelp;
@@ -252,7 +231,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.calculateColors();
       })
 
-
   }
   ngOnInit(): void {
     this.getAllData().subscribe();
@@ -264,7 +242,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
 
     this.allSubs.unsubscribe();
-
 
   }
   calculateColors() {
@@ -279,7 +256,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }, false)
   }
-
 
   getAllData() {
     return of('').pipe(
@@ -359,7 +335,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
   prepare2FACheck(sum: SummaryAgg) {
     try {
       const dates = sum.aggs.map(x => x.key);
@@ -402,7 +377,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
   prepareCreatedTunnel(sum: SummaryAgg) {
     try {
       const dates = sum.aggs.map(x => x.key);
@@ -439,7 +413,6 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       //ignored exception
     }
   }
-
 
   prepareUserLoginSuccess(sum: SummaryAgg) {
     try {
@@ -514,8 +487,5 @@ export class MDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       //ignored exception
     }
   }
-
-
-
 
 }

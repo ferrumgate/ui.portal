@@ -1,18 +1,16 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Gateway, Network } from '../../shared/models/network';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputService } from '../../shared/services/input.service';
-import { ConfigService } from '../services/config.service';
-import { UtilService } from '../services/util.service';
-import { SSubscription } from '../services/SSubscribtion';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
-import { TranslationService } from '../services/translation.service';
+import { Network } from '../../shared/models/network';
+import { InputService } from '../../shared/services/input.service';
+import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
-
-
+import { TranslationService } from '../services/translation.service';
+import { UtilService } from '../services/util.service';
 
 export interface NetworkExtended extends Network {
   orig: Network;
@@ -77,7 +75,6 @@ export class NetworkComponent implements OnInit, OnDestroy {
       window.open(this.helpLink, '_blank');
     }
   }
-
 
   /*   static prepareModel(net: Network) {
       let extended: NetworkExtended = {
@@ -185,7 +182,6 @@ export class NetworkComponent implements OnInit, OnDestroy {
         error.name = 'NameRequired';
     }
 
-
     const clientNetworkError = this.formGroup.controls['clientNetwork'].errors;
 
     if (clientNetworkError) {
@@ -244,7 +240,5 @@ export class NetworkComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
-
-
 
 }

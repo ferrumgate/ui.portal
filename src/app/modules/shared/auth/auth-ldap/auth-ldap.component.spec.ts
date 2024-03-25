@@ -10,7 +10,6 @@ import { ConfigService } from '../../services/config.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
-
 import { AuthLdapComponent } from './auth-ldap.component';
 
 describe('AuthLdapComponent', () => {
@@ -62,11 +61,9 @@ describe('AuthLdapComponent', () => {
     expectValue(fixture, testBindDNInput, 'myadmin');
     expect(component.error.bindDN).toBeFalsy();
 
-
     const testBindPassInput = 'auth-ldap-bindpass-input';
     expectValue(fixture, testBindPassInput, 'mypass');
     expect(component.error.bindPass).toBeFalsy();
-
 
     const testSearchBaseInput = 'auth-ldap-searchbase-input';
     expectValue(fixture, testSearchBaseInput, 'cn=users');
@@ -94,7 +91,6 @@ describe('AuthLdapComponent', () => {
     fixture.detectChanges();
     expect(component.error.host).toBeTruthy();
     expect(component.formGroup.invalid).toBeTrue();
-
 
   }))
 

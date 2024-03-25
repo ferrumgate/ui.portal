@@ -14,12 +14,9 @@ export interface AuthorizationRule {
 
 }
 
-
-
 export interface AuthorizationPolicy {
 
     rules: AuthorizationRule[];
     rulesOrder: string[];
-
 
 }

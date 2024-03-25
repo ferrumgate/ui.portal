@@ -1,23 +1,15 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpEventType } from '@angular/common/http';
-import { interval, Observable, of, throwError, timer } from 'rxjs';
-import { catchError, map, finalize, retryWhen, take, delay, concatMap, delayWhen, scan, tap, mergeMap } from 'rxjs/operators';
-import { AuthenticationService } from '../../modules/shared/services/authentication.service';
-
-
-import { NotificationService } from '../../modules/shared/services/notification.service';
-
-import { TranslationService } from '../../modules/shared/services/translation.service';
+import { Observable, throwError, timer } from 'rxjs';
+import { catchError, delayWhen, finalize, map, retryWhen, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/modules/shared/services/loading.service';
-
-
-
+import { AuthenticationService } from '../../modules/shared/services/authentication.service';
+import { NotificationService } from '../../modules/shared/services/notification.service';
+import { TranslationService } from '../../modules/shared/services/translation.service';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
     constructor(private injector: Injector) { }
-
-
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -62,13 +54,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                             notificationService.error(translationService.translate('ErrNotAuthenticated'));
                             /* if (window.location.href.indexOf('/login') === -1 && window.location.href.indexOf('/user/confirm2fa') == -1) { // reload if not login page
 
-
                             } else { */
                             authenticationService.logout();
                             // }
 
                         }
-
 
                     }
                 return throwError(() => resp);

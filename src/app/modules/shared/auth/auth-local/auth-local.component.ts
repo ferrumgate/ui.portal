@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthLocal } from '../../models/auth';
-import { ConfigService } from '../../services/config.service';
 import { SSubscription } from '../../services/SSubscribtion';
+import { ConfigService } from '../../services/config.service';
 import { TranslationService } from '../../services/translation.service';
-
 
 export interface AuthLocalExtended extends AuthLocal {
   orig: AuthLocal;
@@ -48,7 +47,6 @@ export class AuthLocalComponent implements OnInit, OnDestroy {
   @Output()
   saveAuthLocal: EventEmitter<AuthLocal> = new EventEmitter();
 
-
   formGroup: FormGroup = this.createFormGroup(this.model);
   error = { type: '' };
   isThemeDark = false;
@@ -73,7 +71,6 @@ export class AuthLocalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
-
 
   createFormGroup(model: any) {
     const fmg = new FormGroup(
@@ -120,7 +117,6 @@ export class AuthLocalComponent implements OnInit, OnDestroy {
     if (original.isEnabled != model.isEnabled)
       model.isChanged = true;
 
-
   }
   checkFormError() {
     //check errors 
@@ -139,14 +135,11 @@ export class AuthLocalComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   saveOrUpdate() {
     if (this.model.isChanged) {
       this.saveAuthLocal.emit(this.model);
     }
   }
-
 
   openHelp() {
     if (this.helpLink)

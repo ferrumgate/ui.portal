@@ -1,36 +1,27 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
 import { FormControl } from '@angular/forms';
-
-import { ConfigService } from '../../../shared/services/config.service';
-import { SSubscription } from '../../../shared/services/SSubscribtion';
-
-
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeWhile, throwError } from 'rxjs';
+import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
+import { DevicePosture } from 'src/app/modules/shared/models/authnProfile';
+import { Country } from 'src/app/modules/shared/models/country';
 import { Group } from 'src/app/modules/shared/models/group';
+import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
+import { TimeZone } from 'src/app/modules/shared/models/timezone';
 import { User2 } from 'src/app/modules/shared/models/user';
+import { DataService } from 'src/app/modules/shared/services/data.service';
+import { DeviceService } from 'src/app/modules/shared/services/device.service';
+import { GroupService } from 'src/app/modules/shared/services/group.service';
+import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NetworkService } from 'src/app/modules/shared/services/network.service';
+import { PolicyAuthnService } from 'src/app/modules/shared/services/policyAuthn.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { AuthorizationPolicy, AuthorizationRule } from '../../../shared/models/authzPolicy';
 import { Network } from '../../../shared/models/network';
-import { Service } from '../../../shared/models/service';
+import { SSubscription } from '../../../shared/services/SSubscribtion';
+import { ConfigService } from '../../../shared/services/config.service';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { NotificationService } from '../../../shared/services/notification.service';
 import { TranslationService } from '../../../shared/services/translation.service';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { PolicyAuthnService } from 'src/app/modules/shared/services/policyAuthn.service';
-import { AuthenticationPolicy, AuthenticationRule } from 'src/app/modules/shared/models/authnPolicy';
-import { Country } from 'src/app/modules/shared/models/country';
-import { DataService } from 'src/app/modules/shared/services/data.service';
-import { TimeZone } from 'src/app/modules/shared/models/timezone';
-import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
-import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
-import { DevicePosture } from 'src/app/modules/shared/models/authnProfile';
-import { DeviceService } from 'src/app/modules/shared/services/device.service';
-
-
-
 
 interface Policy {
   network: Network, rules: AuthenticationRule[], isExpanded: boolean
@@ -100,8 +91,6 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
         this.searchKey = newMessage;
         this.search();
       })
-
-
 
   }
   ngOnInit(): void {
@@ -307,13 +296,10 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     }
   }
 
-
   search() {
     let search = this.searchKey.length > 1 ? this.searchKey : '';
     this.fillPolicy(search.toLowerCase());
   }
-
-
 
   addNewRule(net: Network) {
 
@@ -417,6 +403,5 @@ export class PolicyAuthnComponent implements OnInit, OnDestroy {
     if (this.searchKey) return true;
     return pol.rules.find(x => !x.id) ? true : false;
   }
-
 
 }

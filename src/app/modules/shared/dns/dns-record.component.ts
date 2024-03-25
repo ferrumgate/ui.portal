@@ -1,24 +1,20 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Group } from '../models/group';
-import { ConfigService } from '../services/config.service';
+import { ActivatedRoute } from '@angular/router';
+import { DnsRecord } from '../models/dns';
 import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
+import { InputService } from '../services/input.service';
+import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
-import { NotificationService } from '../services/notification.service';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { DnsRecord } from '../models/dns';
-import { InputService } from '../services/input.service';
-
-
 
 export interface DnsRecordExtended extends DnsRecord {
   orig: DnsRecord;
   isChanged: boolean;
-
 
 }
 
@@ -39,7 +35,6 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
       }
     };
 
-
   get dnsRecord(): DnsRecordExtended {
     return this._model;
   }
@@ -57,14 +52,10 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
     this.formGroup = this.createFormGroup(this._model);
   }
 
-
   @Output()
   saveDnsRecord: EventEmitter<DnsRecord> = new EventEmitter();
   @Output()
   deleteDnsRecord: EventEmitter<DnsRecord> = new EventEmitter();
-
-
-
 
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
@@ -73,7 +64,6 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
   } = {
       fqdn: '', ip: '',
     }
-
 
   isThemeDark = false;
   constructor(
@@ -114,10 +104,7 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.dnsRecord.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(dnsRecord: DnsRecord) {
     const fmg = new FormGroup({
@@ -149,7 +136,6 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
   addLabel(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-
     if (value) {
       const isExits = this._model.labels?.find(x => x == value);
       if (!isExits) {
@@ -172,7 +158,6 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
 
   }
 
-
   checkIfModelChanged() {
     this.dnsRecord.isChanged = false;
     const original = this._model.orig as DnsRecord;
@@ -186,7 +171,6 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
 
     if (original.isEnabled != this.dnsRecord.isEnabled)
       this.dnsRecord.isChanged = true;
-
 
   }
 
@@ -239,13 +223,10 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
     }
   }
 
-
   saveOrUpdate() {
 
     this.saveDnsRecord.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteDnsRecord.emit(this.createBaseModel());
@@ -257,10 +238,5 @@ export class DnsRecordComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
-
-
-
-
-
 
 }

@@ -1,24 +1,16 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-
-import { Configure } from '../models/configure';
-import { Network } from '../models/network';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { of, switchMap } from 'rxjs';
+import { FqdnIntelligenceCategory, FqdnIntelligenceList, FqdnIntelligenceListStatus, FqdnIntelligenceSource } from '../models/fqdnIntelligence';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { saveAs } from 'file-saver';
-import { FqdnIntelligenceCategory, FqdnIntelligenceList, FqdnIntelligenceListStatus, FqdnIntelligenceSource } from '../models/fqdnIntelligence';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class FqdnIntelligenceService extends BaseService {
-
 
   private _fqdnIntelligenceUrl = this.configService.getApiUrl() + '/fqdn/intelligence';
   private _fqdnIntelligenceUrlSource = this.configService.getApiUrl() + '/fqdn/intelligence/source';
@@ -62,13 +54,11 @@ export class FqdnIntelligenceService extends BaseService {
       insertDate: new Date().toISOString(), updateDate: new Date().toISOString()
     };
 
-
     return this.preExecute(source).pipe(
       switchMap(y => {
         return this.httpService.post<{ isError: boolean, errorMessage: '' }>(this._fqdnIntelligenceUrlSourceCheck, y, this.jsonHeader)
       }))
   }
-
 
   saveOrupdateSource(item: FqdnIntelligenceSource) {
     const source: FqdnIntelligenceSource = {
@@ -97,9 +87,6 @@ export class FqdnIntelligenceService extends BaseService {
       }))
   }
 
-
-
-
   getList(search?: string) {
     const searchParams = new URLSearchParams();
     if (search)
@@ -112,8 +99,6 @@ export class FqdnIntelligenceService extends BaseService {
       })
     )
   }
-
-
 
   saveOrupdateList(item: FqdnIntelligenceList) {
     const list: FqdnIntelligenceList = {
@@ -155,7 +140,6 @@ export class FqdnIntelligenceService extends BaseService {
       }))
   }
 
-
   downloadList(item: FqdnIntelligenceList) {
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
@@ -172,7 +156,6 @@ export class FqdnIntelligenceService extends BaseService {
         saveAs(data, filename);
 
         // var downloadURL = window.URL.createObjectURL(data);
-
 
         // window.open(this.downloadUrl(item) + '/' + data.key, '_self');
         return of({});

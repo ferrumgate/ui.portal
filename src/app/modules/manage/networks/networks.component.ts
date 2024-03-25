@@ -1,24 +1,15 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
 import { Gateway, Network } from '../../shared/models/network';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputService } from '../../shared/services/input.service';
-import { NetworksRoutingModule } from './networks-routing.module';
-import { NetworkComponent } from '../../shared/network/network.component';
-import { GatewayComponent } from '../../shared/gateway/gateway.component';
-import { UtilService } from '../../shared/services/util.service';
-import { concat, concatMap, debounceTime, distinctUntilChanged, filter, map, merge, mergeMap, of, startWith, Subscription, switchMap, takeWhile } from 'rxjs';
-import { TranslationService } from '../../shared/services/translation.service';
-import { NotificationService } from '../../shared/services/notification.service';
+import { SSubscription } from '../../shared/services/SSubscribtion';
+import { ConfigService } from '../../shared/services/config.service';
+import { ConfirmService } from '../../shared/services/confirm.service';
 import { GatewayService } from '../../shared/services/gateway.service';
 import { NetworkService } from '../../shared/services/network.service';
-import { ConfirmService } from '../../shared/services/confirm.service';
-import { ThemeSelectorComponent } from '../../shared/themeselector/themeselector.component';
-import { ConfigService } from '../../shared/services/config.service';
-import { SSubscription } from '../../shared/services/SSubscribtion';
-
-
+import { NotificationService } from '../../shared/services/notification.service';
+import { TranslationService } from '../../shared/services/translation.service';
+import { UtilService } from '../../shared/services/util.service';
 
 @Component({
   selector: 'app-networks',
@@ -58,7 +49,6 @@ export class NetworksComponent implements OnInit, OnDestroy {
       });
   }
 
-
   ngOnInit(): void {
 
     // test data
@@ -73,8 +63,6 @@ export class NetworksComponent implements OnInit, OnDestroy {
       { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: true },
       { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: true }
     ]
-
-
 
     let item = NetworkComponent.prepareModel(net);
     this.networks.push(item);
@@ -93,7 +81,6 @@ export class NetworksComponent implements OnInit, OnDestroy {
     let item2 = NetworkComponent.prepareModel(net2);
     this.networks.push(item2);
 
-
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
@@ -109,8 +96,6 @@ export class NetworksComponent implements OnInit, OnDestroy {
     };
     const notJoinedExtendedGateway2 = GatewayComponent.prepareModel(notJoinedGateway2);
     this.gatewaysNotJoined.push(notJoinedExtendedGateway2); */
-
-
 
     this.getAllData().subscribe();
 
@@ -139,14 +124,12 @@ export class NetworksComponent implements OnInit, OnDestroy {
 
     })
 
-
   }
   prepareNotJoinedGateways() {
 
     this.gatewaysNotJoined = this.gateways.filter(x => !x.networkId);
     return this.gatewaysNotJoined;
   }
-
 
   getAllData() {
     return this.networkService.get2().pipe(
@@ -201,7 +184,6 @@ export class NetworksComponent implements OnInit, OnDestroy {
     return this.gateways.filter(x => x.networkId == net.id);
     //return net.gateways;
   }
-
 
   addNewNetwork() {
 
@@ -305,8 +287,5 @@ export class NetworksComponent implements OnInit, OnDestroy {
         this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
       });
   }
-
-
-
 
 }

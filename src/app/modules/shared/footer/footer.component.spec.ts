@@ -3,11 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { CaptchaService } from '../services/captcha.service';
-
 import { FooterComponent } from './footer.component';
 
 describe('FooterComponent', () => {
@@ -35,7 +34,6 @@ describe('FooterComponent', () => {
     fixture = TestBed.createComponent(FooterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
 
     spyOn(httpClient, 'get').and.returnValue(of({}));
   });

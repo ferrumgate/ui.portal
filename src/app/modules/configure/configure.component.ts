@@ -1,16 +1,14 @@
 import { AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { catchError, of, switchMap } from 'rxjs';
-import { RBACDefault } from '../shared/models/rbac';
+import { SSubscription } from '../shared/services/SSubscribtion';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { CaptchaService } from '../shared/services/captcha.service';
 import { ConfigService } from '../shared/services/config.service';
 import { ConfigureService } from '../shared/services/configure.service';
 import { InputService } from '../shared/services/input.service';
 import { NotificationService } from '../shared/services/notification.service';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { TranslationService } from '../shared/services/translation.service';
 
 @Component({
@@ -40,7 +38,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
   userError = { email: '', password: '', passwordAgain: '' };
   hidePassword = true;
   hidePasswordAgain = true;
-
 
   //common settings
   commonFormGroup = this.createFormGroupCommon(this.model);
@@ -73,7 +70,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
 
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
   }
 
   ngOnInit(): void {
@@ -88,9 +84,7 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
 
   ngAfterContentInit(): void {
 
-
   }
-
 
   createFormGroupCommon(model: any) {
     const fmg = new FormGroup(
@@ -164,7 +158,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     return fmg;
   }
 
-
   resetUserErrors() {
     this.checkAllError = '';
     return {
@@ -188,7 +181,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     const passwordError = this.userFormGroup.controls['password'].errors;
     if (passwordError) {
 
-
       if (passwordError['required'])
         this.userError.password = 'PasswordRequired';
       else if (passwordError['minlength'])
@@ -199,7 +191,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
         this.userError.password = 'PasswordsMismatch';
       else
         this.userError.password = 'PasswordInvalid';
-
 
     }
 
@@ -256,7 +247,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
 
   }
 
-
   generatePassword(len = 32) {
     const chars = ["!", "#", "$", "%", "&", "(", ")", "*", "+", ",",
       "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":",
@@ -272,8 +262,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
     }
     return password;
   }
-
-
 
   networkModelChanged() {
 
@@ -327,7 +315,6 @@ export class ConfigureComponent implements OnInit, OnDestroy, AfterViewInit, Aft
       this.checkAllError = this.translateService.translate('FormIsInvalid');
       return;
     }
-
 
     this.configureService.configure(this.model).pipe(
       switchMap((x: any) => {

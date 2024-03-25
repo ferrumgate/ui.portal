@@ -3,27 +3,23 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { map, Observable, of, switchMap, takeWhile } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { map, of, switchMap, takeWhile } from 'rxjs';
 import { FileUploadComponent } from 'src/app/modules/shared/fileupload/fileupload.component';
-import { FqdnIntelligence, FqdnIntelligenceList } from 'src/app/modules/shared/models/fqdnIntelligence';
+import { FqdnIntelligenceList } from 'src/app/modules/shared/models/fqdnIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
 import { FqdnIntelligenceService } from 'src/app/modules/shared/services/fqdnIntelligence.service';
+import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
 
-
-
 export interface FqdnIntelligenceListExtended extends FqdnIntelligenceList {
   orig: FqdnIntelligenceList;
   isChanged: boolean;
   insertDateStr: string;
-
 
 }
 
@@ -43,7 +39,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
         id: '', name: '', labels: [], isChanged: false, insertDate: '', updateDate: '', http: { checkFrequency: 60, url: 'https://ferrumgate.com' }
       }
     };
-
 
   get list(): FqdnIntelligenceListExtended {
     return this._model;
@@ -74,15 +69,12 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
   @Output()
   resetFqdnIntelligenceList: EventEmitter<FqdnIntelligenceList> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, httpUrl: string,
     fileSource: string,
   }
     = { name: '', httpUrl: '', fileSource: '' };
-
 
   isThemeDark = false;
 
@@ -132,10 +124,7 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
       this.checkIfModelChanged();
     else this.list.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(list: FqdnIntelligenceListExtended) {
     const fmg = new FormGroup({
@@ -143,8 +132,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
       insertDateStr: new FormControl(list.insertDateStr, []),
       splitter: new FormControl(list.splitter, []),
       splitterIndex: new FormControl(list.splitterIndex, []),
-
-
 
     });
     fmg.controls['insertDateStr'].disable();
@@ -166,7 +153,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
       fmg.controls['statusLastError'].disable();
 
     }
-
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -227,7 +213,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
       this.checkIfModelChanged();
   }
 
-
   checkIfModelChanged() {
     this.list.isChanged = false;
     const original = this._model.orig as FqdnIntelligenceList;
@@ -278,9 +263,7 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
 
       }
 
-
     }
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -317,7 +300,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
     }
   }
 
-
   saveOrUpdate() {
     if (this.uploadFile) {
 
@@ -345,8 +327,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
     }
   }
 
-
-
   delete() {
     this.deleteFqdnIntelligenceList.emit(this.createBaseModel());
   }
@@ -361,7 +341,6 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
       this.modelChanged();
     }
 
-
   }
 
   download() {
@@ -371,7 +350,5 @@ export class ConfigFqdnIntelligenceListItemComponent implements OnInit, OnDestro
   reset() {
     this.resetFqdnIntelligenceList.emit(this.createBaseModel());
   }
-
-
 
 }

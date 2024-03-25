@@ -40,7 +40,6 @@ export interface SSLCertificate extends SSLCertificateBase {
     isSystem?: boolean;
     [key: string]: any;
 
-
 }
 export interface SSLCertificateEx extends SSLCertificate {
     id: string;

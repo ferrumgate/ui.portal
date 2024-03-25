@@ -1,20 +1,10 @@
-import { A } from '@angular/cdk/keycodes';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { AuthorizationPolicy, AuthorizationRule } from '../models/authzPolicy';
-import { Configure } from '../models/configure';
-import { Group } from '../models/group';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +20,6 @@ export class PolicyAuthzService extends BaseService {
     super('policyAuthz', captchaService)
 
   }
-
 
   get() {
     const urlParams = new URLSearchParams();
@@ -67,7 +56,6 @@ export class PolicyAuthzService extends BaseService {
       serviceId: arule.serviceId,
       userOrgroupIds: Array.from(arule.userOrgroupIds || []),
 
-
     }
 
     return this.preExecute(rule).pipe(
@@ -80,7 +68,6 @@ export class PolicyAuthzService extends BaseService {
 
   deleteRule(arule: AuthorizationRule) {
 
-
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
@@ -90,7 +77,6 @@ export class PolicyAuthzService extends BaseService {
 
       }))
   }
-
 
   reorderRule(aRule: AuthorizationRule, prev: number, pivot: string, curr: number) {
     const reorder = {
@@ -102,7 +88,5 @@ export class PolicyAuthzService extends BaseService {
         return this.httpService.put<AuthorizationRule>(url, y, this.jsonHeader)
       }))
   }
-
-
 
 }

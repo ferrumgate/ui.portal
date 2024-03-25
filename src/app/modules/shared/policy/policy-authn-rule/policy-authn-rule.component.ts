@@ -1,16 +1,13 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelect } from '@angular/material/select';
-import { MatTabGroup } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, ReplaySubject, Subject, of, take, takeUntil } from 'rxjs';
 import validator from 'validator';
-import { AuthenticationRule, cloneAuthenticationRule } from '../../models/authnPolicy';
-import { cloneAuthenticationProfile, cloneTimeProfile, DevicePosture, IpIntelligenceProfile, IpProfile, TimeProfile } from '../../models/authnProfile';
-import { AuthorizationRule } from '../../models/authzPolicy';
+import { AuthenticationRule } from '../../models/authnPolicy';
+import { DevicePosture, IpIntelligenceProfile, IpProfile, TimeProfile, cloneAuthenticationProfile, cloneTimeProfile } from '../../models/authnProfile';
 import { Country } from '../../models/country';
 import { Group } from '../../models/group';
 import { IpIntelligenceList } from '../../models/ipIntelligence';
@@ -18,15 +15,11 @@ import { Network } from '../../models/network';
 import { Service } from '../../models/service';
 import { TimeZone } from '../../models/timezone';
 import { User2 } from '../../models/user';
-import { ConfigService } from '../../services/config.service';
-import { InputService } from '../../services/input.service';
-import { NotificationService } from '../../services/notification.service';
 import { SSubscription } from '../../services/SSubscribtion';
+import { ConfigService } from '../../services/config.service';
+import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { UtilService } from '../../services/util.service';
-
-
-
 
 export interface AuthenticationRuleExtended extends AuthenticationRule {
   orig: AuthenticationRule;
@@ -43,12 +36,10 @@ export interface AuthenticationRuleExtended extends AuthenticationRule {
 })
 export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
-
   allSub = new SSubscription();
   helpLink = '';
 
   selectedTab = 0;
-
 
   _model: AuthenticationRuleExtended =
     {
@@ -103,8 +94,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
   }
   get devicePostures() { return this._devicePostures; };
 
-
-
   countryMap = new Map();
   //country list
   /** list of country */
@@ -122,7 +111,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     // load the initial country list
     this.filteredCountryListMulti.next(this._countryListAll.slice());
   }
-
 
   public get countryList() {
     return this._countryListAll;
@@ -162,12 +150,10 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   }
 
-
   @Output()
   saveAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
   @Output()
   deleteAuthnRule: EventEmitter<AuthenticationRule> = new EventEmitter();
-
 
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string, } = { name: '' }
@@ -184,10 +170,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   devicePosturesControl = new FormControl();
   filteredDevicePostures: DevicePosture[] = [];
-
-
-
-
 
   private _countryListAll: Country[] = [];
 
@@ -228,14 +210,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
       })
 
-
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.policyAuthnHelp;
 
   }
-
-
 
   _timezoneList: TimeZone[] = [];
   @Input()
@@ -253,8 +232,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this.prepareAutoCompleteIpIntelligenceLists();
     this.prepareAutoCompleteDevicePostures();
 
-
-
   }
   ngAfterViewInit() {
     this.setInitialValue();
@@ -264,7 +241,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this._onDestroy.complete();
     this.allSub.unsubscribe();
   }
-
 
   openHelp() {
     if (this.helpLink) {
@@ -302,8 +278,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   prepareAutoCompletes() {
 
-
-
     this.filteredUsers = this.users.sort(this.simpleUsernameSort)
 
     this.filteredGroups = this.groups.sort(this.simpleNameSort);
@@ -320,7 +294,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
           this.filteredGroups = this.groups.sort(this.simpleNameSort);
         }
       })
-
 
   }
   prepareAutoCompleteIpIntelligenceLists() {
@@ -360,8 +333,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this.filteredIpIntelligenceBlackLists = this.filteredIpIntelligenceBlackLists.filter(x => !this._model.profile.ipIntelligence?.blackLists.includes(x.id))
   }
 
-
-
   prepareAutoCompleteDevicePostures() {
 
     this.filteredDevicePostures = this.devicePostures.sort(this.simpleNameSort);
@@ -377,7 +348,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         }
 
       })
-
 
   }
 
@@ -415,8 +385,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
         });
   }
 
-
-
   prepareCountryList() {
     this._model.profile.locations = (this.countryMultiCtrl.value as Country[]).map(x => {
       return {
@@ -427,13 +395,10 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
   }
 
-
   displayServiceFn(net: Service | string) {
     if (typeof (net) == 'string') return net;
     return net?.name || '';
   }
-
-
 
   displayUserOrGroupFn(net: User2 | Group | string) {
     if (typeof (net) == 'string') return net;
@@ -449,11 +414,8 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return net?.name || '';
   }
 
-
-
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
 
   removeUserOrGroup(ug: { id: string }): void {
     this.rule.userOrgroupIds = this.rule.userOrgroupIds.filter(x => x != ug.id);
@@ -476,9 +438,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-
   modelChanged() {
 
     this.checkFormError();
@@ -486,15 +445,11 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.rule.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(rule: AuthenticationRule) {
     const fmg = new FormGroup({
       name: new FormControl(rule.name, [Validators.required]),
-
 
     });
 
@@ -517,16 +472,12 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     return { name: '', service: '' };
   }
 
-
-
-
   checkIfModelChanged() {
     this.rule.isChanged = false;
     const original = this._model.orig as AuthenticationRule;
 
     if (original.name != this.rule.name)
       this.rule.isChanged = true;
-
 
     if (UtilService.checkChanged(original.userOrgroupIds, this.rule.userOrgroupIds))
       this.rule.isChanged = true;
@@ -564,8 +515,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.rule.profile.times?.map(x => this.calculateTimeProfileName(x))))
       this.rule.isChanged = true;
 
-
-
   }
 
   checkFormError() {
@@ -580,9 +529,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       else
         error.name = 'NameRequired';
     }
-
-
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -613,12 +559,9 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
   }
 
-
   saveOrUpdate() {
     this.saveAuthnRule.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteAuthnRule.emit(this.createBaseModel());
@@ -641,7 +584,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
 
     if (this.rule.profile.locations?.length)
       whitelist.push(`from ${this.rule.profile.locations.slice(0, 3).map(x => x.countryCode).join(',') + `${this.rule.profile.locations.length > 3 ? ' ...' : ''}`}`);
-
 
     const blacklist = [];
     if (this.rule.profile.blackListIps?.length)
@@ -679,7 +621,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       return `device is in ${this.rule.profile.device.posturesEx?.slice(0, 3).map(x => x.name).join(' or ') + `${this.rule.profile.device.postures?.length > 3 ? ' ...' : ''}`}`
     return ``;
   }
-
 
   getExplanationSummary() {
     let ips = this.rule.profile.whiteListIps?.map(x => x.ip).join(',').substring(0, 30) || '';
@@ -723,8 +664,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   removeIpIntelligenceWhiteList(ug: { id: string }): void {
     if (this.rule.profile.ipIntelligence?.whiteLists && this.rule.profile.ipIntelligence?.whiteListsEx) {
       this.rule.profile.ipIntelligence.whiteLists = this.rule.profile.ipIntelligence.whiteLists.filter(x => x != ug.id);
@@ -744,7 +683,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     }
 
   }
-
 
   ipIntelligenceWhiteListSelected(event: any) {
 
@@ -785,11 +723,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-
-
-
-
 
   addIpOrCidrWhiteList(event: MatChipInputEvent): void {
     let value = (event.value || '').trim();
@@ -859,8 +792,6 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
 
   }
-
-
 
   toggleSelectAllCountryList(selectAllValue: boolean) {
     this.filteredCountryListMulti.pipe(take(1), takeUntil(this._onDestroy))
@@ -1004,9 +935,5 @@ export class PolicyAuthnRuleComponent implements OnInit, OnDestroy {
     this.modelChanged();
   }
 
-
-
-
 }
-
 

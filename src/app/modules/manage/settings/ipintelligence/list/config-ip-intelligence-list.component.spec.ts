@@ -4,20 +4,16 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { click, dispatchFakeEvent, expectValue, findEl, findEls, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { click, findEl, findEls } from 'src/app/modules/shared/helper.spec';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { UtilService } from 'src/app/modules/shared/services/util.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigIpIntelligenceListComponent } from './config-ip-intelligence-list.component';
-
-
 
 describe('ConfigIpIntelligenceListComponent', () => {
   let component: ConfigIpIntelligenceListComponent;
@@ -93,15 +89,8 @@ describe('ConfigIpIntelligenceListComponent', () => {
     const el3 = findEls(fixture, 'config-ip-intelligence-list-item');
     expect(el3.length).toEqual(3);
 
-
-
-
     flush();
-
-
 
   }));
 });
-
-
 

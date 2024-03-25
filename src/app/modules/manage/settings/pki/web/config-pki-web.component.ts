@@ -1,28 +1,23 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, takeWhile } from 'rxjs';
-import { ConfigEmail, ConfigES } from 'src/app/modules/shared/models/config';
-import { IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
+import { ActivatedRoute } from '@angular/router';
 import { SSLCertificate, SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
-import { PKIService } from 'src/app/modules/shared/services/pki.service';
-import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 interface SSLCertificateExtended extends SSLCertificate {
   orig: SSLCertificate;
   isChanged: boolean;
   insertDateStr: string;
   updateDateStr: string;
-
 
 }
 
@@ -46,7 +41,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       }
     };
 
-
   get cert(): SSLCertificateExtended {
     return this._model;
   }
@@ -60,9 +54,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       labels: Array.from(val.labels || []),
       insertDateStr: UtilService.dateFormatToLocale(new Date(val.insertDate)),
       updateDateStr: UtilService.dateFormatToLocale(new Date(val.updateDate)),
-
-
-
 
     }
     if (val.letsEncrypt)
@@ -85,14 +76,11 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
   @Output()
   disableLetsEncrypt: EventEmitter<SSLCertificate> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, publicCrt: string;
   }
     = { name: '', publicCrt: '' };
-
 
   isThemeDark = false;
 
@@ -140,10 +128,7 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.cert.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(cert: SSLCertificateExtended) {
     const fmg = new FormGroup({
@@ -155,8 +140,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
 
     });
     fmg.controls['updateDateStr'].disable();
-
-
 
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
@@ -211,7 +194,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
   }
 
-
   checkIfModelChanged() {
     this.cert.isChanged = false;
     const original = this._model.orig as SSLCertificateEx;
@@ -229,7 +211,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
     if (original.chainCrt != this.cert.chainCrt)
       this.cert.isChanged = true;
 
-
   }
 
   checkFormError() {
@@ -245,8 +226,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
         error.name = 'NameRequired';
     }
 
-
-
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
 
@@ -260,7 +239,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       labels: Array.from(original.labels || []),
 
     }
-
 
     this.checkIfModelChanged();
   }
@@ -279,7 +257,6 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
       letsEncrypt: this._model.letsEncrypt//we are not touching,we are not sending back
     }
   }
-
 
   saveOrUpdate() {
     const model = this.createBaseModel();
@@ -317,11 +294,5 @@ export class ConfigPKIWebComponent implements OnInit, OnDestroy {
     else
       this.disableLetsEncrypt.emit(this.createBaseModel());
   }
-
-
-
-
-
-
 
 }

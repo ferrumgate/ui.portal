@@ -3,21 +3,16 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, queryByCss, setFieldValue } from '../helper.spec';
-import { Group } from '../models/group';
-import { Gateway, Network } from '../models/network';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from '../helper.spec';
+import { Network } from '../models/network';
 import { Service } from '../models/service';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
-import { GroupService } from '../services/group.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
-
-
 import { ServiceComponent } from './service.component';
-import { FormArray } from '@angular/forms';
 
 describe('ServiceComponent', () => {
   let component: ServiceComponent;
@@ -102,9 +97,6 @@ describe('ServiceComponent', () => {
     setFieldValue(fixture, testHostId, 'localhost')
     dispatchFakeEvent(findEl(fixture, testHostId).nativeElement, 'blur');
 
-
-
-
     const chips = findEls(fixture, testChipId)
     expect(chips.length).toBe(1);
 
@@ -122,7 +114,6 @@ describe('ServiceComponent', () => {
     component.removePort(service.ports[0])
     fixture.detectChanges();
     expect(component.formGroup.invalid).toBeTrue()
-
 
   }));
 });

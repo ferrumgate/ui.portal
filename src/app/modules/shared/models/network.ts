@@ -14,7 +14,6 @@ export interface Gateway {
     [key: string]: any;
 }
 
-
 /**
  * @summary a group of @see Gateway s
  */
@@ -30,5 +29,4 @@ export interface Network {
     sshHost?: string;
     [key: string]: any;
 }
-
 

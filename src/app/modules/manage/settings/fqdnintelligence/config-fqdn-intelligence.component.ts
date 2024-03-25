@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { of, switchMap, takeWhile } from 'rxjs';
-import { ConfigES } from 'src/app/modules/shared/models/config';
-import { FqdnIntelligenceList, FqdnIntelligenceSource } from 'src/app/modules/shared/models/fqdnIntelligence';
+import { switchMap, takeWhile } from 'rxjs';
+import { FqdnIntelligenceSource } from 'src/app/modules/shared/models/fqdnIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { FqdnIntelligenceService } from 'src/app/modules/shared/services/fqdnIntelligence.service';
@@ -11,10 +9,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import validator from 'validator';
-
-
-
 
 @Component({
   selector: 'app-config-fqdn-intelligence',
@@ -25,13 +19,9 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
 
-
   isThemeDark = false;
 
-
   sources: FqdnIntelligenceSource[] = [];
-
-
 
   constructor(private router: Router,
     private translateService: TranslationService,
@@ -39,7 +29,6 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private notificationService: NotificationService,
     private ipIntelligenceService: FqdnIntelligenceService) {
-
 
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
@@ -59,7 +48,6 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //test data
 
-
     this.searchSources();
 
   }
@@ -70,7 +58,6 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
   ngAfterViewInit(): void {
 
   }
-
 
   getSource() {
     if (!this.sources.length)
@@ -132,9 +119,5 @@ export class ConfigFqdnIntelligenceComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
     })
   }
-
-
-
-
 
 }

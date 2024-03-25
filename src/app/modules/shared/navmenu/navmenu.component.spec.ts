@@ -2,9 +2,8 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { click, findEl, findEls, makeClickEvent } from '../helper.spec';
+import { click, findEl, findEls } from '../helper.spec';
 import { MaterialModule } from '../material-module';
-
 import { NavMenuComponent } from './navmenu.component';
 
 describe('NavMenuComponent', () => {
@@ -29,7 +28,6 @@ describe('NavMenuComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 
   it('should create a nav menu', fakeAsync(async () => {
     component.items = [
@@ -64,7 +62,6 @@ describe('NavMenuComponent', () => {
     const submenus = findEls(fixture, 'navmenu-subitem');
     expect(submenus.length).toBe(0);
 
-
   }));
 
   it('should create a  submenu', fakeAsync(async () => {
@@ -88,7 +85,6 @@ describe('NavMenuComponent', () => {
 
     fixture.detectChanges();
 
-
     //find firt tree nodes
     const menus = findEls(fixture, 'navmenu-item');
     expect(menus.length).toBe(2);
@@ -100,7 +96,6 @@ describe('NavMenuComponent', () => {
     //find child nodes
     const submenus = findEls(fixture, 'navmenu-subitem');
     expect(submenus.length).toBe(1);
-
 
   }));
 

@@ -1,26 +1,14 @@
-import { X } from '@angular/cdk/keycodes';
-import { HttpEventType } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { debug } from 'console';
-import { debounceTime, distinctUntilChanged, map, of, switchMap, takeWhile } from 'rxjs';
-import { ConfigES } from 'src/app/modules/shared/models/config';
-import { IpIntelligenceList, IpIntelligenceListStatus } from 'src/app/modules/shared/models/ipIntelligence';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { map, of, switchMap, takeWhile } from 'rxjs';
 import { SSLCertificate, SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { PKIService } from 'src/app/modules/shared/services/pki.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-import validator from 'validator';
-
-
-
-
 
 @Component({
   selector: 'app-config-pki-intermediate-list',
@@ -45,7 +33,6 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private pkiService: PKIService) {
 
-
     this.allSubs.addThis =
       this.allSubs.addThis = this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
@@ -53,7 +40,6 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
     this.helpLink = this.configService.links.pkiHelp;
     this.isThemeDark = this.configService.getTheme() == 'dark';
     //search input with wait
-
 
   }
   ngOnInit(): void {
@@ -66,14 +52,12 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
 
     this.allSubs.unsubscribe();
 
-
   }
 
   openHelp() {
     if (this.helpLink)
       window.open(this.helpLink, '_blank');
   }
-
 
   getAllData() {
 
@@ -137,7 +121,6 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
    -----END CERTIFICATE-----`
              },
    
-   
              {
                id: '2', insertDate: new Date().toString(), name: 'file list', updateDate: new Date().toString(), labels: ['test'],
                isEnabled: true,
@@ -178,7 +161,6 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
     return cert;
   }
 
-
   addNewCert(type: 'auth' | 'tls') {
     const cert: SSLCertificateEx = {
       objId: UtilService.randomNumberString(),
@@ -196,7 +178,6 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
       takeWhile(x => x),
       switchMap(y => this.saveList2($event)),
     ).subscribe();
-
 
   }
   saveList2($event: SSLCertificate) {
@@ -267,7 +248,5 @@ export class ConfigPKIIntermediateListComponent implements OnInit, OnDestroy {
     this.notificationService.success(this.translateService.translate('Downloading'))
 
   }
-
-
 
 }

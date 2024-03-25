@@ -11,11 +11,9 @@ export interface ActivityLog {
     status: number;//0 success;
     statusMessage?: string;
 
-
     username?: string;
     userId?: string;
     user2FA?: boolean;
-
 
     sessionId?: string;
     is2FA?: boolean;
@@ -34,7 +32,6 @@ export interface ActivityLog {
     authzRuleId?: string;
     authzRuleName?: string
     tun?: string;
-
 
     deviceId?: string;
     deviceName?: string;

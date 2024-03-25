@@ -1,16 +1,13 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { NavMenuItem } from '../navmenu/navmenuitem';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
-import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
-import { SSubscription } from '../services/SSubscribtion';
-import { RBACDefault } from '../models/rbac';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { ConfigBrand } from '../models/config';
+import { RBACDefault } from '../models/rbac';
+import { SSubscription } from '../services/SSubscribtion';
 
 @Component({
   selector: 'app-toolbar',
@@ -48,8 +45,6 @@ export class ToolbarComponent implements OnInit {
 
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.brand = this.configService.brand;
     this.allSubs.addThis =
@@ -92,7 +87,6 @@ export class ToolbarComponent implements OnInit {
 
   @Output()
   menuClicked = new EventEmitter();
-
 
   logout() {
     this.authService.logout();

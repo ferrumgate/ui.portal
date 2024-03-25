@@ -1,10 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ResetPassRoutingModule } from './resetpass-routing.module';
+import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { ResetPassRoutingModule } from './resetpass-routing.module';
 import { ResetPassComponent } from './resetpass.component';
-
-
 
 @NgModule({
   declarations: [

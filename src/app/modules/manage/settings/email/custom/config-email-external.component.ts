@@ -8,18 +8,11 @@ import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
-
 
 interface Model extends ConfigEmail {
   isChanged: boolean
   orig: ConfigEmail
 }
-
-
-
-
-
 
 @Component({
   selector: 'app-config-email-external',
@@ -29,7 +22,6 @@ interface Model extends ConfigEmail {
 export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
-
 
   isThemeDark = false;
   private _model: Model = {
@@ -59,11 +51,7 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
   @Output()
   public checkEmail: EventEmitter<ConfigEmail> = new EventEmitter();
 
-
-
-
   formGroup: FormGroup = this.createFormGroup(this.model);
-
 
   error: { user: string, pass: string } = { user: '', pass: '' };
 
@@ -79,7 +67,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
   }
   ngOnInit(): void {
 
@@ -87,7 +74,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
-
 
   ngAfterViewInit(): void {
 
@@ -98,7 +84,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
       {
         user: new FormControl(model.user, [Validators.required, InputService.emailValidator]),
         pass: new FormControl(model.pass, [Validators.required]),
-
 
       });
     let keys = Object.keys(fmg.controls)
@@ -136,7 +121,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
     //check errors 
     this.error = this.resetFormErrors();
 
-
     const userError = this.formGroup.controls['user'].errors;
 
     if (userError) {
@@ -155,8 +139,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
         this.error.pass = 'PasswordRequired';
     }
 
-
-
   }
 
   checkIfModelChanged() {
@@ -172,11 +154,6 @@ export class ConfigEmailExternalComponent implements OnInit, OnDestroy {
       model.isChanged = true;
 
   }
-
-
-
-
-
 
   clear() {
     const orig = this.model.orig;

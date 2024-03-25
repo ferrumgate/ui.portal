@@ -1,31 +1,22 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { TranslateModule } from '@ngx-translate/core';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { AppModule } from 'src/app/app.module';
-import { AuthenticationService, Session } from 'src/app/modules/shared/services/authentication.service';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { FooterComponent } from '../shared/footer/footer.component';
 import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
-import { MaterialModule } from '../shared/material-module';
 import { SharedModule } from '../shared/shared.module';
-import { ThemeSelectorComponent } from '../shared/themeselector/themeselector.component';
-
 import { LoginComponent } from './login.component';
-import { LoginModule } from './login.module';
-import { MatIcon } from '@angular/material/icon';
-import { MatIconTestingModule } from '@angular/material/icon/testing';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
-
-
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -102,7 +93,6 @@ describe('LoginComponent', () => {
     tick(1000);
     fixture.detectChanges();
 
-
     //email
     expect(component.model.email).toBe('');
     expect(emailForm.errors).toBeTruthy();
@@ -120,10 +110,7 @@ describe('LoginComponent', () => {
     expect(component.error.email).toBeFalsy();
     expect(findEl(fixture, 'login-email-error', false)).toBeFalsy();
 
-
   }));
-
-
 
   it('login form password input', fakeAsync(async () => {
     expect(component).toBeTruthy();
@@ -139,9 +126,6 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();
-
-
-
 
     //check password values
     expect(component.model.password).toBe('');
@@ -161,22 +145,18 @@ describe('LoginComponent', () => {
     expect(component.error.password).toBeFalsy();
     expect(findEl(fixture, 'login-password-error', false)).toBeFalsy();
 
-
   }));
 
   it('login form submit', fakeAsync(async () => {
 
-
     const emailId = 'login-email-input'
     const passwordId = 'login-password-input'
-
 
     setFieldValue(fixture, emailId, 'test@gmail.com');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
 
     setFieldValue(fixture, passwordId, 'Deneme123');
     dispatchFakeEvent(findEl(fixture, passwordId).nativeElement, 'blur');
-
 
     fixture.detectChanges();
     tick(1000);
@@ -196,16 +176,12 @@ describe('LoginComponent', () => {
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
     expect(authServiceSpy).toHaveBeenCalled();
 
-
-
   }));
 
   /* it('captcha service must be called if needed', fakeAsync(async () => {
 
-
     const emailId = 'login-email-input'
     const passwordId = 'login-password-input'
-
 
     setFieldValue(fixture, emailId, 'test@gmail.com');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
@@ -223,9 +199,7 @@ describe('LoginComponent', () => {
     expect(component.error.login).toBeFalsy();
     expect(findEl(fixture, 'login-submit-button').properties['disabled']).toBe(false);
 
-
     const authServiceSpy = spyOnProperty(authService, 'currentSession', "get");
-
 
     authServiceSpy
       .and.returnValue({
@@ -241,7 +215,6 @@ describe('LoginComponent', () => {
     authServiceSpy.login.and.returnValue(of({}));
     httpClientSpy.post.and.returnValue(of({}));
 
-
     //click submit
     findEl(fixture, 'login-form').triggerEventHandler('submit', {});
 
@@ -252,10 +225,7 @@ describe('LoginComponent', () => {
     expect(captchaServiceSpy).toHaveBeenCalled();
     expect(authServiceSpy.login).toHaveBeenCalled();
 
-
   }));
  */
-
-
 
 });

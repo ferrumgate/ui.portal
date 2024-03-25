@@ -1,23 +1,12 @@
-import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Group } from 'src/app/modules/shared/models/group';
-import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
-import { GroupService } from 'src/app/modules/shared/services/group.service';
-import { UserService } from 'src/app/modules/shared/services/user.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { NotificationService } from 'src/app/modules/shared/services/notification.service';
-import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
-import { map, of, switchMap, takeWhile } from 'rxjs';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { map, switchMap, takeWhile } from 'rxjs';
 import { UserProfile } from 'src/app/modules/shared/models/userProfile';
-
-
-
+import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { UserService } from 'src/app/modules/shared/services/user.service';
 
 @Component({
   selector: 'app-dsetting-profile',
@@ -29,17 +18,11 @@ export class DSettingProfileComponent implements OnInit, OnDestroy, AfterViewIni
 
   isThemeDark = false;
 
-
   help = {
 
   }
 
-
   public model: UserProfile;
-
-
-
-
 
   constructor(
     private translateService: TranslationService,
@@ -53,14 +36,12 @@ export class DSettingProfileComponent implements OnInit, OnDestroy, AfterViewIni
       browserTimeout: 15
     }
 
-
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.allSubs.addThis =
       this.allSubs.addThis = this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
-
 
   }
   ngOnInit(): void {
@@ -75,8 +56,6 @@ export class DSettingProfileComponent implements OnInit, OnDestroy, AfterViewIni
   ngOnDestroy() {
     this.allSubs.unsubscribe();
   }
-
-
 
   getData() {
     return this.userService.getCurrentUserProfile()
@@ -97,16 +76,5 @@ export class DSettingProfileComponent implements OnInit, OnDestroy, AfterViewIni
       this.notificationService.success(this.translateService.translate('SuccessfullySaved'))
     })
   }
-
-
-
-
-
-
-
-
-
-
-
 
 }

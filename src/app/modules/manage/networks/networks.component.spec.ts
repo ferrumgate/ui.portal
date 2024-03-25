@@ -4,15 +4,12 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RecaptchaV3Module } from 'ng-recaptcha';
 import { of } from 'rxjs';
-import { GatewayComponent } from '../../shared/gateway/gateway.component';
 import { findEl, findEls } from '../../shared/helper.spec';
 import { Gateway, Network } from '../../shared/models/network';
-import { NetworkComponent, NetworkExtended } from '../../shared/network/network.component';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { CaptchaService } from '../../shared/services/captcha.service';
-import { ConfigService } from '../../shared/services/config.service';
 import { ConfirmService } from '../../shared/services/confirm.service';
 import { GatewayService } from '../../shared/services/gateway.service';
 import { NetworkService } from '../../shared/services/network.service';
@@ -20,7 +17,6 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { TranslationService } from '../../shared/services/translation.service';
 import { UtilService } from '../../shared/services/util.service';
 import { SharedModule } from '../../shared/shared.module';
-
 import { NetworksComponent } from './networks.component';
 
 describe('NetworksComponent', () => {
@@ -104,7 +100,6 @@ describe('NetworksComponent', () => {
     let item2 = net2;
     thisnetworks.push(item2);
 
-
     const notJoinedGateway: Gateway = {
       objId: UtilService.randomNumberString(),
       id: '1234', networkId: '',
@@ -143,7 +138,6 @@ describe('NetworksComponent', () => {
 
     const elements = findEls(fixture, 'networks-gatewaynotjoined-app-gateway');
     expect(elements.length).toBe(2);
-
 
   }));
 
@@ -191,7 +185,6 @@ describe('NetworksComponent', () => {
     component.networks[0].isGatewayOpened = true;
     tick(1000);
     fixture.detectChanges();
-
 
     //find a gateway
     const gateway = component.gateways.find(x => x.networkId == component.networks[0].id);
@@ -250,12 +243,6 @@ describe('NetworksComponent', () => {
     const elements3 = findEls(fixture, 'networks-app-network-app-gateway');
     expect(elements3.length).toBe(3);
 
-
-
-
-
-
   }));
-
 
 });

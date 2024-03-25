@@ -1,5 +1,3 @@
-
-
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 
 /**

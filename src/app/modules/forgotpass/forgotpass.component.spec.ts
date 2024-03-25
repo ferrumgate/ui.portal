@@ -2,14 +2,14 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { click, dispatchFakeEvent, expectContent, findEl, getText, queryByCss, setFieldElementValue, setFieldValue } from '../shared/helper.spec';
+import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
 import { MaterialModule } from '../shared/material-module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -68,7 +68,6 @@ describe('ForgotPassComponent', () => {
     const inputs = form.nativeElement.querySelectorAll('input');
     expect(inputs.length).toBe(1);
 
-
     //work on email field
     const emailId = 'forgotpass-email-input';
     const emailForm = component.form.controls['email'];
@@ -78,7 +77,6 @@ describe('ForgotPassComponent', () => {
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();
-
 
     //email
     expect(component.model.email).toBe('someone');
@@ -99,19 +97,12 @@ describe('ForgotPassComponent', () => {
 
   }));
 
-
-
-
   it('forgotpass form submit', fakeAsync(async () => {
-
 
     const emailId = 'forgotpass-email-input'
 
-
-
     setFieldValue(fixture, emailId, 'test@gmail.com');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
-
 
     fixture.detectChanges();
     tick(1000);
@@ -127,28 +118,18 @@ describe('ForgotPassComponent', () => {
     findEl(fixture, 'forgotpass-form').triggerEventHandler('submit', {});
     expect(authServiceSpy.forgotPassword).toHaveBeenCalled();
 
-
-
   }));
-
 
   /* it('captca service must be called if needed', fakeAsync(async () => {
 
-
     const emailId = 'forgotpass-email-input'
-
-
 
     setFieldValue(fixture, emailId, 'test@gmail.com');
     dispatchFakeEvent(findEl(fixture, emailId).nativeElement, 'blur');
 
-
-
     fixture.detectChanges();
     tick(1000);
     fixture.detectChanges();
-
-
 
     captchaService.setIsEnabled(true);
     const captchaServiceSpy = spyOn(captchaService, 'execute');
@@ -160,9 +141,6 @@ describe('ForgotPassComponent', () => {
     fixture.detectChanges();
     expect(captchaServiceSpy).toHaveBeenCalled();
     expect(authServiceSpy.forgotPassword).toHaveBeenCalled();
-
-
-
 
   })); */
 

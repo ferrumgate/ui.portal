@@ -1,15 +1,13 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver, MediaMatcher } from '@angular/cdk/layout';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
-import { NotificationService } from 'src/app/modules/shared/services/notification.service';
-import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
+import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
+import { NotificationService } from 'src/app/modules/shared/services/notification.service';
+import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { NavMenuItem } from '../../shared/navmenu/navmenuitem';
 
 export interface NavMenuItemExtendedAuthSource extends NavMenuItem {
   authSourcePattern: string;
@@ -24,7 +22,6 @@ export interface NavMenuItemExtendedAuthSource extends NavMenuItem {
 
 })
 export class DefaultLayoutComponent {
-
 
   isMobile = false;
   isThemeDark = false;
@@ -91,7 +88,6 @@ export class DefaultLayoutComponent {
 
   selectedMenus: NavMenuItem[] = [];
 
-
   ngOnInit(): void {
     const authSource = this.authService.currentSession?.currentUser?.source;
     if (authSource) {
@@ -104,6 +100,5 @@ export class DefaultLayoutComponent {
     }
 
   }
-
 
 }

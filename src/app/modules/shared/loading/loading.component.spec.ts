@@ -2,14 +2,10 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { materialize } from 'rxjs';
 import { findEl } from '../helper.spec';
 import { MaterialModule } from '../material-module';
 import { LoadingService } from '../services/loading.service';
-import { SharedModule } from '../shared.module';
-
 import { LoadingComponent } from './loading.component';
-
 
 describe('LoadingComponent', () => {
   let component: LoadingComponent;

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { switchMap, takeWhile } from 'rxjs';
 import { ConfigCaptcha } from 'src/app/modules/shared/models/config';
@@ -9,12 +9,10 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 
-
 interface BaseModel extends ConfigCaptcha {
   isChanged: boolean
 }
 interface Model extends BaseModel {
-
 
   orig: ConfigCaptcha
 }
@@ -27,7 +25,6 @@ interface Model extends BaseModel {
 export class ConfigCaptchaComponent implements OnInit, OnDestroy {
   allSub = new SSubscription();
   helpLink = '';
-
 
   isThemeDark = false;
   private _model: Model = { server: '', client: '', isChanged: false, orig: { server: '', client: '' } };
@@ -45,7 +42,6 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
     this.captchaFormGroup = this.createFormGroup(this._model);
   }
 
-
   //captcha settings
   captchaFormGroup: FormGroup = this.createFormGroup(this.model);
 
@@ -57,14 +53,11 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private notificationService: NotificationService) {
 
-
     this.allSub.addThis =
       this.configService.themeChanged.subscribe(x => {
         this.isThemeDark = x == 'dark';
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
-
-
 
     this.helpLink = this.configService.links.captchaHelp;
 
@@ -128,8 +121,6 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
     //check errors 
     this.captchaError = this.resetCaptchaErrors();
 
-
-
   }
 
   checkIfModelChanged() {
@@ -143,17 +134,12 @@ export class ConfigCaptchaComponent implements OnInit, OnDestroy {
 
   }
 
-
-
-
-
   clear() {
     this.model.server = (this.model as Model).orig.server;
     this.model.client = (this.model as Model).orig.client;
     this.model.isChanged = false;
     this.captchaFormGroup = this.createFormGroup(this.model)
   }
-
 
   saveOrUpdate() {
     this.confirmService.showSave().pipe(

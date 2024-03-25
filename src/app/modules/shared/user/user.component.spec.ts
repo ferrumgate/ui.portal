@@ -1,26 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { checkField, click, dispatchFakeEvent, expectCheckValue, expectText, expectValue, findEl, findEls, getValue, queryByCss, setCheckValue, setFieldValue } from '../helper.spec';
-import { Group } from '../models/group';
-import { Gateway, Network } from '../models/network';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectCheckValue, expectValue, findEl, findEls, getValue, setCheckValue, setFieldValue } from '../helper.spec';
 import { RBACDefault } from '../models/rbac';
 import { User2 } from '../models/user';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
-import { GroupService } from '../services/group.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
-
-
 import { UserComponent } from './user.component';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
 
 describe('UserComponent', () => {
   let component: UserComponent;
@@ -56,7 +49,6 @@ describe('UserComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 
   it('data binding', fakeAsync(async () => {
     expect(component).toBeTruthy();
@@ -94,8 +86,6 @@ describe('UserComponent', () => {
     const testChipId = 'user-label-chip';
     const testOkButtonId = 'user-ok-button';
 
-
-
     expect(component.formGroup.valid).toBeTrue();
     expect(component.formError.name).toBeFalsy();
 
@@ -105,7 +95,6 @@ describe('UserComponent', () => {
     expectCheckValue(fixture, testis2FAId, true);
     expectCheckValue(fixture, testisVerifiedId, true);
     expectCheckValue(fixture, testisLockedId, true);
-
 
     const chips = findEls(fixture, testChipId)
     expect(chips.length).toBe(1);
@@ -117,7 +106,6 @@ describe('UserComponent', () => {
     expect(component.formError.name).toBeTruthy();
     const button = findEl(fixture, testOkButtonId, false);
     expect(button).toBeUndefined;
-
 
     setFieldValue(fixture, testNameId, 'adfasdfa')
     dispatchFakeEvent(findEl(fixture, testNameId).nativeElement, 'blur');
@@ -154,7 +142,6 @@ describe('UserComponent', () => {
     const crt = getValue(fixture, 'user-cert-pem-input')
     expect(crt).toEqual('acrt');
 
-
     setFieldValue(fixture, 'user-resetpass-password-input', 'testDeneme12')
     dispatchFakeEvent(findEl(fixture, 'user-resetpass-password-input').nativeElement, 'blur');
     fixture.detectChanges();
@@ -162,22 +149,12 @@ describe('UserComponent', () => {
     expect(component.resetPassword.password).toBeTruthy();
     expect(component.resetPassword.passwordAgain).toBeFalsy();
 
-
-
     setFieldValue(fixture, 'user-resetpass-password-again-input', 'testDeneme12')
     dispatchFakeEvent(findEl(fixture, 'user-resetpass-password-again-input').nativeElement, 'blur');
     fixture.detectChanges();
     expect(component.resetPasswordForm.valid).toBeTrue();
     expect(component.resetPassword.password).toBeTruthy();
     expect(component.resetPassword.passwordAgain).toBeTruthy();
-
-
-
-
-
-
-
-
 
   }));
 });

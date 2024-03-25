@@ -1,24 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-
-import { Configure } from '../models/configure';
-import { Network } from '../models/network';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { of, switchMap } from 'rxjs';
+import { SSLCertificate, SSLCertificateEx } from '../models/sslCertificate';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { saveAs } from 'file-saver';
-import { SSLCertificate, SSLCertificateEx } from '../models/sslCertificate';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class PKIService extends BaseService {
-
 
   private _pkiUrl = this.configService.getApiUrl() + '/pki';
   private _pkiIntermediateUrl = this.configService.getApiUrl() + '/pki/intermediate';
@@ -30,8 +21,6 @@ export class PKIService extends BaseService {
     super('pki', captchaService)
 
   }
-
-
 
   getIntermediateList() {
     const searchParams = new URLSearchParams();
@@ -55,8 +44,6 @@ export class PKIService extends BaseService {
     )
   }
 
-
-
   saveOrupdateIntermediateCert(item: SSLCertificateEx) {
     const cert: SSLCertificateEx = {
       id: item.id, insertDate: item.insertDate, isEnabled: item.isEnabled, labels: item.labels, name: item.name,
@@ -71,7 +58,6 @@ export class PKIService extends BaseService {
       }))
 
   }
-
 
   deleteIntermediateCert(item: SSLCertificateEx) {
 
@@ -114,7 +100,6 @@ export class PKIService extends BaseService {
     link.download = `${item.name}.pem`;
     link.click();
   }
-
 
   getWebCert() {
     const searchParams = new URLSearchParams();
@@ -166,7 +151,6 @@ export class PKIService extends BaseService {
 
       }))
 
-
   }
   refreshWebCertLetsEncryt(item: SSLCertificate) {
 
@@ -176,8 +160,6 @@ export class PKIService extends BaseService {
 
       }))
 
-
   }
-
 
 }

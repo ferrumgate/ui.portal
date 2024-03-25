@@ -2,8 +2,8 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { TranslateModule } from '@ngx-translate/core';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from '../helper.spec';
 import { Gateway, Network } from '../models/network';
 import { CaptchaService } from '../services/captcha.service';
@@ -11,7 +11,6 @@ import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
-
 import { NetworkComponent } from './network.component';
 
 describe('NetworkComponent', () => {
@@ -68,7 +67,6 @@ describe('NetworkComponent', () => {
     component.network = network1;
     component.network.gatewaysCount = 1;
 
-
     tick(1000);
     fixture.detectChanges();
 
@@ -106,7 +104,6 @@ describe('NetworkComponent', () => {
     const button3 = findEl(fixture, 'network-ok-button', false);
     expect(button3).toBeFalsy();
 
-
     // set ssh 
     setFieldValue(fixture, 'network-sshhost-input', 'localhost:1234');
     dispatchFakeEvent(findEl(fixture, 'network-sshhost-input').nativeElement, 'blur');
@@ -123,9 +120,6 @@ describe('NetworkComponent', () => {
     tick(1000);
     expect(component.formGroup.invalid).toBe(true);
 
-
-
-
   }));
 
   it('form is invalid', fakeAsync(async () => {
@@ -140,12 +134,10 @@ describe('NetworkComponent', () => {
     component.network = network1;
     component.network.gatewaysCount = 1;
 
-
     tick(1000);
     fixture.detectChanges();
 
     expect(component.formGroup.valid).toBe(false);
   }))
-
 
 });

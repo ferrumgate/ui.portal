@@ -1,19 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Configure } from '../models/configure';
-import { Group } from '../models/group';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { Service } from '../models/service';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
 import { UtilService } from './util.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +20,6 @@ export class ServiceService extends BaseService {
     super('service', captchaService)
 
   }
-
-
 
   saveOrupdate(service: Service) {
     const srv: Service = {
@@ -54,7 +44,6 @@ export class ServiceService extends BaseService {
   }
 
   delete(service: Service) {
-
 
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
@@ -93,7 +82,5 @@ export class ServiceService extends BaseService {
       })
     )
   }
-
-
 
 }

@@ -1,23 +1,15 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ThisReceiver } from '@angular/compiler';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
-import { delay, map, shareReplay, switchMap } from 'rxjs/operators';
-import { RunHelpers } from 'rxjs/testing';
-import { Login, Login2FA } from 'src/app/modules/shared/models/login';
+import { Login2FA } from 'src/app/modules/shared/models/login';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
-import { InputService } from 'src/app/modules/shared/services/input.service';
-import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { RBACDefault } from '../shared/models/rbac';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
-
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-confirm2fa',
@@ -61,7 +53,6 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
 
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
     this.route.queryParams.subscribe(params => {
       this.model2fa.key = params.key;
     })
@@ -96,7 +87,6 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
   ngAfterViewInit(): void {
 
   }
-
 
   ///// 2fa
   createFormGroup(model: Login2FA) {
@@ -139,8 +129,6 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
         this.error2fa.token = 'TokenInvalid';
     }
 
-
-
   }
   submit2FA() {
 
@@ -151,7 +139,6 @@ export class Confirm2FAComponent implements OnInit, OnDestroy {
     }
 
     this.authService.confirm2FA(this.model2fa.key || '', this.model2fa.token || '').subscribe();
-
 
   }
 

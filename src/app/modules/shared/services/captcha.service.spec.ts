@@ -1,11 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { fakeAsync, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { defer, of } from 'rxjs';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { RECAPTCHA_V3_SITE_KEY, ReCaptchaV3Service, RecaptchaV3Module } from 'ng-recaptcha';
+import { of } from 'rxjs';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
 import { LoggerService } from './logger.service';
@@ -37,8 +35,6 @@ describe('CaptchaService', () => {
 
     service = TestBed.inject(CaptchaService);
     service.setIsEnabled(false);
-
-
 
   });
 

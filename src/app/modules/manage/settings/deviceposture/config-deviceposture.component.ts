@@ -1,8 +1,6 @@
-import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
-import { AuthLocal, AuthSettings, BaseLdap, BaseOAuth, BaseSaml } from 'src/app/modules/shared/models/auth';
 import { DevicePosture, OSType } from 'src/app/modules/shared/models/device';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
@@ -11,9 +9,6 @@ import { DeviceService } from 'src/app/modules/shared/services/device.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { UtilService } from 'src/app/modules/shared/services/util.service';
-
-
-
 
 @Component({
   selector: 'app-config-deviceposture',
@@ -51,8 +46,6 @@ export class ConfigDevicePostureComponent implements OnInit {
         this.search();
       })
 
-
-
   }
   ngOnInit(): void {
     //test data
@@ -73,9 +66,7 @@ export class ConfigDevicePostureComponent implements OnInit {
 
     this.allSubs.unsubscribe();
 
-
   }
-
 
   getAllData() {
 
@@ -89,7 +80,6 @@ export class ConfigDevicePostureComponent implements OnInit {
     )
 
   }
-
 
   search() {
     let search = this.searchKey.length > 1 ? this.searchKey : '';

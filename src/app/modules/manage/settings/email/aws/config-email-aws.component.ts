@@ -8,18 +8,11 @@ import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { ThemeSelectorComponent } from 'src/app/modules/shared/themeselector/themeselector.component';
-
 
 interface Model extends ConfigEmail {
   isChanged: boolean
   orig: ConfigEmail
 }
-
-
-
-
-
 
 @Component({
   selector: 'app-config-email-aws',
@@ -29,7 +22,6 @@ interface Model extends ConfigEmail {
 export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
 
   allSub = new SSubscription();
-
 
   isThemeDark = false;
   private _model: Model = {
@@ -63,11 +55,7 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
   @Output()
   public checkEmail: EventEmitter<ConfigEmail> = new EventEmitter();
 
-
-
-
   formGroup: FormGroup = this.createFormGroup(this.model);
-
 
   error: { user: string, pass: string, accessKey: string, secretKey: string, region: string } = { user: '', pass: '', accessKey: '', secretKey: '', region: '' };
 
@@ -83,7 +71,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
       })
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
-
   }
   ngOnInit(): void {
 
@@ -91,7 +78,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.allSub.unsubscribe();
   }
-
 
   ngAfterViewInit(): void {
 
@@ -104,7 +90,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
         region: new FormControl(model.region, [Validators.required]),
         accessKey: new FormControl(model.accessKey, [Validators.required]),
         secretKey: new FormControl(model.secretKey, [Validators.required]),
-
 
       });
     let keys = Object.keys(fmg.controls)
@@ -142,7 +127,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
     //check errors 
     this.error = this.resetFormErrors();
 
-
     const userError = this.formGroup.controls['user'].errors;
 
     if (userError) {
@@ -179,7 +163,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
         this.error.secretKey = 'SecretKeyRequired';
     }
 
-
   }
 
   checkIfModelChanged() {
@@ -201,11 +184,6 @@ export class ConfigEmailAWSComponent implements OnInit, OnDestroy {
       model.isChanged = true;
 
   }
-
-
-
-
-
 
   clear() {
     const orig = this.model.orig;

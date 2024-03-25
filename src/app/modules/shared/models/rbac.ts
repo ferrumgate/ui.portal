@@ -12,7 +12,6 @@ export interface Right {
     id: string;
     name: string;
 
-
 }
 export class RBACDefault {
 
@@ -25,8 +24,6 @@ export class RBACDefault {
     static rightReporter: Right = { id: 'Reporter', name: 'Reporter' };
     static rightUser: Right = { id: 'User', name: 'User' };
     static rightDevOps: Right = { id: 'DevOps', name: 'DevOps', };
-
-
 
     // new rights here
     static rightIds: string[] = [];

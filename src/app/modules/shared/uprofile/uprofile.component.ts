@@ -1,19 +1,12 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Group } from '../models/group';
-import { ConfigService } from '../services/config.service';
-import { SSubscription } from '../services/SSubscribtion';
-import { TranslationService } from '../services/translation.service';
-import { UtilService } from '../services/util.service';
-import { map, switchMap, takeWhile } from 'rxjs';
-import { NotificationService } from '../services/notification.service';
-import { ConfirmService } from '../services/confirm.service';
-import { UserService } from '../services/user.service';
+import { FormControl, FormGroup } from '@angular/forms';
 import { UserProfile } from '../models/userProfile';
-
+import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
+import { ConfirmService } from '../services/confirm.service';
+import { NotificationService } from '../services/notification.service';
+import { TranslationService } from '../services/translation.service';
+import { UserService } from '../services/user.service';
 
 export interface Model extends UserProfile {
   isChanged: boolean;
@@ -28,13 +21,11 @@ export interface Model extends UserProfile {
 })
 export class UProfileComponent implements OnInit, OnDestroy {
 
-
   @Output()
   saveUserProfile: EventEmitter<UserProfile> = new EventEmitter();
   private allSubs = new SSubscription();
 
   isThemeDark = false;
-
 
   help = {
 
@@ -54,12 +45,9 @@ export class UProfileComponent implements OnInit, OnDestroy {
 
     }
 
-
     this.formGroup = this.createFormGroup(this._model);
 
   }
-
-
 
   constructor(
     private translateService: TranslationService,
@@ -81,11 +69,8 @@ export class UProfileComponent implements OnInit, OnDestroy {
         this.isThemeDark = x == 'dark';
       })
 
-
   }
   ngOnInit(): void {
-
-
 
   }
   ngAfterViewInit() {
@@ -98,7 +83,6 @@ export class UProfileComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup;
   error = { browserTimeout: '' };
-
 
   createFormGroup(model: any) {
     const fmg = new FormGroup(
@@ -151,7 +135,6 @@ export class UProfileComponent implements OnInit, OnDestroy {
         this.error.browserTimeout = 'BrowserTimeoutRequired';
     }
 
-
   }
 
   checkIfModelChanged() {
@@ -163,7 +146,6 @@ export class UProfileComponent implements OnInit, OnDestroy {
 
   }
 
-
   clear() {
 
     this.model = {
@@ -173,20 +155,15 @@ export class UProfileComponent implements OnInit, OnDestroy {
     this.formGroup.markAsUntouched();
   }
 
-
-
-
   createBaseModel(): UserProfile {
     return {
       browserTimeout: this.model.browserTimeout
     }
   }
 
-
   saveOrUpdate() {
 
     this.saveUserProfile.emit(this.createBaseModel());
   }
-
 
 }

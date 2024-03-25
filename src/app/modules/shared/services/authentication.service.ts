@@ -1,19 +1,14 @@
-import { HttpClient, HttpHeaders, HttpParams, JsonpInterceptor } from '@angular/common/http';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
-
-import { catchError, from, map, mergeMap, Observable, of, Subscriber, switchMap, take, throwError, timer } from 'rxjs';
+import { Observable, catchError, from, map, of, switchMap, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { RBACDefault } from '../models/rbac';
 import { User } from '../models/user';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-import { UserService } from './user.service';
-
 
 export interface Session {
   accessToken: string;
@@ -34,7 +29,6 @@ export class AuthenticationService extends BaseService {
   static StorageTunnelSessionKey = 'ferrumgate_tunnel_session_key';
   static StorageExchangeSessionKey = 'ferrumgate_exchange_session_key';
 
-
   private _auth = this.configService.getApiUrl() + '/auth';
   private _authRegister = this.configService.getApiUrl() + '/register'
   private _authRegisterInvite = this.configService.getApiUrl() + '/register/invite'
@@ -51,7 +45,6 @@ export class AuthenticationService extends BaseService {
   private _authOAuthLinkedinCallback = this.configService.getApiUrl() + '/auth/oauth/linkedin/callback'
   private _authSamlAuth0 = this.configService.getApiUrl() + '/auth/saml/auth0'
   private _authSamlAzureAD = this.configService.getApiUrl() + '/auth/saml/azure'
-
 
   protected _currentSession: Session | null = null;
   protected refreshTokenTimer: any | null = null;
@@ -88,7 +81,6 @@ export class AuthenticationService extends BaseService {
 
     this.initIdleWatching();
 
-
   }
   configureIdle(time: number) {
     if (this.idle.isRunning()) {
@@ -115,7 +107,6 @@ export class AuthenticationService extends BaseService {
     this.configureIdle(15);//15 minutes
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-
     this.idle.onTimeout.subscribe(() => {
       if (this.currentSession) {
         this.logout(true, true);
@@ -126,11 +117,9 @@ export class AuthenticationService extends BaseService {
     //the ping interval to 15 seconds
     this.keepalive.interval(15);
 
-
     this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
 
   }
-
 
   getSavedSession() {
     const session = sessionStorage.getItem(AuthenticationService.StorageSessionKey)
@@ -151,10 +140,6 @@ export class AuthenticationService extends BaseService {
   get currentSession() {
     return this._currentSession;
   }
-
-
-
-
 
   checkSessionIsValid() {
     try {
@@ -198,7 +183,6 @@ export class AuthenticationService extends BaseService {
         }
         if (exchangeSessionKey)
           this._currentSession.createdWith.push('exchangeKey');
-
 
         //this.saveSession();
         sessionStorage.removeItem(AuthenticationService.StorageTunnelSessionKey);
@@ -249,7 +233,6 @@ export class AuthenticationService extends BaseService {
       switchMap(y => this.httpService.post<{ result: boolean }>(this._authRegisterInvite, y, this.jsonHeader))
     );
   }
-
 
   logout(navigate = true, reload = false) {
     debugger;
@@ -375,9 +358,7 @@ export class AuthenticationService extends BaseService {
     */
     return from(this.router.navigate(['/screenswitch']));
 
-
   }
-
 
   loginCallback(callback: { url: string; params: any; }) {
     return this.preExecute({} as any).pipe(
@@ -416,7 +397,6 @@ export class AuthenticationService extends BaseService {
 
         } */
 
-
         if (y.captcha)
           callback.params.captcha = y.captcha;
         if (y.action)
@@ -428,8 +408,6 @@ export class AuthenticationService extends BaseService {
         }
       })
     )
-
-
 
   }
 
@@ -454,7 +432,6 @@ export class AuthenticationService extends BaseService {
 
   }
 
-
   /**
    * @summary get tunnel session key, after that remove it from storage
    * @returns 
@@ -476,7 +453,6 @@ export class AuthenticationService extends BaseService {
 
   }
 
-
   getOpenIdAuthenticateUrl(auth: { authName: string }) {
     return this.configService.getApiUrl() + '/auth/openid/' + auth.authName;
   }
@@ -487,12 +463,5 @@ export class AuthenticationService extends BaseService {
   getSamlAuthenticateUrl(auth: { authName: string }) {
     return this.configService.getApiUrl() + '/auth/saml/' + auth.authName;
   }
-
-
-
-
-
-
-
 
 }

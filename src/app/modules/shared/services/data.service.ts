@@ -1,20 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Configure } from '../models/configure';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { Country } from '../models/country';
-import { Group } from '../models/group';
 import { TimeZone } from '../models/timezone';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +21,6 @@ export class DataService extends BaseService {
     super('data', captchaService)
 
   }
-
-
-
-
 
   getCountry() {
     const urlParams = new URLSearchParams();
@@ -56,6 +43,5 @@ export class DataService extends BaseService {
 
       }))
   }
-
 
 }

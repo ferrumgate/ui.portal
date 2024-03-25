@@ -27,7 +27,6 @@ export class ScreenSwitchComponent implements OnInit {
     private notificationService: NotificationService,
     private captchaService: CaptchaService) {
 
-
     this.configService.themeChanged.subscribe(x => {
       this.isThemeDark = x == 'dark';
     })
@@ -53,6 +52,5 @@ export class ScreenSwitchComponent implements OnInit {
           this.router.navigate(['/user/dashboard'])
         }
   }
-
 
 }

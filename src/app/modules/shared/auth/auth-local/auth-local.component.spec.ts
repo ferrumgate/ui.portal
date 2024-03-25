@@ -4,13 +4,12 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecaptchaV3Module } from 'ng-recaptcha';
-import { dispatchFakeEvent, expectCheckValue, findEl, getCheckValue, setCheckValue } from '../../helper.spec';
+import { expectCheckValue } from '../../helper.spec';
 import { AuthLocal } from '../../models/auth';
 import { ConfigService } from '../../services/config.service';
 import { NotificationService } from '../../services/notification.service';
 import { TranslationService } from '../../services/translation.service';
 import { SharedModule } from '../../shared.module';
-
 import { AuthLocalComponent } from './auth-local.component';
 
 describe('AuthLocalComponent', () => {

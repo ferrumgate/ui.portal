@@ -1,21 +1,11 @@
-import { A } from '@angular/cdk/keycodes';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { UrlHandlingStrategy } from '@angular/router';
-import { catchError, map, mergeMap, of, switchMap, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { switchMap } from 'rxjs';
 import { AuthenticationPolicy, AuthenticationRule } from '../models/authnPolicy';
 import { cloneAuthenticationProfile } from '../models/authnProfile';
-import { Configure } from '../models/configure';
-import { Group } from '../models/group';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { UtilService } from './util.service';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +21,6 @@ export class PolicyAuthnService extends BaseService {
     super('policyAuthn', captchaService)
 
   }
-
 
   get() {
     const urlParams = new URLSearchParams();
@@ -67,7 +56,6 @@ export class PolicyAuthnService extends BaseService {
 
     }
 
-
     return this.preExecute(rule).pipe(
       switchMap(y => {
         if (rule.id)
@@ -77,7 +65,6 @@ export class PolicyAuthnService extends BaseService {
   }
 
   deleteRule(arule: AuthenticationRule) {
-
 
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
@@ -99,7 +86,5 @@ export class PolicyAuthnService extends BaseService {
         return this.httpService.put<AuthenticationRule>(url, y, this.jsonHeader)
       }))
   }
-
-
 
 }

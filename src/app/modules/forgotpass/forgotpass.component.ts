@@ -1,9 +1,7 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { map, Observable, of, switchMap } from 'rxjs';
 import { ForgotPass } from 'src/app/modules/shared/models/forgotpass';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
@@ -11,8 +9,8 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-forgotpass',
@@ -25,10 +23,6 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
   device: any;
   model: ForgotPass = {};
   isForgotPassSended = false;
-
-
-
-
 
   error: { email: string, send: string };
   form: FormGroup = this.createFormGroup(this.model);
@@ -56,9 +50,7 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
         this.brand = this.configService.brand;
       })
 
-
   }
-
 
   ngOnInit(): void {
 
@@ -107,7 +99,6 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
       this.error = this.resetErrrors();
     })
 
-
   }
   checkFormError() {
     //check errors 
@@ -119,7 +110,6 @@ export class ForgotPassComponent implements OnInit, OnDestroy {
         this.error.email = 'EmailRequired';
       else
         this.error.email = 'EmailInvalid';
-
 
     }
 

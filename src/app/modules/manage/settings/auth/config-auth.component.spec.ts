@@ -10,7 +10,6 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
 import { ConfigAuthComponent } from './config-auth.component';
 
 describe('ConfigAuthComponent', () => {

@@ -1,23 +1,12 @@
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MatChipInputEvent, } from '@angular/material/chips';
-import { MatSelect } from '@angular/material/select';
-import { MatTabGroup } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { type } from 'os';
-import { debounceTime, distinctUntilChanged, filter, map, Observable, of, ReplaySubject, Subject, take, takeUntil } from 'rxjs';
-import validator from 'validator';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Subject, debounceTime, distinctUntilChanged, of } from 'rxjs';
 import { TimeProfile } from '../../../models/authnProfile';
 import { TimeZone } from '../../../models/timezone';
-import { ConfigService } from '../../../services/config.service';
 import { SSubscription } from '../../../services/SSubscribtion';
+import { ConfigService } from '../../../services/config.service';
 import { TranslationService } from '../../../services/translation.service';
-import { UtilService } from '../../../services/util.service';
-
-
-
-
 
 export interface TimeProfileExtended extends TimeProfile {
 
@@ -43,8 +32,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
       timezone: '', days: [1, 2, 3, 4, 5], daysCount: 5, timezoneEx: '', startTimeStr: '09:00', endTimeStr: '17:00'
 
     };
-
-
 
   formGroup: FormGroup = this.createFormGroup(this.model);
   formError: { timezone: string, startTime: string, endTime: string, days: string, startTimeLower: string } = { timezone: '', startTime: '', endTime: '', days: '', startTimeLower: '' }
@@ -77,12 +64,9 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
         this.searchTimeZone();
       })
 
-
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
   }
-
-
 
   _timezoneList: TimeZone[] = [];
   @Input()
@@ -96,7 +80,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
   }
   filteredTimeZones: Observable<TimeZone[]> = of();
 
-
   ngOnInit(): void {
     this.prepareAutoCompleteTimeZone();
   }
@@ -107,7 +90,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
     this.allSub.unsubscribe();
   }
-
 
   createFormGroup(zone: TimeProfileExtended) {
     const fmg = new FormGroup({
@@ -169,10 +151,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
   }
 
-
-
-
-
   checkFormError() {
     //check errors 
     let error = this.createFormError();
@@ -204,7 +182,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
         error.endTime = 'EndTimeInvalid';
     }
 
-
     const daysError = this.formGroup.controls.daysCount.errors;
     if (daysError) {
       if (daysError['required'])
@@ -212,7 +189,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
       else
         error.days = 'DaysRequired';
     }
-
 
     this.formError = error;
 
@@ -225,7 +201,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
     this.filteredTimeZones = of(this._timezoneList);
   }
-
 
   /// timezone 
   timezoneChanged(event: any) {
@@ -244,7 +219,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
     }
   }
-
 
   selectedTimeZoneChanged(data: any) {
     if (typeof (data) == 'string')
@@ -266,7 +240,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
     if (typeof (tz) == 'string') return tz;
     return tz?.nameEx || '';
   }
-
 
   startTimeChanged(data: any) {
     this.formGroup.controls.startTime.setValue(data);
@@ -307,7 +280,6 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
   addTimeProfile() {
     this.checkFormError();
 
-
     if (this.formGroup.invalid)
       return;
     //invalid data
@@ -318,11 +290,5 @@ export class PolicyAuthnRuleTimeAddComponent implements OnInit, OnDestroy {
 
     this.add.emit(this.model);
   }
-
-
-
-
-
-
 
 }

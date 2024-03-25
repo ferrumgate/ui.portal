@@ -3,18 +3,15 @@ import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { dispatchFakeEvent, expectCheckValue, expectValue, findEl, findEls, setFieldValue } from 'src/app/modules/shared/helper.spec';
-import { IpIntelligenceList } from 'src/app/modules/shared/models/ipIntelligence';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectValue, findEl, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-
-
 import { ConfigPKIIntermediateCertComponent } from './config-pki-intermediate-cert.component';
-import { SSLCertificateEx } from 'src/app/modules/shared/models/sslCertificate';
 
 describe('ConfigPKIIntermediateCertComponent', () => {
   let component: ConfigPKIIntermediateCertComponent;
@@ -60,7 +57,6 @@ describe('ConfigPKIIntermediateCertComponent', () => {
     }
     component.cert = item1;
 
-
     tick(1000);
     fixture.detectChanges();
 
@@ -86,9 +82,7 @@ describe('ConfigPKIIntermediateCertComponent', () => {
     const deleteButton = findEl(fixture, 'cert-delete-button', false);
     expect(deleteButton).toBeFalsy();
 
-
   }));
-
 
   it('data binding isSytem=false', fakeAsync(async () => {
     expect(component).toBeTruthy();
@@ -100,7 +94,6 @@ describe('ConfigPKIIntermediateCertComponent', () => {
 
     }
     component.cert = item1;
-
 
     tick(1000);
     fixture.detectChanges();
@@ -132,13 +125,8 @@ describe('ConfigPKIIntermediateCertComponent', () => {
     const deleteButton = findEl(fixture, 'cert-delete-button', false);
     expect(deleteButton).toBeTruthy();
 
-
     const cancelButton2 = findEl(fixture, 'cert-close-button', false);
     expect(cancelButton2).toBeTruthy();
-
-
-
-
 
   }));
 });

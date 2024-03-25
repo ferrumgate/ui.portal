@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { of } from 'rxjs';
 import { dispatchFakeEvent, findEl, queryByCss, setFieldValue } from '../shared/helper.spec';
 import { AuthenticationService } from '../shared/services/authentication.service';
@@ -154,7 +154,6 @@ describe('ConfigureComponent', () => {
     fixture.detectChanges();
     expect(component.userError.passwordAgain).toBe('');
 
-
     //set passwords different valid 
     setFieldValue(fixture, 'configure-password-again-input', '8CharacterPassword1Upper1lowerButDifferent');
     dispatchFakeEvent(findEl(fixture, 'configure-password-again-input').nativeElement, 'blur');
@@ -163,13 +162,9 @@ describe('ConfigureComponent', () => {
     fixture.detectChanges();
     expect(component.userError.passwordAgain).toBe('PasswordsMismatch');
 
-
-
     flush();
 
-
   }));
-
 
   it('default common input', fakeAsync(async () => {
     expect(component).toBeTruthy();
@@ -196,9 +191,6 @@ describe('ConfigureComponent', () => {
     fixture.detectChanges();
     expect(component.commonError.domain).toBe('DomainInvalid');
 
-
-
-
     //set url to empty
     /*     setFieldValue(fixture, 'configure-url-input', '');
     
@@ -216,9 +208,7 @@ describe('ConfigureComponent', () => {
         fixture.detectChanges();
         expect(component.commonError.url).toBe('UrlInvalid'); */
 
-
     flush();
-
 
   }));
 
@@ -247,9 +237,6 @@ describe('ConfigureComponent', () => {
         fixture.detectChanges();
         expect(component.networkError.clientNetwork).toBe('ClientNetworkInvalid'); */
 
-
-
-
     //set servicenetwork to empty
     /*  setFieldValue(fixture, 'configure-servicenetwork-input', '');
  
@@ -267,7 +254,6 @@ describe('ConfigureComponent', () => {
         fixture.detectChanges();
         expect(component.networkError.serviceNetwork).toBe('ServiceNetworkInvalid'); */
 
-
     //set sshost not valid
     /*     setFieldValue(fixture, 'configure-sshhost-input', '10.2');
         dispatchFakeEvent(findEl(fixture, 'configure-sshhost-input').nativeElement, 'blur');
@@ -278,7 +264,6 @@ describe('ConfigureComponent', () => {
     flush();
 
   }));
-
 
   it('checkAllError', fakeAsync(async () => {
     //expect(component).toBeTruthy();
@@ -321,6 +306,5 @@ describe('ConfigureComponent', () => {
     fixture.detectChanges();
     flush();
   }));
-
 
 });

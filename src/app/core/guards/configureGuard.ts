@@ -1,10 +1,9 @@
-import { Injectable, Injector } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { RBACDefault } from 'src/app/modules/shared/models/rbac';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { AuthenticationService } from '../../modules/shared/services/authentication.service';
 import { LoggerService } from '../../modules/shared/services/logger.service';
-
 
 // for /configure page
 // only admin user if not allready configured

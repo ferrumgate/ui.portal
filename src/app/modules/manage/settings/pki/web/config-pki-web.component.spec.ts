@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { dispatchFakeEvent, expectText, expectValue, findEl, setFieldElementValue, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
+import { dispatchFakeEvent, expectValue, findEl, setFieldValue } from 'src/app/modules/shared/helper.spec';
+import { SSLCertificate } from 'src/app/modules/shared/models/sslCertificate';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfigureService } from 'src/app/modules/shared/services/configure.service';
@@ -15,10 +15,6 @@ import { NotificationService } from 'src/app/modules/shared/services/notificatio
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { ConfigPKIWebComponent } from './config-pki-web.component';
-import { SSLCertificate } from 'src/app/modules/shared/models/sslCertificate';
-
-
-
 
 describe('ConfigPKIWebComponent', () => {
   let component: ConfigPKIWebComponent;
@@ -81,7 +77,6 @@ describe('ConfigPKIWebComponent', () => {
     expect(component.formGroup.valid).toBeTrue();
     expect(component.formError.name).toBeFalsy();
 
-
     expectValue(fixture, 'cert-name-input', item1.name);
     expectValue(fixture, 'cert-updatedate-input', '2001-01-01 00:00:00');
     expectValue(fixture, 'cert-pem-input', 'public crt');
@@ -103,8 +98,6 @@ describe('ConfigPKIWebComponent', () => {
 
     const deleteButton = findEl(fixture, 'cert-delete-button', false);
     expect(deleteButton).toBeTruthy();
-
-
 
   }));
 });

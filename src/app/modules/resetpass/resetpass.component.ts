@@ -1,21 +1,16 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
-import { RunHelpers } from 'rxjs/testing';
+import { ActivatedRoute } from '@angular/router';
 import { ResetPass } from 'src/app/modules/shared/models/resetpass';
-import { Login, Login2FA } from 'src/app/modules/shared/models/login';
 import { AuthenticationService } from 'src/app/modules/shared/services/authentication.service';
 import { CaptchaService } from 'src/app/modules/shared/services/captcha.service';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { InputService } from 'src/app/modules/shared/services/input.service';
-import { LoggerService } from 'src/app/modules/shared/services/logger.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
-import { SSubscription } from '../shared/services/SSubscribtion';
 import { ConfigBrand } from '../shared/models/config';
+import { SSubscription } from '../shared/services/SSubscribtion';
 
 @Component({
   selector: 'app-resetpass',
@@ -33,9 +28,7 @@ export class ResetPassComponent implements OnInit, OnDestroy {
   key: string = '';
   form: FormGroup = this.createFormGroup(this.model);
 
-
   error: { password: string, passwordAgain: string, save: string };
-
 
   @Output() submitEM = new EventEmitter();
 
@@ -69,9 +62,7 @@ export class ResetPassComponent implements OnInit, OnDestroy {
 
   }
 
-
   ngOnInit(): void {
-
 
   }
   ngOnDestroy(): void {
@@ -123,7 +114,6 @@ export class ResetPassComponent implements OnInit, OnDestroy {
         this.error = this.resetErrrors();
       })
 
-
   }
   checkFormError() {
     //check errors 
@@ -166,6 +156,5 @@ export class ResetPassComponent implements OnInit, OnDestroy {
 
     this.checkFormError();
   }
-
 
 }

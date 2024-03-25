@@ -7,7 +7,6 @@ import { AuthenticationService } from 'src/app/modules/shared/services/authentic
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
 import { SharedModule } from '../shared.module';
-
 import { ThemeSelectorComponent } from './themeselector.component';
 
 describe('ThemeSelectorComponent', () => {

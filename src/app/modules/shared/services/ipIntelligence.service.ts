@@ -1,24 +1,16 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, EventEmitter } from '@angular/core';
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
-
-import { Configure } from '../models/configure';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { of, switchMap } from 'rxjs';
 import { IpIntelligenceList, IpIntelligenceListStatus, IpIntelligenceSource } from '../models/ipIntelligence';
-import { Network } from '../models/network';
 import { BaseService } from './base.service';
 import { CaptchaService } from './captcha.service';
 import { ConfigService } from './config.service';
-
-import { TranslationService } from './translation.service';
-import { saveAs } from 'file-saver';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class IpIntelligenceService extends BaseService {
-
 
   private _ipIntelligenceUrl = this.configService.getApiUrl() + '/ip/intelligence';
   private _ipIntelligenceUrlSource = this.configService.getApiUrl() + '/ip/intelligence/source';
@@ -30,8 +22,6 @@ export class IpIntelligenceService extends BaseService {
     super('ipIntelligence', captchaService)
 
   }
-
-
 
   getSource() {
     const searchParams = new URLSearchParams();
@@ -51,13 +41,11 @@ export class IpIntelligenceService extends BaseService {
       insertDate: new Date().toISOString(), updateDate: new Date().toISOString()
     };
 
-
     return this.preExecute(source).pipe(
       switchMap(y => {
         return this.httpService.post<{ isError: boolean, errorMessage: '' }>(this._ipIntelligenceUrlSourceCheck, y, this.jsonHeader)
       }))
   }
-
 
   saveOrupdateSource(item: IpIntelligenceSource) {
     const source: IpIntelligenceSource = {
@@ -86,9 +74,6 @@ export class IpIntelligenceService extends BaseService {
       }))
   }
 
-
-
-
   getList(search: string) {
     const searchParams = new URLSearchParams();
     if (search)
@@ -101,8 +86,6 @@ export class IpIntelligenceService extends BaseService {
       })
     )
   }
-
-
 
   saveOrupdateList(item: IpIntelligenceList) {
     const list: IpIntelligenceList = {
@@ -144,7 +127,6 @@ export class IpIntelligenceService extends BaseService {
       }))
   }
 
-
   downloadList(item: IpIntelligenceList) {
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
@@ -161,7 +143,6 @@ export class IpIntelligenceService extends BaseService {
         saveAs(data, filename);
 
         // var downloadURL = window.URL.createObjectURL(data);
-
 
         // window.open(this.downloadUrl(item) + '/' + data.key, '_self');
         return of({});

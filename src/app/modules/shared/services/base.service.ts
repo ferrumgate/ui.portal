@@ -1,9 +1,6 @@
 import { HttpHeaders } from "@angular/common/http";
-import { Injectable } from "@angular/core";
 import { map } from "rxjs";
-
 import { CaptchaService } from "./captcha.service";
-
 
 export class BaseService {
 
@@ -11,7 +8,6 @@ export class BaseService {
      *
      */
     constructor(protected action: string, private _captchaService: CaptchaService) {
-
 
     }
     protected jsonHeader = {

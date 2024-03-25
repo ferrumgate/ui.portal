@@ -1,17 +1,15 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Group } from '../models/group';
-import { ConfigService } from '../services/config.service';
 import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
+import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
-import { NotificationService } from '../services/notification.service';
-import { Clipboard } from '@angular/cdk/clipboard';
-
-
 
 export interface GroupExtended extends Group {
   orig: Group;
@@ -38,7 +36,6 @@ export class GroupComponent implements OnInit, OnDestroy {
       }
     };
 
-
   get group(): GroupExtended {
     return this._model;
   }
@@ -57,7 +54,6 @@ export class GroupComponent implements OnInit, OnDestroy {
     this.formGroup = this.createFormGroup(this._model);
   }
 
-
   @Output()
   saveGroup: EventEmitter<Group> = new EventEmitter();
   @Output()
@@ -66,10 +62,8 @@ export class GroupComponent implements OnInit, OnDestroy {
   @Output()
   openGroupUsers: EventEmitter<Group> = new EventEmitter();
 
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: { name: string } = { name: '' }
-
 
   isThemeDark = false;
   constructor(
@@ -108,15 +102,11 @@ export class GroupComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.group.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(group: Group) {
     const fmg = new FormGroup({
       name: new FormControl(group.name, [Validators.required]),
-
 
     });
 
@@ -164,7 +154,6 @@ export class GroupComponent implements OnInit, OnDestroy {
 
   }
 
-
   checkIfModelChanged() {
     this.group.isChanged = false;
     const original = this._model.orig as Group;
@@ -176,7 +165,6 @@ export class GroupComponent implements OnInit, OnDestroy {
 
     if (original.isEnabled != this.group.isEnabled)
       this.group.isChanged = true;
-
 
   }
 
@@ -192,8 +180,6 @@ export class GroupComponent implements OnInit, OnDestroy {
       else
         error.name = 'NameRequired';
     }
-
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -217,13 +203,10 @@ export class GroupComponent implements OnInit, OnDestroy {
     }
   }
 
-
   saveOrUpdate() {
 
     this.saveGroup.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteGroup.emit(this.createBaseModel());
@@ -239,9 +222,5 @@ export class GroupComponent implements OnInit, OnDestroy {
       this.notificationService.success(this.translateService.translate('Copied'));
     }
   }
-
-
-
-
 
 }

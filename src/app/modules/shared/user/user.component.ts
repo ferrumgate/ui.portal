@@ -1,20 +1,20 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, map, of } from 'rxjs';
 import { Group } from '../models/group';
 import { Role } from '../models/rbac';
+import { SSLCertificateBase, SSLCertificateEx } from '../models/sslCertificate';
 import { User2 } from '../models/user';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { ConfigService } from '../services/config.service';
 import { SSubscription } from '../services/SSubscribtion';
+import { ConfigService } from '../services/config.service';
+import { InputService } from '../services/input.service';
+import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
-import { NotificationService } from '../services/notification.service';
-import { SSLCertificate, SSLCertificateBase, SSLCertificateEx } from '../models/sslCertificate';
-import { Observable, map, of } from 'rxjs';
-import { InputService } from '../services/input.service';
 
 export interface UserExtended extends User2 {
   orig: User2;
@@ -22,7 +22,6 @@ export interface UserExtended extends User2 {
   //intermediate cert name
   inCertName: string;
   inCertId: string;
-
 
 }
 
@@ -64,7 +63,6 @@ export class UserComponent implements OnInit, OnDestroy {
   groups: Group[] = [];
   @Input()
   roles: Role[] = [];
-
 
   get user(): UserExtended {
     return this._model;
@@ -113,7 +111,6 @@ export class UserComponent implements OnInit, OnDestroy {
   @Output()
   deleteUserApiKey: EventEmitter<User2> = new EventEmitter();
 
-
   @Output()
   generateUserCert: EventEmitter<User2> = new EventEmitter();
   @Output()
@@ -121,10 +118,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   @Output()
   resetUserPassword: EventEmitter<{ id: string, objId?: string, password: string }> = new EventEmitter();
-
-
-
-
 
   groupFormControl = new FormControl();
   roleFormControl = new FormControl();
@@ -206,11 +199,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.modelChanged();
     }
 
-
   }
-
-
-
 
   openHelp() {
     if (this.helpLink) {
@@ -224,18 +213,13 @@ export class UserComponent implements OnInit, OnDestroy {
       this.checkIfModelChanged();
     else this.user.isChanged = false;
 
-
   }
-
-
 
   createFormGroup(user: User2) {
     const fmg = new FormGroup({
       //name: new FormControl(user.name, [Validators.required]),
       //username: new FormControl(user.username, [Validators.required]),
       inCertName: new FormControl(user.inCertName, []),
-
-
 
     });
     if (user.isNewUser) {
@@ -311,7 +295,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   }
 
-
   checkIfModelChanged() {
     this.user.isChanged = false;
     const original = this.user.orig as User2;
@@ -332,7 +315,6 @@ export class UserComponent implements OnInit, OnDestroy {
     if (UtilService.checkChanged(this.user.groupIds, original.groupIds))
       this.user.isChanged = true;
 
-
   }
 
   checkFormError() {
@@ -348,7 +330,6 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     } else {
 
-
       const nameError = this.formGroup.controls.name?.errors;
 
       if (nameError) {
@@ -358,10 +339,6 @@ export class UserComponent implements OnInit, OnDestroy {
           error.name = 'NameRequired';
       }
     }
-
-
-
-
 
     this.formError = error;
     (this.formGroup as FormGroup).markAllAsTouched();
@@ -417,13 +394,10 @@ export class UserComponent implements OnInit, OnDestroy {
 
   }
 
-
   saveOrUpdate() {
 
     this.saveUser.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteUser.emit(this.createBaseModel());
@@ -443,7 +417,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   defaultCertificate(): SSLCertificateBase {
     return {
-
 
       category: 'auth'
     }
@@ -558,12 +531,5 @@ export class UserComponent implements OnInit, OnDestroy {
     if (this.user.id && this.resetPassword.password && this.resetPassword.password == this.resetPassword.passwordAgain)
       this.resetUserPassword.emit({ id: this.user.id, objId: this.user.objId, password: this.resetPassword.password });
   }
-
-
-
-
-
-
-
 
 }

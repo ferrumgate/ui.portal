@@ -1,22 +1,16 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputService } from '../../../shared/services/input.service';
-
-import { UtilService } from '../../../shared/services/util.service';
-import { concat, concatMap, debounceTime, distinctUntilChanged, filter, map, merge, mergeMap, of, startWith, Subject, Subscription, switchMap, takeUntil, takeWhile } from 'rxjs';
-import { TranslationService } from '../../../shared/services/translation.service';
-import { NotificationService } from '../../../shared/services/notification.service';
-import { ConfirmService } from '../../../shared/services/confirm.service';
-import { ThemeSelectorComponent } from '../../../shared/themeselector/themeselector.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map, switchMap, takeWhile } from 'rxjs';
 import { Group } from 'src/app/modules/shared/models/group';
 import { User, User2 } from 'src/app/modules/shared/models/user';
-import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
+import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { GroupService } from 'src/app/modules/shared/services/group.service';
 import { UserService } from 'src/app/modules/shared/services/user.service';
+import { ConfirmService } from '../../../shared/services/confirm.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { TranslationService } from '../../../shared/services/translation.service';
+import { UtilService } from '../../../shared/services/util.service';
 @Component({
   selector: 'app-accounts-groups',
   templateUrl: './accounts-groups.component.html',
@@ -25,7 +19,6 @@ import { UserService } from 'src/app/modules/shared/services/user.service';
 export class AccountsGroupsComponent implements OnInit, OnDestroy {
   private allSubs = new SSubscription();
   searchForm = new FormControl();
-
 
   groups: Group[] = [];
   users: User[] = [];
@@ -55,8 +48,6 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
 
         this.search(newMessage);
       })
-
-
 
   }
   ngOnInit(): void {
@@ -102,7 +93,6 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
 
     this.allSubs.unsubscribe();
 
-
   }
   prepareGroup(group: Group, userList: User[]) {
     const users = userList.filter(x => x.groupIds.includes(group.id));
@@ -142,7 +132,6 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
     )
 
   }
-
 
   search(data: string) {
     if (!data?.length || data?.length > 2) {
@@ -201,7 +190,6 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
     }
   }
 
-
   deleteUserFromGroup(user: User2, group: Group) {
 
     this.confirmService.showDelete().pipe(
@@ -237,12 +225,8 @@ export class AccountsGroupsComponent implements OnInit, OnDestroy {
         }
       }
 
-
-
       this.notificationService.success(this.translateService.translate('SuccessfullyDeleted'))
     });
   }
-
-
 
 }

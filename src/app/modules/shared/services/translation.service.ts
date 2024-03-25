@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
 export function translationHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -23,7 +22,6 @@ export class TranslationService {
     languages.forEach(x => {
       this.translateService.addLangs([x]);
     });
-
 
     this.translateService.setDefaultLang(languages[0]);
 
@@ -57,8 +55,4 @@ export class TranslationService {
     return ['en'];
   }
 }
-
-
-
-
 

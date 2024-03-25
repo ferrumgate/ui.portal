@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BaseOAuth, BaseOpenId } from '../../models/auth';
+import { BaseOpenId } from '../../models/auth';
+import { SSubscription } from '../../services/SSubscribtion';
 import { ConfigService } from '../../services/config.service';
 import { ConfirmService } from '../../services/confirm.service';
-import { NotificationService } from '../../services/notification.service';
-import { SSubscription } from '../../services/SSubscribtion';
-import { TranslationService } from '../../services/translation.service';
 import { InputService } from '../../services/input.service';
-
+import { NotificationService } from '../../services/notification.service';
+import { TranslationService } from '../../services/translation.service';
 
 interface BaseModel extends BaseOpenId {
 
@@ -60,8 +59,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
   saveOpenId: EventEmitter<BaseOpenId> = new EventEmitter();
   @Output()
   deleteOpenId: EventEmitter<BaseOpenId> = new EventEmitter();
-
-
 
   //captcha settings
   formGroup: FormGroup;
@@ -117,7 +114,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
     this.allSub.unsubscribe();
   }
 
-
   createFormGroup(model: any) {
     const fmg = new FormGroup(
       {
@@ -159,12 +155,9 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   checkFormError() {
     //check errors 
     this.error = this.resetErrors();
-
 
     const nameError = this.formGroup.controls.name.errors;
 
@@ -185,7 +178,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
       else
         this.error.shortName = 'ShortNameRequired';
     }
-
 
     const discoveryUrlError = this.formGroup.controls.discoveryUrl.errors;
 
@@ -210,8 +202,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
       else
         this.error.clientSecret = 'ClientSecretRequired';
     }
-
-
 
   }
 
@@ -239,7 +229,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
       model.isChanged = true;
 
   }
-
 
   clear() {
 
@@ -276,7 +265,6 @@ export class AuthOpenIdComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.saveOpenId.emit(this.createBaseModel())
   }
-
 
   delete() {
     this.deleteOpenId.emit(this.createBaseModel());

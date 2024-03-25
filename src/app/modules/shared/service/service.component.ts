@@ -1,23 +1,19 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { ActivatedRoute, Router } from '@angular/router';
-
-import { map, Observable, of } from 'rxjs';
-import { Group } from '../models/group';
+import { ActivatedRoute } from '@angular/router';
+import * as diff from 'deep-object-diff';
+import { Observable, map, of } from 'rxjs';
 import { Network } from '../models/network';
 import { Service, ServiceAlias, ServiceHost, ServicePort } from '../models/service';
+import { SSubscription } from '../services/SSubscribtion';
 import { ConfigService } from '../services/config.service';
 import { InputService } from '../services/input.service';
-import { SSubscription } from '../services/SSubscribtion';
+import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
-import { ThemeSelectorComponent } from '../themeselector/themeselector.component';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { NotificationService } from '../services/notification.service';
-import * as diff from 'deep-object-diff';
-
 
 export interface ServiceExtended extends Service {
   orig: Service;
@@ -48,11 +44,9 @@ export class ServiceComponent implements OnInit, OnDestroy {
       }
     };
 
-
   get service(): ServiceExtended {
     return this._model;
   }
-
 
   @Input()
   set service(val: Service) {
@@ -87,8 +81,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
   @Output()
   deleteService: EventEmitter<Service> = new EventEmitter();
 
-
-
   formGroup: FormGroup = this.createFormGroup(this._model);
   formError: {
     name: string, hosts: string[],
@@ -96,7 +88,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
     aliases: string[], network: string, portNeeds: string
   }
     = { name: '', hosts: [], ports: [], aliases: [], network: '', portNeeds: '' };
-
 
   isThemeDark = false;
   constructor(
@@ -148,7 +139,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.modelChanged();
     }
 
-
   }
 
   openHelp() {
@@ -162,7 +152,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.checkIfModelChanged();
     else this.service.isChanged = false;
-
 
   }
 
@@ -237,7 +226,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
         }
 
-
       } else
         if (iterator == 'hosts') {
           const fmarray = fmg.controls['hosts'] as FormArray;
@@ -264,8 +252,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
                   (this._model as any)[iterator] = x.toLowerCase();
                 else
                   (this._model as any)[iterator] = x;
-
-
 
               })
           }
@@ -295,7 +281,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
   getAliasesFormGroup(index: number) {
     return (this.formGroup.controls['aliases'] as FormArray).controls[index] as FormGroup
   }
-
 
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -344,7 +329,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
       keyLength += Object.keys(diffFields.updated).length
     return keyLength > 0 ? true : false
   }
-
 
   checkIfModelChanged() {
     this.service.isChanged = false;
@@ -412,7 +396,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
       }
     }
 
-
     for (let i = 0; i < (this.formGroup.controls['ports'] as FormArray).controls.length; ++i) {
       const fmg = (this.formGroup.controls['ports'] as FormArray).controls[i] as FormGroup;
       const portError = fmg.controls.port.errors;
@@ -432,10 +415,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-
-
     const networkError = this.formGroup.controls.networkId.errors;
 
     if (networkError) {
@@ -444,8 +423,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
       else
         error.network = 'NetworkRequired';
     }
-
-
 
     this.formError = error;
 
@@ -457,7 +434,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.formGroup.controls['portNeeds'].setErrors(null);
     }
     this.formGroup.markAllAsTouched();
-
 
   }
 
@@ -520,13 +496,10 @@ export class ServiceComponent implements OnInit, OnDestroy {
     }
   }
 
-
   saveOrUpdate() {
 
     this.saveService.emit(this.createBaseModel());
   }
-
-
 
   delete() {
     this.deleteService.emit(this.createBaseModel());
@@ -607,7 +580,6 @@ export class ServiceComponent implements OnInit, OnDestroy {
     this.modelChanged();
   }
 
-
   removeAlias(val: ServiceAlias) {
     if (!this.service.aliases)
       this.service.aliases = [];
@@ -632,11 +604,5 @@ export class ServiceComponent implements OnInit, OnDestroy {
 
     this.modelChanged();
   }
-
-
-
-
-
-
 
 }

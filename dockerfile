@@ -1,4 +1,4 @@
-FROM nginx:1.23-alpine
+FROM nginx:stable-alpine3.17-slim
 RUN cat /etc/passwd
 USER nginx
 COPY dist/portal /usr/share/nginx/html

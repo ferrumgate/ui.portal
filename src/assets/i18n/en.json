@@ -159,6 +159,7 @@
     "Gateways": "Gateways",
     "NetworkName": "Network name",
     "Networks": "Networks",
+    "Nodes": "Nodes",
     "Search": "Search",
     "Add": "Add",
     "NotJoinedGateways": "Not Joined Gateways(For activating bind them to a network)",
@@ -547,5 +548,10 @@
     "Version": "Version",
     "BrowserIdleTimeoutMinute": "Browser Idle Timeout(minute)",
     "BrowserIdleTimeoutHint": "Auto logout time, after idle. Stored on browser",
-    "DnsSearchHint": "Search by fqdn, ip"
+    "DnsSearchHint": "Search by fqdn, ip",
+    "Node": "Node",
+    "NodeIdHint": "Node unique id",
+    "LastSeen": "Last seen",
+    "Release": "Release",
+    "Role": "Role"
 }

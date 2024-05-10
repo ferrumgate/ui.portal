@@ -1,0 +1,36 @@
+<div class="nodes-container" [ngClass]="isThemeDark?'theme-dark':''">
+    <div class="nodes nodes-toolbar">
+        <div fxFlex fxLayout="column">
+            <div class="row title">
+                <span matBadge="{{nodes.length}}" class="stretch-badge"
+                    matBadgeOverlap="false">{{'Nodes'|translate}}</span>
+
+            </div>
+            <div class="row" fxLayout="row">
+                <!-- <mat-form-field fxFlex>
+                    <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
+                    <mat-hint>{{"nodesSearchHint"|translate}}</mat-hint>
+                </mat-form-field> -->
+                <div fxLayoutAlign="center center">
+                    <!-- <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">
+                        <mat-icon>add</mat-icon>
+                        {{"Add"|translate}}
+                    </button> -->
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div class="nodes nodes-content">
+        <div fxLayout="row wrap">
+            <p class="row node-item" fxLayout="row" *ngFor="let node of nodes">
+
+                <app-node test-id="nodes-app-node" [nodeDetail]="node.detail" [node]="node"
+                    (deleteNode)="deleteNode($event)" (saveNode)="saveNode($event)">
+
+                </app-node>
+            </p>
+        </div>
+
+    </div>
+</div>

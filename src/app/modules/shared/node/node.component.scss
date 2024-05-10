@@ -1,0 +1,39 @@
+.node {
+    min-width: 300px;
+}
+
+.node .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.node .title {
+    padding-top: 20px;
+    font-size: 1.5rem;
+}
+
+.node .row-pad {
+    margin-left: 15px;
+}
+
+.node .node-item {
+    max-width: 700px;
+    max-height: 700px;
+    padding-right: 30px;
+
+}
+
+.node .node-title {
+    padding-left: 10px;
+}
+
+.node .node-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.node .node-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

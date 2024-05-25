@@ -16,8 +16,12 @@ export interface NodeWithDetail extends Node {
   version: string;
   lastSeen: number;
   lastSeenDate: string;
-  release: string;
   roles: string;
+  insertDateByNumber: number
+  nodeIp: string;
+  nodePort: string;
+  nodeIpw: string;
+  nodePortw: string;
 }
 
 export interface NodeExtended extends NodeWithDetail {
@@ -38,8 +42,11 @@ export class NodeComponent implements OnInit, OnDestroy {
   _node: NodeWithDetail =
     {
       id: '', name: '', labels: [],
+      insertDate: '',
+      insertDateByNumber: 0,
       isChanged: false, lastSeen: 0, lastSeenDate: new Date(1, 1, 1).toString(),
-      release: '', version: '', roles: ''
+      version: '', roles: '',
+      nodeIp: '', nodePort: '', nodeIpw: '', nodePortw: ''
 
     };
 
@@ -56,12 +63,15 @@ export class NodeComponent implements OnInit, OnDestroy {
       ...val,
       isChanged: false,
       orig: val,
+      insertDateByNumber: new Date(val.insertDate).getTime(),
       lastSeen: this.nodeDetail?.lastSeen || 0,
       lastSeenDate: this.nodeDetail ? new Date(this.nodeDetail?.lastSeen).toLocaleString() : new Date(1, 1, 1).toLocaleString(),
-      release: this.nodeDetail?.release || '',
       version: this.nodeDetail?.version || '',
-      hostname: this.nodeDetail?.hostname || '',
-      roles: this.nodeDetail?.roles || ''
+      roles: this.nodeDetail?.roles || '',
+      nodeIp: this.nodeDetail?.nodeIp || '',
+      nodePort: this.nodeDetail?.nodePort || '',
+      nodeIpw: this.nodeDetail?.nodeIpw || '',
+      nodePortw: this.nodeDetail?.nodePortw || ''
     }
     this.node.labels = Array.from(val.labels);
     this.formGroup = this.createFormGroup(this.node);
@@ -73,8 +83,8 @@ export class NodeComponent implements OnInit, OnDestroy {
   deleteNode: EventEmitter<Node> = new EventEmitter();
 
   formGroup: FormGroup = this.createFormGroup(this.node);
-  formError: { name: string, hostname: string, lastSeenDate: string } =
-    { name: '', hostname: '', lastSeenDate: '' }
+  formError: { name: string, lastSeenDate: string } =
+    { name: '', lastSeenDate: '' }
 
 
   enabledFormControl = new FormControl();
@@ -119,11 +129,13 @@ export class NodeComponent implements OnInit, OnDestroy {
     const fmg = new FormGroup({
       name: new FormControl(node.name, [Validators.required]),
       id: new FormControl(node.id, []),
-      hostname: new FormControl(node.hostname, []),
       lastSeenDate: new FormControl(node.lastSeenDate, []),
       version: new FormControl(node.version, []),
-      release: new FormControl(node.release, []),
       roles: new FormControl(node.roles, []),
+      nodeIp: new FormControl(node.nodeIp, []),
+      nodePort: new FormControl(node.nodePort, []),
+      nodeIpw: new FormControl(node.nodeIpw, []),
+      nodePortw: new FormControl(node.nodePortw, []),
 
     });
 
@@ -143,7 +155,7 @@ export class NodeComponent implements OnInit, OnDestroy {
     return fmg;
   }
   createFormError() {
-    return { name: '', hostname: '', lastSeenDate: '' };
+    return { name: '', lastSeenDate: '' };
   }
 
   addOnBlur = true;

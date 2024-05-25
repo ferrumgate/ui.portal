@@ -6,22 +6,93 @@
                     matBadgeOverlap="false">{{'Nodes'|translate}}</span>
 
             </div>
-            <div class="row" fxLayout="row">
-                <!-- <mat-form-field fxFlex>
+            <!-- <div class="row" fxLayout="row">
+                <mat-form-field fxFlex>
                     <input matInput placeholder="{{'Search'|translate}}" [formControl]="searchForm" />
                     <mat-hint>{{"nodesSearchHint"|translate}}</mat-hint>
-                </mat-form-field> -->
+                </mat-form-field> 
                 <div fxLayoutAlign="center center">
-                    <!-- <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">
+                    <button mat-raised-button color="primary" class="add" (click)="addNewNetwork()">
                         <mat-icon>add</mat-icon>
                         {{"Add"|translate}}
-                    </button> -->
+                    </button>
                 </div>
-            </div>
+            </div> -->
             <mat-divider></mat-divider>
         </div>
     </div>
     <div class="nodes nodes-content">
+        <div fxLayout="row wrap" *ngIf="hasCloudConfig()">
+            <p fxFill>
+                <mat-card class="nodes-commands">
+                    <mat-card-header>
+                        <mat-card-title class="title" matTooltip="{{'Command'|translate}}">
+                            <mat-icon>code</mat-icon>
+                            {{'Command'|translate}}
+                        </mat-card-title>
+                        <mat-action-row class="node-header-actions" fxFlex fxLayoutAlign="end start">
+                            <button matSuffix mat-icon-button (click)="copyClusterUpdateToWorker()">
+                                <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                            </button>
+                        </mat-action-row>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <p>
+                            {{clusterUpgradeToWorker}}
+                        </p>
+                    </mat-card-content>
+
+                </mat-card>
+            </p>
+            <p fxFill>
+                <mat-card class="nodes-commands">
+                    <mat-card-header>
+                        <mat-card-title class="title" matTooltip="{{'Command'|translate}}">
+                            <mat-icon>code</mat-icon>
+                            {{'Command'|translate}}
+                        </mat-card-title>
+                        <mat-action-row class="node-header-actions" fxFlex fxLayoutAlign="end start">
+                            <button matSuffix mat-icon-button (click)="copyClusterGlobalConfig()">
+                                <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                            </button>
+                        </mat-action-row>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p>
+                            {{clusterSetConfigAll}}
+                        </p>
+                    </mat-card-content>
+
+                </mat-card>
+            </p>
+
+            <p fxFill>
+                <mat-card class="nodes-commands">
+                    <mat-card-header>
+                        <mat-card-title class="title" matTooltip="{{'Command'|translate}}">
+                            <mat-icon>code</mat-icon>
+                            {{'Command'|translate}}
+                        </mat-card-title>
+                        <mat-action-row class="node-header-actions" fxFlex fxLayoutAlign="end start">
+                            <button matSuffix mat-icon-button (click)="copyJoinToCluster()">
+                                <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                            </button>
+                        </mat-action-row>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <p>
+                            {{clusterJoinToMaster}}
+                        </p>
+                    </mat-card-content>
+
+                </mat-card>
+            </p>
+
+
+        </div>
+        <mat-divider *ngIf="hasCloudConfig()"></mat-divider>
         <div fxLayout="row wrap">
             <p class="row node-item" fxLayout="row" *ngFor="let node of nodes">
 

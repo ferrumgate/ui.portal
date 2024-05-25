@@ -9,6 +9,7 @@ export interface Gateway {
     name: string;
     labels: string[];
     networkId?: string;
+    nodeId?: string;
     isEnabled?: boolean;
 
     [key: string]: any;

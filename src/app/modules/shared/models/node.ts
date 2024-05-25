@@ -4,12 +4,13 @@ export interface Node {
     id: string;
     name: string;
     labels: string[];
-
+    insertDate: string,
     [key: string]: any;
 }
 
 /**
- * Host details like network, cpu
+ * Host details like network, cpu 
+ *  also there is one in rest.portal
  */
 export interface NodeDetail {
     id: string;
@@ -27,4 +28,9 @@ export interface NodeDetail {
     interfaces: string,
     lastSeen: number,
     roles?: string
+    nodeIp?: string,
+    nodePort?: string,
+    nodeIpw?: string,
+    nodePortw?: string,
+    nodePublicKey?: string,
 }

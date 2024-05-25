@@ -11,11 +11,13 @@ import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { UtilService } from '../services/util.service';
+import { Node } from '../models/node';
 
 export interface GatewayExtended extends Gateway {
   orig: Gateway;
   isChanged: boolean;
   networkName: string;
+  nodeName: string;
 }
 
 @Component({
@@ -42,7 +44,8 @@ export class GatewayComponent implements OnInit, OnDestroy {
       ...val,
       isChanged: false,
       orig: val,
-      networkName: this.networks.find(x => x.id == val.networkId)?.name || ''
+      networkName: this.networks.find(x => x.id == val.networkId)?.name || '',
+      nodeName: this.nodes?.find(x => x.id == val.nodeId)?.name || ''
 
     }
     this.gateway.labels = Array.from(val.labels);
@@ -57,6 +60,7 @@ export class GatewayComponent implements OnInit, OnDestroy {
   deleteGateway: EventEmitter<Gateway> = new EventEmitter();
   isGatewayOpened = false;
 
+  _nodes: Node[] = [];
   _networks: Network[] = [];
 
   get networks(): Network[] {
@@ -73,6 +77,11 @@ export class GatewayComponent implements OnInit, OnDestroy {
     this.prepareAutoComplete();
   }
 
+  @Input()
+  set nodes(value: Node[]) {
+    this.nodes = value;
+  }
+
   filteredOptions: Observable<Network[]> = of();
 
   networkAutoCompleteFormControl = new FormControl();
@@ -83,7 +92,8 @@ export class GatewayComponent implements OnInit, OnDestroy {
     private router: Router,
     private configService: ConfigService,
     private translateService: TranslationService,
-    private clipboard: Clipboard, private notificationService: NotificationService
+    private clipboard: Clipboard,
+    private notificationService: NotificationService
   ) {
 
     this.allSub.addThis =
@@ -150,8 +160,8 @@ export class GatewayComponent implements OnInit, OnDestroy {
   createFormGroup(gate: Gateway) {
     const fmg = new FormGroup({
       name: new FormControl(gate.name, [Validators.required]),
-      id: new FormControl(gate.id, [])
-
+      id: new FormControl(gate.id, []),
+      nodeName: new FormControl(gate.nodeName, []),
     });
 
     let keys = Object.keys(fmg.controls)

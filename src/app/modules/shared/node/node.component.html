@@ -23,7 +23,7 @@
                         <mat-accordion class="service-details">
                             <mat-expansion-panel [expanded]="node.isExpanded">
                                 <mat-expansion-panel-header>
-                                    <mat-panel-title test-id="user-username-title">
+                                    <mat-panel-title test-id="node-name-title">
                                         {{node.name}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
@@ -41,22 +41,6 @@
                                         <input matInput test-id="node-name-input" placeholder="{{'Name'|translate}}"
                                             formControlName="name" required>
                                         <mat-error>{{formError.name|translate}}</mat-error>
-                                    </mat-form-field>
-                                </p>
-                                <p>
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"Hostname"|translate}}</mat-label>
-                                        <input matInput test-id="node-hostname-input"
-                                            placeholder="{{'Hostname'|translate}}" formControlName="hostname"
-                                            readonly="true">
-                                    </mat-form-field>
-                                </p>
-                                <p>
-                                    <mat-form-field fxFlex appearance="fill">
-                                        <mat-label>{{"Release"|translate}}</mat-label>
-                                        <input matInput test-id="node-release-input"
-                                            placeholder="{{'Release'|translate}}" formControlName="release"
-                                            readonly="true">
                                     </mat-form-field>
                                 </p>
                                 <p>
@@ -96,8 +80,39 @@
                                 <p>
                                     <mat-form-field fxFlex appearance="fill">
                                         <mat-label>{{"Roles"|translate}}</mat-label>
-                                        <input matInput test-id="node-role-input" placeholder="{{'Role'|translate}}"
+                                        <input matInput test-id="node-roles-input" placeholder="{{'Role'|translate}}"
                                             formControlName="roles" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodeIp"|translate}}</mat-label>
+                                        <input matInput test-id="node-nodeip-input" placeholder="{{'NodeIp'|translate}}"
+                                            formControlName="nodeIp" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodePort"|translate}}</mat-label>
+                                        <input matInput test-id="node-nodeport-input"
+                                            placeholder="{{'NodePort'|translate}}" formControlName="nodePort"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodeIpW"|translate}}</mat-label>
+                                        <input matInput test-id="node-publicip-input"
+                                            placeholder="{{'NodeIpw'|translate}}" formControlName="nodeIpw"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodePortW"|translate}}</mat-label>
+                                        <input matInput test-id="node-publicportw-input"
+                                            placeholder="{{'NodePortw'|translate}}" formControlName="nodePortw"
+                                            readonly="true">
                                     </mat-form-field>
                                 </p>
                             </mat-expansion-panel>

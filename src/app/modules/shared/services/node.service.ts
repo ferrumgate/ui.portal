@@ -13,6 +13,7 @@ import { ConfigService } from './config.service';
 export class NodeService extends BaseService {
 
   private _nodeUrl = this.configService.getApiUrl() + '/node';
+  private _nodeAliveUrl = this.configService.getApiUrl() + '/node/alive';
   constructor(private httpService: HttpClient, private configService: ConfigService, private captchaService: CaptchaService) {
     super('node', captchaService)
 
@@ -39,17 +40,18 @@ export class NodeService extends BaseService {
 
   }
   getAliveAll() {
+
     const urlParams = new URLSearchParams();
     return this.preExecute(urlParams).pipe(
       switchMap(y => {
-        const url = this.joinUrl(this._nodeUrl, y);
+        const url = this.joinUrl(this._nodeAliveUrl, y);
         return this.httpService.get<{ items: NodeDetail[] }>(url);
       }));
   }
 
   saveOrupdate(net: Node) {
     const node: Node = {
-      id: net.id, labels: net.labels, name: net.name,
+      id: net.id, labels: net.labels, name: net.name, insertDate: net.insertDate,
     }
 
     return this.preExecute(node).pipe(

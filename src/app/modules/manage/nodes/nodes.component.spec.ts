@@ -18,6 +18,8 @@ import { TranslationService } from '../../shared/services/translation.service';
 import { UtilService } from '../../shared/services/util.service';
 import { SharedModule } from '../../shared/shared.module';
 import { NodesComponent } from './nodes.component';
+import { Node, NodeDetail } from '../../shared/models/node';
+import { NodeService } from '../../shared/services/node.service';
 
 describe('NodesComponent', () => {
   let component: NodesComponent;
@@ -25,8 +27,8 @@ describe('NodesComponent', () => {
   let httpClient: HttpClient;
   let captchaSpy = jasmine.createSpyObj('CaptchaService', ['executeIfEnabled']);
   let confirmService = jasmine.createSpyObj('ConfirmService', ['showSave', 'showDelete']);
-  let gatewayService: GatewayService;
-  let networkService: NetworkService;
+  let nodeService: NodeService;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NodesComponent],
@@ -49,8 +51,7 @@ describe('NodesComponent', () => {
   beforeEach(() => {
     httpClient = TestBed.inject(HttpClient);
     fixture = TestBed.createComponent(NodesComponent);
-    networkService = TestBed.inject(NetworkService);
-    gatewayService = TestBed.inject(GatewayService);
+    nodeService = TestBed.inject(NodeService);
 
     component = fixture.componentInstance;
     captchaSpy.executeIfEnabled.and.returnValue(of(false));
@@ -65,184 +66,23 @@ describe('NodesComponent', () => {
   });
 
   function createSampleData() {
-    let net: Network = {
-      objId: UtilService.randomNumberString(),
-      id: '312', name: 'ops3', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
+    let nodes: Node[] = [
+      { objId: UtilService.randomNumberString(), id: '123', name: 'ops1', labels: ['deneme2'], insertDate: '' },
+      { objId: UtilService.randomNumberString(), id: '1234', name: 'ops2', labels: ['deneme2'], insertDate: '' },
+      { objId: UtilService.randomNumberString(), id: '12345', name: 'ops3', labels: ['deneme2'], insertDate: '' },
 
-      clientNetwork: '1.2.3.4/24'
-    }
-    let gateways: Gateway[] = [
-      { objId: UtilService.randomNumberString(), id: '123', networkId: net.id, name: 'blac', labels: ['testme'], isEnabled: true },
-      { objId: UtilService.randomNumberString(), id: '1234', networkId: net.id, name: 'blac2', labels: ['testme2'], isEnabled: true },
-      { objId: UtilService.randomNumberString(), id: '12345', networkId: net.id, name: 'blac3', labels: ['testme3'], isEnabled: true }
+    ];
+
+    let nodeDetails: NodeDetail[] = [
+      { id: '123', hostname: 'fs1', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' },
+      { id: '1234', hostname: 'fs2', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' },
+      { id: '1235', hostname: 'fs3', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' },
+      { id: '1236', hostname: 'fs4', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' },
+
     ]
+    //nodes.forEach(x => x.detail = nodeDetails.find(y => y.id == x.id));
 
-    let thisnetworks: Network[] = [];
-    let thisgateways: Gateway[] = [];
-    let thisgatewaysNotJoined: Gateway[] = [];
-
-    let item = net;
-    thisnetworks.push(item);
-    gateways.forEach(x => {
-      const extendedGateway = x;
-      extendedGateway.orig = x;
-      item.gatewaysCount++;
-      extendedGateway.networkName = net.name;
-      thisgateways.push(extendedGateway);
-    })
-
-    let net2: Network = {
-      objId: UtilService.randomNumberString(),
-      id: '3123', name: 'ops2', labels: ['deneme2'], serviceNetwork: '1.1.1.1/16',
-
-      clientNetwork: '1.2.3.4/24'
-    }
-    let item2 = net2;
-    thisnetworks.push(item2);
-
-    const notJoinedGateway: Gateway = {
-      objId: UtilService.randomNumberString(),
-      id: '1234', networkId: '',
-      name: 'not joined ', labels: ['testme'], isEnabled: true,
-      orig: {
-        id: '1234', networkId: '',
-        name: 'not joined ', labels: ['testme'], isEnabled: true,
-      }
-    };
-    const notJoinedExtendedGateway = notJoinedGateway;
-    thisgatewaysNotJoined.push(notJoinedExtendedGateway);
-
-    const notJoinedGateway2: Gateway = {
-      objId: UtilService.randomNumberString(),
-      id: '12344', networkId: '',
-      name: 'not joined2 ', labels: ['testme'], isEnabled: true,
-      orig: {
-        id: '12344', networkId: '',
-        name: 'not joined2 ', labels: ['testme'], isEnabled: true,
-      }
-
-    };
-    const notJoinedExtendedGateway2 = notJoinedGateway2;
-    thisgatewaysNotJoined.push(notJoinedExtendedGateway2);
-    return { networks: thisnetworks, gateways: thisgateways, gatewaysNotJoined: thisgatewaysNotJoined };
+    return { nodes: nodes, nodeDetails: nodeDetails }
   }
-
-  /*  it('gatewaysnotjoined must be seen', fakeAsync(async () => {
-     expect(component).toBeTruthy();
-     const data = createSampleData();
-     component.gatewaysNotJoined = data.gatewaysNotJoined;
-     tick(1000);
-     fixture.detectChanges();
-     const element = findEl(fixture, 'networks-gatewaynotjoined-accordion', false);
-     expect(element).toBeTruthy();
- 
-     const elements = findEls(fixture, 'networks-gatewaynotjoined-app-gateway');
-     expect(elements.length).toBe(2);
- 
-   }));
- 
-   it('addNewNetwork', fakeAsync(async () => {
-     expect(component).toBeTruthy();
- 
-     component.addNewNetwork();
-     tick(1000);
-     fixture.detectChanges();
-     const elements = findEls(fixture, 'networks-app-network');
-     expect(elements.length).toBe(1);
- 
-   }));
- 
-   it('networks count', fakeAsync(async () => {
-     expect(component).toBeTruthy();
-     const data = createSampleData();
-     component.networks = data.networks;
-     component.gateways = data.gateways;
-     tick(1000);
-     fixture.detectChanges();
-     const elements = findEls(fixture, 'networks-app-network');
-     expect(elements.length).toBe(2);
- 
-   }));
- 
-   it('networks gateway count', fakeAsync(async () => {
-     expect(component).toBeTruthy();
-     const data = createSampleData();
-     component.networks = data.networks;
-     component.gateways = data.gateways;
-     component.networks[0].isGatewayOpened = true;
-     tick(1000);
-     fixture.detectChanges();
-     const elements = findEls(fixture, 'networks-app-network-app-gateway');
-     expect(elements.length).toBe(3);
- 
-   }));
- 
-   it('change gateway network', fakeAsync(async () => {
-     expect(component).toBeTruthy();
-     const data = createSampleData();
-     component.networks = data.networks;
-     component.gateways = data.gateways;
-     component.networks[0].isGatewayOpened = true;
-     tick(1000);
-     fixture.detectChanges();
- 
-     //find a gateway
-     const gateway = component.gateways.find(x => x.networkId == component.networks[0].id);
-     if (!gateway) throw Error('must found');
-     let savedGateway: Gateway = { id: gateway.id, labels: gateway.labels, name: gateway.name, isEnabled: gateway.isEnabled };
-     //    spyOn(httpClient, 'put').and.returnValue(of(savedGateway));
-     //clear network relation
-     gateway.networkId = ''
-     const saveOrUpdate = spyOn(gatewayService, 'saveOrupdate')
-     saveOrUpdate.and.returnValue(of(savedGateway));
-     component.saveGateway(gateway);
-     tick(1000);
-     fixture.detectChanges();
-     // gateway not joined must be visible
-     const accordion = findEl(fixture, 'networks-gatewaynotjoined-accordion', false);
-     expect(accordion).toBeTruthy();
- 
-     tick(1000);
-     fixture.detectChanges();
-     // and gateway component must be there
-     const elements = findEls(fixture, 'networks-gatewaynotjoined-app-gateway');
-     expect(elements.length).toBe(1);
- 
-     component.networks[0].isGatewayOpened = true;
-     tick(1000);
-     fixture.detectChanges();
-     // networks gateway count must be from 3 to 2
-     const elements2 = findEls(fixture, 'networks-app-network-app-gateway');
-     expect(elements2.length).toBe(2);
- 
-     //and move gateway back by selecting network again
-     const gateway2 = component.gatewaysNotJoined[0];
-     if (!gateway2) throw new Error('not found')
-     gateway2.networkId = component.networks[0].id;
- 
-     let savedGateway2: Gateway = { id: gateway2.id, labels: gateway2.labels, name: gateway2.name, isEnabled: gateway2.isEnabled, networkId: gateway2.networkId };
-     saveOrUpdate.and.returnValue(of(savedGateway2));
- 
-     component.saveGateway(gateway2);
-     tick(1000);
-     fixture.detectChanges();
-     // gateway not joined must be visible
-     const accordion2 = findEl(fixture, 'networks-gatewaynotjoined-accordion', false);
-     expect(accordion2).toBeFalsy();
- 
-     tick(1000);
-     fixture.detectChanges();
-     // and gateway component must be there
-     const elements22 = findEls(fixture, 'networks-gatewaynotjoined-app-gateway');
-     expect(elements22.length).toBe(0);
- 
-     component.networks[0].isGatewayOpened = true;
-     tick(1000);
-     fixture.detectChanges();
-     // gateway count must be from 3 to 2
-     const elements3 = findEls(fixture, 'networks-app-network-app-gateway');
-     expect(elements3.length).toBe(3);
- 
-   })); */
 
 });

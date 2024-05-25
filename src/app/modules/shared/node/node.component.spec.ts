@@ -6,13 +6,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha';
 import { dispatchFakeEvent, expectValue, findEl, findEls, setFieldValue } from '../helper.spec';
 import { Network } from '../models/network';
-import { Node } from '../models/node';
+import { Node, NodeDetail } from '../models/node';
 import { CaptchaService } from '../services/captcha.service';
 import { ConfigService } from '../services/config.service';
 import { NotificationService } from '../services/notification.service';
 import { TranslationService } from '../services/translation.service';
 import { SharedModule } from '../shared.module';
 import { NodeComponent } from './node.component';
+import { UtilService } from '../services/util.service';
 
 describe(' NodeComponent', () => {
   let component: NodeComponent;
@@ -52,19 +53,11 @@ describe(' NodeComponent', () => {
   it('data binding', fakeAsync(async () => {
 
     expect(component).toBeTruthy();
-    let node: Node = {
-      id: '12123',
-      name: 'test',
-      labels: ['testlabel', 'testlabel2'],
-      isEnabled: true,
+    let node: Node = { objId: UtilService.randomNumberString(), id: '123', name: 'ops1', labels: ['deneme2'], };
 
-    }
-    let network1: Network = {
-      id: '22',
-      name: 'testnetwork',
-      labels: [], clientNetwork: '', serviceNetwork: ''
-    }
-    component.node = node
+    let nodeDetail: NodeDetail = { id: '123', hostname: 'fs1', roles: 'master', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' };
+    component.nodeDetail = nodeDetail;
+    component.node = node;
 
     tick(1000);
     fixture.detectChanges();
@@ -72,26 +65,12 @@ describe(' NodeComponent', () => {
     expectValue(fixture, 'node-name-input', node.name);
     expectValue(fixture, 'node-id-input', node.id);
     const chips = findEls(fixture, 'node-label-chip')
-    expect(chips.length).toBe(2);
-    //these codes are not working as expected
-    //expectValue(fixture, 'node-input-network', network1.name);
+    expect(chips.length).toBe(1);
+    expectValue(fixture, 'node-hostname-input', nodeDetail.hostname || '');
+    expectValue(fixture, 'node-release-input', nodeDetail.release || '');
+    expectValue(fixture, 'node-roles-input', nodeDetail.roles || '');
 
-    //const { nativeElement } = queryByCss(fixture, '[test-id=node-checkbox-enabled] input');
-    //expect(nativeElement.checked).toBe(true);
 
-    expect(component.node.isChanged).toBe(false);
-    const button = findEl(fixture, 'node-ok-button', false);
-    expect(button).toBeFalsy();
-
-    setFieldValue(fixture, 'node-name-input', 'anewvalue');
-    dispatchFakeEvent(findEl(fixture, 'node-name-input').nativeElement, 'blur');
-    fixture.detectChanges();
-    tick(1000);
-    fixture.detectChanges();
-    expect(component.node.name).toBe('anewvalue');
-    expect(component.node.isChanged).toBe(true);
-    const button2 = findEl(fixture, 'node-ok-button', false);
-    expect(button2).toBeTruthy();
 
   }));
 

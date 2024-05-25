@@ -8,7 +8,7 @@
 
     /* Make sure the toolbar will stay on top of the content as it scrolls past. */
     font-size: 0.9rem;
-    height: 130px;
+    height: 80px;
 
 }
 
@@ -28,18 +28,10 @@
     margin-left: 15px;
 }
 
-.nodes .gateway-title {
-    padding-left: 10px;
-}
 
-.nodes .network-gateways {
-    padding: 10px;
-
-}
-
-.nodes .network-gateways mat-card {
-    background-color: #d3d3d3;
-
+.nodes .node-actions {
+    padding: 0px;
+    border-top-style: none;
 }
 
 .theme-dark .nodes .network-gateways mat-card {
@@ -47,7 +39,8 @@
 
 }
 
-.nodes app-gateway {
+.nodes app-node {
+    padding-top: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
 
@@ -56,10 +49,28 @@
 .nodes-content {
     margin-top: 10px;
     margin-bottom: 10px;
-    height: calc(100vh - 60px - 130px - 10px);
+    height: calc(100vh - 60px - 50px - 10px);
     overflow: auto;
 }
 
 .nodes .content-divider {
     padding-bottom: 10px;
+}
+
+.nodes-commands {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    word-break: break-all;
+    font-size: 0.9rem;
+
+}
+
+.nodes-commands .title {
+    font-size: 0.9rem;
+}
+
+.nodes .node-header-actions {
+    padding: 0px;
+    border-top-style: none;
 }

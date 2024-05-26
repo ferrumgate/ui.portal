@@ -33,9 +33,9 @@
 
                 <div class="row network-item" fxLayout="column">
                     <div class="network-item" fxLayout="row wrap">
-                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [networks]="networks"
-                            [gateway]="gate" (saveGateway)="saveGateway($event)" (deleteGateway)="deleteGateway($event)"
-                            *ngFor="let gate of gatewaysNotJoined">
+                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [nodes]="nodes"
+                            [networks]="networks" [gateway]="gate" (saveGateway)="saveGateway($event)"
+                            (deleteGateway)="deleteGateway($event)" *ngFor="let gate of gatewaysNotJoined">
                         </app-gateway>
                     </div>
                 </div>

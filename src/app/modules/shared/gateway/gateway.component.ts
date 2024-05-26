@@ -61,6 +61,10 @@ export class GatewayComponent implements OnInit, OnDestroy {
   isGatewayOpened = false;
 
   _nodes: Node[] = [];
+
+  get nodes(): Node[] {
+    return this._nodes;
+  }
   _networks: Network[] = [];
 
   get networks(): Network[] {
@@ -79,7 +83,10 @@ export class GatewayComponent implements OnInit, OnDestroy {
 
   @Input()
   set nodes(value: Node[]) {
-    this.nodes = value;
+
+    this._nodes = value;
+    this.gateway.nodeName = this.nodes.find(x => x.id == this.gateway.nodeId)?.name || ''
+    console.log(this.gateway.nodeName);
   }
 
   filteredOptions: Observable<Network[]> = of();

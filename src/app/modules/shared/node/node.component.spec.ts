@@ -53,22 +53,37 @@ describe(' NodeComponent', () => {
   it('data binding', fakeAsync(async () => {
 
     expect(component).toBeTruthy();
-    let node: Node = { objId: UtilService.randomNumberString(), id: '123', name: 'ops1', labels: ['deneme2'], };
+    let node: Node = {
+      objId: UtilService.randomNumberString(),
+      id: '123', name: 'ops1', labels: ['deneme2'],
+      insertDate: new Date().toISOString(), lastSeen: new Date().toISOString(), status: 'active', type: 'windows'
+    };
 
-    let nodeDetail: NodeDetail = { id: '123', hostname: 'fs1', roles: 'master', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0' };
+    let nodeDetail: NodeDetail = {
+      id: '123', hostname: 'fs1', roles: 'master', lastSeen: new Date().getTime(), freeMem: 0, interfaces: '', platform: 'windows', release: '12', totalMem: 3, type: 'windows', version: '1.16.0',
+
+    };
     component.nodeDetail = nodeDetail;
     component.node = node;
 
     tick(1000);
     fixture.detectChanges();
     expectValue(fixture, 'node-id-input', node.id);
-    expectValue(fixture, 'node-name-input', node.name);
-    expectValue(fixture, 'node-id-input', node.id);
     const chips = findEls(fixture, 'node-label-chip')
     expect(chips.length).toBe(1);
-    expectValue(fixture, 'node-hostname-input', nodeDetail.hostname || '');
-    expectValue(fixture, 'node-release-input', nodeDetail.release || '');
+    expectValue(fixture, 'node-hostname-input', node.name || '');
     expectValue(fixture, 'node-roles-input', nodeDetail.roles || '');
+    expectValue(fixture, 'node-version-input', nodeDetail.version || '');
+    expectValue(fixture, 'node-ip-input', nodeDetail.nodeIp || '');
+    expectValue(fixture, 'node-port-input', nodeDetail.nodePort || '');
+    expectValue(fixture, 'node-ipw-input', nodeDetail.nodeIpw || '');
+    expectValue(fixture, 'node-portw-input', nodeDetail.nodePortw || '');
+
+
+
+
+
+
 
 
 

@@ -135,7 +135,7 @@ export class NodesComponent implements OnInit, OnDestroy {
         this.nodes = z.items.map(x => {
           return this.prepareNode(x);
         });
-        this.nodes = this.nodes.sort(x => new Date(x.insertDate).getTime());
+        this.nodes = this.nodes.sort((a, b) => a.name.localeCompare(b.name));
       }),
       map(z => {
         this.clusterSetConfigAll = `ferrumgate --set-config-all ${this.getClusterSetConfigAll()}`;

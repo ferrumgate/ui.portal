@@ -38,6 +38,8 @@ export interface BaseLdap extends BaseAuthId, BaseAuth {
     allowedGroups?: string[];
     saveNewUser?: boolean;
     syncGroups?: boolean;
+    tlsCaRoot?: string;
+    tlsValidateCert?: boolean;
 }
 export interface BaseSaml extends BaseAuthId, BaseAuth {
     issuer: string;

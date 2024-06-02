@@ -7,6 +7,7 @@ import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { TranslationService } from 'src/app/modules/shared/services/translation.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 import { BaseLdap } from '../../models/auth';
 import { SSubscription } from '../../services/SSubscribtion';
 
@@ -70,7 +71,8 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
     private translateService: TranslationService,
     private configService: ConfigService,
     private confirmService: ConfirmService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private clipboard: Clipboard,) {
 
     this._model = {
 
@@ -122,7 +124,9 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
         searchBase: new FormControl(model.searchBase, [Validators.required]),
         searchFilter: new FormControl(model.searchFilter, []),
         usernameField: new FormControl(model.usernameField, [Validators.required]),
-        groupnameField: new FormControl(model.groupnameField, [Validators.required])
+        groupnameField: new FormControl(model.groupnameField, [Validators.required]),
+        tlsCaRoot: new FormControl(model.tlsCaRoot, []),
+        tlsValidateCert: new FormControl(model.tlsValidateCert, []),
 
       });
 
@@ -252,6 +256,10 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       if (original.allowedGroups && !original.allowedGroups?.find(x => x == item))
         model.isChanged = true;
     }
+    if (original.tlsCaRoot != model.tlsCaRoot)
+      model.isChanged = true;
+    if (original.tlsValidateCert != model.tlsValidateCert)
+      model.isChanged = true;
 
   }
 
@@ -283,6 +291,8 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
       isEnabled: this.model.isEnabled,
       saveNewUser: this.model.saveNewUser,
       syncGroups: this.model.syncGroups,
+      tlsCaRoot: this.model.tlsCaRoot,
+      tlsValidateCert: this.model.tlsValidateCert,
       securityProfile: {
         ...this.model.securityProfile
       }
@@ -323,6 +333,12 @@ export class AuthLdapComponent implements OnInit, OnDestroy {
     if (this.formGroup.valid)
       this.checkIfModelChanged();
 
+  }
+  copyCert() {
+    if (this.model.tlsCaRoot) {
+      this.clipboard.copy(this.model.tlsCaRoot);
+      this.notificationService.success(this.translateService.translate('Copied'));
+    }
   }
 
 }

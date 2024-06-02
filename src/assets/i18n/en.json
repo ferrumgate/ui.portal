@@ -560,5 +560,6 @@
     "NodePort": "Node Port",
     "NodeIpw": "Node worker IP",
     "NodePortw": "Node worker Port",
-    "Command": "Command"
+    "Command": "Command",
+    "TlsVerify": "Tls verify"
 }

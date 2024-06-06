@@ -72,6 +72,14 @@
                         </p>
 
                         <p>
+                            <mat-form-field fxFlex appearance="fill">
+                                <mat-label>{{"Node"|translate}}</mat-label>
+                                <input matInput test-id="gateway-node-input" placeholder="{{'NodeName'|translate}}"
+                                    formControlName="nodeName" readonly>
+                            </mat-form-field>
+                        </p>
+
+                        <p>
                             <mat-checkbox test-id="gateway-checkbox-enabled" [(ngModel)]="gateway.isEnabled"
                                 (ngModelChange)="gatewayModelChanged()" [ngModelOptions]="{standalone:true}">
                                 {{"Enabled"|translate}}</mat-checkbox>

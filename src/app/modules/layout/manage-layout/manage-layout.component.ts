@@ -67,9 +67,6 @@ export class ManageLayoutComponent implements OnInit {
       ]
     },
     {
-      icon: 'lan', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
-    },
-    {
       icon: 'supervisor_account', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Accounts'), navigate: () => { },
       subItems: [
         {
@@ -84,6 +81,12 @@ export class ManageLayoutComponent implements OnInit {
 
         }
       ]
+    },
+    {
+      icon: 'server', isSVG: true, roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Nodes'), navigate: () => { this.router.navigate(['/manage/nodes']) }, subItems: []
+    },
+    {
+      icon: 'lan', roleIds: [RBACDefault.roleAdmin.id], isClicked: false, isExpanded: false, name: this.translateService.translate('Networks'), navigate: () => { this.router.navigate(['/manage/networks']) }, subItems: []
     },
     {
       icon: 'services', roleIds: [RBACDefault.roleAdmin.id], isSVG: true, isClicked: false, isExpanded: false, name: this.translateService.translate('Services'), subItems: [], navigate: () => { this.router.navigate(['/manage/services']) }

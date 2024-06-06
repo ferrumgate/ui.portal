@@ -104,7 +104,7 @@ export class AuthenticationService extends BaseService {
   }
 
   initIdleWatching() {
-    this.configureIdle(15);//15 minutes
+    this.configureIdle(0);//15 minutes
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     this.idle.onTimeout.subscribe(() => {

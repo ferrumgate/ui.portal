@@ -33,9 +33,9 @@
 
                 <div class="row network-item" fxLayout="column">
                     <div class="network-item" fxLayout="row wrap">
-                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [networks]="networks"
-                            [gateway]="gate" (saveGateway)="saveGateway($event)" (deleteGateway)="deleteGateway($event)"
-                            *ngFor="let gate of gatewaysNotJoined">
+                        <app-gateway test-id="networks-gatewaynotjoined-app-gateway" [nodes]="nodes"
+                            [networks]="networks" [gateway]="gate" (saveGateway)="saveGateway($event)"
+                            (deleteGateway)="deleteGateway($event)" *ngFor="let gate of gatewaysNotJoined">
                         </app-gateway>
                     </div>
                 </div>
@@ -58,8 +58,8 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="gateway-item" fxFlex fxLayout="row wrap">
-                                <app-gateway test-id="networks-app-network-app-gateway" [networks]="networks"
-                                    [gateway]="gate" *ngFor="let gate of filterGateways(net)"
+                                <app-gateway test-id="networks-app-network-app-gateway" [nodes]="nodes"
+                                    [networks]="networks" [gateway]="gate" *ngFor="let gate of filterGateways(net)"
                                     (saveGateway)=" saveGateway($event)" (deleteGateway)="deleteGateway($event)">
                                 </app-gateway>
                             </div>

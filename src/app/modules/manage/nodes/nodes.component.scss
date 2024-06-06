@@ -1,0 +1,76 @@
+.nodes-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.nodes-toolbar {
+
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    font-size: 0.9rem;
+    height: 80px;
+
+}
+
+.nodes .row {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+.nodes .title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.nodes .add {
+    margin-left: 15px;
+}
+
+
+.nodes .node-actions {
+    padding: 0px;
+    border-top-style: none;
+}
+
+.theme-dark .nodes .network-gateways mat-card {
+    background-color: #383535;
+
+}
+
+.nodes app-node {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+
+}
+
+.nodes-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: calc(100vh - 60px - 50px - 10px);
+    overflow: auto;
+}
+
+.nodes .content-divider {
+    padding-bottom: 10px;
+}
+
+.nodes-commands {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    word-break: break-all;
+    font-size: 0.9rem;
+
+}
+
+.nodes-commands .title {
+    font-size: 0.9rem;
+}
+
+.nodes .node-header-actions {
+    padding: 0px;
+    border-top-style: none;
+}

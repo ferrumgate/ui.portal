@@ -10,6 +10,8 @@ import { NetworkService } from '../../shared/services/network.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { TranslationService } from '../../shared/services/translation.service';
 import { UtilService } from '../../shared/services/util.service';
+import { NodeService } from '../../shared/services/node.service';
+import { Node } from '../../shared/models/node';
 
 @Component({
   selector: 'app-networks',
@@ -21,6 +23,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
   gatewaysNotJoinedpanelOpenState = true;
   searchForm = new FormControl();
   allSubs: SSubscription = new SSubscription();
+  nodes: Node[] = [];
   networks: Network[] = [];
   gateways: Gateway[] = [];
   gatewaysNotJoined: Gateway[] = [];
@@ -30,6 +33,7 @@ export class NetworksComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private gatewayService: GatewayService,
     private networkService: NetworkService,
+    private nodeService: NodeService,
     private confirmService: ConfirmService,
     private configService: ConfigService
   ) {
@@ -132,12 +136,16 @@ export class NetworksComponent implements OnInit, OnDestroy {
   }
 
   getAllData() {
-    return this.networkService.get2().pipe(
+    return this.nodeService.get2().pipe(
+      map(z => this.nodes = z.items),
+      switchMap(y => this.networkService.get2()),
       map(y => {
         this.networks = y.items.map(x => {
           return this.prepareNetwork(x);
         });
       }),
+      switchMap(y => this.nodeService.get2()),
+      map(z => this.nodes = z.items),
       switchMap(y => this.gatewayService.get2()),
       map(z => {
         this.gateways = z.items.map(x => {

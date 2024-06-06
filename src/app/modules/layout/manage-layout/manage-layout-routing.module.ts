@@ -22,6 +22,15 @@ const routes: Routes = [
 
       },
       {
+        path: 'nodes',
+        canActivate: [RoleGuard],
+        data: {
+          roleIds: [RBACDefault.roleAdmin.id]
+        },
+        loadChildren: () => import('../../manage/nodes/nodes.module').then(m => m.NodesModule)
+
+      },
+      {
         path: 'networks',
         canActivate: [RoleGuard],
         data: {

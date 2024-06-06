@@ -40,6 +40,7 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { UProfileComponent } from "./uprofile/uprofile.component";
 import { UserComponent } from './user/user.component';
 import { ViewSelectorComponent } from "./viewselector/viewselector.component";
+import { NodeComponent } from "./node/node.component";
 
 @NgModule({
     exports: [
@@ -60,6 +61,7 @@ import { ViewSelectorComponent } from "./viewselector/viewselector.component";
         QRCodeModule,
         NavMenuComponent,
         ToolbarComponent,
+        NodeComponent,
         NetworkComponent,
         GatewayComponent,
         ConfirmComponent,
@@ -110,6 +112,7 @@ import { ViewSelectorComponent } from "./viewselector/viewselector.component";
         LoadingComponent,
         NavMenuComponent,
         ToolbarComponent,
+        NodeComponent,
         NetworkComponent,
         GatewayComponent,
         ConfirmComponent,

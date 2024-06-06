@@ -48,6 +48,7 @@ export class ConfigService extends BaseService {
     esHelp: "https://ferrumgate.com/docs/configuration/settings/elasticsearch",
     backupHelp: "https://ferrumgate.com/docs/configuration/settings/backup",
     emailHelp: "https://ferrumgate.com/docs/configuration/settings/email",
+    nodeHelp: "https://ferrumgate.com/docs/configuration/node",
     gatewayHelp: "https://ferrumgate.com/docs/configuration/network#gateway",
     networkHelp: "https://ferrumgate.com/docs/configuration/network",
     authLocalHelp: "https://ferrumgate.com/docs/configuration/settings/auth#local",
@@ -449,7 +450,9 @@ export class ConfigService extends BaseService {
       securityProfile: auth.securityProfile,
       isEnabled: auth.isEnabled,
       saveNewUser: auth.saveNewUser,
-      syncGroups: auth.syncGroups
+      syncGroups: auth.syncGroups,
+      tlsCaRoot: auth.tlsCaRoot,
+      tlsValidateCert: auth.tlsValidateCert
 
     }
     return this.preExecute(parameter).pipe(

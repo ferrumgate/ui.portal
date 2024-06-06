@@ -1,0 +1,147 @@
+<div class="node">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title matTooltip="{{'Node'|translate}} {{node.name}}">
+                <mat-icon matSuffix svgIcon="server">
+                </mat-icon>
+            </mat-card-title>
+            <mat-action-row class="node-header-actions" fxFlex fxLayoutAlign="end start" *ngIf="helpLink">
+                <button matSuffix mat-icon-button (click)="copyNodeId()" [disabled]="!node.id">
+                    <mat-icon matSuffix matTooltip="{{'Copy'|translate}}">{{'file_copy'}}</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="{{'Help'|translate}}" (click)="openHelp()">
+                    <mat-icon>help_outline</mat-icon>
+                </button>
+            </mat-action-row>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <div>
+
+                    <form test-id="node-form" [formGroup]="formGroup">
+                        <mat-accordion class="service-details">
+                            <mat-expansion-panel [expanded]="node.isExpanded">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title test-id="node-name-title">
+                                        {{node.name}}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Id"|translate}}</mat-label>
+                                        <input matInput test-id="node-id-input" formControlName="id" readonly="true">
+                                        <mat-hint>{{"NodeIdHint"|translate}}</mat-hint>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Name"|translate}}</mat-label>
+                                        <input matInput test-id="node-hostname-input" placeholder="{{'Name'|translate}}"
+                                            formControlName="name" required>
+                                        <mat-error>{{formError.name|translate}}</mat-error>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Labels"|translate}}</mat-label>
+                                        <mat-chip-list #chipList>
+                                            <mat-chip test-id="node-label-chip" *ngFor="let label of node.labels||[]"
+                                                (removed)="removeLabel(label)">
+                                                {{label}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="{{'NewLabel' |translate}}" [matChipInputFor]="chipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addLabel($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"LastSeen"|translate}}</mat-label>
+                                        <input matInput test-id="node-lastseen-input"
+                                            placeholder="{{'LastSeen'|translate}}" formControlName="lastSeenDate"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Version"|translate}}</mat-label>
+                                        <input matInput test-id="node-version-input"
+                                            placeholder="{{'Version'|translate}}" formControlName="version"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"Roles"|translate}}</mat-label>
+                                        <input matInput test-id="node-roles-input" placeholder="{{'Role'|translate}}"
+                                            formControlName="roles" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodeIp"|translate}}</mat-label>
+                                        <input matInput test-id="node-ip-input" placeholder="{{'NodeIp'|translate}}"
+                                            formControlName="nodeIp" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodePort"|translate}}</mat-label>
+                                        <input matInput test-id="node-port-input" placeholder="{{'NodePort'|translate}}"
+                                            formControlName="nodePort" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodeIpW"|translate}}</mat-label>
+                                        <input matInput test-id="node-ipw-input" placeholder="{{'NodeIpw'|translate}}"
+                                            formControlName="nodeIpw" readonly="true">
+                                    </mat-form-field>
+                                </p>
+                                <p>
+                                    <mat-form-field fxFlex appearance="fill">
+                                        <mat-label>{{"NodePortW"|translate}}</mat-label>
+                                        <input matInput test-id="node-portw-input"
+                                            placeholder="{{'NodePortw'|translate}}" formControlName="nodePortw"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </p>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </form>
+                </div>
+
+                <div>
+                    <mat-divider></mat-divider>
+                    <mat-toolbar style="height:35px">
+                        <mat-action-row class="node-actions" fxFlex fxLayoutAlign="start center">
+                            <button test-id="node-delete-button" mat-icon-button color="primary"
+                                matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <span *ngIf="node.isChanged" fxFlex fxLayoutAlign="end center">
+                                <button test-id="node-close-button" mat-icon-button color="warn"
+                                    matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                                <button test-id="node-ok-button" mat-icon-button color="warn"
+                                    matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                            </span>
+
+                        </mat-action-row>
+                    </mat-toolbar>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

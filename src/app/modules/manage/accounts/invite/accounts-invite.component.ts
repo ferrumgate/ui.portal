@@ -62,8 +62,7 @@ export class AccountsInviteComponent implements OnInit, OnDestroy {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.accountInviteHelp;
-    this.results.push({ email: 'test@abc.ocmo', errMsg: 'error sfasdfafawasdfaw adfasdfasdfa' });
-    this.results.push({ email: 'test@ferrumgate.com', errMsg: '' });
+
   }
 
   openHelp() {

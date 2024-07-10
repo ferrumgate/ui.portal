@@ -561,5 +561,6 @@
     "NodeIpw": "Node worker IP",
     "NodePortw": "Node worker Port",
     "Command": "Command",
-    "TlsVerify": "Tls verify"
+    "TlsVerify": "Tls verify",
+    "IpIntelligenceUrlHint": "Ip intelligence url"
 }

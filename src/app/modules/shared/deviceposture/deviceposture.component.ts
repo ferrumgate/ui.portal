@@ -346,8 +346,22 @@ export class DevicePostureComponent implements OnInit, OnDestroy {
     ]
     this.modelChanged();
   }
+
   removeClientVersion() {
     delete this.model.clientVersions;
+    this.modelChanged();
+  }
+
+  addOsVersion() {
+    if (this.model.osVersions?.length) return;
+    this.model.osVersions = [
+      { name: 'osname', release: '' }
+    ]
+    this.modelChanged();
+  }
+
+  removeOsVersion() {
+    delete this.model.osVersions;
     this.modelChanged();
   }
 

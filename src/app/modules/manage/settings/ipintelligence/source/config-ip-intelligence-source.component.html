@@ -35,15 +35,22 @@
                             <mat-hint>{{"ApiProvider"|translate}}</mat-hint>
                         </mat-form-field>
                     </p>
+                    <p *ngIf="model.type=='ferrum'" fxFill class="config-ip-intelligence-source-explanation">
+                        <mat-form-field appearance="fill" fxFill class="config-ip-intelligence-source-width">
+                            <mat-label>{{"Url"|translate}}</mat-label>
+                            <input matInput test-id="config-ip-intelligence-source-url-input"
+                                placeholder="https://portal.ferrumdome.com" formControlName="url">
+                            <mat-hint>{{"IpIntelligenceUrlHint"|translate}}</mat-hint>
+                            <mat-error>{{error.url|translate}}</mat-error>
+                        </mat-form-field>
+                    </p>
                     <p *ngIf="model.type" fxFill class="config-ip-intelligence-source-explanation">
                         <mat-form-field appearance="fill" fxFill class="config-ip-intelligence-source-width">
                             <mat-label>{{"ApiKey"|translate}}</mat-label>
                             <input matInput test-id="config-ip-intelligence-source-apikey-input"
                                 placeholder="netpbtj9l8uw" formControlName="apiKey">
                             <mat-hint>{{"ApiKeyHint"|translate}}</mat-hint>
-
                             <mat-error>{{error.apiKey|translate}}</mat-error>
-
                         </mat-form-field>
                     </p>
                 </form>

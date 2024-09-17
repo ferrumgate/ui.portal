@@ -50,7 +50,7 @@ export class IpIntelligenceService extends BaseService {
   saveOrupdateSource(item: IpIntelligenceSource) {
     const source: IpIntelligenceSource = {
       id: item.id, type: item.type, name: item.type, insertDate: item.insertDate, updateDate: item.updateDate,
-      apiKey: item.apiKey
+      apiKey: item.apiKey, url: item.url
     }
 
     return this.preExecute(source).pipe(

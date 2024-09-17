@@ -9,13 +9,12 @@
     </div>
 
     <mat-tab-group dynamicHeight>
-        <mat-tab label="{{'List'|translate}}">
-            <app-config-ip-intelligence-list helpLink="{{helpLink}}">list</app-config-ip-intelligence-list>
-        </mat-tab>
-
         <mat-tab label="{{'Source'|translate}}">
             <app-config-ip-intelligence-source helpLink="{{helpLink}}" [model]="getSource()" (save)="saveSource($event)"
                 (delete)="deleteSource($event)" (check)="checkSource($event)"></app-config-ip-intelligence-source>
+        </mat-tab>
+        <mat-tab label="{{'List'|translate}}">
+            <app-config-ip-intelligence-list helpLink="{{helpLink}}">list</app-config-ip-intelligence-list>
         </mat-tab>
     </mat-tab-group>
 

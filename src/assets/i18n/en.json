@@ -484,9 +484,11 @@
     "DevicePostureMacHints": "Check if any mac is exists",
     "MinClientVersion": "Minimum client version",
     "DevicePostureMinClientVersion": "Check if client version is bigger or equal",
-    "OsFamily": "Os family",
-    "OsName": "Os name",
-    "OsVersion": "Os version",
+    "OsFamily": "OS family",
+    "OsName": "OS name",
+    "OsVersion": "OS version",
+    "MinOsVersion": "Minimum OS version",
+    "DevicePostureMinOsVersion": "Check if OS version is bigger or equal",
     "ClientVersion": "Client version",
     "HealthStatus": "Healthy status",
     "WhyNotHealthy": "Why",
@@ -561,5 +563,6 @@
     "NodeIpw": "Node worker IP",
     "NodePortw": "Node worker Port",
     "Command": "Command",
-    "TlsVerify": "Tls verify"
+    "TlsVerify": "Tls verify",
+    "IpIntelligenceUrlHint": "Ip intelligence url"
 }

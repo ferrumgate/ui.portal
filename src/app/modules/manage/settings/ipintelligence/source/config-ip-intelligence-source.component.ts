@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IpIntelligenceSource } from 'src/app/modules/shared/models/ipIntelligence';
 import { ConfigService } from 'src/app/modules/shared/services/config.service';
 import { ConfirmService } from 'src/app/modules/shared/services/confirm.service';
+import { InputService } from 'src/app/modules/shared/services/input.service';
 import { IpIntelligenceService } from 'src/app/modules/shared/services/ipIntelligence.service';
 import { NotificationService } from 'src/app/modules/shared/services/notification.service';
 import { SSubscription } from 'src/app/modules/shared/services/SSubscribtion';
@@ -11,6 +12,7 @@ import { TranslationService } from 'src/app/modules/shared/services/translation.
 
 interface BaseModel extends IpIntelligenceSource {
   apiKey?: string;
+  url?: string;
 
 }
 interface Model extends BaseModel {
@@ -42,14 +44,14 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   @Output()
   check = new EventEmitter();
 
-  apiProviders = ['ipdata.co', 'ipapi.com', 'ipify.org'];
+  apiProviders = ['ferrum', 'ipdata.co', 'ipapi.com', 'ipify.org'];
   isThemeDark = false;
   private _model: Model = {
-    id: '', insertDate: '', updateDate: '', apiKey: '',
+    id: '', insertDate: '', updateDate: '', apiKey: '', url: '',
     type: '', name: 'not set yet', isChanged: false,
     orig: {
       type: 'empty', name: 'not set yet', id: '',
-      insertDate: '', updateDate: '', apiKey: ''
+      insertDate: '', updateDate: '', apiKey: '', url: ''
     }
   };
 
@@ -67,7 +69,7 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
     this.formGroup = this.createFormGroup(this.model);
 
   }
-  error = { type: '', apiKey: '' };
+  error = { type: '', apiKey: '', url: '' };
   formGroup = this.createFormGroup(this.model);
 
   constructor(private router: Router,
@@ -84,7 +86,6 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
     this.isThemeDark = this.configService.getTheme() == 'dark';
 
     this.helpLink = this.configService.links.ipIntelligenceHelp;
-
   }
 
   openHelp() {
@@ -103,10 +104,18 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   }
 
   createFormGroup(model: any) {
+
     const fmg = new FormGroup(
       {
-        apiKey: new FormControl(model.apiKey, [Validators.required]),
       });
+    if (model.type == 'ferrum') {
+      fmg.addControl('url', new FormControl(model.url, [Validators.required, InputService.urlValidator]));
+      fmg.addControl('apiKey', new FormControl(model.apiKey, [Validators.required]));
+
+    } else {
+      fmg.addControl('apiKey', new FormControl(model.apiKey, [Validators.required]));
+    }
+
     let keys = Object.keys(fmg.controls)
     for (const iterator of keys) {
 
@@ -126,10 +135,11 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
   resetFormErrors() {
 
     return {
-      type: '', apiKey: ''
+      type: '', apiKey: '', url: ''
     }
   }
   modelChanged() {
+
     this.checkFormError();
     if (this.formGroup.valid)
       this.checkIfModelChanged();
@@ -144,14 +154,24 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
 
     if (apiKeyError) {
       if (apiKeyError['required'])
-        this.error.type = 'ApiKeyRequired';
+        this.error.apiKey = 'ApiKeyRequired';
       else
-        this.error.type = 'ApiKeyRequired';
+        this.error.apiKey = 'ApiKeyRequired';
+    }
+    if (this.model.type == 'ferrum') {
+      const urlError = this.formGroup.controls['url'].errors;
+      if (urlError) {
+        if (urlError['required'])
+          this.error.url = 'UrlRequired';
+        else
+          this.error.url = 'UrlInvalid';
+      }
     }
 
   }
 
   checkIfModelChanged() {
+
     let model = this.model as Model;
     model.isChanged = false;
     const original = model.orig;
@@ -159,26 +179,43 @@ export class ConfigIpIntelligenceSourceComponent implements OnInit, OnDestroy {
       model.isChanged = true;
     if (original.apiKey != model.apiKey)
       model.isChanged = true;
+    if (model.type == 'ferrum') {
+      if (original.url != model.url)
+        model.isChanged = true;
+    }
 
   }
 
   apiTypeChanged($event: any) {
 
     this.model.type = $event.option.value;
+    this.formGroup = this.createFormGroup(this.model);
   }
-
+  createBaseModel() {
+    let item: IpIntelligenceSource = {
+      id: this.model.id,
+      objId: this.model.objId,
+      insertDate: new Date().toISOString(),
+      updateDate: new Date().toISOString(),
+      name: this.model.name,
+      type: this.model.type,
+      apiKey: this.model.apiKey,
+      url: this.model.url,
+    }
+    return item;
+  }
   checkSource() {
 
-    this.check.emit(this.model);
+    this.check.emit(this.createBaseModel());
   }
 
   deleteSource() {
-    this.delete.emit(this.model);
+    this.delete.emit(this.createBaseModel());
   }
 
   saveSource() {
 
-    this.save.emit(this.model);
+    this.save.emit(this.createBaseModel());
   }
 
   canDelete() {

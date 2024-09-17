@@ -202,9 +202,10 @@ export class AppComponent implements OnInit {
   }
 
   injectScripts() {
+    const id = 'G-ZXZJ9QM2WV';
     const script = this.renderer.createElement('script');
     script.type = 'text/javascript';
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZXZJ9QM2WV';
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
     this.renderer.appendChild(this.document.body, script);
 
     const scriptBody = this.renderer.createElement('script');
@@ -214,7 +215,7 @@ export class AppComponent implements OnInit {
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
 
-      gtag('config', 'G-ZXZJ9QM2WV');
+      gtag('config', '${id}');
     `;
     this.renderer.appendChild(this.document.body, scriptBody);
   }

@@ -67,6 +67,11 @@
                                             <mat-icon>short_text</mat-icon>
                                             <span>{{"ClientVersion"|translate}}</span>
                                         </button>
+                                        <button mat-menu-item *ngIf="!model.clientVersions?.length"
+                                            (click)="addOsVersion()">
+                                            <mat-icon>short_text</mat-icon>
+                                            <span>{{"OsVersion"|translate}}</span>
+                                        </button>
                                         <button mat-menu-item *ngIf="!model.macList?.length" (click)="addMac()">
                                             <mat-icon>short_text</mat-icon>
                                             <span>{{"MacCheck"|translate}}</span>
@@ -123,10 +128,20 @@
 
                                         <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
                                             (click)="removeClientVersion()">delete</mat-icon>
-
-
                                     </mat-form-field>
 
+                                </p>
+                                <p fxFill class="deviceposture-exp" *ngFor="let client of model.osVersions||[]">
+                                    <mat-form-field appearance="fill" fxFill class="deviceposture-width">
+                                        <mat-label>{{"MinOsVersion"|translate}}</mat-label>
+                                        <input matInput test-id="deviceposture-osversion-input" placeholder="1.2.0"
+                                            [(ngModel)]="client.release" [ngModelOptions]="{standalone:true}"
+                                            (ngModelChange)="modelChanged()">
+                                        <mat-hint>{{"DevicePostureMinOsVersion"|translate}}</mat-hint>
+
+                                        <mat-icon matSuffix style="cursor: pointer;" matTooltip="{{'Delete'|translate}}"
+                                            (click)="removeOsVersion()">delete</mat-icon>
+                                    </mat-form-field>
                                 </p>
                                 <p fxFill class="deviceposture-exp" *ngIf="model.macList || model.macAdded">
                                     <mat-form-field appearance="fill" fxFill class="deviceposture-width">

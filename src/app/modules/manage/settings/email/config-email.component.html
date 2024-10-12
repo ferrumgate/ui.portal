@@ -58,6 +58,10 @@
                     (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
                 </app-config-email-aws>
 
+                <app-config-email-ferrum *ngIf="model.type=='ferrum'" [model]="model" (saveEmail)="saveEmail($event)"
+                    (deleteEmail)="deleteEmail()" (checkEmail)="checkEmail($event)">
+                </app-config-email-ferrum>
+
             </div>
         </mat-card-content>
     </mat-card>

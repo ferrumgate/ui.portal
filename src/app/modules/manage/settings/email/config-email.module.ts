@@ -6,13 +6,15 @@ import { ConfigEmailRoutingModule } from './config-email-routing.module';
 import { ConfigEmailComponent } from './config-email.component';
 import { ConfigEmailExternalComponent } from './custom/config-email-external.component';
 import { ConfigEmailSmtpComponent } from './smtp/config-email-smtp.component';
+import { ConfigEmailFerrumComponent } from './ferrum/config-email-ferrum.component';
 
 @NgModule({
   declarations: [
     ConfigEmailComponent,
     ConfigEmailExternalComponent,
     ConfigEmailSmtpComponent,
-    ConfigEmailAWSComponent
+    ConfigEmailAWSComponent,
+    ConfigEmailFerrumComponent
   ],
   imports: [
     CommonModule,

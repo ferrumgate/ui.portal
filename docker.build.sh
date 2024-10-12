@@ -9,13 +9,13 @@ version=$(cat package.json | grep version | cut -d: -f2 | tr -d , | tr -d \" | t
 
 docker build -t ui.portal .
 echo "ui.portal:$version builded"
-docker tag ui.portal registry.ferrumgate.zero/ferrumgate/ui.portal:"$version"
-docker tag ui.portal registry.ferrumgate.zero/ferrumgate/ui.portal:latest
+docker tag ui.portal registry.ferrumdome.com/ferrumgate/ui.portal:"$version"
+docker tag ui.portal registry.ferrumdome.com/ferrumgate/ui.portal:latest
 docker tag ui.portal ferrumgate/ui.portal:"$version"
 
 execute() {
-    docker push registry.ferrumgate.zero/ferrumgate/ui.portal:"$version"
-    docker push registry.ferrumgate.zero/ferrumgate/ui.portal:latest
+    docker push registry.ferrumdome.com/ferrumgate/ui.portal:"$version"
+    docker push registry.ferrumdome.com/ferrumgate/ui.portal:latest
     if [ "$first" == "--push" ] || [ "$second" == "--push" ]; then
         docker push ferrumgate/ui.portal:"$version"
 

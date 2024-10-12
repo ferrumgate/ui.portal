@@ -564,5 +564,7 @@
     "NodePortw": "Node worker Port",
     "Command": "Command",
     "TlsVerify": "Tls verify",
-    "IpIntelligenceUrlHint": "Ip intelligence url"
+    "IpIntelligenceUrlHint": "Ip intelligence url",
+    "UserRequired": "User required",
+    "EmailUrlHint": "Send email over url"
 }

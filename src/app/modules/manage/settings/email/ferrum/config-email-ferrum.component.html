@@ -1,0 +1,69 @@
+<div>
+    <div>
+        <form test-id="config-email-ferrum-form" [formGroup]="formGroup">
+            <p fxFill class="config-email-ferrum-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-ferrum-width">
+                    <mat-label>{{"Url"|translate}}</mat-label>
+                    <input matInput test-id="config-email-ferrum-url-input" placeholder="http://localhost"
+                        formControlName="url" required>
+                    <mat-hint>{{"EmailUrlHint"|translate}}</mat-hint>
+                    <mat-error>{{error.url|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-ferrum-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-ferrum-width">
+                    <mat-label>{{"User"|translate}}</mat-label>
+                    <input matInput test-id="config-email-ferrum-user-input" placeholder="ferrumgate"
+                        formControlName="user">
+                    <mat-hint>{{"EmailUserHint"|translate}}</mat-hint>
+                    <mat-error>{{error.user|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+            <p fxFill class="config-email-ferrum-explanation ">
+                <mat-form-field appearance="fill" fxFill class="config-email-ferrum-width">
+                    <mat-label>{{"Password"|translate}}</mat-label>
+                    <input matInput test-id="config-email-ferrum-pass-input" placeholder="PaSSwoRd"
+                        formControlName="pass">
+                    <mat-hint>{{"EmailPassHint"|translate}}</mat-hint>
+                    <mat-error>{{error.pass|translate}}</mat-error>
+
+                </mat-form-field>
+            </p>
+
+        </form>
+
+    </div>
+
+    <div>
+        <mat-divider></mat-divider>
+        <mat-toolbar style="height:40px">
+            <mat-action-row class="config-email-ferrum-actions" fxFlex fxLayoutAlign="start center">
+                <button *ngIf="canDelete()" test-id="config-email-ferrum-delete-button" mat-icon-button color="primary"
+                    matTooltip="{{'Delete'|translate}}" (click)="delete()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button *ngIf="canSend()" test-id="config-email-ferrum-send-button" mat-icon-button color="primary"
+                    matTooltip="{{'Check'|translate}}" (click)="check()">
+                    <mat-icon>send</mat-icon>
+                </button>
+
+                <span *ngIf="model.isChanged" fxFlex fxLayoutAlign="end center">
+                    <button mat-icon-button color="warn" matTooltip="{{'CancelChanges'|translate}}" (click)="clear()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                    <button test-id="setttings-config-email-ferrum-ok-button" mat-icon-button color="warn"
+                        matTooltip="{{'SaveChanges'|translate}}" (click)="saveOrUpdate()">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </span>
+
+
+            </mat-action-row>
+        </mat-toolbar>
+
+
+    </div>
+
+</div>

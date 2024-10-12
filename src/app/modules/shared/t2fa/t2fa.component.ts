@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SSubscription } from '../services/SSubscribtion';
 import { ConfigService } from '../services/config.service';
 import { TranslationService } from '../services/translation.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 export interface T2FA {
   is2FA: boolean;
@@ -75,7 +76,7 @@ export class T2FAComponent implements OnInit, OnDestroy {
   refreshT2FA: EventEmitter<T2FA> = new EventEmitter();
 
   get qrCode() {
-    return `otpauth://totp/ferrumgate?secret=${this._model.t2FAKey}`
+    return `otpauth://totp/${window.location.hostname}(${this.authService.currentSession?.currentUser.username})?secret=${this._model.t2FAKey}`
   }
 
   get isActivated() {
@@ -94,6 +95,7 @@ export class T2FAComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private configService: ConfigService,
     private translateService: TranslationService,
+    private authService: AuthenticationService
   ) {
 
     this.allSub.addThis =
